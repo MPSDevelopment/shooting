@@ -1,0 +1,9 @@
+/.classpath
+/.project
+/.settings/
+/target/
+/logs/
+/app.pid
+/data/
+/.springBeans
+/bin/

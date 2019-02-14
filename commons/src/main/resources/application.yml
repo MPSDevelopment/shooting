@@ -1,0 +1,6 @@
+spring:
+  main:
+#    web-environment: true
+    banner-mode: "off" 
+    
+shooting: 
