@@ -6,6 +6,7 @@ import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.subscription.Subscription;
 
+@SuppressWarnings("rawtypes")
 public class AvisionMbassador extends MBassador<Event> {
 
 	public AvisionMbassador() {

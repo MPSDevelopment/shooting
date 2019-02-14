@@ -58,6 +58,7 @@ public class EventBus {
 		return getEventBus().unsubscribe(subscriber);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static Collection<Subscription> getSubscribers(Class messageType) {
 		return getEventBus().getSubscriptions(messageType);
 	}
