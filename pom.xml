@@ -16,8 +16,8 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
-				<module>commons</module>
-				<module>ipsc</module>
+				<module>shooting-commons</module>
+				<module>shooting-ipsc</module>
 			</modules>
 		</profile>
 	</profiles>

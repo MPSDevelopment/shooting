@@ -1,10 +1,11 @@
-/.project
+**/.project
 /.idea/*
 *.iml
 out/
 *.log
 *.DS_Store
-/.settings/
-/bin/
+**/.settings/
+**/bin/
 **/target/
+**/logs/
 **/app.pid
