@@ -32,8 +32,8 @@ spring:
   data:
     mongodb:
       host: localhost
-      port: 27017
-      database: ipsc
+      port: 27018
+      database: shooting
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
@@ -61,7 +61,7 @@ spring:
     mongodb:
       host: 10.0.0.5
       port: 27017
-      database: ipsc
+      database: shooting
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
