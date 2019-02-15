@@ -1,4 +1,4 @@
-package com.mpsdevelopment.shooting.eventbus;
+package tech.shooting.eventbus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

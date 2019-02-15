@@ -1,0 +1,19 @@
+[Unit]
+
+Description=Avision dataserver service
+
+After=syslog.target
+
+[Service]
+
+User=root
+
+WorkingDirectory=/usr/share/servers/avisionserver/dataserver
+Environment=SPRING_PROFILES_ACTIVE=production
+ExecStart=/usr/share/servers/avisionserver/dataserver/service.sh
+
+SuccessExitStatus=143
+
+[Install]
+
+WantedBy=multi-user.target

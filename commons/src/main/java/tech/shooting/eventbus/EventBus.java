@@ -1,4 +1,4 @@
-package com.mpsdevelopment.shooting.eventbus;
+package tech.shooting.eventbus;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
