@@ -1,0 +1,77 @@
+spring:
+  profiles:
+    active: local
+# Global configuration
+---
+spring:
+  main:
+    banner-mode: "off"
+
+server:
+  display-name: dataserver
+  address: 127.0.0.1
+  port: 8130
+
+#logging:
+#  level:
+#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+#management:
+#  security:
+#    enabled: false
+
+---
+spring:
+  profiles: local
+  main:
+    banner-mode: "off"
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: ipsc
+      authentication-database: admin
+      username: ipsc
+      password: ipasdfb14235346jsbcfdhasbf3q234sc
+server:
+  address: 127.0.0.1
+  port: 9900
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+
+shooting:
+
+---
+spring:
+  profiles: development
+  main:
+    banner-mode: "off"
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: 10.0.0.5
+      port: 27017
+      database: ipsc
+      authentication-database: admin
+      username: ipsc
+      password: ipasdfb14235346jsbcfdhasbf3q234sc
+server:
+  address: 10.0.0.5
+  port: 9901
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  connection-timeout: 20000
+shooting:
+

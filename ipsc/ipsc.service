@@ -1,6 +1,6 @@
 [Unit]
 
-Description=Avision dataserver service
+Description=IPSC service
 
 After=syslog.target
 
@@ -8,9 +8,9 @@ After=syslog.target
 
 User=root
 
-WorkingDirectory=/usr/share/servers/avisionserver/dataserver
-Environment=SPRING_PROFILES_ACTIVE=production
-ExecStart=/usr/share/servers/avisionserver/dataserver/service.sh
+WorkingDirectory=/usr/share/servers/shooting/ipsc
+Environment=SPRING_PROFILES_ACTIVE=development
+ExecStart=/usr/share/servers/shooting/ipsc/service.sh
 
 SuccessExitStatus=143
 

@@ -1,0 +1,34 @@
+spring:
+  main:
+    web-environment: false
+    banner-mode: "off"
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: localhost
+      port: 12345
+      database: test
+  mongodb:
+    embedded:
+      version: 4.0.4
+      features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
+      storage.database-dir: data/embeddedmongo
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: avisasdghawfdsfion
+    password: avisi236ergesr7485456e73esrgon
+logging:
+  level:
+#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+#    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
+    org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongo: DEBUG 
+    org.springframework.data.mongodb.core.MongoTemplate: INFO
+
+shooting: 
+
+

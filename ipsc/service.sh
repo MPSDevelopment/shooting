@@ -4,7 +4,7 @@ cmd="java
 	-server  
 	-Djava.net.preferIPv4Stack=true
 	-Xms1g 
-	-Xmx32g
+	-Xmx8g
 	-XX:+HeapDumpOnOutOfMemoryError 
 	-XX:HeapDumpPath=heapdumps/heap_dump_`date \"+%d.%m.%y\"`.hprof  
 	-XX:+CMSParallelRemarkEnabled 
@@ -13,6 +13,6 @@ cmd="java
 	-XX:+ScavengeBeforeFullGC 
 	-XX:+CMSScavengeBeforeRemark
 	-verbose:gc 
-	-cp dataserver.jar com.avisionrobotics.drones.dataserver.DataServerApplication"
+	-cp ipsc.jar tech.shooting.ipsc.IpscApplication"
 
 $cmd
