@@ -9,7 +9,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>ipsc</artifactId>
+	<artifactId>shooting-ipsc</artifactId>
 	<packaging>jar</packaging>
 	<name>Shooting ipsc project</name>
 	<url>http://maven.apache.org</url>
@@ -18,7 +18,7 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>commons</artifactId>
+			<artifactId>shooting-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

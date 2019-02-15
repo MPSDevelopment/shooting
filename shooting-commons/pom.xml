@@ -10,7 +10,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commons</artifactId>
+	<artifactId>shooting-commons</artifactId>
 	<packaging>jar</packaging>
 	<name>Shooting commons</name>
 	<url>http://maven.apache.org</url>
