@@ -15,9 +15,13 @@ public class Person {
 	private String id;
 	
 	private OffsetDateTime birthDate;
+	
 	private String familyName;
+	
 	private String givenName;
+	
 	private String initials;
+	
 	private String alias;
 
 }

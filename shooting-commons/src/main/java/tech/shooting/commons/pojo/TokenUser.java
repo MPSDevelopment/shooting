@@ -1,0 +1,46 @@
+package tech.shooting.commons.pojo;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import tech.shooting.commons.enums.AccountTypeEnum;
+import tech.shooting.commons.enums.RoleName;
+
+@Getter
+@Setter
+@Accessors(chain = true)
+@ApiModel(value = "TokenUser", description = "Token simple user object")
+@EqualsAndHashCode(callSuper = false)
+@ToString
+public class TokenUser {
+	
+	public static final String ID_FIELD = "id";
+	public static final String LOGIN_FIELD = "email";
+	public static final String ROLE_FIELD = "userrole";
+	public static final String ORGANIZATION_FIELD = "userToOrganization";
+
+	@JsonProperty
+	@ApiModelProperty(value = "User's id")
+	private Long id;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "User's login")
+	private String email;
+
+	@ApiModelProperty(value = "User's role")
+	@JsonProperty
+	private RoleName roleName;
+	
+	@ApiModelProperty(value = "User's account")
+	@JsonProperty
+	private AccountTypeEnum accountType;
+
+}
