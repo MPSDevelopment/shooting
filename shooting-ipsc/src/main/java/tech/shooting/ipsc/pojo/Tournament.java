@@ -48,12 +48,12 @@ public class Tournament extends BaseDocument {
 	private User director;
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Tournament's main judge", required = true)
-	private User mainJudge;
+	@ApiModelProperty(value = "Tournament's main official", required = true)
+	private User mainOfficial;
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Tournament's statistics judge", required = true)
-	private User statisticsJudge;
+	@ApiModelProperty(value = "Tournament's statistics official", required = true)
+	private User statisticsOfficial;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's active ")
