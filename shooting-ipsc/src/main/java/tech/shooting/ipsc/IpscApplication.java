@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebMvc
 @EnableMongoRepositories
 @EntityScan(basePackages = { "tech.shooting.ipsc" })
-@ComponentScan(basePackages = { "tech.shooting.commons" })
+@ComponentScan(basePackages = { "tech.shooting.ipsc" })
 @EnableScheduling
 @Slf4j
 public class IpscApplication {

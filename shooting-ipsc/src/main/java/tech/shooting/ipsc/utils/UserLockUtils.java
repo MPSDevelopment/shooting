@@ -48,7 +48,7 @@ public class UserLockUtils {
 	}
 
 	private void userLock(String email) {
-		User user = Optional.ofNullable(userRepository.findByEmailAndIsActive(email, true)).orElseThrow(() -> new ValidationException(User.EMAIL_FIELD, "There is no such active user with email %s", email));
+		User user = Optional.ofNullable(userRepository.findByEmailAndActive(email, true)).orElseThrow(() -> new ValidationException(User.EMAIL_FIELD, "There is no such active user with email %s", email));
 		user.setActive(false);
 		userRepository.save(user);
 	}

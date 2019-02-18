@@ -43,7 +43,7 @@ public class User extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's surname", required = true)
-	private String familyName;
+	private String firstName;
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's middle name")
@@ -51,7 +51,7 @@ public class User extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's name", required = true)
-	private String givenName;
+	private String lastName;
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's role name", required = true)

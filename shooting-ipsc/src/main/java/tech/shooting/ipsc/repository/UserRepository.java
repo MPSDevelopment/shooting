@@ -23,6 +23,6 @@ public interface UserRepository extends MongoRepository<User, Long> {
 
 	public List<User> findByLastName(String name);
 
-	public User findByEmailAndIsActive(String email, boolean active);
+	public User findByEmailAndActive(String email, boolean active);
 
 }
