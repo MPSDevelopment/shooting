@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.enums.AccountTypeEnum;
 import tech.shooting.commons.enums.RoleName;
 
 @Getter
@@ -38,9 +37,5 @@ public class TokenUser {
 	@ApiModelProperty(value = "User's role")
 	@JsonProperty
 	private RoleName roleName;
-	
-	@ApiModelProperty(value = "User's account")
-	@JsonProperty
-	private AccountTypeEnum accountType;
 
 }

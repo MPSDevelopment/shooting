@@ -82,7 +82,7 @@ public class AuthController {
 
 		RoleName usersRole = databaseUser.getRoleName();
 
-		token = tokenUtils.createToken(databaseUser.getId(), Token.TokenType.USER, "", user.getEmail(), usersRole, null, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		token = tokenUtils.createToken(databaseUser.getId(), Token.TokenType.USER, "", user.getEmail(), usersRole, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		log.info("User %s has been logged in with role = %s", user.getEmail(), usersRole);
 
 		HeaderUtils.setAuthToken(response, token);

@@ -2,6 +2,7 @@ package tech.shooting.ipsc.repository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +25,18 @@ import tech.shooting.ipsc.pojo.User;
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
+@DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserRepositoryTest {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	
+	@BeforeEach
+	public void before() {
+		userRepository.deleteAll();
+	}
 	
 	@Test 
 	public void checkFindByFields() {

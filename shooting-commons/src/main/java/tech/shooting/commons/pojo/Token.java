@@ -3,7 +3,6 @@ package tech.shooting.commons.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import tech.shooting.commons.enums.AccountTypeEnum;
 import tech.shooting.commons.enums.RoleName;
 
 @Getter
@@ -23,8 +22,6 @@ public class Token {
 	public static final String FIELD_TYPE = "type";
 
 	public static final String FIELD_ROLE = "role";
-
-	public static final String FIELD_ACCOUNT_TYPE = "account";
 
 	public static final String COOKIE_KEY_FIELD = "accessToken";
 
@@ -46,8 +43,5 @@ public class Token {
 
 	@JsonProperty
 	private RoleName role;
-
-	@JsonProperty
-	private AccountTypeEnum accountType;
 
 }

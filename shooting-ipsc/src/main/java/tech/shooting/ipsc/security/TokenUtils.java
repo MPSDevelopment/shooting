@@ -22,7 +22,6 @@ import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import lombok.extern.slf4j.Slf4j;
-import tech.shooting.commons.enums.AccountTypeEnum;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.pojo.Token.TokenType;
@@ -54,7 +53,6 @@ public class TokenUtils {
 				user.setEmail(getLoginFromToken(token));
 				user.setId(getIdFromToken(token));
 				user.setRoleName(getRoleFromToken(token));
-				user.setAccountType(getAccountFromToken(token));
 				return user;
 			} catch (InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
 				log.error("Cannot get a user by token %s because %s", token, e.getMessage());
@@ -63,7 +61,7 @@ public class TokenUtils {
 		return null;
 	}
 
-	public String createToken(Long userId, TokenType tokenType, String server, String userLogin, RoleName roleName, AccountTypeEnum accountType, Date expirationDate, Date notBeforeDate) {
+	public String createToken(Long userId, TokenType tokenType, String server, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
 		if (server != null) {
 			server = server.replace("https://", "").replace("http://", "").toLowerCase();
 		}
@@ -74,7 +72,6 @@ public class TokenUtils {
 		authPayload.put(Token.FIELD_LOGIN, userLogin);
 		authPayload.put(Token.FIELD_TYPE, tokenType);
 		authPayload.put(Token.FIELD_ROLE, roleName);
-		authPayload.put(Token.FIELD_ACCOUNT_TYPE, accountType);
 		String token = JWT.create().withIssuer(ISSUER).withIssuedAt(new Date()).withExpiresAt(expirationDate).withNotBefore(notBeforeDate).withHeader(authPayload).sign(algorithm);
 
 		return token;
@@ -134,13 +131,6 @@ public class TokenUtils {
 			return null;
 		}
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_ROLE).as(RoleName.class);
-	}
-
-	public AccountTypeEnum getAccountFromToken(String token) {
-		if (StringUtils.isBlank(token)) {
-			return null;
-		}
-		return verifier.verify(token).getHeaderClaim(Token.FIELD_ACCOUNT_TYPE).as(AccountTypeEnum.class);
 	}
 
 	/**
