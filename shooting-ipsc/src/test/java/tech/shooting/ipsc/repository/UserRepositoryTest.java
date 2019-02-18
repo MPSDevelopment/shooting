@@ -2,6 +2,7 @@ package tech.shooting.ipsc.repository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.User;
 
@@ -22,6 +24,7 @@ import tech.shooting.ipsc.pojo.User;
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserRepositoryTest {
 
 	@Autowired

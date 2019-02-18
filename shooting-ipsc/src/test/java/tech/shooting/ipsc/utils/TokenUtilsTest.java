@@ -10,13 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.AccountTypeEnum;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
+import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.security.TokenUtils;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class TokenUtilsTest {
 
 	@Autowired

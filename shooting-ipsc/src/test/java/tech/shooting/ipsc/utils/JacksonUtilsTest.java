@@ -13,14 +13,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.mpsdevelopment.plasticine.commons.DateUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.config.IpscConstants;
 
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class JacksonUtilsTest {
 
 	@BeforeAll
