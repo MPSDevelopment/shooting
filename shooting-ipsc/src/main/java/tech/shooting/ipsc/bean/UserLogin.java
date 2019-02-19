@@ -26,7 +26,7 @@ public class UserLogin {
 	@NotBlank(message = ValidationConstants.USER_EMAIL_REQUIRED_MESSAGE)
 	@Email(message = ValidationConstants.USER_EMAIL_MESSAGE)
 	@LoginForValidPassword
-	private String email;
+	private String login;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's password", required = true)

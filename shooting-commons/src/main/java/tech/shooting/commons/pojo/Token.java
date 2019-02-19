@@ -13,8 +13,6 @@ public class Token {
 		USER, LOST_PASSWORD
 	};
 
-	public static final String FIELD_SERVER = "server";
-
 	public static final String FIELD_ID = "id";
 
 	public static final String FIELD_LOGIN = "uid";
@@ -28,9 +26,6 @@ public class Token {
 	public static final String TOKEN_HEADER = "Authorization";
 
 	public static final String COOKIE_DEFAULT_VALUE = "";
-
-	@JsonProperty
-	private String server;
 	
 	@JsonProperty
 	private Long id;

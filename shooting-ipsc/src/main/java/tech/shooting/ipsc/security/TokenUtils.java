@@ -61,14 +61,10 @@ public class TokenUtils {
 		return null;
 	}
 
-	public String createToken(Long userId, TokenType tokenType, String server, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
-		if (server != null) {
-			server = server.replace("https://", "").replace("http://", "").toLowerCase();
-		}
-
+	public String createToken(Long userId, TokenType tokenType, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
+		
 		Map<String, Object> authPayload = new HashMap<String, Object>();
 		authPayload.put(Token.FIELD_ID, userId);
-		authPayload.put(Token.FIELD_SERVER, server);
 		authPayload.put(Token.FIELD_LOGIN, userLogin);
 		authPayload.put(Token.FIELD_TYPE, tokenType);
 		authPayload.put(Token.FIELD_ROLE, roleName);
@@ -77,39 +73,12 @@ public class TokenUtils {
 		return token;
 	}
 
-	// public String createToken(Long userId, TokenType tokenType, String userLogin, RoleName roleName, Long organizationId, Date expirationDate, Date notBeforeDate) {
-	// Map<String, Object> authPayload = new HashMap<String, Object>();
-	// authPayload.put(Token.FIELD_ID, userId);
-	// authPayload.put(Token.FIELD_LOGIN, userLogin);
-	// authPayload.put(Token.FIELD_TYPE, tokenType.toString());
-	// authPayload.put(Token.FIELD_ROLE, roleName.toString());
-	// authPayload.put(Token.FIELD_ORGANIZATION, organizationId);
-	//
-	// TokenOptions tokenOptions = new TokenOptions();
-	// tokenOptions.setAdmin(true);
-	// tokenOptions.setExpires(expirationDate);
-	// tokenOptions.setNotBefore(notBeforeDate);
-	//
-	// TokenGenerator tokenGenerator = new TokenGenerator(SECRET_CODE);
-	// String token = tokenGenerator.createToken(authPayload, tokenOptions);
-	//
-	// return token;
-	// }
-
 	public String getLoginFromToken(String token) {
 		if (StringUtils.isBlank(token)) {
 			return null;
 		}
 
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_LOGIN).asString();
-	}
-
-	public String getServerFromToken(String token) {
-		if (StringUtils.isBlank(token)) {
-			return null;
-		}
-
-		return verifier.verify(token).getHeaderClaim(Token.FIELD_SERVER).asString();
 	}
 
 	public Long getIdFromToken(String token) {
@@ -140,16 +109,6 @@ public class TokenUtils {
 	 * @return
 	 */
 	public boolean verifyToken(String token) {
-		return verifyToken(null, token);
-	}
-
-	/**
-	 * Verifies is a token valid using also a server comparison
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public boolean verifyToken(String currentServer, String token) {
 		if (StringUtils.isBlank(token)) {
 			log.debug("Payload isBlank = %s", token);
 			return false;
@@ -158,19 +117,6 @@ public class TokenUtils {
 			DecodedJWT decoded = verifier.verify(token);
 			Date expirationDate = decoded.getClaim(PublicClaims.EXPIRES_AT).asDate();
 			// log.info("Token expiration is %s", expirationDate);
-
-			String server = getServerFromToken(token);
-			
-			if (server == null) {
-				log.error("Token server is null, need to regenerate the token");
-				return false;
-			}
-			
-			if (currentServer != null && !currentServer.toLowerCase().contains(server)) {
-				log.error("Token server %s does not match current server %s", server, currentServer);
-				return false;
-			}
-
 			return true;
 		} catch (JWTVerificationException e) {
 			log.error("Error Verification = %s", e.getMessage());
