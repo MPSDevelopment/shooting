@@ -24,10 +24,12 @@ public class Competitor extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's name", required = true)
-	@Indexed(unique = true)
 	private String name;
 	
-	
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor's rfid code", required = true)
+	@Indexed(unique = true)
+	private String code;
 	
 	
 	

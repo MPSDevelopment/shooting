@@ -2,16 +2,16 @@ package tech.shooting.ipsc.enums;
 
 /**
  * 
- * Класс пистолет
+ * Класс ружье
  *
  */
-public enum HandgunEnum {
+public enum ShotgunEnum {
 
-	OPEN("Open"), STANDARD("Standard"), CLASSIC("Classic"), PRODUCTION("Production"), REVOLVER("Revolver"), MODIFIED("Modified");
+	OPEN("Open"), MODIFIED("Modified"), STANDARD("Standard"), PUMP("Pump");
 
 	private String value;
 
-	HandgunEnum(String value) {
+	ShotgunEnum(String value) {
 		this.value = value;
 	}
 
