@@ -10,8 +10,6 @@ import tech.shooting.ipsc.pojo.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, Long> {
-
-	public User findByEmail(String value);
 	
 	public User findByLogin(String value);
 
@@ -19,10 +17,8 @@ public interface UserRepository extends MongoRepository<User, Long> {
 
 	public List<User> findByRoleName(RoleName roleName);
 
-	public List<User> findByFirstName(String name) ;
+	public List<User> findByName(String name) ;
 
-	public List<User> findByLastName(String name);
-
-	public User findByEmailAndActive(String email, boolean active);
+	public User findByLoginAndActive(String email, boolean active);
 
 }

@@ -41,7 +41,7 @@ public class UserService {
             try {
                 login = tokenUtils.getLoginFromToken(value);
                 if (login != null && !login.isEmpty()) {
-                    return userRepository.findByEmail(login);
+                    return userRepository.findByLogin(login);
                 }
             } catch (InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
                 log.error("Cannot get a user by token %s because %s", value, e.getMessage());
@@ -54,7 +54,7 @@ public class UserService {
         String login = userLogin.trim().toLowerCase();
         String password = userPassword.trim();
 
-        User databaseUser = userRepository.findByEmail(login);
+        User databaseUser = userRepository.findByLogin(login);
         if (databaseUser != null) {
             boolean ok = passwordEncoder.matches(password, databaseUser.getPassword());
             if (ok) {

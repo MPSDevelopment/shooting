@@ -40,7 +40,7 @@ public class IpscUserDetailsService implements UserDetailsService {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 		log.info(" USER ROLE- %s ", getAuthorities(domainUser.getRoleName().name()));
-		User newUser = new User(domainUser.getEmail(), domainUser.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(domainUser.getRoleName().name()));
+		User newUser = new User(domainUser.getLogin(), domainUser.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(domainUser.getRoleName().name()));
 		log.info(" USER FROM SERVICE - %s   autority = %s", newUser, newUser.getAuthorities());
 		return newUser;
 	}

@@ -22,33 +22,33 @@ public class UserLockUtils {
 	@Autowired
 	private UserRepository userRepository;
 
-	public void successfulLogin(String email) {
-		Optional.ofNullable(email).orElseThrow(() -> new IllegalArgumentException("Email must not be null"));
-		unsuccessfulAttemptLoginMap.remove(email);
+	public void successfulLogin(String login) {
+		Optional.ofNullable(login).orElseThrow(() -> new IllegalArgumentException("Login must not be null"));
+		unsuccessfulAttemptLoginMap.remove(login);
 	}
 
 	// Lock user after 7 unsuccessful login attempts
-	public void unsuccessfulLogin(String email) {
-		Optional.ofNullable(email).orElseThrow(() -> new IllegalArgumentException("Email must not be null"));
-		Integer attemptNumber = unsuccessfulAttemptLoginMap.get(email);
+	public void unsuccessfulLogin(String login) {
+		Optional.ofNullable(login).orElseThrow(() -> new IllegalArgumentException("Login must not be null"));
+		Integer attemptNumber = unsuccessfulAttemptLoginMap.get(login);
 
 		if (attemptNumber == null) {
 			attemptNumber = 1;
-			unsuccessfulAttemptLoginMap.put(email, attemptNumber);
+			unsuccessfulAttemptLoginMap.put(login, attemptNumber);
 		} else {
 			switch (attemptNumber) {
 			case MAX_ATTEMPT_NUMBER - 1:
-				userLock(email);
+				userLock(login);
 				break;
 			default:
 				attemptNumber++;
-				unsuccessfulAttemptLoginMap.put(email, attemptNumber);
+				unsuccessfulAttemptLoginMap.put(login, attemptNumber);
 			}
 		}
 	}
 
 	private void userLock(String email) {
-		User user = Optional.ofNullable(userRepository.findByEmailAndActive(email, true)).orElseThrow(() -> new ValidationException(User.EMAIL_FIELD, "There is no such active user with email %s", email));
+		User user = Optional.ofNullable(userRepository.findByLoginAndActive(email, true)).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "There is no such active user with login %s", email));
 		user.setActive(false);
 		userRepository.save(user);
 	}

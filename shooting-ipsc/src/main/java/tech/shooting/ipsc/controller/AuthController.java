@@ -73,7 +73,7 @@ public class AuthController {
 		user.setEmail(user.getEmail().trim().toLowerCase());
 		user.setPassword(user.getPassword().trim());
 
-		User databaseUser = Optional.ofNullable(userService.checkUserInDB(user.getEmail(), user.getPassword())).orElseThrow(() -> new ValidationException(User.EMAIL_FIELD, "User with login %s does not exist", user.getEmail()));
+		User databaseUser = Optional.ofNullable(userService.checkUserInDB(user.getEmail(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "User with login %s does not exist", user.getEmail()));
 
 		if (BooleanUtils.isNotTrue(databaseUser.isActive())) {
 			log.info("  USER DIDN'T CONFIRM REGISTRATION");

@@ -40,10 +40,9 @@ public class UserRepositoryTest {
 	
 	@Test 
 	public void checkFindByFields() {
-		userRepository.save(new User().setLastName("Суворов").setFirstName("Антон").setMiddleName("Исхакович"));
+		userRepository.save(new User().setName("Суворов Антон"));
 		
-		assertNotNull(userRepository.findByLastName("Суворов"));
-		assertNotNull(userRepository.findByFirstName("Антон"));
+		assertNotNull(userRepository.findByName("Суворов Антон"));
 	}
 
 }

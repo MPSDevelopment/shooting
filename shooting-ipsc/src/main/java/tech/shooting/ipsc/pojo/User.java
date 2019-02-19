@@ -21,17 +21,16 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Accessors(chain = true)
 public class User extends BaseDocument {
 
-	public static final String EMAIL_FIELD = "email";
+	public static final String LOGIN_FIELD = "login";
 
+	@JsonProperty
+	@ApiModelProperty(value = "User's name", required = true)
+	private String name;
+	
 	@JsonProperty
 	@ApiModelProperty(value = "User's login", required = true)
 	@Indexed(unique = true)
 	private String login;
-
-	@JsonProperty
-	@ApiModelProperty(value = "User's email", required = true)
-	@Indexed(unique = true)
-	private String email;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's password", required = true)
@@ -40,18 +39,6 @@ public class User extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "User's birthday")
 	private OffsetDateTime birthDate;
-
-	@JsonProperty
-	@ApiModelProperty(value = "User's surname", required = true)
-	private String firstName;
-
-	@JsonProperty
-	@ApiModelProperty(value = "User's middle name")
-	private String middleName;
-
-	@JsonProperty
-	@ApiModelProperty(value = "User's name", required = true)
-	private String lastName;
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's role name", required = true)

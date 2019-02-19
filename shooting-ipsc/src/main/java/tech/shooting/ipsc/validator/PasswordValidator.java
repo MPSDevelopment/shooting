@@ -67,10 +67,10 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 					} else {
 						login = loginField == null ? null : BeanUtils.getProperty(o, loginField);
 						log.info("Login for password to check is %s", login);
-						user = userRepository.findByEmail(login.trim().toLowerCase());
+						user = userRepository.findByLogin(login.trim().toLowerCase());
 
 						if (user == null) {
-							log.info("UserId with email %s does not exists", login);
+							log.info("UserId with login %s does not exists", login);
 							context.disableDefaultConstraintViolation();
 							context.buildConstraintViolationWithTemplate("User does not exists").addPropertyNode(loginField).addConstraintViolation();
 							return false;
