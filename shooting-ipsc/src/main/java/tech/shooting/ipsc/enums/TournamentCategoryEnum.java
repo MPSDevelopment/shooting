@@ -1,12 +1,12 @@
 package tech.shooting.ipsc.enums;
 
-public enum TournamentDivisionEnum {
+public enum TournamentCategoryEnum {
 
-	OPEN("Open"), STANDARD("Standard"), MODIFIED("Modified"), PRODUCTION("Production"), RESOLVER("Resolver"), CLASSIC("Classic");
+	LADY("Lady"), JUNIOR("Junior"), SUPER_JUNIOR("Super junior"), SENIOR("Senior"), SUPER_SENIOR("Super senior");
 
 	private String value;
 
-	TournamentDivisionEnum(String value) {
+	TournamentCategoryEnum(String value) {
 		this.value = value;
 	}
 

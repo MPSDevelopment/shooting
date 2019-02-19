@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.HandgunEnum;
-import tech.shooting.ipsc.enums.TournamentDivisionEnum;
+import tech.shooting.ipsc.enums.TournamentCategoryEnum;
 import tech.shooting.ipsc.enums.TournamentLevelEnum;
 import tech.shooting.ipsc.enums.TournamentTypeEnum;
 
@@ -51,6 +51,14 @@ public class Tournament extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's type", required = true)
 	private TournamentTypeEnum type;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's level", required = true)
+	private TournamentLevelEnum level;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's category", required = true)
+	private TournamentCategoryEnum category;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's begin date")
@@ -59,10 +67,6 @@ public class Tournament extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's end date")
 	private OffsetDateTime endDate;
-
-	@JsonProperty
-	@ApiModelProperty(value = "Tournament's level", required = true)
-	private TournamentLevelEnum level;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's director", required = true)

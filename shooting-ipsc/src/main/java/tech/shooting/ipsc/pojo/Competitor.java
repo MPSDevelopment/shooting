@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.HandgunEnum;
-import tech.shooting.ipsc.enums.TournamentDivisionEnum;
+import tech.shooting.ipsc.enums.TournamentCategoryEnum;
 
 @Document(collection = "competitor")
 @TypeAlias("competitor")
@@ -33,7 +33,7 @@ public class Competitor extends BaseDocument {
 	
 	
 	
-	private TournamentDivisionEnum tournamentDivision;
+	private TournamentCategoryEnum tournamentDivision;
 	
 	private HandgunEnum handgunDivision;
 	
