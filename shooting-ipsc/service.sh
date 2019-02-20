@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cmd="java 
+cmd="/usr/lib/jvm/jdk-11/bin/java 
 	-server  
 	-Djava.net.preferIPv4Stack=true
 	-Xms1g 
