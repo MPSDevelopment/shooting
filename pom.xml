@@ -24,13 +24,12 @@
 
 	<properties>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
 		<product.version>0.1-SNAPSHOT</product.version>
-
+		<jdk.version>11</jdk.version>
+		
+		<lib.property>lib</lib.property>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jdk.version>11</jdk.version>
 
 		<resources.plugin.version>3.1.0</resources.plugin.version>
 		<compiler.plugin.version>3.8.0</compiler.plugin.version>
