@@ -21,7 +21,7 @@ import tech.shooting.commons.constraints.Version;
 @Configuration
 @EnableSwagger2
 @Slf4j
-public class SwaggerConfig extends WebMvcConfigurationSupport {
+public class SwaggerConfig {
 	
 	private static final String SLASH_API = "";
 
@@ -46,16 +46,5 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	public Docket apiOld(ServletContext servletContext) {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("Version old").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
 				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(Version.NOT_INCLUDE_VERSION_REGEXP)).build();
-	}
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		super.addResourceHandlers(registry);
-		registry.addResourceHandler("/static/images/**").addResourceLocations("/images/");
-		registry.addResourceHandler("/static/css/**").addResourceLocations("/css/");
-		registry.addResourceHandler("/static/js/**").addResourceLocations("/js/");
-		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-
 	}
 }

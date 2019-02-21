@@ -12,13 +12,14 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @EnableWebMvc
 @Configuration
 @Slf4j
-public class AppConfig implements WebMvcConfigurer {
+public class AppConfig extends WebMvcConfigurationSupport {
 	
 	@Autowired
 	private IpscSettings settings;
@@ -27,16 +28,23 @@ public class AppConfig implements WebMvcConfigurer {
 		super();
 	}
 	
-	@Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/", "index.html");
-    }
-
+//	@Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addRedirectViewController("/", "index.html");
+//    }
+	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/api/**");
-		registry.addResourceHandler("index.html").addResourceLocations("file:" + settings.getFrontendFolder() + "/index.html");
-		registry.addResourceHandler("^(?!/(api|doc|swagger|webjars|image|error).*)$").addResourceLocations("file:" + settings.getFrontendFolder());
+		super.addResourceHandlers(registry);
+		registry.addResourceHandler("/static/images/**").addResourceLocations("/images/");
+		registry.addResourceHandler("/static/css/**").addResourceLocations("/css/");
+		registry.addResourceHandler("/static/js/**").addResourceLocations("/js/");
+		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		
+//		registry.addResourceHandler("index.html").addResourceLocations("file:" + settings.getFrontendFolder() + "/index.html");
+//		registry.addResourceHandler("^/((?!api|doc|swagger|webjars|image|error).)*$").addResourceLocations("file:" + settings.getFrontendFolder());
+
 	}
 
 //	@Bean(name = "mappingJackson2HttpMessageConverter")
