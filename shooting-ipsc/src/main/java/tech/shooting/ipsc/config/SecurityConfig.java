@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers(AUTH_WHITELIST).antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/status**").antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**").antMatchers("/favicon.ico")
 				.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable();
@@ -52,7 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).accessDeniedHandler(new RestAccessDeniedHandler());
 		http.userDetailsService(userDetailsService);
 		http.addFilterBefore(tokenAuthenticationFilter, TokenAuthenticationFilter.class);
-		http.antMatcher("/**").authorizeRequests().antMatchers("/**").authenticated().anyRequest().hasRole("ADMIN");
+		http.antMatcher("/api/**")
+				.authorizeRequests()
+				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/login**").permitAll()
+				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/logout").permitAll()
+				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/status").permitAll()
+				.antMatchers("/someurl").authenticated().and().authorizeRequests().anyRequest().hasRole("ADMIN");
 	}
 
 	@Bean

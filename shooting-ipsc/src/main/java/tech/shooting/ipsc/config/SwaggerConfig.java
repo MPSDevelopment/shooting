@@ -19,32 +19,47 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tech.shooting.commons.constraints.Version;
 
 @Configuration
-@EnableSwagger2
+//@EnableSwagger2
 @Slf4j
-public class SwaggerConfig {
+public class SwaggerConfig extends WebMvcConfigurationSupport {
 	
-	private static final String SLASH_API = "";
-
-	@Bean
-	public UiConfiguration uiConfig() {
-		return new UiConfiguration("validatorUrl", // url
-				"none", // docExpansion => none | list
-				"alpha", // apiSorter => alpha
-				"model", // defaultModelRendering => schema
-				UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, true, // enableJsonEditor => true | false
-				true, // showRequestHeaders => true | false
-				60000L); // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
-	}
-
-	@Bean
-	public Docket apiVersion10(ServletContext servletContext) {
-		return new Docket(DocumentationType.SWAGGER_2).groupName("Version 1.0").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
-				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(Version.INCLUDE_VERSION_REGEXP)).build();
-	}
-	
-	@Bean
-	public Docket apiOld(ServletContext servletContext) {
-		return new Docket(DocumentationType.SWAGGER_2).groupName("Version old").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
-				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(Version.NOT_INCLUDE_VERSION_REGEXP)).build();
-	}
+//	private static final String SLASH_API = "";
+//
+//	@Bean
+//	public UiConfiguration uiConfig() {
+//		return new UiConfiguration("validatorUrl", // url
+//				"none", // docExpansion => none | list
+//				"alpha", // apiSorter => alpha
+//				"model", // defaultModelRendering => schema
+//				UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, true, // enableJsonEditor => true | false
+//				true, // showRequestHeaders => true | false
+//				60000L); // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
+//	}
+//
+////	@Bean
+////	public Docket apiVersion10(ServletContext servletContext) {
+////		return new Docket(DocumentationType.SWAGGER_2).groupName("Version 1.0").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
+////				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(Version.INCLUDE_VERSION_REGEXP)).build();
+////	}
+//	
+//	@Bean
+//	public Docket api(ServletContext servletContext) {
+//		return new Docket(DocumentationType.SWAGGER_2).pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
+//				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.any()).build();
+//	}
+//	
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		super.addResourceHandlers(registry);
+//		
+//		registry.addResourceHandler("/static/images/**").addResourceLocations("/images/");
+//		registry.addResourceHandler("/static/css/**").addResourceLocations("/css/");
+//		registry.addResourceHandler("/static/js/**").addResourceLocations("/js/");
+//		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+//		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//		
+////		registry.addResourceHandler("index.html").addResourceLocations("file:" + settings.getFrontendFolder() + "/index.html");
+////		registry.addResourceHandler("^/((?!api|doc|swagger|webjars|image|error).)*$").addResourceLocations("file:" + settings.getFrontendFolder());
+//
+//	}
 }
