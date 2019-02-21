@@ -9,6 +9,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
@@ -20,6 +21,12 @@ public class AppConfig implements WebMvcConfigurer {
 	public AppConfig() {
 		super();
 	}
+
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler("/api/**");
+//		registry.addResourceHandler("/**").addResourceLocations("file:/opt/files/");
+//	}
 
 //	@Bean(name = "mappingJackson2HttpMessageConverter")
 	private MappingJackson2HttpMessageConverter converter() {
