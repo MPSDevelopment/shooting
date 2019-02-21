@@ -9,3 +9,4 @@ out/
 **/target/
 **/logs/
 **/app.pid
+/data/
