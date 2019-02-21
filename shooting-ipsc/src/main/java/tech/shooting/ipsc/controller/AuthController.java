@@ -29,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -51,6 +52,14 @@ public class AuthController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "User Login")
+	public ResponseEntity<String> status(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
+		// Long id = tokenUtils.getIdFromToken(token);
+		// log.info("id fro status = %s ", id);
+		return new ResponseEntity<>(token, HttpStatus.OK);
+	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Login")

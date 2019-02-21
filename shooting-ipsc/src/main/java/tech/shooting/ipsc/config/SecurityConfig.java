@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import tech.shooting.ipsc.controller.ControllerAPI;
 import tech.shooting.ipsc.security.RestAccessDeniedHandler;
 import tech.shooting.ipsc.security.RestAuthenticationEntryPoint;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
@@ -28,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
 			// -- swagger ui
-			"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**"
+			"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/index.html", "/error", "/"
 			// other public endpoints of your API may be appended to this array
 	};
 
@@ -40,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers(AUTH_WHITELIST).antMatchers(HttpMethod.OPTIONS, "/**");
+		web.ignoring().antMatchers(AUTH_WHITELIST).antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/status**").antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**").antMatchers("/favicon.ico")
+				.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 
 	@Override

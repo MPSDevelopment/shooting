@@ -46,6 +46,7 @@ server:
     min-response-size: 1024
 
 shooting:
+  frontendFolder: /files
 
 ---
 spring:
@@ -74,4 +75,4 @@ server:
     min-response-size: 1024
   connection-timeout: 20000
 shooting:
-
+  frontendFolder: /usr/share/servers/ipsc-frontend/

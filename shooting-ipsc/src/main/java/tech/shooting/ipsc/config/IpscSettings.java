@@ -16,4 +16,5 @@ import lombok.ToString;
 @ConfigurationProperties(prefix = "shooting.ipsc")
 public class IpscSettings {
 
+	private String frontendFolder;
 }
