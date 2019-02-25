@@ -161,17 +161,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.plugin.version}</version>
 				<configuration>
-					<!-- <encoding>UTF-8</encoding> -->
-					<!-- <inputEncoding>UTF-8</inputEncoding> -->
-					<!-- <outputEncoding>UTF-8</outputEncoding> -->
-					<!-- <argLine>-Xms256m -Xmx512m -XX:MaxPermSize=128m -ea</argLine> -->
-					<skip>false</skip>
-					<!-- <includes> -->
-					<!-- <include>**/*Test.java</include> -->
-					<!-- </includes> -->
-					<!-- <excludes> -->
-					<!-- <exclude>**/*Parser*.java</exclude> -->
-					<!-- </excludes> -->
+					<properties>
+						<includeTags>auto</includeTags>
+						<groups>auto</groups>
+					</properties>
 				</configuration>
 			</plugin>
 			<plugin>

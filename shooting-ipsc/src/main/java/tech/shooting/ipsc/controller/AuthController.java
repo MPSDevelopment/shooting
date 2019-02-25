@@ -55,7 +55,15 @@ public class AuthController {
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Login")
-	public ResponseEntity<String> status(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
+	public ResponseEntity<String> statusGet(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
+		// Long id = tokenUtils.getIdFromToken(token);
+		// log.info("id fro status = %s ", id);
+		return new ResponseEntity<>(token, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "User Login")
+	public ResponseEntity<String> statusPost(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
 		// Long id = tokenUtils.getIdFromToken(token);
 		// log.info("id fro status = %s ", id);
 		return new ResponseEntity<>(token, HttpStatus.OK);

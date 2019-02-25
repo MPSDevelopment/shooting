@@ -11,4 +11,5 @@ public class ControllerAPI {
 	public static final String AUTH_CONTROLLER_POST_LOGIN = "/login";
 	public static final String AUTH_CONTROLLER_POST_LOGOUT = "/logout";
 	public static final String AUTH_CONTROLLER_GET_STATUS = "/status";
+	public static final String AUTH_CONTROLLER_POST_STATUS = "/status";
 }
