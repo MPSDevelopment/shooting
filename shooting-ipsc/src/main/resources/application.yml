@@ -45,8 +45,8 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
     min-response-size: 1024
 
-shooting:
-  frontendFolder: /files
+ipsc:
+  frontendFolder: /files/
 
 ---
 spring:
@@ -74,5 +74,5 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
     min-response-size: 1024
   connection-timeout: 20000
-shooting:
+ipsc:
   frontendFolder: /usr/share/servers/ipsc-frontend/

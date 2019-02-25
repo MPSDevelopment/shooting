@@ -51,7 +51,7 @@ public class RegExTest {
 	
 	@Test 
 	public void checkApi() {
-		Pattern pattern = Pattern.compile("^/((?!api|doc|swagger|webjars|image|error).)*$");
+		Pattern pattern = Pattern.compile("^(?!/(api|doc|swagger|webjars|image|error)).*$");
 		String s = "/api/auth";
         Matcher matcher = pattern.matcher(s);
         assertFalse(matcher.find());

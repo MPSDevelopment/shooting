@@ -29,6 +29,6 @@ logging:
     org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongo: DEBUG 
     org.springframework.data.mongodb.core.MongoTemplate: INFO
 
-shooting: 
+ipsc: 
 
 
