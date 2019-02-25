@@ -25,7 +25,12 @@ import lombok.experimental.Accessors;
 public class BaseDocument implements ShootingDocument {
 
 	public static final String ID_FIELD = "id";
+	
 	public static final String ID_FIELD_GS = "id";
+	
+	public static final String CREATED_DATE_FIELD = "createdDate";
+	
+	public static final String UPDATED_DATE_FIELD = "updatedDate";
 
 	@Id
 	@JsonProperty(ID_FIELD_GS)

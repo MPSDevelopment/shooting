@@ -75,9 +75,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new RequestContextListener();
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 }
