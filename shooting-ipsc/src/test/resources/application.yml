@@ -47,6 +47,11 @@ spring:
       host: localhost
       port: 12345
       database: test
+  mongodb:
+    embedded:
+      version: 4.0.6
+      features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
+      storage.database-dir: data/embeddedmongo
 server:
   address: 127.0.0.1
   port: 9909
@@ -56,6 +61,35 @@ server:
     min-response-size: 1024
 
 ipsc:
-  frontendFolder: /files/
+
+---
+spring:
+  profiles: development
+  main:
+    banner-mode: "off"
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: localhost
+      port: 12345
+      database: test
+  mongodb:
+    embedded:
+      version: 4.0.6
+      features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
+      storage.database-dir: data/embeddedmongo
+server:
+  address: 10.0.6.4
+  port: 9909
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+
+ipsc:
 
 
