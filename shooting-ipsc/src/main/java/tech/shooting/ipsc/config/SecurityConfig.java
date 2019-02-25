@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
 			// -- swagger ui
-			"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/index.html", "/error", "/"
+			"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error"
 			// other public endpoints of your API may be appended to this array
 	};
 
@@ -41,8 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers(AUTH_WHITELIST).antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/status**").antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**").antMatchers("/favicon.ico")
-				.antMatchers(HttpMethod.OPTIONS, "/**");
+		web.ignoring()
+		.antMatchers(AUTH_WHITELIST)
+		.antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
+		.antMatchers("/favicon.ico")
+		.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 	
 	@Override
@@ -56,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/login**").permitAll()
 				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/logout").permitAll()
-				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/status").permitAll()
+//				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/status").permitAll()
 				.antMatchers("/someurl").authenticated().and().authorizeRequests().anyRequest().hasRole("ADMIN");
 	}
 
