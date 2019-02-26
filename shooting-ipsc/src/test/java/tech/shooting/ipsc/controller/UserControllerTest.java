@@ -67,7 +67,7 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 @SpringBootTest
 @DirtiesContext
 @Slf4j
-//@Tag(IpscConstants.UNIT_TEST_TAG)
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserControllerTest {
 
 	@Autowired
