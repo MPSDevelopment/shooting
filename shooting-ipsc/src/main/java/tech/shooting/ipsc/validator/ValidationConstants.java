@@ -8,9 +8,7 @@ public class ValidationConstants {
 	
 	public static final String USER_PHONE_MESSAGE = "Min 7 characters (digits - and +)";
 
-	public static final String USER_LAST_NAME_MESSAGE = "Min 3 character";
-
-	public static final String USER_FIRST_NAME_MESSAGE = "Min 3 character";
+	public static final String USER_NAME_MESSAGE = "Min 3 character";
 
 	public static final String USER_LOGIN_MESSAGE = "Incorrect login";
 	
