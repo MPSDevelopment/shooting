@@ -38,6 +38,6 @@ public class DatabaseCreator {
 	}
 
 	private void createDatabase() {
-		userDao.upsert(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD));
+		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD));
 	}
 }

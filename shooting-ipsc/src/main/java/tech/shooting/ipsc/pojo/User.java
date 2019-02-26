@@ -22,6 +22,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 public class User extends BaseDocument {
 
 	public static final String LOGIN_FIELD = "login";
+	
+	public static final String PASSWORD_FIELD = "password";
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's name", required = true)
