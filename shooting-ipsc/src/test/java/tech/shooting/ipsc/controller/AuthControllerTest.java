@@ -1,18 +1,17 @@
 package tech.shooting.ipsc.controller;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,6 +22,7 @@ import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.config.CorsConfig;
+import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.pojo.User;
@@ -34,7 +34,6 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.UserService;
 import tech.shooting.ipsc.utils.UserLockUtils;
 
-@ActiveProfiles(value = "local")
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
 @ContextConfiguration(classes = { IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, CorsConfig.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, IpscUserDetailsService.class, AuthController.class, UserService.class,
@@ -44,18 +43,11 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 @SpringBootTest
 @DirtiesContext
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class AuthControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	// @LocalServerPort
-	// private int port;
-
-	protected final static String serverUrl = "http://127.0.0.1:9909";
-
-	@Autowired
-	private TokenUtils tokenUtils;
 
 	@Autowired
 	private UserRepository userRepository;
