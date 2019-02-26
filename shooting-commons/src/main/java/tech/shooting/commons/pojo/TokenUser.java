@@ -22,7 +22,7 @@ import tech.shooting.commons.enums.RoleName;
 public class TokenUser {
 	
 	public static final String ID_FIELD = "id";
-	public static final String LOGIN_FIELD = "email";
+	public static final String LOGIN_FIELD = "login";
 	public static final String ROLE_FIELD = "userrole";
 	public static final String ORGANIZATION_FIELD = "userToOrganization";
 
@@ -32,7 +32,7 @@ public class TokenUser {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "User's login")
-	private String email;
+	private String login;
 
 	@ApiModelProperty(value = "User's role")
 	@JsonProperty

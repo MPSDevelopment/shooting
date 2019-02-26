@@ -12,9 +12,9 @@ public class ValidationConstants {
 
 	public static final String USER_FIRST_NAME_MESSAGE = "Min 3 character";
 
-	public static final String USER_EMAIL_MESSAGE = "Incorrect email";
+	public static final String USER_LOGIN_MESSAGE = "Incorrect login";
 	
-	public static final String USER_EMAIL_REQUIRED_MESSAGE = "Incorrect email";
+	public static final String USER_LOGIN_REQUIRED_MESSAGE = "Incorrect login";
 
 	public static final String USER_PASSWORD_MESSAGE = "Min 5 characters";
 	

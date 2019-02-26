@@ -70,7 +70,7 @@ public class AuthControllerTest {
 
 		// RestAssured.post(serverUrl + ControllerAPI.AUTH_CONTROLLER + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN).then().statusCode(200);
 
-		User user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setPassword("123456").setActive(true);
+		User user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15).toLowerCase()).setPassword("123456").setActive(true);
 
 		// try to access status with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -103,7 +103,7 @@ public class AuthControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to access status with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, token)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, token)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 	}
 }

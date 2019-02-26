@@ -50,7 +50,7 @@ public class TokenUtils {
 		if (token != null && !token.isEmpty()) {
 			try {
 				TokenUser user = new TokenUser();
-				user.setEmail(getLoginFromToken(token));
+				user.setLogin(getLoginFromToken(token));
 				user.setId(getIdFromToken(token));
 				user.setRoleName(getRoleFromToken(token));
 				return user;

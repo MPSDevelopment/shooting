@@ -23,8 +23,7 @@ public class UserLogin {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "User's login", required = true)
-	@NotBlank(message = ValidationConstants.USER_EMAIL_REQUIRED_MESSAGE)
-	@Email(message = ValidationConstants.USER_EMAIL_MESSAGE)
+	@NotBlank(message = ValidationConstants.USER_LOGIN_REQUIRED_MESSAGE)
 	@LoginForValidPassword
 	private String login;
 

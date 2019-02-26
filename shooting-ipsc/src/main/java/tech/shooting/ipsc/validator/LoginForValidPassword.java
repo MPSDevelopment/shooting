@@ -14,7 +14,7 @@ import java.lang.annotation.Documented;
 @Documented
 public @interface LoginForValidPassword {
 
-	String message() default "{Incorrect email}";
+	String message() default "{Incorrect login}";
 
 	Class<?>[] groups() default {};
 

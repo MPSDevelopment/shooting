@@ -42,7 +42,7 @@ import tech.shooting.ipsc.enums.TournamentTypeEnum;
 @Accessors(chain = true)
 public class Tournament extends BaseDocument {
 
-	public static final String EMAIL_FIELD = "email";
+	public static final String NAME_FIELD = "name";
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's name", required = true)

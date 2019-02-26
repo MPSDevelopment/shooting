@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.validator;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -68,7 +69,7 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 						login = loginField == null ? null : BeanUtils.getProperty(o, loginField);
 						log.info("Login for password to check is %s", login);
 						user = userRepository.findByLogin(login.trim().toLowerCase());
-
+						
 						if (user == null) {
 							log.info("UserId with login %s does not exists", login);
 							context.disableDefaultConstraintViolation();
