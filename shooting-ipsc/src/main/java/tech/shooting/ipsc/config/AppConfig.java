@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
 @Configuration
 @EnableSwagger2
 @Slf4j
-public class AppConfig extends WebMvcConfigurationSupport {
+public class AppConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private IpscSettings settings;
