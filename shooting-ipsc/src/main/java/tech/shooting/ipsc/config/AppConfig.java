@@ -96,8 +96,6 @@ public class AppConfig extends WebMvcConfigurationSupport {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		super.addResourceHandlers(registry);
 
-		log.info("Frontend folder is %s", settings.getFrontendFolder());
-
 		registry.addResourceHandler("/static/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/static/css/**").addResourceLocations("/css/");
 		registry.addResourceHandler("/static/js/**").addResourceLocations("/js/");

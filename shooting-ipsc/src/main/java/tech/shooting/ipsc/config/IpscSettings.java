@@ -16,5 +16,4 @@ import lombok.ToString;
 @ConfigurationProperties(prefix = "ipsc")
 public class IpscSettings {
 
-	private String frontendFolder;
 }
