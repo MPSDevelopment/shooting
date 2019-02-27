@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,6 +26,7 @@ import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
@@ -59,8 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/login**").permitAll()
 				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/logout").permitAll()
-//				.antMatchers("/api/auth"+ControllerAPI.VERSION_1_0+"/status").permitAll()
-				.antMatchers("/someurl").authenticated().and().authorizeRequests().anyRequest().hasRole("ADMIN");
+				.and().authorizeRequests().anyRequest().hasRole("ADMIN");
 	}
 
 	@Bean

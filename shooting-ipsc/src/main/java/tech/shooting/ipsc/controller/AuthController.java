@@ -14,6 +14,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.HeaderUtils;
 import tech.shooting.ipsc.bean.TokenLogin;
 import tech.shooting.ipsc.bean.UserLogin;
+import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.UserService;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -54,7 +56,7 @@ public class AuthController {
 	private UserService userService;
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "User Login")
+	@ApiOperation(value = "User status")
 	public ResponseEntity<String> statusGet(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
 		// Long id = tokenUtils.getIdFromToken(token);
 		// log.info("id fro status = %s ", id);
@@ -62,13 +64,14 @@ public class AuthController {
 	}
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "User Login")
+	@ApiOperation(value = "User status")
 	public ResponseEntity<String> statusPost(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
 		// Long id = tokenUtils.getIdFromToken(token);
 		// log.info("id fro status = %s ", id);
 		return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
+//	@PreAuthorize(IpscConstants.PERMIT_ALL)
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Login")
 	public ResponseEntity<TokenLogin> login(HttpServletResponse response, @RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestBody @Valid UserLogin user) throws RequestException {
@@ -97,6 +100,7 @@ public class AuthController {
 		return new ResponseEntity<>(new TokenLogin(token), HttpStatus.OK);
 	}
 
+//	@PreAuthorize(IpscConstants.PERMIT_ALL)
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Logout")
 	public ResponseEntity<SuccessfulMessage> logout(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {

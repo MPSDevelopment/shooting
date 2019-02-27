@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
-import tech.shooting.ipsc.config.CorsConfig;
 import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
+import tech.shooting.ipsc.security.TokenAuthentication;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
@@ -36,7 +36,7 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
-@ContextConfiguration(classes = { IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, CorsConfig.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, IpscUserDetailsService.class, AuthController.class, UserService.class,
+@ContextConfiguration(classes = { IpscMongoConfig.class, TokenUtils.class, IpscUserDetailsService.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, SecurityConfig.class, AuthController.class, UserService.class,
 		UserLockUtils.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
@@ -95,7 +95,8 @@ public class AuthControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to access status with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, token)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, token))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 	}
 }

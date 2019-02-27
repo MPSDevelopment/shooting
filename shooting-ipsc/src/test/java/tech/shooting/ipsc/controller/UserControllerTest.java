@@ -42,7 +42,6 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.pojo.Token.TokenType;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.config.CorsConfig;
 import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -60,7 +59,7 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
-@ContextConfiguration(classes = { IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, CorsConfig.class, DatabaseCreator.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class,
+@ContextConfiguration(classes = { IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, DatabaseCreator.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class,
 		IpscUserDetailsService.class, UserController.class, UserService.class, UserDao.class, UserLockUtils.class, ValidationErrorHandler.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
@@ -131,5 +130,24 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
+	
+	
+	@Test
+	public void checkUpdate() throws Exception {
+
+		// try to access update with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		
+	}
+	
+	
+	@Test
+	public void checkUpdatePassword() throws Exception {
+
+		// try to access update password with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_UPDATE_PASSWORD)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		
+	}
+	
 
 }

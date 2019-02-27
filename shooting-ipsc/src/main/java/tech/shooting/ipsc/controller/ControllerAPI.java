@@ -16,6 +16,7 @@ public class ControllerAPI {
     public static final String USER_CONTROLLER = "/api/users";
     public static final String USER_CONTROLLER_UPDATE_PASSWORD = "/updatepassword";
     public static final String USER_CONTROLLER_GET_ALL_USERS_BY_PAGE = "/all/{pageSize}/from/{pageNumber}";
+    public static final String USER_CONTROLLER_CHANGE_PASSWORD = "/changepassword";
     public static final String USER_CONTROLLER_GET_ALL = "/all";
     public static final String USER_CONTROLLER_POST_CREATE = "/create";
     public static final String USER_CONTROLLER_PUT_UPDATE = "/update";
