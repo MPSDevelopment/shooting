@@ -24,11 +24,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -78,11 +81,16 @@ public class UserController {
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Edit existing User", notes = "Update existing User")
-	public ResponseEntity<User> updateUser(@RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
+	public ResponseEntity<User> updateUser(@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
+		
+		if (!userId.equals(bean.getId())) {
+			throw new BadRequestException(new ErrorMessage("Path userId %s does not match bean userId %s", userId, bean.getId()));
+		}
 		
 		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
 
 		dbUser.setName(bean.getName());
+		dbUser.setAddress(bean.getAddress());
 		
 		userRepository.save(dbUser);
 
@@ -92,7 +100,7 @@ public class UserController {
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update password", notes = "Update user password")
-	public ResponseEntity<User> updatePassword(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
+	public ResponseEntity<User> updatePassword(@RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
 		
 		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
 		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));
@@ -101,5 +109,15 @@ public class UserController {
 		log.info("Password has been changed for the user %s", dbUser.getLogin());
 		return new ResponseEntity<>(dbUser, HttpStatus.OK);
 	}
+	
+    @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Delete User", notes = "Returns deleted user object")
+    public ResponseEntity<User> deleteUser(@PathVariable(value = "userId", required = true) Long userId) throws BadRequestException {
+        log.info("Trying to delete user by id %s", userId);
+        
+        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", userId)));
+        userRepository.delete(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 }

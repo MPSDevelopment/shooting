@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 @Data
@@ -24,6 +25,10 @@ public class UserUpdateBean {
 	@NotNull(message = ValidationConstants.USER_NAME_MESSAGE)
 	@Size(min = 3, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
 	private String name;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "User's address", required = true)
+	private Address address;
 	
 	
 }

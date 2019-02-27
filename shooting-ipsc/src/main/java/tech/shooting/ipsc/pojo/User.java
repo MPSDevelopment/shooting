@@ -49,4 +49,8 @@ public class User extends BaseDocument {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's active ")
 	private boolean active = true;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "User's address", required = true)
+	private Address address;
 }

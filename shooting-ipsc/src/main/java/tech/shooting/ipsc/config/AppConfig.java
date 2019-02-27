@@ -28,16 +28,52 @@ import javax.servlet.ServletContext;
 @Configuration
 @EnableSwagger2
 @Slf4j
-public class AppConfig implements WebMvcConfigurer {
+public class AppConfig extends WebMvcConfigurationSupport {
+	
+	public static final String NOT_INCLUDE_VERSION_REGEXP = "^((?!v[0123456789.]*).)*$";
+
+	public static final String INCLUDE_VERSION_REGEXP = ".*/v[0123456789.]*/.*";
+	
+	private static final String SLASH_API = "";
+	
 
 	@Autowired
 	private IpscSettings settings;
 
-	public AppConfig() {
-		super();
+	@Bean
+	public UiConfiguration uiConfig() {
+		return new UiConfiguration("validatorUrl", // url
+				"none", // docExpansion => none | list
+				"alpha", // apiSorter => alpha
+				"model", // defaultModelRendering => schema
+				UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, true, // enableJsonEditor => true | false
+				true, // showRequestHeaders => true | false
+				60000L); // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
 	}
 
-//	@Bean(name = "mappingJackson2HttpMessageConverter")
+	@Bean
+	public Docket apiVersion10(ServletContext servletContext) {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("Version 1.0").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
+				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(INCLUDE_VERSION_REGEXP)).build();
+	}
+
+	@Bean
+	public Docket api(ServletContext servletContext) {
+		return new Docket(DocumentationType.SWAGGER_2).pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
+				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.any()).build();
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		super.addResourceHandlers(registry);
+		registry.addResourceHandler("/static/images/**").addResourceLocations("/images/");
+		registry.addResourceHandler("/static/css/**").addResourceLocations("/css/");
+		registry.addResourceHandler("/static/js/**").addResourceLocations("/js/");
+		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
+
+	@Bean(name = "mappingJackson2HttpMessageConverter")
 	private MappingJackson2HttpMessageConverter converter() {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 		ObjectMapper mapper = JacksonUtils.getMapper();
@@ -48,7 +84,7 @@ public class AppConfig implements WebMvcConfigurer {
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(mappingJackson2HttpMessageConverter());
-//		super.configureMessageConverters(converters);
+		super.configureMessageConverters(converters);
 	}
 
 	private HttpMessageConverter<Object> mappingJackson2HttpMessageConverter() {
