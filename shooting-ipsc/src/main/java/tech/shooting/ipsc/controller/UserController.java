@@ -130,7 +130,7 @@ public class UserController {
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
     
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get all users count", notes = "Returns all users count")
     public ResponseEntity<Long> getCount() throws BadRequestException {
         return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);

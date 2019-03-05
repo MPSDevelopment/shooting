@@ -74,7 +74,7 @@ public class AppConfig extends WebMvcConfigurationSupport {
 	}
 
 	@Bean(name = "mappingJackson2HttpMessageConverter")
-	private MappingJackson2HttpMessageConverter converter() {
+	public MappingJackson2HttpMessageConverter converter() {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 		ObjectMapper mapper = JacksonUtils.getMapper();
 		converter.setObjectMapper(mapper);

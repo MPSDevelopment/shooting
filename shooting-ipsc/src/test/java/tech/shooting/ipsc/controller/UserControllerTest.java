@@ -30,6 +30,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -178,6 +179,32 @@ public class UserControllerTest {
 		
 		
 		
+
+	}
+	@Test
+	public void checkGetCount() throws Exception {
+
+		// try to access getCount with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try to access getCount  with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try to access getCount  with admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+
+		//compare getCount() & userRepository.count
+		long count = userRepository.count();
+
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andReturn();
+
+		assertEquals(mvcResult.getResponse().getContentAsString(), String.valueOf(count));
 
 	}
 
