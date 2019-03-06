@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -45,6 +46,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.pojo.Token.TokenType;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -83,6 +85,9 @@ public class UserControllerTest {
 	private TokenUtils tokenUtils;
 
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
 	private IpscSettings settings;
 
 	private String body;
@@ -109,6 +114,7 @@ public class UserControllerTest {
 
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+
 	}
 
 	@Test
@@ -177,17 +183,28 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		//try to access update password with admin user
-		user = userRepository.save(new User().setLogin("updatePd").setName("updatePd").setPassword("12345").setRoleName(RoleName.JUDGE).setActive(true).setAddress(new Address().setIndex("08250")));
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("userId",Long.valueOf(user.getId()));
-		jsonObject.put("newPassword","54321");
+		if (userRepository.findByLogin("korsa")==null) {
+			user = userRepository.save(new User().setLogin("korsa").setName("kostya").setPassword("12345").setRoleName(RoleName.JUDGE).setActive(true).setAddress(new Address().setIndex("08250")));
+		}else{
+			user = userRepository.findByLogin("korsa");
+		}
 
+
+		ChangePasswordBean chb = new ChangePasswordBean();
+		chb.setId(user.getId());
+		chb.setNewPassword("54321");
+
+		userJson = JacksonUtils.getFullJson(chb);
 
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD)
 				.header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(jsonObject.toJSONString()))
-				.andExpect(MockMvcResultMatchers.status().isOk());
+				.content(userJson))
+				.andExpect(MockMvcResultMatchers.status().is(200));
+
+
+
+		assertEquals("54321",userRepository.findByLogin("korsa").getPassword());
 
 	}
 
