@@ -38,7 +38,7 @@ public class UserSignupBean {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's password", required = true)
 	@NotEmpty(message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	@Size(min = 5, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	private String password;
 
 	@JsonProperty
