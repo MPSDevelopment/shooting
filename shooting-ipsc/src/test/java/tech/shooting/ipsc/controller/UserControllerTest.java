@@ -142,8 +142,17 @@ public class UserControllerTest {
 		user = userRepository.save(user);
 
 		// try to access update with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		userJson = JacksonUtils.getFullJson(user.setName("test"));
+
+		// try to access update with admin user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString())).header(Token.TOKEN_HEADER, adminToken)
+				.contentType(MediaType.APPLICATION_JSON).content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		user = userRepository.findByLogin(user.getLogin());
+		assertEquals("test", user.getName());
 
 	}
 
@@ -174,35 +183,30 @@ public class UserControllerTest {
 		mockMvc.perform(
 				MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace("{userId}", user.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
-		
+
 		assertFalse(userRepository.existsById(user.getId()));
-		
-		
-		
 
 	}
+
 	@Test
 	public void checkGetCount() throws Exception {
 
 		// try to access getCount with unauthorized user
-		mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT))
-				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-		// try to access getCount  with non admin user
+		// try to access getCount with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		// try to access getCount  with admin user
+		// try to access getCount with admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		//compare getCount() & userRepository.count
+		// compare getCount() & userRepository.count
 		long count = userRepository.count();
 
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andReturn();
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
 		assertEquals(mvcResult.getResponse().getContentAsString(), String.valueOf(count));
 
