@@ -66,7 +66,7 @@ public class UserController {
 			throw new ValidationException(User.LOGIN_FIELD, "User with login %s already exists", user.getLogin());
 		}
 
-		user.setRoleName(RoleName.USER);
+		user.setRoleName(RoleName.JUDGE);
 		user.setActive(true);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 

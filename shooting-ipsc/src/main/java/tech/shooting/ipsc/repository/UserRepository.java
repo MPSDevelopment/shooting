@@ -17,7 +17,7 @@ public interface UserRepository extends MongoRepository<User, Long> {
 
 	public List<User> findByRoleName(RoleName roleName);
 
-	public List<User> findByName(String name) ;
+	public List<User> findByName(String name);
 
 	public User findByLoginAndActive(String login, boolean active);
 
