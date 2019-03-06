@@ -12,7 +12,7 @@ import tech.shooting.ipsc.repository.UserRepository;
 @Component
 public class DatabaseCreator {
 
-	private static final String ADMIN_PASSWORD = "test";
+	public static final String ADMIN_PASSWORD = "test";
 
 	public static final String ADMIN_LOGIN = "admin";
 	
