@@ -51,16 +51,16 @@ public class UserController {
 
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Add new User", notes = "Creates new User")
-	public ResponseEntity<User> signupUser(HttpServletRequest request, @RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
+	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
+	public ResponseEntity<User> signupJudge(HttpServletRequest request, @RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
 		User user = new User();
 		BeanUtils.copyProperties(signupUser, user);
-		signupUser(request, user);
+		signupJudge(request, user);
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
-	private void signupUser(HttpServletRequest request, User user) {
-		log.info("Signing up user with login %s", user.getLogin());
+	private void signupJudge(HttpServletRequest request, User user) {
+		log.info("Signing up judge with login %s", user.getLogin());
 
 		if (userRepository.findByLogin(user.getLogin()) != null) {
 			throw new ValidationException(User.LOGIN_FIELD, "User with login %s already exists", user.getLogin());
