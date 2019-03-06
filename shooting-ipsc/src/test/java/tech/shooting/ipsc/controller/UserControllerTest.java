@@ -204,8 +204,8 @@ public class UserControllerTest {
 
 
 
-		assertEquals("54321",userRepository.findByLogin("korsa").getPassword());
-
+		assertTrue(passwordEncoder.matches("54321", userRepository.findByLogin("korsa").getPassword()));
+		
 	}
 
 	@Test

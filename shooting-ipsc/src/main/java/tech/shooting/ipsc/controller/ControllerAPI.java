@@ -17,7 +17,7 @@ public class ControllerAPI {
     public static final String USER_CONTROLLER_PUT_UPDATE = "/{userId}";
     public static final String USER_CONTROLLER_GET_USER = "/{userId}";
     public static final String USER_CONTROLLER_DELETE_USER = "/{userId}";
-    public static final String USER_CONTROLLER_CHANGE_PASSWORD = "/changepassword";
+    public static final String USER_CONTROLLER_CHANGE_PASSWORD = "/changepassword/{userId}";
     public static final String USER_CONTROLLER_GET_ALL_USERS_BY_PAGE = "/all/{pageSize}/from/{pageNumber}";
     public static final String USER_CONTROLLER_GET_ALL = "/all";
     public static final String USER_CONTROLLER_GET_COUNT = "/count";

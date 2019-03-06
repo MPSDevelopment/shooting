@@ -99,7 +99,7 @@ public class UserController {
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update judge password", notes = "Update judge password")
-	public ResponseEntity<User> updatePassword(@RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
+	public ResponseEntity<User> updatePassword(@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
 
 		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
 		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));

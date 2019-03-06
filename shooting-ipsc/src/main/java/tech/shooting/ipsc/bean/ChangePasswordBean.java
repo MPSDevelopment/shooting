@@ -24,11 +24,11 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 public class ChangePasswordBean {
 
 	public static final String NEW_PASSWORD = "newPassword";
-	private static final String USER_ID = "userId";
+	private static final String USER_ID = "id";
 	
 	@JsonProperty(USER_ID)
 	@UserIdForValidPassword
-	@NotBlank(message = ValidationConstants.USER_ID_MESSAGE)
+	@NotNull(message = ValidationConstants.USER_ID_MESSAGE)
 	private Long id;
 
 	@JsonProperty(value = NEW_PASSWORD)
