@@ -26,6 +26,12 @@ public class HeaderUtils {
 	public final static String TOKEN_HEADER = "Token";
 	
 	public final static String X_FORWARDED_FOR = "X-Forwarded-For";
+	
+	public final static String PAGE_HEADER = "page";
+	
+	public final static String PAGES_HEADER = "pages";
+	
+	public final static String TOTAL_HEADER = "total";
 
 	public static String getAuthToken(HttpServletRequest request) {
 		return request.getHeader(Token.TOKEN_HEADER);

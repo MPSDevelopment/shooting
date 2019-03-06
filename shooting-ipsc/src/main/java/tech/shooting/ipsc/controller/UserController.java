@@ -1,12 +1,13 @@
 package tech.shooting.ipsc.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.commons.pojo.Token;
+import tech.shooting.commons.utils.HeaderUtils;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
@@ -16,18 +17,25 @@ import tech.shooting.ipsc.service.UserService;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -127,16 +135,40 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
     
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get all users", notes = "Returns all user objects")
-    public ResponseEntity<List<User>> getUsers() throws BadRequestException {
-        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
-    }
-    
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get all users count", notes = "Returns all users count")
-    public ResponseEntity<Long> getCount() throws BadRequestException {
-        return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);
-    }
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all users", notes = "Returns all user objects")
+	public ResponseEntity<List<User>> getUsers() throws BadRequestException {
+		return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get users by page")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = "page", description = "Current page number", response = String.class),
+			@ResponseHeader(name = "total", description = "Total records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class) }) })
+	public ResponseEntity<List<User>> getDrones(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestParam(value = "page", required = false) Integer pageNumber,
+			@RequestParam(value = "size", required = false) Integer size) throws BadRequestException {
+
+		pageNumber = Math.max(0, pageNumber);
+		size = Math.max(Math.min(10, size), 20);
+
+		PageRequest pageable = PageRequest.of(pageNumber, size, Sort.Direction.DESC, User.ID_FIELD);
+		Page<User> page = userRepository.findAll(pageable);
+		return new ResponseEntity<>(page.getContent(), setHeaders(pageNumber, page.getTotalElements(), page.getTotalPages()), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all users count", notes = "Returns all users count")
+	public ResponseEntity<Long> getCount() throws BadRequestException {
+		return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);
+	}
+
+	private MultiValueMap<String, String> setHeaders(Integer page, Long totalDronesInDB, Integer totalPagesInDB) {
+		MultiValueMap<String, String> headers = new HttpHeaders();
+		page++;
+		headers.add(HeaderUtils.PAGE_HEADER, page.toString());
+		headers.add(HeaderUtils.TOTAL_HEADER, totalDronesInDB.toString());
+		headers.add(HeaderUtils.PAGES_HEADER, totalPagesInDB.toString());
+		return headers;
+	}
 
 }
