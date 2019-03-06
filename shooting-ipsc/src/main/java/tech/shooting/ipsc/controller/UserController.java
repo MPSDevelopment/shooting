@@ -87,6 +87,9 @@ public class UserController {
 
 		dbUser.setName(bean.getName());
 		dbUser.setAddress(bean.getAddress());
+		dbUser.setActive(bean.isActive());
+		dbUser.setLogin(bean.getLogin());
+		dbUser.setBirthDate(bean.getBirthDate());
 		
 		userRepository.save(dbUser);
 
@@ -95,7 +98,7 @@ public class UserController {
 
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Update password", notes = "Update user password")
+	@ApiOperation(value = "Update judge password", notes = "Update judge password")
 	public ResponseEntity<User> updatePassword(@RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
 		
 		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
