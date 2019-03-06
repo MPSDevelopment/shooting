@@ -30,7 +30,7 @@ public class UserLogin {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's password", required = true)
 	@NotBlank(message = ValidationConstants.USER_PASSWORD_REQUIRED_MESSAGE)
-	@Size(min = 5, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	@ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
 	private String password;
 
