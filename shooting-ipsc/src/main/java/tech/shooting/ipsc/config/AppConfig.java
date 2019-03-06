@@ -13,14 +13,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tech.shooting.commons.utils.JacksonUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -91,6 +98,26 @@ public class AppConfig extends WebMvcConfigurationSupport {
 		MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
 		jackson2HttpMessageConverter.setObjectMapper(JacksonUtils.getMapper());
 		return jackson2HttpMessageConverter;
+	}
+	
+	@Bean
+	public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
+		UrlBasedCorsConfigurationSource source = corsSource();
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return bean;
+	}
+
+	@Bean
+	public UrlBasedCorsConfigurationSource corsSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOrigins(Collections.singletonList("*"));
+		config.setAllowedMethods(Collections.singletonList("*"));
+		config.setAllowedHeaders(Collections.singletonList("*"));
+		source.registerCorsConfiguration("/**", config);
+		return source;
 	}
 
 }
