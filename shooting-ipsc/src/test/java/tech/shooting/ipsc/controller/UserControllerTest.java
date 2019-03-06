@@ -6,9 +6,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.json.UTF8StreamJsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -47,6 +50,7 @@ import tech.shooting.commons.pojo.Token.TokenType;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
+import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -235,6 +239,28 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testUser.getName()))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testUser.getId()));
 
+	}
+
+	@Test
+	public void checkGetAllUsers() throws Exception{
+
+		//try to access get all users method unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.USER_CONTROLLER_GET_ALL))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try to access get all users method non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.USER_CONTROLLER_GET_ALL)
+				.header(Token.TOKEN_HEADER,userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try to access get all users method admin user
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL)
+				.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<Object> res= objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {});
+		assertTrue(userRepository.findAll().size()==res.size());
 	}
 
 	@Test
