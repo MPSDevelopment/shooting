@@ -179,32 +179,27 @@ public class UserControllerTest {
 	@Test
 	public void checkUpdatePassword() throws Exception {
 		// try to access update password with unauthorized user
-		//mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD))
-				//.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		user = userRepository.save(user);
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD
+				.replace("{userId}",user.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-		//try to access update password with admin user
-		if (userRepository.findByLogin("korsa")==null) {
-			user = userRepository.save(new User().setLogin("korsa").setName("kostya").setPassword("12345").setRoleName(RoleName.JUDGE).setActive(true).setAddress(new Address().setIndex("08250")));
-		}else{
-			user = userRepository.findByLogin("korsa");
-		}
+		User testUser = userRepository.save(user);
+		ChangePasswordBean changePasswordBean = new ChangePasswordBean();
+		changePasswordBean.setId(testUser.getId());
+		changePasswordBean.setNewPassword("54321");
 
-
-		ChangePasswordBean chb = new ChangePasswordBean();
-		chb.setId(user.getId());
-		chb.setNewPassword("54321");
-
-		userJson = JacksonUtils.getFullJson(chb);
+		userJson = JacksonUtils.getFullJson(changePasswordBean);
 
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD
-				.replace("{userId}", user.getId().toString())).header(Token.TOKEN_HEADER, adminToken)
+				.replace("{userId}", testUser.getId().toString())).header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 
 
-		assertTrue(passwordEncoder.matches("54321", userRepository.findByLogin("korsa").getPassword()));
+		assertTrue(passwordEncoder.matches("54321", userRepository.findByLogin(testUser.getLogin()).getPassword()));
 		
 	}
 
