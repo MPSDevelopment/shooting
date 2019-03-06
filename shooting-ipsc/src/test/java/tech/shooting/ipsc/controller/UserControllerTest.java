@@ -147,6 +147,14 @@ public class UserControllerTest {
 
 		userJson = JacksonUtils.getFullJson(user.setName("test"));
 
+		//try to access update with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE
+				.replace("{userId}",user.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(userJson)
+				.header(Token.TOKEN_HEADER,userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
 		// try to access update with admin user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString())).header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON).content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
