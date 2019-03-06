@@ -41,12 +41,6 @@ public class UserUpdateBean {
 	private String login;
 
 	@JsonProperty
-	@ApiModelProperty(value = "User's password")
-	@NotEmpty(message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	private String password;
-
-	@JsonProperty
 	@ApiModelProperty(value = "User's birthday")
 	private OffsetDateTime birthDate;
 
