@@ -33,7 +33,7 @@ public class ChangePasswordBean {
 
 	@JsonProperty(value = NEW_PASSWORD)
 	@NotBlank(message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	@Size(min = 5, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	private String newPassword;
 
 }

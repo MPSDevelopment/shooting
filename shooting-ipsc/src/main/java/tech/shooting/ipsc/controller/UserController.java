@@ -76,7 +76,7 @@ public class UserController {
 
 //	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Edit existing User", notes = "Update existing User")
+	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
 	public ResponseEntity<User> updateUser(@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
 		
 		if (!userId.equals(bean.getId())) {
