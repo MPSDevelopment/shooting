@@ -178,12 +178,20 @@ public class UserControllerTest {
 
 	@Test
 	public void checkUpdatePassword() throws Exception {
+
 		// try to access update password with unauthorized user
 		user = userRepository.save(user);
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD
 				.replace("{userId}",user.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
+		//try to acess update password with non admin user
+		user = userRepository.save(user);
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD
+				.replace("{userId}",user.getId().toString())).header(Token.TOKEN_HEADER,userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try to access update password with admin user
 		User testUser = userRepository.save(user);
 		ChangePasswordBean changePasswordBean = new ChangePasswordBean();
 		changePasswordBean.setId(testUser.getId());
@@ -200,7 +208,33 @@ public class UserControllerTest {
 
 
 		assertTrue(passwordEncoder.matches("54321", userRepository.findByLogin(testUser.getLogin()).getPassword()));
-		
+
+	}
+
+	@Test
+	public void checkGetUser() throws Exception {
+
+		//try to access get user method unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.USER_CONTROLLER_GET_USER
+				.replace("{userId}",String.valueOf(455645646))))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try to access get user method non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.USER_CONTROLLER_GET_USER
+				.replace("{userId}",String.valueOf(455645646)))
+				.header(Token.TOKEN_HEADER,userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try to access get user method admin user
+		User testUser = userRepository.save(user);
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER
+				.replace("{userId}", String.valueOf(testUser.getId())))
+				.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.login").value(testUser.getLogin()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testUser.getName()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testUser.getId()));
+
 	}
 
 	@Test
