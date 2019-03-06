@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
 
@@ -38,6 +39,6 @@ public class DatabaseCreator {
 	}
 
 	private void createDatabase() {
-		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD));
+		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
 	}
 }
