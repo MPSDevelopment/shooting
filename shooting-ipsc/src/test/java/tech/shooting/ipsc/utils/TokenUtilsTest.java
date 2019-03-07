@@ -7,9 +7,9 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.mpsdevelopment.plasticine.commons.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
-import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.security.TokenUtils;
 
 import org.junit.jupiter.api.Tag;

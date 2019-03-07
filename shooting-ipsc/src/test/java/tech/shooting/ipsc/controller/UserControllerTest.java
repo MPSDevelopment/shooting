@@ -43,6 +43,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.Token;
@@ -51,7 +52,6 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
-import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -312,25 +312,26 @@ public class UserControllerTest {
 	@Test
 	public void checkGetAllUsersByPage () throws Exception {
 
-		//try to access getAllUsersByPage with unauthorized user
+		// try to access getAllUsersByPage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
 						.replace("{pageNumber}",String.valueOf(1))
 						.replace("{pageSize}",String.valueOf(5))))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-		//try to access getAllUsersByPage with authorized user
+		// try to access getAllUsersByPage with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
 				.replace("{pageNumber}",String.valueOf(1))
 				.replace("{pageSize}",String.valueOf(5)))
 				.header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		//try to access getAllUsersByPage with admin user
+		// try to access getAllUsersByPage with admin user
        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
                 .replace("{pageNumber}", String.valueOf(1))
                 .replace("{pageSize}", String.valueOf(5)))
                 .header(Token.TOKEN_HEADER, adminToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+       
 
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        List <Object> resultSet = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {});

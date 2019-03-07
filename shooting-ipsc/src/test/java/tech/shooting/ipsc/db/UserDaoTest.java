@@ -15,8 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.utils.JacksonUtils;
-import tech.shooting.ipsc.config.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;

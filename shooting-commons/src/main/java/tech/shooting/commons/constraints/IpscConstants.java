@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.config;
+package tech.shooting.commons.constraints;
 
 public class IpscConstants {
 
