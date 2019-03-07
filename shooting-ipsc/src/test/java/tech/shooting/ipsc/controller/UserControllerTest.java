@@ -261,7 +261,7 @@ public class UserControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Object> res= objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {});
-		assertTrue(userRepository.findAll().size()==res.size());
+		assertEquals(userRepository.findAll().size(), res.size());
 	}
 
 	@Test
@@ -333,8 +333,8 @@ public class UserControllerTest {
             .header (Token.TOKEN_HEADER, adminToken))
             .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
 
-        List<User> res = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
-        assertTrue (10 == res.size ());
+        List<User> list = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
+        assertEquals(10, list.size());
 
         //try to access getAllUsersByPage with admin user with size 30
         mvcResult = mockMvc.perform (MockMvcRequestBuilders.get (ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
@@ -343,8 +343,8 @@ public class UserControllerTest {
             .header (Token.TOKEN_HEADER, adminToken))
             .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
 
-        res = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
-        assertTrue (20 == res.size ());
+        list = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
+        assertEquals(20, list.size ());
 
     }
 
@@ -363,9 +363,9 @@ public class UserControllerTest {
             .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
 
         MockHttpServletResponse response = mvcResult.getResponse ();
-        assertTrue (response.getHeader ("pages").equals (String.valueOf (countPages)));
-        assertTrue (response.getHeader ("page").equals (String.valueOf (page+1)));
-        assertTrue (response.getHeader ("total").equals (String.valueOf (sizeAllUser)));
+        assertEquals (response.getHeader ("pages"), String.valueOf (countPages));
+        assertEquals (response.getHeader ("page"), String.valueOf (page+1));
+        assertEquals (response.getHeader ("total"), String.valueOf (sizeAllUser));
 
     }
 }
