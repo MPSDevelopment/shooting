@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -309,34 +310,62 @@ public class UserControllerTest {
 
 	}
 
-	@Test
-	public void checkGetAllUsersByPage () throws Exception {
+    @Test
+    public void checkGetAllUsersByPage () throws Exception {
 
-		// try to access getAllUsersByPage with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
-						.replace("{pageNumber}",String.valueOf(1))
-						.replace("{pageSize}",String.valueOf(5))))
-				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        // try to access getAllUsersByPage with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+            .replace("{pageNumber}",String.valueOf(1))
+            .replace("{pageSize}",String.valueOf(5))))
+            .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-		// try to access getAllUsersByPage with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
-				.replace("{pageNumber}",String.valueOf(1))
-				.replace("{pageSize}",String.valueOf(5)))
-				.header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+        // try to access getAllUsersByPage with authorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+            .replace("{pageNumber}",String.valueOf(1))
+            .replace("{pageSize}",String.valueOf(5)))
+            .header(Token.TOKEN_HEADER, userToken))
+            .andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		// try to access getAllUsersByPage with admin user
-       mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
-                .replace("{pageNumber}", String.valueOf(1))
-                .replace("{pageSize}", String.valueOf(5)))
-                .header(Token.TOKEN_HEADER, adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-       
+        //try to access getAllUsersByPage with admin user
+        MvcResult mvcResult = mockMvc.perform (MockMvcRequestBuilders.get (ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+            .replace ("{pageNumber}", String.valueOf (1))
+            .replace ("{pageSize}", String.valueOf (5)))
+            .header (Token.TOKEN_HEADER, adminToken))
+            .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        List <Object> resultSet = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {});
-//        System.out.println(resultSet.size());
-//        assertTrue(resultSet.size()==10);
+        List<User> res = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
+        assertTrue (10 == res.size ());
+
+        //try to access getAllUsersByPage with admin user with size 30
+        mvcResult = mockMvc.perform (MockMvcRequestBuilders.get (ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+            .replace ("{pageNumber}", String.valueOf (1))
+            .replace ("{pageSize}", String.valueOf (30)))
+            .header (Token.TOKEN_HEADER, adminToken))
+            .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
+
+        res = JacksonUtils.getListFromJson (User[].class, mvcResult.getResponse ().getContentAsString ());
+        assertTrue (20 == res.size ());
+
     }
 
+    @Test
+    public void checkGetAllUsersByPagePart2 () throws Exception {
+        //try to access to header
+        int sizeAllUser = userRepository.findAll ().size ();
+        int page = 250;
+        int size =  0;
+        int countInAPage = size <= 10 ? 10 :20;
+        int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser/countInAPage : (sizeAllUser / countInAPage)+1;
+        MvcResult mvcResult = mockMvc.perform (MockMvcRequestBuilders.get (ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+            .replace ("{pageNumber}", String.valueOf (page))
+            .replace ("{pageSize}", String.valueOf (size)))
+            .header (Token.TOKEN_HEADER, adminToken))
+            .andExpect (MockMvcResultMatchers.status ().isOk ()).andReturn ();
+
+        MockHttpServletResponse response = mvcResult.getResponse ();
+        assertTrue (response.getHeader ("pages").equals (String.valueOf (countPages)));
+        assertTrue (response.getHeader ("page").equals (String.valueOf (page+1)));
+        assertTrue (response.getHeader ("total").equals (String.valueOf (sizeAllUser)));
+
+    }
 }
