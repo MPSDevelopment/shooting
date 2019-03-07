@@ -18,6 +18,8 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 public class Person extends BaseDocument {
 
+    public static final String NAME_AND_IPSC_FIELD = "name and ipsc code";
+
     @JsonProperty
     @ApiModelProperty(value = "Person's name", required = true)
     private String name;

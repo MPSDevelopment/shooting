@@ -10,7 +10,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.validator.ValidateTypeWeapon;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -28,7 +27,7 @@ public class PersonBean {
     @JsonProperty
     @ApiModelProperty(value = "Person's name", required = true)
     @NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)
-    @Size(min = 3 , max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)
+    @Size(min = 3, max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)
     private String name;
 
     @JsonProperty
