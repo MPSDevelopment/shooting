@@ -146,7 +146,7 @@ public class UserController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = "page", description = "Current page number", response = String.class),
 			@ResponseHeader(name = "total", description = "Total records in database", response = String.class),
 			@ResponseHeader(name = "pages", description = "Total pages in database", response = String.class) }) })
-	public ResponseEntity<List<User>> getDrones(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
+	public ResponseEntity<List<User>> getUsers(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
 												@PathVariable(value = "pageNumber") Integer page,
 			@PathVariable(value = "pageSize") Integer size) throws BadRequestException {
 
