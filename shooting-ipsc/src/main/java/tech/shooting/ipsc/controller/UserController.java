@@ -144,16 +144,18 @@ public class UserController {
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get users by page")
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = "page", description = "Current page number", response = String.class),
-			@ResponseHeader(name = "total", description = "Total records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class) }) })
-	public ResponseEntity<List<User>> getDrones(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestParam(value = "page", required = false) Integer pageNumber,
-			@RequestParam(value = "size", required = false) Integer size) throws BadRequestException {
+			@ResponseHeader(name = "total", description = "Total records in database", response = String.class),
+			@ResponseHeader(name = "pages", description = "Total pages in database", response = String.class) }) })
+	public ResponseEntity<List<User>> getDrones(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
+												@PathVariable(value = "pageNumber") Integer page,
+			@PathVariable(value = "pageSize") Integer size) throws BadRequestException {
 
-		pageNumber = Math.max(0, pageNumber);
+		page = Math.max(0, page);
 		size = Math.max(Math.min(10, size), 20);
 
-		PageRequest pageable = PageRequest.of(pageNumber, size, Sort.Direction.DESC, User.ID_FIELD);
-		Page<User> page = userRepository.findAll(pageable);
-		return new ResponseEntity<>(page.getContent(), setHeaders(pageNumber, page.getTotalElements(), page.getTotalPages()), HttpStatus.OK);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.DESC, User.ID_FIELD);
+		Page<User> pageOfUsers = userRepository.findAll(pageable);
+		return new ResponseEntity<>(pageOfUsers.getContent(), setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

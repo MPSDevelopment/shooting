@@ -309,4 +309,33 @@ public class UserControllerTest {
 
 	}
 
+	@Test
+	public void checkGetAllUsersByPage () throws Exception {
+
+		//try to access getAllUsersByPage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+						.replace("{pageNumber}",String.valueOf(1))
+						.replace("{pageSize}",String.valueOf(5))))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try to access getAllUsersByPage with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+				.replace("{pageNumber}",String.valueOf(1))
+				.replace("{pageSize}",String.valueOf(5)))
+				.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try to access getAllUsersByPage with admin user
+       mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE
+                .replace("{pageNumber}", String.valueOf(1))
+                .replace("{pageSize}", String.valueOf(5)))
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        List <Object> resultSet = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {});
+//        System.out.println(resultSet.size());
+//        assertTrue(resultSet.size()==10);
+    }
+
 }
