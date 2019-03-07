@@ -97,6 +97,8 @@ public class UserControllerTest {
 
 	@BeforeEach
 	public void before() {
+		userRepository.deleteByRoleName(RoleName.USER);
+		
 		String password = RandomStringUtils.randomAscii(14);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -276,7 +278,7 @@ public class UserControllerTest {
 	@Test
 	public void checkGetAllUsersByPage() throws Exception {
 
-		createUsers(20);
+		createUsers(40);
 
 		// try to access getAllUsersByPage with unauthorized user
 		mockMvc.perform(
@@ -300,7 +302,7 @@ public class UserControllerTest {
 
 		// try to access getAllUsersByPage with admin user with size 30
 		mvcResult = mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(30)))
+				MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(30))) 
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -323,7 +325,7 @@ public class UserControllerTest {
 
 		MockHttpServletResponse response = mvcResult.getResponse();
 		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
-		assertEquals(response.getHeader("page"), String.valueOf(page + 1));
+		assertEquals(response.getHeader("page"), String.valueOf(page));
 		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
 
 	}

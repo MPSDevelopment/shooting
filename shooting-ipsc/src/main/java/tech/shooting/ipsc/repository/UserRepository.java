@@ -20,5 +20,7 @@ public interface UserRepository extends MongoRepository<User, Long> {
 	public List<User> findByName(String name);
 
 	public User findByLoginAndActive(String login, boolean active);
+	
+	public void deleteByRoleName(RoleName roleName);
 
 }

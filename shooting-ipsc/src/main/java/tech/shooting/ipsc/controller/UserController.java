@@ -150,8 +150,11 @@ public class UserController {
 												@PathVariable(value = "pageNumber") Integer page,
 			@PathVariable(value = "pageSize") Integer size) throws BadRequestException {
 
-		page = Math.max(0, page);
-		size = size <= 10 ? 10 :20;
+		page = Math.max(1, page);
+		page--;
+		size = Math.min(Math.max(10, size), 20);
+		
+		log.info("Page is %s and size is %s", page, size);
 
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.DESC, User.ID_FIELD);
 		Page<User> pageOfUsers = userRepository.findAll(pageable);
