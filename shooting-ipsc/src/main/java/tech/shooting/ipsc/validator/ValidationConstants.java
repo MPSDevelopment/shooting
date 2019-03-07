@@ -24,4 +24,6 @@ public class ValidationConstants {
 
 	public static final String LOGIN_INCORRECT = "The account or password is incorrect. Please try again";
 
+	public static final String PERSON_NAME_MESSAGE = "Min 3 character";
+
 }
