@@ -330,8 +330,9 @@ public class UserControllerTest {
 
 	private void createUsers(int count) {
 		for (int i = 0; i < count; i++) {
-			userRepository
-					.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(RandomStringUtils.randomAlphanumeric(15)).setRoleName(RoleName.USER));
+			var user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(RandomStringUtils.randomAlphanumeric(15)).setRoleName(RoleName.USER);
+			userRepository.save(user);
+			log.info("User %s has been created", user.getLogin());
 		}
 	}
 
