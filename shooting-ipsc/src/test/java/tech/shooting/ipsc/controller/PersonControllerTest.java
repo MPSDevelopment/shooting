@@ -28,6 +28,7 @@ import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
+import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -42,9 +43,8 @@ import java.util.Map;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class,
-    TokenUtils.class, SecurityConfig.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-    TokenAuthenticationFilter.class, IpscUserDetailsService.class, PersonController.class,ValidationErrorHandler.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class,
+		IpscUserDetailsService.class, PersonController.class, ValidationErrorHandler.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -53,45 +53,45 @@ import java.util.Map;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class PersonControllerTest {
 
-    @Autowired
-    private PersonRepository personRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Autowired
-    private TokenUtils tokenUtils;
+	@Autowired
+	private TokenUtils tokenUtils;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
+	private User user;
+	private User admin;
 
-    private User user;
-    private User admin;
+	private String adminToken;
 
-    private String adminToken;
+	private String userJson;
 
-    private String userJson;
+	private String userToken;
 
-    private String userToken;
-    @BeforeEach
-    public void before() {
-        String password = RandomStringUtils.randomAscii(14);
-        user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
-        admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-        userJson = JacksonUtils.getFullJson(user);
+	@BeforeEach
+	public void before() {
+		String password = RandomStringUtils.randomAscii(14);
+		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
+		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
+		userJson = JacksonUtils.getFullJson(user);
 
-        userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-        adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 
-    }
+	}
 
-    @Test
-    public void checkCreatePerson(){
+	@Test
+	public void checkCreatePerson() {
 
-    }
+	}
 
 }
