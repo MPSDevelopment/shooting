@@ -29,20 +29,8 @@ public class Competitor extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's rfid code", required = true)
 	@Indexed(unique = true)
-	private String code;
+	private String rfidCode;
 	
 	
-	
-	private TournamentCategoryEnum tournamentDivision;
-	
-	private HandgunEnum handgunDivision;
-	
-//	Enum shotgunDivision
-//	Enum rifleDivision
-//	Enum handgunPowerFactor
-//	Enum shotgunPowerFactor
-//	Enum riflePowerFactor
-//	Enum category
-//	String tag
 
 }
