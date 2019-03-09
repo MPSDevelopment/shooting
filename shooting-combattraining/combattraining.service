@@ -1,0 +1,19 @@
+[Unit]
+
+Description=Combat training service
+
+After=syslog.target
+
+[Service]
+
+User=root
+
+WorkingDirectory=/usr/share/servers/shooting/combattraining
+Environment=SPRING_PROFILES_ACTIVE=development
+ExecStart=/usr/share/servers/shooting/combattraining/service.sh
+
+SuccessExitStatus=143
+
+[Install]
+
+WantedBy=multi-user.target
