@@ -41,7 +41,7 @@ public class PersonRepositoryTest {
         String name = "Tigran";
         String codeIPSC = "123456789";
 
-        personRepository.save(new Person().setName(name).setCodeIPSC(codeIPSC));
-        assertNotNull(personRepository.findByNameAndCodeIPSC(name,codeIPSC));
+        personRepository.save(new Person().setName(name).setRifleCodeIpsc(codeIPSC));
+        assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name,codeIPSC));
     }
 }
