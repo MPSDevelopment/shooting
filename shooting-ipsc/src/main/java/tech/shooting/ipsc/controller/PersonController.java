@@ -90,7 +90,7 @@ public class PersonController {
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
 	public ResponseEntity<List<Person>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
 	                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
-		return PageAble.getPage(page, size, Person.class, personRepository);
+		return PageAble.getPage(page, size, personRepository);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

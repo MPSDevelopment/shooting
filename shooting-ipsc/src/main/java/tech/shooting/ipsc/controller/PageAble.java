@@ -15,14 +15,14 @@ import tech.shooting.ipsc.pojo.User;
 public class PageAble {
 
 
-	public static ResponseEntity getPage (int page, int size, Class<?> personClass, MongoRepository<? extends BaseDocument, Long> personRepository) {
+	public static ResponseEntity getPage (int page, int size, MongoRepository<? extends BaseDocument, Long> personRepository) {
 		page = Math.max(1, page);
 		page--;
-		Page<?> pageOfUsers = PageAble.countPage(page, size, personClass, personRepository);
+		Page<?> pageOfUsers = PageAble.countPage(page, size, personRepository);
 		return new ResponseEntity(pageOfUsers.getContent(), PageAble.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
-	public static Page<? extends BaseDocument> countPage (Integer page, Integer size, Class<?> personClass, MongoRepository<? extends BaseDocument, Long> personRepository) {
+	public static Page<? extends BaseDocument> countPage (Integer page, Integer size, MongoRepository<? extends BaseDocument, Long> personRepository) {
 
 		size = Math.min(Math.max(10, size), 20);
 

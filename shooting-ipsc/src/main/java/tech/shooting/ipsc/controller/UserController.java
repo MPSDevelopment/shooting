@@ -137,7 +137,7 @@ public class UserController {
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
 	public ResponseEntity<List<User>> getUsers (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
 	                                            @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
-		return PageAble.getPage(page, size, User.class, userRepository);
+		return PageAble.getPage(page, size, userRepository);
 	}
 
 }
