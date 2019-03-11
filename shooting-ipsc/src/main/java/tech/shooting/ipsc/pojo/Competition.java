@@ -18,6 +18,7 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 public class Competition extends BaseDocument {
 
+	public static final String NAME = "name";
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	private String name;

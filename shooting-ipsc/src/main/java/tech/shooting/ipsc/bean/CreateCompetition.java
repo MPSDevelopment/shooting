@@ -10,7 +10,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -24,6 +26,7 @@ public class CreateCompetition {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
+	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)
 	private String name;
 
 	@JsonProperty

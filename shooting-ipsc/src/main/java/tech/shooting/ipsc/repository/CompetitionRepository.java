@@ -6,4 +6,5 @@ import tech.shooting.ipsc.pojo.Competition;
 
 @Repository
 public interface CompetitionRepository extends MongoRepository<Competition, Long> {
+	Competition findByName (String name);
 }
