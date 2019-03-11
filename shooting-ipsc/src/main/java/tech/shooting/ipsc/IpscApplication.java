@@ -19,10 +19,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Slf4j
 public class IpscApplication {
 
-    public static void main (String[] args) {
-        log.info("Starting IpscApplication");
-        SpringApplication application = new SpringApplication(IpscApplication.class);
-        application.addListeners(new ApplicationPidFileWriter("app.pid"));
-        application.run(args);
-    }
+	public static void main (String[] args) {
+		log.info("Starting IpscApplication");
+		SpringApplication application = new SpringApplication(IpscApplication.class);
+		application.addListeners(new ApplicationPidFileWriter("app.pid"));
+		application.run(args);
+	}
 }

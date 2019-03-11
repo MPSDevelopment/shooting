@@ -4,6 +4,6 @@ import java.util.List;
 
 public class Team {
 
-    private List<Competitor> competitors;
+	private List<Competitor> competitors;
 
 }

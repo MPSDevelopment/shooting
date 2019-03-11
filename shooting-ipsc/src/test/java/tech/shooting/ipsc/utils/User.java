@@ -12,24 +12,24 @@ import java.util.Date;
 @Accessors(chain = true)
 public class User {
 
-    @JsonProperty("n")
-    @JsonView(TestViews.Public.class)
-    private String name;
+	@JsonProperty("n")
+	@JsonView(TestViews.Public.class)
+	private String name;
 
-    @JsonProperty("s")
-    @JsonView(TestViews.Public.class)
-    private String surname;
+	@JsonProperty("s")
+	@JsonView(TestViews.Public.class)
+	private String surname;
 
-    @JsonProperty("c")
-    @JsonView(TestViews.Private.class)
-    private Integer count;
+	@JsonProperty("c")
+	@JsonView(TestViews.Private.class)
+	private Integer count;
 
-    @JsonProperty("sel")
-    private Long salary;
+	@JsonProperty("sel")
+	private Long salary;
 
-    @JsonIgnore
-    private String password;
+	@JsonIgnore
+	private String password;
 
-    @JsonProperty("date")
-    private Date date;
+	@JsonProperty("date")
+	private Date date;
 }

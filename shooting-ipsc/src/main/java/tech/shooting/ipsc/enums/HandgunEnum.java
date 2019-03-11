@@ -5,19 +5,19 @@ package tech.shooting.ipsc.enums;
  */
 public enum HandgunEnum {
 
-    OPEN("Open"), STANDARD("Standard"), CLASSIC("Classic"), PRODUCTION("Production"), REVOLVER("Revolver"), MODIFIED("Modified");
+	OPEN("Open"), STANDARD("Standard"), CLASSIC("Classic"), PRODUCTION("Production"), REVOLVER("Revolver"), MODIFIED("Modified");
 
-    private String value;
+	private String value;
 
-    HandgunEnum (String value) {
-        this.value = value;
-    }
+	HandgunEnum (String value) {
+		this.value = value;
+	}
 
-    @Override
-    public String toString () {
-        return String.valueOf(value);
-    }
+	@Override
+	public String toString () {
+		return String.valueOf(value);
+	}
 
-    public String getValue () {
-        return value;
-    }}
+	public String getValue () {
+		return value;
+	}}

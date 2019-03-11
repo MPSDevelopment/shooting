@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserSignup {
 
-    private String name;
+	private String name;
 
-    private String password;
+	private String password;
 }

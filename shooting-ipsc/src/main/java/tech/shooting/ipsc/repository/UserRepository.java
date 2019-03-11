@@ -10,16 +10,16 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, Long> {
 
-    public User findByLogin (String value);
+	public User findByLogin (String value);
 
-    public User getById (Long id);
+	public User getById (Long id);
 
-    public List<User> findByRoleName (RoleName roleName);
+	public List<User> findByRoleName (RoleName roleName);
 
-    public List<User> findByName (String name);
+	public List<User> findByName (String name);
 
-    public User findByLoginAndActive (String login, boolean active);
+	public User findByLoginAndActive (String login, boolean active);
 
-    public void deleteByRoleName (RoleName roleName);
+	public void deleteByRoleName (RoleName roleName);
 
 }

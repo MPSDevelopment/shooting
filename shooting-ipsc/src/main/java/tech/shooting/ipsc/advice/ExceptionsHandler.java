@@ -20,14 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class ExceptionsHandler {
 
-    @ExceptionHandler({InvalidClaimException.class, TokenExpiredException.class, SignatureVerificationException.class})
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public @ResponseBody
-    String handleRequestException (Exception ex, HttpServletResponse response) {
-        log.error("User token expired!");
-        Cookie cookie = new Cookie("accessToken", "");
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return "User login expired, please reconnect!";
-    }
+	@ExceptionHandler({InvalidClaimException.class, TokenExpiredException.class, SignatureVerificationException.class})
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	public @ResponseBody
+	String handleRequestException (Exception ex, HttpServletResponse response) {
+		log.error("User token expired!");
+		Cookie cookie = new Cookie("accessToken", "");
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		return "User login expired, please reconnect!";
+	}
 }

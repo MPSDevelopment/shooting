@@ -12,9 +12,9 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class TokenLogin {
 
-    public static final String TOKEN_FIELD = "token";
+	public static final String TOKEN_FIELD = "token";
 
-    @JsonProperty(value = TOKEN_FIELD)
-    private String token;
+	@JsonProperty(value = TOKEN_FIELD)
+	private String token;
 
 }

@@ -16,16 +16,16 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Accessors(chain = true)
 public class Competitor extends BaseDocument {
 
-    @JsonProperty
-    @ApiModelProperty(value = "Competitor's name", required = true)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor's name", required = true)
+	private String name;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Competitor's rfid code", required = true)
-    @Indexed(unique = true)
-    private String rfidCode;
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor's rfid code", required = true)
+	@Indexed(unique = true)
+	private String rfidCode;
 
-    @DBRef
-    private Person person;
+	@DBRef
+	private Person person;
 
 }

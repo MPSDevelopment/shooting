@@ -7,13 +7,13 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Address {
 
-    public String street;
+	public String street;
 
-    public String city;
+	public String city;
 
-    public String region;
+	public String region;
 
-    public String index;
+	public String index;
 
-    public String phone;
+	public String phone;
 }

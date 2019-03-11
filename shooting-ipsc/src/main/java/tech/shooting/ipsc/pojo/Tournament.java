@@ -34,50 +34,50 @@ import java.util.List;
 @Accessors(chain = true)
 public class Tournament extends BaseDocument {
 
-    public static final String NAME_FIELD = "name";
+	public static final String NAME_FIELD = "name";
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's name", required = true)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's name", required = true)
+	private String name;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's type", required = true)
-    private TournamentTypeEnum type;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's type", required = true)
+	private TournamentTypeEnum type;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's level", required = true)
-    private TournamentLevelEnum level;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's level", required = true)
+	private TournamentLevelEnum level;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's category", required = true)
-    private TournamentCategoryEnum category;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's category", required = true)
+	private TournamentCategoryEnum category;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's begin date")
-    private OffsetDateTime beginDate;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's begin date")
+	private OffsetDateTime beginDate;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's end date")
-    private OffsetDateTime endDate;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's end date")
+	private OffsetDateTime endDate;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's director", required = true)
-    private User director;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's director", required = true)
+	private User director;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's main official", required = true)
-    private User mainOfficial;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's main official", required = true)
+	private User mainOfficial;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's statistics official", required = true)
-    private User statisticsOfficial;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's statistics official", required = true)
+	private User statisticsOfficial;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's active ")
-    private boolean active = true;
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's active ")
+	private boolean active = true;
 
-    @DBRef
-    @JsonProperty
-    @ApiModelProperty(value = "Tournament's exercise list ")
-    private List<Exercise> exercises;
+	@DBRef
+	@JsonProperty
+	@ApiModelProperty(value = "Tournament's exercise list ")
+	private List<Exercise> exercises;
 }

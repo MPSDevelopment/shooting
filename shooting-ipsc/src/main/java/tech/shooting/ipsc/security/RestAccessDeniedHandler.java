@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
-    @Override
-    public void handle (HttpServletRequest httpServletRequest, HttpServletResponse resp, AccessDeniedException e) throws IOException, ServletException {
-        if(!resp.isCommitted()) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-        }
+	@Override
+	public void handle (HttpServletRequest httpServletRequest, HttpServletResponse resp, AccessDeniedException e) throws IOException, ServletException {
+		if(!resp.isCommitted()) {
+			resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+		}
 
-    }
+	}
 }

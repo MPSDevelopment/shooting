@@ -33,13 +33,13 @@ import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 @Accessors(chain = true)
 public class Exercise extends BaseDocument {
 
-    @JsonProperty
-    @ApiModelProperty(value = "Exercise's name", required = true)
-    @Indexed(unique = true)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "Exercise's name", required = true)
+	@Indexed(unique = true)
+	private String name;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Exercise's weapon type", required = true)
-    private ExerciseWeaponTypeEnum weaponType;
+	@JsonProperty
+	@ApiModelProperty(value = "Exercise's weapon type", required = true)
+	private ExerciseWeaponTypeEnum weaponType;
 
 }

@@ -18,49 +18,49 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 public class Person extends BaseDocument {
 
-    public static final String NAME_AND_IPSC_FIELD = "name and ipsc code";
+	public static final String NAME_AND_IPSC_FIELD = "name and ipsc code";
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's name", required = true)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's name", required = true)
+	private String name;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's birthday")
-    private OffsetDateTime birthDate;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's birthday")
+	private OffsetDateTime birthDate;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's active ")
-    private boolean active = true;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's active ")
+	private boolean active = true;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's address", required = true)
-    private Address address;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's address", required = true)
+	private Address address;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's team")
-    private String team;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's team")
+	private String team;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's rank")
-    private String rank;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's rank")
+	private String rank;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's rifle IPSC code")
-    private String rifleCodeIpsc;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's rifle IPSC code")
+	private String rifleCodeIpsc;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's shotgun IPSC code")
-    private String shotgunCodeIpsc;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's shotgun IPSC code")
+	private String shotgunCodeIpsc;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's handgun IPSC code")
-    private String handgunCodeIpsc;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's handgun IPSC code")
+	private String handgunCodeIpsc;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's type weapon")
-    private ExerciseWeaponTypeEnum typeWeapon;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's type weapon")
+	private ExerciseWeaponTypeEnum typeWeapon;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Person's qualifier rank")
-    private String qualifierRank;
+	@JsonProperty
+	@ApiModelProperty(value = "Person's qualifier rank")
+	private String qualifierRank;
 }

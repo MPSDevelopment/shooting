@@ -8,19 +8,19 @@ package tech.shooting.ipsc.enums;
 
 public enum RifleEnum {
 
-    OPEN("Open"), STANDARD("Standard"), OPEN_MANUAL("Open manual"), STANDARD_MANUAL("Standard manual");
+	OPEN("Open"), STANDARD("Standard"), OPEN_MANUAL("Open manual"), STANDARD_MANUAL("Standard manual");
 
-    private String value;
+	private String value;
 
-    RifleEnum (String value) {
-        this.value = value;
-    }
+	RifleEnum (String value) {
+		this.value = value;
+	}
 
-    @Override
-    public String toString () {
-        return String.valueOf(value);
-    }
+	@Override
+	public String toString () {
+		return String.valueOf(value);
+	}
 
-    public String getValue () {
-        return value;
-    }}
+	public String getValue () {
+		return value;
+	}}

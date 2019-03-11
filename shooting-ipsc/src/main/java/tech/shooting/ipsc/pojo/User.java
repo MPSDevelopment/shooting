@@ -19,36 +19,36 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 public class User extends BaseDocument {
 
-    public static final String LOGIN_FIELD = "login";
+	public static final String LOGIN_FIELD = "login";
 
-    public static final String PASSWORD_FIELD = "password";
+	public static final String PASSWORD_FIELD = "password";
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's name", required = true)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "User's name", required = true)
+	private String name;
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's login", required = true)
-    @Indexed(unique = true)
-    private String login;
+	@JsonProperty
+	@ApiModelProperty(value = "User's login", required = true)
+	@Indexed(unique = true)
+	private String login;
 
-    @JsonProperty(access = Access.WRITE_ONLY)
-    @ApiModelProperty(value = "User's password", required = true)
-    private String password;
+	@JsonProperty(access = Access.WRITE_ONLY)
+	@ApiModelProperty(value = "User's password", required = true)
+	private String password;
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's birthday")
-    private OffsetDateTime birthDate;
+	@JsonProperty
+	@ApiModelProperty(value = "User's birthday")
+	private OffsetDateTime birthDate;
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's role name", required = true)
-    private RoleName roleName;
+	@JsonProperty
+	@ApiModelProperty(value = "User's role name", required = true)
+	private RoleName roleName;
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's active ")
-    private boolean active = true;
+	@JsonProperty
+	@ApiModelProperty(value = "User's active ")
+	private boolean active = true;
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's address", required = true)
-    private Address address;
+	@JsonProperty
+	@ApiModelProperty(value = "User's address", required = true)
+	private Address address;
 }

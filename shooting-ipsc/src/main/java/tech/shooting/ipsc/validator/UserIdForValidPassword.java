@@ -8,12 +8,12 @@ import java.lang.annotation.*;
 @Documented
 public @interface UserIdForValidPassword {
 
-    String message () default "{Incorrect id}";
+	String message () default "{Incorrect id}";
 
-    Class<?>[] groups () default {};
+	Class<?>[] groups () default {};
 
-    Class<? extends Payload>[] payload () default {};
+	Class<? extends Payload>[] payload () default {};
 
-    // String[] patterns();
+	// String[] patterns();
 
 }

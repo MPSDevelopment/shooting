@@ -10,9 +10,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface EnablePasswordConstraint {
 
-    String message () default ValidationConstants.USER_OLD_PASSWORD_MATCH_MESSAGE;
+	String message () default ValidationConstants.USER_OLD_PASSWORD_MATCH_MESSAGE;
 
-    Class<?>[] groups () default {};
+	Class<?>[] groups () default {};
 
-    Class<? extends Payload>[] payload () default {};
+	Class<? extends Payload>[] payload () default {};
 }

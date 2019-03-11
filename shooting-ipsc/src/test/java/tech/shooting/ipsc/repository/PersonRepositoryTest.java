@@ -28,20 +28,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class PersonRepositoryTest {
 
-    @Autowired
-    private PersonRepository personRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
-    @BeforeEach
-    public void before () {
-        personRepository.deleteAll();
-    }
+	@BeforeEach
+	public void before () {
+		personRepository.deleteAll();
+	}
 
-    @Test
-    public void checkFindByNameAndCodeIPSC () {
-        String name = "Tigran";
-        String codeIPSC = "123456789";
+	@Test
+	public void checkFindByNameAndCodeIPSC () {
+		String name = "Tigran";
+		String codeIPSC = "123456789";
 
-        personRepository.save(new Person().setName(name).setRifleCodeIpsc(codeIPSC));
-        assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name, codeIPSC));
-    }
+		personRepository.save(new Person().setName(name).setRifleCodeIpsc(codeIPSC));
+		assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name, codeIPSC));
+	}
 }

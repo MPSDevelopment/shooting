@@ -22,17 +22,17 @@ import javax.validation.constraints.Size;
 @EnablePasswordConstraint
 public class ChangePasswordBean {
 
-    public static final String NEW_PASSWORD = "newPassword";
-    private static final String USER_ID = "id";
+	public static final String NEW_PASSWORD = "newPassword";
+	private static final String USER_ID = "id";
 
-    @JsonProperty(USER_ID)
-    @UserIdForValidPassword
-    @NotNull(message = ValidationConstants.USER_ID_MESSAGE)
-    private Long id;
+	@JsonProperty(USER_ID)
+	@UserIdForValidPassword
+	@NotNull(message = ValidationConstants.USER_ID_MESSAGE)
+	private Long id;
 
-    @JsonProperty(value = NEW_PASSWORD)
-    @NotBlank(message = ValidationConstants.USER_PASSWORD_MESSAGE)
-    @Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
-    private String newPassword;
+	@JsonProperty(value = NEW_PASSWORD)
+	@NotBlank(message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	private String newPassword;
 
 }

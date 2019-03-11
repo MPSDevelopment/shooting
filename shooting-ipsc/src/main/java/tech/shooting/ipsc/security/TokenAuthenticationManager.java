@@ -21,64 +21,64 @@ import java.util.HashSet;
 @Slf4j
 public class TokenAuthenticationManager implements AuthenticationManager {
 
-    @Autowired
-    private TokenUtils tokenUtils;
+	@Autowired
+	private TokenUtils tokenUtils;
 
-    @Override
-    public Authentication authenticate (Authentication authentication) throws AuthenticationException {
-        log.debug(" Token Authentication MANAGER Start WORK");
-        try {
-            if(authentication instanceof TokenAuthentication) {
-                TokenAuthentication readyTokenAuthentication = processAuthentication((TokenAuthentication) authentication);
-                return readyTokenAuthentication;
-            } else {
-                authentication.setAuthenticated(false);
-                return authentication;
-            }
-        } catch(Exception ex) {
-            if(ex instanceof AuthenticationServiceException)
-                try {
-                    throw ex;
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-        }
-        return null;
-    }
+	@Override
+	public Authentication authenticate (Authentication authentication) throws AuthenticationException {
+		log.debug(" Token Authentication MANAGER Start WORK");
+		try {
+			if(authentication instanceof TokenAuthentication) {
+				TokenAuthentication readyTokenAuthentication = processAuthentication((TokenAuthentication) authentication);
+				return readyTokenAuthentication;
+			} else {
+				authentication.setAuthenticated(false);
+				return authentication;
+			}
+		} catch(Exception ex) {
+			if(ex instanceof AuthenticationServiceException)
+				try {
+					throw ex;
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+		}
+		return null;
+	}
 
-    private TokenAuthentication processAuthentication (TokenAuthentication authentication) throws AuthenticationException, IOException {
-        String token = authentication.getToken();
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
+	private TokenAuthentication processAuthentication (TokenAuthentication authentication) throws AuthenticationException, IOException {
+		String token = authentication.getToken();
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
 
-        HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-        try {
+		try {
 
-            String grantedRole = "ROLE_UNKNOWN";
+			String grantedRole = "ROLE_UNKNOWN";
 
-            if(token != null) {
-                grantedRole = "ROLE_".concat(tokenUtils.getRoleFromToken(token).name());
-            }
+			if(token != null) {
+				grantedRole = "ROLE_".concat(tokenUtils.getRoleFromToken(token).name());
+			}
 
-            authorities.add(new SimpleGrantedAuthority(grantedRole));
-        } catch(InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
-            log.error(" AUTH ERROR %s", e);
-            return null;
-        }
+			authorities.add(new SimpleGrantedAuthority(grantedRole));
+		} catch(InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
+			log.error(" AUTH ERROR %s", e);
+			return null;
+		}
 
-        User newUser = null;
-        boolean isAuthenticated = false;
-        if(token != null) {
-            newUser = new User(tokenUtils.getLoginFromToken(token), "root", enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-            isAuthenticated = true;
-        } else {
-            newUser = new User("unknown", "empty", false, false, false, false, authorities);
-        }
-        TokenAuthentication fullTokenAuthentication = new TokenAuthentication(tokenUtils, authentication.getToken(), authorities, isAuthenticated, newUser);
+		User newUser = null;
+		boolean isAuthenticated = false;
+		if(token != null) {
+			newUser = new User(tokenUtils.getLoginFromToken(token), "root", enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+			isAuthenticated = true;
+		} else {
+			newUser = new User("unknown", "empty", false, false, false, false, authorities);
+		}
+		TokenAuthentication fullTokenAuthentication = new TokenAuthentication(tokenUtils, authentication.getToken(), authorities, isAuthenticated, newUser);
 
-        return fullTokenAuthentication;
-    }
+		return fullTokenAuthentication;
+	}
 }

@@ -8,12 +8,12 @@ import java.lang.annotation.*;
 @Documented
 public @interface LoginForValidPassword {
 
-    String message () default "{Incorrect login}";
+	String message () default "{Incorrect login}";
 
-    Class<?>[] groups () default {};
+	Class<?>[] groups () default {};
 
-    Class<? extends Payload>[] payload () default {};
+	Class<? extends Payload>[] payload () default {};
 
-    // String[] patterns();
+	// String[] patterns();
 
 }

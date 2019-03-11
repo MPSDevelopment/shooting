@@ -28,20 +28,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserRepositoryTest {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 
-    @BeforeEach
-    public void before () {
-        userRepository.deleteAll();
-    }
+	@BeforeEach
+	public void before () {
+		userRepository.deleteAll();
+	}
 
-    @Test
-    public void checkFindByFields () {
-        userRepository.save(new User().setName("Суворов Антон"));
+	@Test
+	public void checkFindByFields () {
+		userRepository.save(new User().setName("Суворов Антон"));
 
-        assertNotNull(userRepository.findByName("Суворов Антон"));
-    }
+		assertNotNull(userRepository.findByName("Суворов Антон"));
+	}
 
 }

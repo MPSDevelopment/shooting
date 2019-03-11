@@ -7,6 +7,6 @@ import tech.shooting.ipsc.pojo.Person;
 @Repository
 public interface PersonRepository extends MongoRepository<Person, Long> {
 
-    public Person findByNameAndRifleCodeIpsc (String name, String codeIPSC);
+	public Person findByNameAndRifleCodeIpsc (String name, String codeIPSC);
 
 }

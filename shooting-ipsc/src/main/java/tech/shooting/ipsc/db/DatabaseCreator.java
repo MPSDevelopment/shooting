@@ -12,32 +12,32 @@ import javax.annotation.PostConstruct;
 @Component
 public class DatabaseCreator {
 
-    public static final String ADMIN_PASSWORD = "test";
+	public static final String ADMIN_PASSWORD = "test";
 
-    public static final String ADMIN_LOGIN = "admin";
+	public static final String ADMIN_LOGIN = "admin";
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private DatabaseCreator databaseCreator;
+	@Autowired
+	private DatabaseCreator databaseCreator;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private UserDao userDao;
+	@Autowired
+	private UserDao userDao;
 
-    public DatabaseCreator () {
+	public DatabaseCreator () {
 
-    }
+	}
 
-    @PostConstruct
-    public void init () {
-        databaseCreator.createDatabase();
-    }
+	@PostConstruct
+	public void init () {
+		databaseCreator.createDatabase();
+	}
 
-    private void createDatabase () {
-        userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
-    }
+	private void createDatabase () {
+		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
+	}
 }

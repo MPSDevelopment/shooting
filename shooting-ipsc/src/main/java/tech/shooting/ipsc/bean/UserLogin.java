@@ -18,17 +18,17 @@ import javax.validation.constraints.Size;
 @EnablePasswordConstraint
 public class UserLogin {
 
-    @JsonProperty
-    @ApiModelProperty(value = "User's login", required = true)
-    @NotBlank(message = ValidationConstants.USER_LOGIN_REQUIRED_MESSAGE)
-    @LoginForValidPassword
-    private String login;
+	@JsonProperty
+	@ApiModelProperty(value = "User's login", required = true)
+	@NotBlank(message = ValidationConstants.USER_LOGIN_REQUIRED_MESSAGE)
+	@LoginForValidPassword
+	private String login;
 
-    @JsonProperty(access = Access.WRITE_ONLY)
-    @ApiModelProperty(value = "User's password", required = true)
-    @NotBlank(message = ValidationConstants.USER_PASSWORD_REQUIRED_MESSAGE)
-    @Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
-    @ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
-    private String password;
+	@JsonProperty(access = Access.WRITE_ONLY)
+	@ApiModelProperty(value = "User's password", required = true)
+	@NotBlank(message = ValidationConstants.USER_PASSWORD_REQUIRED_MESSAGE)
+	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
+	private String password;
 
 }
