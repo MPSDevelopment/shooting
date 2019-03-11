@@ -31,4 +31,7 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_ALL = "/all";
 	public static final String PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE = "/all/{pageNumber}/{pageSize}";
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
+
+	public static final String COMPETITION_CONTROLLER = "/api/competition";
+	public static final String COMPETITION_CONTROLLER_POST_CREATE = "/create";
 }

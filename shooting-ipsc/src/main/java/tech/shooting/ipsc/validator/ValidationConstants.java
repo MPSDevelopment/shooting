@@ -26,4 +26,5 @@ public class ValidationConstants {
 
 	public static final String PERSON_NAME_MESSAGE = "Min 3 character";
 
+
 }
