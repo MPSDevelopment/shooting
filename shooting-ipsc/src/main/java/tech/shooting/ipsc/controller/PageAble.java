@@ -10,19 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.utils.HeaderUtils;
-import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
-
-import java.util.List;
 
 public class PageAble {
 
 
-	public static ResponseEntity<List<? extends BaseDocument>> getPage (int page, int size, Class<?> personClass, MongoRepository<? extends BaseDocument, Long> personRepository) {
+	public static ResponseEntity getPage (int page, int size, Class<?> personClass, MongoRepository<? extends BaseDocument, Long> personRepository) {
 		page = Math.max(1, page);
 		page--;
-		Page<Person> pageOfUsers = (Page<Person>) PageAble.countPage(page, size, personClass, personRepository);
-		return new ResponseEntity<>(pageOfUsers.getContent(), PageAble.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
+		Page<?> pageOfUsers = PageAble.countPage(page, size, personClass, personRepository);
+		return new ResponseEntity(pageOfUsers.getContent(), PageAble.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
 	public static Page<? extends BaseDocument> countPage (Integer page, Integer size, Class<?> personClass, MongoRepository<? extends BaseDocument, Long> personRepository) {

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
-import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.PersonBean;
@@ -89,8 +88,8 @@ public class PersonController {
 	@ApiOperation(value = "Get persons by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
-	public ResponseEntity<List<? extends BaseDocument>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
-	                                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+	public ResponseEntity<List<Person>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
+	                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
 		return PageAble.getPage(page, size, Person.class, personRepository);
 	}
 
