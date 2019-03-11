@@ -29,7 +29,7 @@ public class CompetitionController {
 
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
+	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
 	public ResponseEntity<User> createCompetition (HttpServletRequest request, @RequestBody @Valid CreateCompetition createCompetition) throws BadRequestException {
 
 	}
