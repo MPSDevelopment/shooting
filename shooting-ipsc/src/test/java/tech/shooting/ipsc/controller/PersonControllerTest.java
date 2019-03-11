@@ -137,4 +137,14 @@ public class PersonControllerTest {
 
     }
 
+    @Test
+    public void checkGetPersonById() throws Exception{
+        Person testing = personRepository.save(new Person().setName("testing").setHandgunCodeIpsc("445645645"));
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON
+            .replace("personId",String.valueOf(testing.getId()))).header(Token.TOKEN_HEADER,adminToken))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+
+    }
+
 }

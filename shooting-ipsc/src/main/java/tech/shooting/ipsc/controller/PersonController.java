@@ -10,11 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -47,5 +46,12 @@ public class PersonController {
         person.setActive(true);
         personRepository.save(person);
 
+    }
+
+    @GetMapping(value = ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get person by id", notes = "Return person object")
+    public ResponseEntity<Person> getPerson(@PathVariable(value = "{personId}",required = true) Long personId) throws BadRequestException{
+        Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
+        return new ResponseEntity<>(person,HttpStatus.OK);
     }
 }
