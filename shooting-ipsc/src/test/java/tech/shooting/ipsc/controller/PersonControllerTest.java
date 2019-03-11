@@ -18,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
@@ -42,6 +43,7 @@ import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,39 +117,39 @@ public class PersonControllerTest {
 
 		// try access to createPerson() with authorized non admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_CREATE).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access to createPerson() with authorized admin but without content
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		// try access to createPerson() with authorized admin create person with rifleCodeIpsc
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(personJsonWithRifleCode))
-		       .andExpect(MockMvcResultMatchers.status().isCreated())
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithRifleCode.getName()))
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.rifleCodeIpsc").value(personWithRifleCode.getRifleCodeIpsc()));
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(personJsonWithRifleCode))
+			.andExpect(MockMvcResultMatchers.status().isCreated())
+			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithRifleCode.getName()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.rifleCodeIpsc").value(personWithRifleCode.getRifleCodeIpsc()));
 
 		// try access to createPerson() with authorized admin create person with handgunCodeIpsc
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(personJsonHandgunCode))
-		       .andExpect(MockMvcResultMatchers.status().isCreated())
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithHandgunCode.getName()))
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.handgunCodeIpsc").value(personWithHandgunCode.getHandgunCodeIpsc()));
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(personJsonHandgunCode))
+			.andExpect(MockMvcResultMatchers.status().isCreated())
+			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithHandgunCode.getName()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.handgunCodeIpsc").value(personWithHandgunCode.getHandgunCodeIpsc()));
 
 		// try access to createPerson() with authorized admin create person with shotgunCodeIpsc
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(personJsonWithShotgunCode))
-		       .andExpect(MockMvcResultMatchers.status().isCreated())
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personShotgunCode.getName()))
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.shotgunCodeIpsc").value(personShotgunCode.getShotgunCodeIpsc()));
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(personJsonWithShotgunCode))
+			.andExpect(MockMvcResultMatchers.status().isCreated())
+			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personShotgunCode.getName()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.shotgunCodeIpsc").value(personShotgunCode.getShotgunCodeIpsc()));
 
 	}
 
@@ -157,19 +159,19 @@ public class PersonControllerTest {
 
 		//try to access getPerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON.replace("{personId}", String.valueOf(testing.getId()))))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 
 		//try to access getPerson() with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 
 		//try to access getPerson() with admin role
 		log.info("PersonId is %s , url will be %s", testing.getId(), ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON.replace("{personId}", String.valueOf(testing.getId())));
 
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
 
 	}
 
@@ -178,31 +180,31 @@ public class PersonControllerTest {
 
 		//try to access updatePerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_UPDATE.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		//try to access updatePerson() with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_UPDATE.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, userToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.header(Token.TOKEN_HEADER, userToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		//try to access updatePerson() with admin
 		UpdatePerson updatePerson = new UpdatePerson();
 		BeanUtils.copyProperties(testing, updatePerson);
 		updatePerson.setHandgunCodeIpsc("123");
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_UPDATE.replace("{personId}", String.valueOf(updatePerson.getId())))
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(JacksonUtils.getFullJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(JacksonUtils.getFullJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
 
 		Optional<Person> byId = personRepository.findById(updatePerson.getId());
 		assertEquals(byId.get().getHandgunCodeIpsc(), updatePerson.getHandgunCodeIpsc());
 
 		//try to access updatePerson() with admin but without context
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_UPDATE.replace("{personId}", String.valueOf(updatePerson.getId())))
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 
@@ -211,22 +213,41 @@ public class PersonControllerTest {
 
 		//try to access getPerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON.replace("{personId}", String.valueOf(testing.getId()))))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 
 		//try to access getPerson() with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 
 		//try to access getPerson() with admin role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON.replace("{personId}", String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
 
 		//try to access getPerson() with admin role when id incorrect
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON.replace("{personId}", "1232747467497979"))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
+	}
+
+	@Test
+	public void checkGetAll () throws Exception {
+
+		//try to access getAll() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try to access getAll() with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try to access getAll() with admin role
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andReturn();
+		List<Person> listFromJson = JacksonUtils.getListFromJson(Person[].class, mvcResult.getResponse().getContentAsString());
+
+		assertEquals(listFromJson.size(), personRepository.findAll().size());
 	}
 
 }

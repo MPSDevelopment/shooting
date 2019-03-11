@@ -117,26 +117,26 @@ public class UserControllerTest {
 
 		// try to create user with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to create empty user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE).header(Token.TOKEN_HEADER, adminToken))
-		       .andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		long count = userRepository.count();
 
 		// try to create user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isCreated());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(userJson)).andExpect(MockMvcResultMatchers.status().isCreated());
 		assertEquals(count + 1, userRepository.count());
 
 		// try to create the same user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(userJson)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
 
@@ -147,21 +147,21 @@ public class UserControllerTest {
 
 		// try to access update with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString())))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		userJson = JacksonUtils.getFullJson(user.setName("test"));
 
 		// try to access update with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString()))
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(userJson)
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access update with admin user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE.replace("{userId}", user.getId().toString()))
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		user = userRepository.findByLogin(user.getLogin());
 		assertEquals("test", user.getName());
@@ -174,12 +174,12 @@ public class UserControllerTest {
 		// try to access update password with unauthorized user
 		user = userRepository.save(user);
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", user.getId().toString())))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to acess update password with non admin user
 		user = userRepository.save(user);
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", user.getId().toString()))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access update password with admin user
 		User testUser = userRepository.save(user);
@@ -190,9 +190,9 @@ public class UserControllerTest {
 		userJson = JacksonUtils.getFullJson(changePasswordBean);
 
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", testUser.getId().toString()))
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
+			.header(Token.TOKEN_HEADER, adminToken)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(userJson)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertTrue(passwordEncoder.matches("54321", userRepository.findByLogin(testUser.getLogin()).getPassword()));
 
@@ -203,20 +203,20 @@ public class UserControllerTest {
 
 		// try to access get user method unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace("{userId}", String.valueOf(455645646))))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to access get user method non admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace("{userId}", String.valueOf(455645646))).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access get user method admin user
 		User testUser = userRepository.save(user);
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace("{userId}", String.valueOf(testUser.getId())))
-		                                      .header(Token.TOKEN_HEADER, adminToken))
-		       .andExpect(MockMvcResultMatchers.status().isOk())
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.login").value(testUser.getLogin()))
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testUser.getName()))
-		       .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testUser.getId()));
+			.header(Token.TOKEN_HEADER, adminToken))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.jsonPath("$.login").value(testUser.getLogin()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testUser.getName()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testUser.getId()));
 
 	}
 
@@ -228,12 +228,12 @@ public class UserControllerTest {
 
 		// try to access get all users method non admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access get all users method admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
-		                             .andExpect(MockMvcResultMatchers.status().isOk())
-		                             .andReturn();
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andReturn();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Object> res = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Object>>() {
@@ -246,17 +246,17 @@ public class UserControllerTest {
 
 		// try to access delete user with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace("{userId}", "1")))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to delete not existing user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace("{userId}", RandomStringUtils.randomNumeric(6)))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		user = userRepository.save(user);
 
 		// try to delete user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace("{userId}", user.getId().toString()))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertFalse(userRepository.existsById(user.getId()));
 
@@ -270,18 +270,18 @@ public class UserControllerTest {
 
 		// try to access getCount with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access getCount with admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
+			.andExpect(MockMvcResultMatchers.status().isOk());
 
 		// compare getCount() & userRepository.count
 		long count = userRepository.count();
 
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
-		                             .andExpect(MockMvcResultMatchers.status().isOk())
-		                             .andReturn();
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andReturn();
 
 		assertEquals(mvcResult.getResponse().getContentAsString(), String.valueOf(count));
 
@@ -294,26 +294,22 @@ public class UserControllerTest {
 
 		// try to access getAllUsersByPage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
-		                                                                                                                                                          .replace("{pageSize}", String.valueOf(5))))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.replace("{pageSize}", String.valueOf(5)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try to access getAllUsersByPage with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
-		                                                                                                                                                          .replace("{pageSize}", String.valueOf(5)))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try to access getAllUsersByPage with admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
-		                                                                                                                                                                                .replace("{pageSize}", String.valueOf(5)))
-		                                                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
 		List<User> list = JacksonUtils.getListFromJson(User[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(10, list.size());
 
 		// try to access getAllUsersByPage with admin user with size 30
 		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
-		                                                                                                                                                                      .replace("{pageSize" + "}", String.valueOf(30)))
-		                                                  .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+			.replace("{pageSize" + "}", String.valueOf(30))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
 		list = JacksonUtils.getListFromJson(User[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(20, list.size());
@@ -329,8 +325,7 @@ public class UserControllerTest {
 		int countInAPage = size <= 10 ? 10 : 20;
 		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(page))
-		                                                                                                                                                                                .replace("{pageSize}", String.valueOf(size)))
-		                                                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+			.replace("{pageSize}", String.valueOf(size))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
 		MockHttpServletResponse response = mvcResult.getResponse();
 		assertEquals(response.getHeader("pages"), String.valueOf(countPages));

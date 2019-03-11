@@ -44,9 +44,9 @@ public class UserDao {
 
 		var query = Query.query(Criteria.where(User.LOGIN_FIELD).is(user.getLogin()));
 		var update = new Update().set(User.UPDATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
-		                         .setOnInsert(User.ID_FIELD, IdGenerator.nextId())
-		                         .setOnInsert(User.CREATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
-		                         .setOnInsert(User.PASSWORD_FIELD, user.getPassword());
+			.setOnInsert(User.ID_FIELD, IdGenerator.nextId())
+			.setOnInsert(User.CREATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
+			.setOnInsert(User.PASSWORD_FIELD, user.getPassword());
 		mongoTemplate.upsert(query, update, User.class);
 	}
 

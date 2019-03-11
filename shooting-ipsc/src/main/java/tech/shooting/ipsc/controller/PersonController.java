@@ -19,6 +19,7 @@ import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.repository.PersonRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.PERSON_CONTROLLER)
@@ -75,5 +76,11 @@ public class PersonController {
 		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 		personRepository.delete(person);
 		return new ResponseEntity<>(person, HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
+	public ResponseEntity<List<Person>> getUsers () throws BadRequestException {
+		return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
 	}
 }
