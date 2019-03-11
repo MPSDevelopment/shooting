@@ -47,15 +47,15 @@ public class Person extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Person's rifle IPSC code")
     private String rifleCodeIpsc;
-    
+
     @JsonProperty
     @ApiModelProperty(value = "Person's shotgun IPSC code")
     private String shotgunCodeIpsc;
-    
+
     @JsonProperty
     @ApiModelProperty(value = "Person's handgun IPSC code")
     private String handgunCodeIpsc;
-    
+
     @JsonProperty
     @ApiModelProperty(value = "Person's type weapon")
     private ExerciseWeaponTypeEnum typeWeapon;

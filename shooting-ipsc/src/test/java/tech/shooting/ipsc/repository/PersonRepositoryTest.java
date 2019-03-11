@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
-@ContextConfiguration(classes = { IpscMongoConfig.class })
+@ContextConfiguration(classes = {IpscMongoConfig.class})
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
@@ -32,16 +32,16 @@ public class PersonRepositoryTest {
     private PersonRepository personRepository;
 
     @BeforeEach
-    public void before(){
+    public void before () {
         personRepository.deleteAll();
     }
 
     @Test
-    public void checkFindByNameAndCodeIPSC(){
+    public void checkFindByNameAndCodeIPSC () {
         String name = "Tigran";
         String codeIPSC = "123456789";
 
         personRepository.save(new Person().setName(name).setRifleCodeIpsc(codeIPSC));
-        assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name,codeIPSC));
+        assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name, codeIPSC));
     }
 }

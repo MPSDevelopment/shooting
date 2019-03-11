@@ -9,35 +9,35 @@
 <!-- -->
 <configuration>
 
-	<!-- Stop output INFO at start -->
-	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
-	
-	<appender name="APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
-		<File>logs/Server.log</File>
-		<encoder class="com.mpsdevelopment.plasticine.commons.logging.PlasticineEncoder">
-			<layout class="com.mpsdevelopment.plasticine.commons.logging.PlasticineLayout">
-				<pattern>%5p %d %18c - %m%n</pattern>
-			</layout>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>logs/Server.log.%i</FileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>1000KB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="com.mpsdevelopment.plasticine.commons.logging.PlasticineEncoder">
-			<layout class="com.mpsdevelopment.plasticine.commons.logging.PlasticineLayout">
-				<pattern>%5p %d %12c - %m%n</pattern>
-			</layout>
-		</encoder>
-	</appender>
-	<logger name="org.springframework.web.cors" level="trace" />
-	<root level="INFO">
-		<appender-ref ref="APPENDER" />
-		<appender-ref ref="CONSOLE" />
-	</root>
+    <!-- Stop output INFO at start -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <appender name="APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+        <File>logs/Server.log</File>
+        <encoder class="com.mpsdevelopment.plasticine.commons.logging.PlasticineEncoder">
+            <layout class="com.mpsdevelopment.plasticine.commons.logging.PlasticineLayout">
+                <pattern>%5p %d %18c - %m%n</pattern>
+            </layout>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>logs/Server.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>1000KB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="com.mpsdevelopment.plasticine.commons.logging.PlasticineEncoder">
+            <layout class="com.mpsdevelopment.plasticine.commons.logging.PlasticineLayout">
+                <pattern>%5p %d %12c - %m%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+    <logger name="org.springframework.web.cors" level="trace"/>
+    <root level="INFO">
+        <appender-ref ref="APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
 </configuration>

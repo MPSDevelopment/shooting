@@ -1,13 +1,9 @@
 package tech.shooting.ipsc.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import lombok.Data;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.validator.ValidationConstants;
@@ -16,13 +12,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@Accessors(chain = true)
-@ApiModel(value = "Person create")
-@EqualsAndHashCode(callSuper = false)
-@ToString
-public class PersonBean {
+@Data
+public class UpdatePerson {
+
+    @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @ApiModelProperty(value = "Person's id")
+    private long id;
 
     @JsonProperty
     @ApiModelProperty(value = "Person's name", required = true)
