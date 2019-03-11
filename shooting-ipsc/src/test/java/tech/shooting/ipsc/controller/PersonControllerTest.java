@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -248,6 +249,86 @@ public class PersonControllerTest {
 		List<Person> listFromJson = JacksonUtils.getListFromJson(Person[].class, mvcResult.getResponse().getContentAsString());
 
 		assertEquals(listFromJson.size(), personRepository.findAll().size());
+	}
+
+	@Test
+	public void checkGetAllPersonsByPage () throws Exception {
+
+		createUsers(40);
+
+		// try to access getAllPersonsByPage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try to access getAllPersonsByPage with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try to access getAllPersonsByPage with admin user
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		List<User> list = JacksonUtils.getListFromJson(User[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(10, list.size());
+
+		// try to access getAllPersonsByPage with admin user with size 30
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize" + "}", String.valueOf(30))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		list = JacksonUtils.getListFromJson(User[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(20, list.size());
+
+	}
+
+	@Test
+	public void checkGetAllPersonsByPagePart2 () throws Exception {
+		// try to access to header
+		int sizeAllUser = personRepository.findAll().size();
+		int page = 250;
+		int size = 0;
+		int countInAPage = size <= 10 ? 10 : 20;
+		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(page))
+			.replace("{pageSize}", String.valueOf(size))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		MockHttpServletResponse response = mvcResult.getResponse();
+		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
+		assertEquals(response.getHeader("page"), String.valueOf(page));
+		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
+
+	}
+
+	private void createUsers (int count) {
+		for(int i = 0; i < count; i++) {
+			var user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			personRepository.save(user);
+			log.info("Person %s has been created", user.getName());
+		}
+	}
+
+	@Test
+	public void checkGetCount () throws Exception {
+
+		// try to access getCount with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try to access getCount with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, userToken))
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try to access getCount with admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+			.andExpect(MockMvcResultMatchers.status().isOk());
+
+		// compare getCount() & personRepository.count
+		long count = personRepository.count();
+
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andReturn();
+
+		assertEquals(mvcResult.getResponse().getContentAsString(), String.valueOf(count));
+
 	}
 
 }

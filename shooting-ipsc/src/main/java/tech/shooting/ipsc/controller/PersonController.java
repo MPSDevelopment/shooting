@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.pojo.Person;
@@ -83,4 +84,21 @@ public class PersonController {
 	public ResponseEntity<List<Person>> getUsers () throws BadRequestException {
 		return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
 	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get persons by page")
+	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
+		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
+	public ResponseEntity<List<? extends BaseDocument>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
+	                                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+		return PageAble.getPage(page, size, Person.class, personRepository);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all persons count", notes = "Returns all persons count")
+	public ResponseEntity<Long> getCount () throws BadRequestException {
+		return new ResponseEntity<>(personRepository.count(), HttpStatus.OK);
+	}
+
+
 }

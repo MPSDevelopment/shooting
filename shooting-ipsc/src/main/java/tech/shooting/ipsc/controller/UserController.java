@@ -4,23 +4,18 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
-import tech.shooting.commons.utils.HeaderUtils;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
@@ -131,37 +126,19 @@ public class UserController {
 		return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get users by page")
-	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
-		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
-	public ResponseEntity<List<User>> getUsers (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
-	                                            @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
-
-		page = Math.max(1, page);
-		page--;
-		size = Math.min(Math.max(10, size), 20);
-
-		log.info("Page is %s and size is %s", page, size);
-
-		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.DESC, User.ID_FIELD);
-		Page<User> pageOfUsers = userRepository.findAll(pageable);
-		return new ResponseEntity<>(pageOfUsers.getContent(), setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
-	}
-
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all users count", notes = "Returns all users count")
 	public ResponseEntity<Long> getCount () throws BadRequestException {
 		return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);
 	}
 
-	private MultiValueMap<String, String> setHeaders (Integer page, Long totalDronesInDB, Integer totalPagesInDB) {
-		MultiValueMap<String, String> headers = new HttpHeaders();
-		page++;
-		headers.add(HeaderUtils.PAGE_HEADER, page.toString());
-		headers.add(HeaderUtils.TOTAL_HEADER, totalDronesInDB.toString());
-		headers.add(HeaderUtils.PAGES_HEADER, totalPagesInDB.toString());
-		return headers;
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get users by page")
+	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
+		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
+	public ResponseEntity<List<? extends BaseDocument>> getUsers (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
+	                                                              @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+		return PageAble.getPage(page, size, User.class, userRepository);
 	}
 
 }
