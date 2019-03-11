@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 
 import java.time.OffsetDateTime;
@@ -27,7 +28,7 @@ public class Competition extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
-	private String qualifierRank;
+	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition type weapon", required = true)
