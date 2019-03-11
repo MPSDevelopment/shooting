@@ -28,7 +28,7 @@ public class Person extends BaseDocument {
     @ApiModelProperty(value = "Person's birthday")
     private OffsetDateTime birthDate;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty
     @ApiModelProperty(value = "Person's active ")
     private boolean active = true;
 

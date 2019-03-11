@@ -46,7 +46,7 @@ public class User extends BaseDocument {
 	@ApiModelProperty(value = "User's role name", required = true)
 	private RoleName roleName;
 
-	@JsonProperty(access = Access.WRITE_ONLY)
+	@JsonProperty
 	@ApiModelProperty(value = "User's active ")
 	private boolean active = true;
 	
