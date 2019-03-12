@@ -36,4 +36,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_CREATE = "/create";
 	public static final String COMPETITION_CONTROLLER_GET_BY_ID = "/{competitionId}";
 	public static final String COMPETITION_CONTROLLER_DELETE_BY_ID = "/{competitionId}";
+	public static final String COMPETITION_CONTROLLER_UPDATE_BY_ID = "/{competitionId}";
 }

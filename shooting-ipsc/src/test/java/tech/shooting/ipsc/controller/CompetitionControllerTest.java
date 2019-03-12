@@ -41,6 +41,7 @@ import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 
 import java.util.Date;
+import java.util.Objects;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
@@ -149,4 +150,29 @@ public class CompetitionControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(save.getName()));
 
 	}
+
+	@Test
+	public void checkUpdateCompetitionById () throws Exception {
+		Competition test = competitionRepository.findByName(save.getName());
+		test.setName("Update Name");
+
+		// try access to updateCompetition with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_UPDATE_BY_ID.replace("{competitionId}", test.getId().toString()))
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access to updateCompetition with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_UPDATE_BY_ID.replace("{competitionId}", test.getId().toString()))
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access to updateCompetition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_UPDATE_BY_ID.replace("{competitionId}", test.getId().toString()))
+			.contentType(MediaType.APPLICATION_JSON_UTF8)
+			.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
+
+	}
+
 }

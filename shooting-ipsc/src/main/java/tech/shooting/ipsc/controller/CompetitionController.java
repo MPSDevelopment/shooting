@@ -63,4 +63,12 @@ public class CompetitionController {
 		competitionRepository.delete(competition);
 		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_UPDATE_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update competition", notes = "Return update competition object")
+	public ResponseEntity<Competition> updateCompetition (@PathVariable(value = "competitionId", required = true) Long id, @RequestBody @Valid CreateCompetition competition) throws BadRequestException {
+		Competition existCompetition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
+		BeanUtils.copyProperties(competition, existCompetition);
+		return new ResponseEntity<>(competitionRepository.save(existCompetition), HttpStatus.OK);
+	}
 }
