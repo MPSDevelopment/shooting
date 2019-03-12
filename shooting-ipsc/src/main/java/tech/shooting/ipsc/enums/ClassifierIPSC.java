@@ -48,7 +48,147 @@ public enum ClassifierIPSC {
 		"Standing relaxed in center of area ‘A’, facing center of barricade.",
 		"Handgun loaded and holstered. ",
 		"After the audible start signal engage targets P1, P2, T1 and T2 only rom left side of the barricade, make a mandatory reload and engage targets P3, P4, T3 and T4 from the right side of the barricade.Targets may only be shot from the designated side of the barricade.",
-		"Set IPSC Targets to 1.52m (5’) to the top of the targets. Area ‘A’ is 1.22m (4’) wide by 0.92m (3’) deep. Barricade is 2.44m (8’) high and 1.22m (4’) wide. ");
+		"Set IPSC Targets to 1.52m (5’) to the top of the targets. Area ‘A’ is 1.22m (4’) wide by 0.92m (3’) deep. Barricade is 2.44m (8’) high and 1.22m (4’) wide. "),
+	CLC_15(
+		"CLC-15",
+		TypeOfCourse.ShortCourse,
+		4,
+		1,
+		0,
+		9,
+		45,
+		"Standing relaxed in area ‘A’, with both wrists above respective shoulders.",
+		"Handgun loaded and holstered.",
+		"After the audible start signal engage targets from within the designated area ‘A’. ",
+		"Set IPSC Targets to 1.52m (5’) to the top of the targets. Area ‘A’ is 0.92m (3’) by 0.92m (3’). Angle T1, T2 and T4 to face shooting area."),
+	CLC_21(
+		"CLC-21",
+		TypeOfCourse.ShortCourse,
+		4,
+		2,
+		1,
+		12,
+		60),
+	CLC_31(
+		"CLC-31",
+		TypeOfCourse.ShortCourse,
+		2,
+		2,
+		1,
+		6,
+		30),
+	CLC_33(
+		"CLC-33",
+		TypeOfCourse.ShortCourse,
+		3,
+		0,
+		0,
+		6,
+		30),
+	CLC_35(
+		"CLC-35",
+		TypeOfCourse.ShortCourse,
+		2,
+		2,
+		2,
+		6,
+		30),
+	CLC_37(
+		"CLC-37",
+		TypeOfCourse.ShortCourse,
+		5,
+		2,
+		1,
+		12,
+		60),
+	CLC_41(
+		"CLC-41",
+		TypeOfCourse.ShortCourse,
+		6,
+		0,
+		3,
+		12,
+		60),
+	CLC_45(
+		"CLC-45",
+		TypeOfCourse.ShortCourse,
+		2,
+		4,
+		0,
+		8,
+		40),
+	CLC_47(
+		"CLC-47",
+		TypeOfCourse.ShortCourse,
+		2,
+		2,
+		0,
+		6,
+		30),
+	CLC_51(
+		"CLC-51",
+		TypeOfCourse.ShortCourse,
+		3,
+		0,
+		0,
+		6,
+		30),
+	CLC_55(
+		"CLC-55",
+		TypeOfCourse.ShortCourse,
+		5,
+		2,
+		3,
+		12,
+		60),
+	CLC_57(
+		"CLC-57",
+		TypeOfCourse.ShortCourse,
+		5,
+		2,
+		0,
+		12,
+		60),
+	CLC_59(
+		"CLC-59",
+		TypeOfCourse.ShortCourse,
+		6,
+		0,
+		3,
+		12,
+		60),
+	CLC_65(
+		"CLC-65",
+		TypeOfCourse.ShortCourse,
+		1,
+		4,
+		0,
+		6,
+		30),
+	CLC_67(
+		"CLC-67",
+		TypeOfCourse.ShortCourse,
+		6,
+		0,
+		1,
+		12,
+		60),
+	CLC_71(
+		"CLC-71",
+		TypeOfCourse.ShortCourse,
+		3,
+		2,
+		0,
+		8,
+		40),
+	CLC_73(
+		"CLC-73",
+		TypeOfCourse.ShortCourse,
+		2,
+		2,
+		3,
+		6,
+		30);
 
 	private String name;
 	private TypeOfCourse typeOfCourse;
@@ -62,6 +202,15 @@ public enum ClassifierIPSC {
 	private String procedure;
 	private String setupNotice;
 
+	ClassifierIPSC (String name, TypeOfCourse typeOfCourse, Integer targets, Integer popper, Integer noShoots, Integer numberOfRoundToBeScored, Integer maximumPoints) {
+		this.name = name;
+		this.typeOfCourse = typeOfCourse;
+		this.targets = targets;
+		this.popper = popper;
+		this.noShoots = noShoots;
+		NumberOfRoundToBeScored = numberOfRoundToBeScored;
+		this.maximumPoints = maximumPoints;
+	}
 
 	ClassifierIPSC (String name, TypeOfCourse typeOfCourse, Integer targets, Integer popper, Integer noShoots, Integer numberOfRoundToBeScored, Integer maximumPoints, String startPosition, String handgunReadyCondition, String procedure,
 		String setupNotice) {
