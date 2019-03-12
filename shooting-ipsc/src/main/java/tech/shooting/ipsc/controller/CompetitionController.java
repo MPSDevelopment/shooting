@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.CreateCompetition;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -72,15 +72,24 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionRepository.save(existCompetition), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get count competitions", notes = "Return long count of competitions")
 	public ResponseEntity<Long> getCount () throws BadRequestException {
 		return new ResponseEntity<>(competitionRepository.count(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list competitions", notes = "Return List competition object")
 	public ResponseEntity<List<Competition>> getAllCompetitions () throws BadRequestException {
 		return new ResponseEntity<>(competitionRepository.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get competition by page")
+	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
+		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
+	public ResponseEntity<List<Competition>> getCompetitionsByPage (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
+	                                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+		return PageAble.getPage(page, size, competitionRepository);
 	}
 }

@@ -39,4 +39,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_PUT_BY_ID = "/{competitionId}";
 	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 	public static final String COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS = "/all";
+	public static final String COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE = "/all/{pageNumber}/{pageSize}";
 }

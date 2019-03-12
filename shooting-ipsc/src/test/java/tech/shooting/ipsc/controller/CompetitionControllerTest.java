@@ -18,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
@@ -42,6 +43,7 @@ import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -219,5 +221,58 @@ public class CompetitionControllerTest {
 			assertEquals(actual[i], exact[i]);
 		}
 	}
+
+	@Test
+	public void checkGetAllUsersByPage () throws Exception {
+
+		createCompetition(40);
+
+		// try to access getCompetitionsByPage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try to access getCompetitionsByPage with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try to access getCompetitionsByPage with admin user
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE.replace("{pageNumber}",
+			String.valueOf(1))
+			.replace("{pageSize}", String.valueOf(5))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		List<Competition> list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(10, list.size());
+
+		// try to access getCompetitionsByPage with admin user with size 30
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1))
+			.replace("{pageSize" + "}", String.valueOf(30))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+		list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(20, list.size());
+
+		// try to access to getCompetitionsByPage header with admin
+		int sizeAllUser = competitionRepository.findAll().size();
+		int page = 250;
+		int size = 0;
+		int countInAPage = size <= 10 ? 10 : 20;
+		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
+		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE.replace("{pageNumber" +
+			"}", String
+			.valueOf(page)).replace("{pageSize}", String.valueOf(size))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
+
+		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
+		assertEquals(response.getHeader("page"), String.valueOf(page));
+		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
+
+	}
+
+	private void createCompetition (int count) {
+		for(int i = 0; i < count; i++) {
+			var competition = new Competition().setName("Test firstname" + i);
+			competitionRepository.save(competition);
+			log.info("Competition %s has been created", competition.getName());
+		}
+	}
+
 
 }
