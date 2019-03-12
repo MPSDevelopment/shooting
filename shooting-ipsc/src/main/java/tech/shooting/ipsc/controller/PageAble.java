@@ -26,7 +26,7 @@ public class PageAble {
 
 		size = Math.min(Math.max(10, size), 20);
 
-		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.DESC, User.ID_FIELD);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, User.ID_FIELD);
 		return personRepository.findAll(pageable);
 
 	}

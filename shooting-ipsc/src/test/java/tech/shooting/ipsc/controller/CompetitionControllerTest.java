@@ -86,7 +86,7 @@ public class CompetitionControllerTest {
 	public void before () {
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
-		testing = new Competition().setName("Alladin");
+		testing = new Competition().setName("Alladin").setLocation("Cave!");
 		save = competitionRepository.save(new Competition().setName("Test name Competition"));
 
 
@@ -159,7 +159,7 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkUpdateCompetitionById () throws Exception {
 		Competition test = competitionRepository.findByName(save.getName());
-		test.setName("Update Name");
+		test.setName("Update Name").setLocation("cave number 2");
 
 		// try access to updateCompetition with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_BY_ID.replace("{competitionId}", test.getId().toString()))

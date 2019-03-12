@@ -13,6 +13,7 @@ import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -27,6 +28,7 @@ public class CreateCompetition {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)
+	@Size(min = 5, max = 50, message = ValidationConstants.COMPETITION_NAME_MESSAGE)
 	private String name;
 
 	@JsonProperty
@@ -47,6 +49,8 @@ public class CreateCompetition {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")
+	@NotNull(message = ValidationConstants.COMPETITION_LOCATION_MESSAGE)
+	@Size(min = 5, max = 50, message = ValidationConstants.COMPETITION_LOCATION_MESSAGE)
 	private String location;
 
 	@JsonProperty
