@@ -9,11 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CreateCompetition;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -48,5 +47,12 @@ public class CompetitionController {
 		competition.setActive(true);
 		competitionRepository.save(competition);
 
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	public ResponseEntity<Competition> getCompetitionById (@PathVariable(value = "competitionId", required = true) Long id) throws BadRequestException {
+		Competition competition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Not find competition with %s id", id)));
+
+		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
 }

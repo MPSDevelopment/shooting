@@ -92,7 +92,7 @@ public class CompetitionControllerTest {
 	}
 
 	@Test
-	public void checkCreatePerson () throws Exception {
+	public void checkCreateCompetition () throws Exception {
 
 		// try access to createCompetition() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -112,6 +112,23 @@ public class CompetitionControllerTest {
 			.contentType(MediaType.APPLICATION_JSON_UTF8)
 			.content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testing.getName()));
 
+	}
+
+	@Test
+	public void checkGetCompetitionById () throws Exception {
+		Competition save = competitionRepository.save(testing);
+
+		// try access to getCompetitionById with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID.replace("{competitionId}", save.getId().toString())))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access to getCompetitionById with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID.replace("{competitionId}", save.getId().toString()))
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access to getCompetitionById with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID.replace("{competitionId}", save.getId().toString()))
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(save.getName()));
 
 	}
 }
