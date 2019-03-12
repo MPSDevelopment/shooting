@@ -15,6 +15,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.repository.PersonRepository;
 
@@ -45,6 +46,7 @@ public class PersonController {
 			throw new ValidationException(Person.NAME_AND_IPSC_FIELD, "Person with name %s and rifle ipsc code %s is already exist", person.getName(), person.getRifleCodeIpsc());
 		}
 		person.setActive(true);
+		person.setQualifierRank(ClassificationBreaks.D);
 		personRepository.save(person);
 
 	}
