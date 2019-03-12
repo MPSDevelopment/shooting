@@ -10,11 +10,13 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +24,7 @@ import java.time.OffsetDateTime;
 @ApiModel(value = "Competition create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class CreateCompetition {
+public class CompetitionBean {
 
 
 	@JsonProperty
@@ -68,5 +70,9 @@ public class CreateCompetition {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
 	private Long statsOfficer;
+
+	@JsonProperty
+	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
+	private List<Stage> stages;
 
 }

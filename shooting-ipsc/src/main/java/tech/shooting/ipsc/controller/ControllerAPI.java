@@ -42,6 +42,6 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS = "/all";
 	public static final String COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE = "/all/{pageNumber}/{pageSize}";
 
-	public static final String STAGE_CONTROLLER = "/api/stage";
-	public static final String STAGE_CONTROLLER_POST_CREATE_STAGE_IN_COMPETITION_ID = "/create/{competitionId}";
+	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/{competitionId}/stages";
+
 }

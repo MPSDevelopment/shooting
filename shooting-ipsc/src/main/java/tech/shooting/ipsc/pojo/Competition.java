@@ -12,6 +12,7 @@ import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 @Document(collection = "competition")
@@ -62,5 +63,9 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
 	@DBRef
 	private User statsOfficer;
+
+	@JsonProperty
+	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
+	private List<Stage> stages;
 
 }
