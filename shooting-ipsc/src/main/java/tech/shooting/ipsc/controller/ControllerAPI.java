@@ -22,6 +22,7 @@ public class ControllerAPI {
 	public static final String USER_CONTROLLER_GET_ALL = "/all";
 	public static final String USER_CONTROLLER_GET_COUNT = "/count";
 	public static final String USER_CONTROLLER_POST_CREATE = "/create";
+	public static final String USER_CONTROLLER_GET_ALL_JUDGES = "/all/judge";
 
 	public static final String PERSON_CONTROLLER = "/api/persons";
 	public static final String PERSON_CONTROLLER_GET_PERSON = "/{personId}";

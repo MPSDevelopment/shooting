@@ -140,4 +140,10 @@ public class UserController {
 		return PageAble.getPage(page, size, userRepository);
 	}
 
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_JUDGES, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
+	public ResponseEntity<List<User>> getJudges () {
+		return new ResponseEntity<>(userRepository.findByRoleName(RoleName.JUDGE), HttpStatus.OK);
+	}
+
 }

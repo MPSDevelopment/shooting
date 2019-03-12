@@ -342,4 +342,23 @@ public class UserControllerTest {
 		}
 	}
 
+	@Test
+	public void checkGetJudges () throws Exception {
+
+		//try access to getJudges with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_JUDGES)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try access to getJudges with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_JUDGES).header(Token.TOKEN_HEADER, userToken))
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to getJudges with admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_JUDGES).header(Token.TOKEN_HEADER, adminToken))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		assertEquals(userRepository.findByRoleName(RoleName.JUDGE).size(), JacksonUtils.getListFromJson(User[].class, contentAsString).size());
+	}
+
 }
