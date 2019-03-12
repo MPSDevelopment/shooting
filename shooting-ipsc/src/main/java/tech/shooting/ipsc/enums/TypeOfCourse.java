@@ -1,7 +1,8 @@
 package tech.shooting.ipsc.enums;
 
 public enum TypeOfCourse {
-	ShortCourse("Short Course");
+	ShortCourse("Short Course"),
+	MediumCourse("Medium Course");
 	private String typeOfCourse;
 
 	TypeOfCourse (String typeOfCourse) {
