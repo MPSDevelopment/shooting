@@ -59,14 +59,14 @@ public class CreateCompetition {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
-	private String matchDirector;
+	private Long matchDirector;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Range Master", notes = "Competition's Range Master")
-	private String rangeMaster;
+	private Long rangeMaster;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
-	private String statsOfficer;
+	private Long statsOfficer;
 
 }

@@ -35,11 +35,11 @@ public class CompetitionController {
 	public ResponseEntity<Competition> createCompetition (@RequestBody @Valid CreateCompetition createCompetition) throws BadRequestException {
 		Competition competition = new Competition();
 		BeanUtils.copyProperties(createCompetition, competition);
-		createPerson(competition);
+		createCompetition(competition);
 		return new ResponseEntity<>(competition, HttpStatus.CREATED);
 	}
 
-	private void createPerson (Competition competition) {
+	private void createCompetition (Competition competition) {
 		log.info("Create competition with name %s ", competition.getName());
 		if(competitionRepository.findByName(competition.getName()) != null) {
 			throw new ValidationException(Competition.NAME, "Competition with name %s is already exist", competition.getName());
