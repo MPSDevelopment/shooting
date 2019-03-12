@@ -45,7 +45,6 @@ public class CompetitionController {
 		}
 		competition.setActive(true);
 		competitionRepository.save(competition);
-
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -70,5 +69,11 @@ public class CompetitionController {
 		Competition existCompetition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
 		BeanUtils.copyProperties(competition, existCompetition);
 		return new ResponseEntity<>(competitionRepository.save(existCompetition), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT)
+	@ApiOperation(value = "Get count competitions", notes = "Return long count of competitions")
+	public ResponseEntity<Long> getCount () throws BadRequestException {
+		return new ResponseEntity<>(competitionRepository.count(), HttpStatus.OK);
 	}
 }

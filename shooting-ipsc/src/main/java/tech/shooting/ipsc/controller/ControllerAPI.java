@@ -37,4 +37,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_BY_ID = "/{competitionId}";
 	public static final String COMPETITION_CONTROLLER_DELETE_BY_ID = "/{competitionId}";
 	public static final String COMPETITION_CONTROLLER_PUT_BY_ID = "/{competitionId}";
+	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 }
