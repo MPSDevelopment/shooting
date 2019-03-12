@@ -17,7 +17,6 @@ import tech.shooting.ipsc.bean.CreateCompetition;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -32,7 +31,7 @@ public class CompetitionController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
-	public ResponseEntity<Competition> createCompetition (HttpServletRequest request, @RequestBody @Valid CreateCompetition createCompetition) throws BadRequestException {
+	public ResponseEntity<Competition> createCompetition (@RequestBody @Valid CreateCompetition createCompetition) throws BadRequestException {
 		Competition competition = new Competition();
 		BeanUtils.copyProperties(createCompetition, competition);
 		createPerson(competition);
@@ -50,9 +49,18 @@ public class CompetitionController {
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get competition by id", notes = "Return competition object")
 	public ResponseEntity<Competition> getCompetitionById (@PathVariable(value = "competitionId", required = true) Long id) throws BadRequestException {
-		Competition competition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Not find competition with %s id", id)));
+		Competition competition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
 
+		return new ResponseEntity<>(competition, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Remove competition", notes = "Return removed competition object")
+	public ResponseEntity<Competition> deleteCompetitionById (@PathVariable(value = "competitionId", required = true) Long id) throws BadRequestException {
+		Competition competition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
+		competitionRepository.delete(competition);
 		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
 }

@@ -69,6 +69,7 @@ public class CompetitionControllerTest {
 	private User admin;
 
 	private Competition testing;
+	private Competition save;
 
 	private String adminToken;
 
@@ -80,6 +81,7 @@ public class CompetitionControllerTest {
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		testing = new Competition().setName("Alladin");
+		save = competitionRepository.save(new Competition().setName("Test name Competition"));
 
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
@@ -116,7 +118,6 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkGetCompetitionById () throws Exception {
-		Competition save = competitionRepository.save(testing);
 
 		// try access to getCompetitionById with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID.replace("{competitionId}", save.getId().toString())))
@@ -128,6 +129,23 @@ public class CompetitionControllerTest {
 
 		// try access to getCompetitionById with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID.replace("{competitionId}", save.getId().toString()))
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(save.getName()));
+
+	}
+
+	@Test
+	public void checkDeleteCompetitionById () throws Exception {
+
+		// try access to deleteCompetitionById with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_BY_ID.replace("{competitionId}", save.getId().toString())))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access to deleteCompetitionById with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_BY_ID.replace("{competitionId}", save.getId().toString()))
+			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access to deleteCompetitionById with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_BY_ID.replace("{competitionId}", save.getId().toString()))
 			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(save.getName()));
 
 	}
