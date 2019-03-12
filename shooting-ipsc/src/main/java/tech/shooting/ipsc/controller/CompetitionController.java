@@ -18,6 +18,7 @@ import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.COMPETITION_CONTROLLER)
@@ -75,5 +76,11 @@ public class CompetitionController {
 	@ApiOperation(value = "Get count competitions", notes = "Return long count of competitions")
 	public ResponseEntity<Long> getCount () throws BadRequestException {
 		return new ResponseEntity<>(competitionRepository.count(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS)
+	@ApiOperation(value = "Get list competitions", notes = "Return List competition object")
+	public ResponseEntity<List<Competition>> getAllCompetitions () throws BadRequestException {
+		return new ResponseEntity<>(competitionRepository.findAll(), HttpStatus.OK);
 	}
 }

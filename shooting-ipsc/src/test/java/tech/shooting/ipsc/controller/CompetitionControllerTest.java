@@ -197,4 +197,27 @@ public class CompetitionControllerTest {
 		assertEquals(response.getContentAsString(), String.valueOf(competitionRepository.count()));
 	}
 
+	@Test
+	public void checkGetAllCompetitions () throws Exception {
+
+		// try access to getAllCompetitions with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access to getAllCompetitions with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS).header(Token.TOKEN_HEADER, userToken))
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access to getAllCompetitions with authorized admin
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS)
+			.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		Competition[] actual = JacksonUtils.fromJson(Competition[].class, contentAsString);
+		Competition[] exact = competitionRepository.findAll().toArray(new Competition[0]);
+
+		assertEquals(actual.length, exact.length);
+		for(int i = 0; i < actual.length; i++) {
+			assertEquals(actual[i], exact[i]);
+		}
+	}
+
 }
