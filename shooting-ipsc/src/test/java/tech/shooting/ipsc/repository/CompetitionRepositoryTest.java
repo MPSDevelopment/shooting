@@ -44,4 +44,6 @@ public class CompetitionRepositoryTest {
 		competitionRepository.save(new Competition().setName(name).setLocation(location));
 		assertNotNull(competitionRepository.findByName(name));
 	}
+	
+	
 }
