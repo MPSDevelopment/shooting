@@ -51,7 +51,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, IpscUserDetailsService.class, CompetitionController.class, ValidationErrorHandler.class})
+@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
+	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CompetitionController.class, ValidationErrorHandler.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -122,8 +123,7 @@ public class CompetitionControllerTest {
 
 		// try access to createCompetition() with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE)
-			                .header(Token.TOKEN_HEADER, adminToken)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getFullJson(competition)))
+			                .header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getFullJson(competition)))
 			.andExpect(MockMvcResultMatchers.status().isCreated())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(competition.getName()));
 
@@ -198,7 +198,8 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access to getCount with authorized admin
-		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER,
+			adminToken))
 			                                   .andExpect(MockMvcResultMatchers.status().isOk())
 			                                   .andReturn()
 			                                   .getResponse();
@@ -216,8 +217,12 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access to getAllCompetitions with authorized admin
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS)
-			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 
 		Competition[] actual = JacksonUtils.fromJson(Competition[].class, contentAsString);
 		Competition[] exact = competitionRepository.findAll().toArray(new Competition[0]);
@@ -300,18 +305,13 @@ public class CompetitionControllerTest {
 
 
 		//try access to getStagesFromCompetitionById with admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace("{competitionId}", testingCompetition.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		String contentAsString = mockMvc.perform(
+			MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace("{competitionId}", testingCompetition.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(stages.size(), listFromJson.size());
 		for(int i = 0; i < listFromJson.size(); i++) {
-			assertEquals(listFromJson.get(i).getNameOfStage(), stages.get(i).getNameOfStage());
-			assertEquals(listFromJson.get(i).getMaximumPoints(), stages.get(i).getMaximumPoints());
-			assertEquals(listFromJson.get(i).getTargets(), stages.get(i).getTargets());
+			testRequiredFields(listFromJson.get(i), stages.get(i));
 		}
 	}
 
@@ -337,11 +337,11 @@ public class CompetitionControllerTest {
 			                .content(Objects.requireNonNull(fullJson))).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		//try to access postStages with admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace("{competitionId}", testingCompetition.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(fullJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(
+			MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace("{competitionId}", testingCompetition.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(fullJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(4, listFromJson.size());
 		for(int i = 0; i < listFromJson.size(); i++) {
@@ -366,11 +366,11 @@ public class CompetitionControllerTest {
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		//try access to postStage with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace("{competitionId}", testingCompetition.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(stageJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(
+			MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace("{competitionId}", testingCompetition.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(stageJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		Stage stage = JacksonUtils.fromJson(Stage.class, contentAsString);
 
@@ -405,6 +405,40 @@ public class CompetitionControllerTest {
 
 		testRequiredFields(Objects.requireNonNull(JacksonUtils.fromJson(Stage.class, contentAsString)), testingStage);
 	}
+
+	@Test
+	public void checkDeleteStageById () throws Exception {
+		Stage removeStage = new Stage().setNameOfStage("Removed stage").setMaximumPoints(60).setNumberOfRoundToBeScored(12).setTargets(5);
+		List<Stage> stages = testingCompetition.getStages();
+		stages.add(testingStage);
+		stages.add(removeStage);
+		testingCompetition = competitionRepository.save(testingCompetition.setStages(stages));
+		Stage stageToRemove = findStage(testingCompetition, removeStage);
+
+		//try access to deleteStage with non unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace("{competitionId}", testingCompetition.getId().toString()).replace("{stageId}", stageToRemove.getId().toString()))
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try access to deleteStage with non admin role
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace("{competitionId}", testingCompetition.getId().toString()).replace("{stageId}", stageToRemove.getId().toString()))
+			                .header(Token.TOKEN_HEADER, userToken)
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to deleteStage with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                       ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace("{competitionId}", testingCompetition.getId().toString())
+			                                                                       .replace("{stageId}", stageToRemove.getId().toString())).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8))
+			                         .andExpect(MockMvcResultMatchers.status().isOk())
+			                         .andReturn()
+			                         .getResponse()
+			                         .getContentAsString();
+		testRequiredFields(Objects.requireNonNull(JacksonUtils.fromJson(Stage.class, contentAsString)), removeStage);
+		assertEquals(testingCompetition.getStages().size() - 1, competitionRepository.findById(testingCompetition.getId()).get().getStages().size());
+
+	}
+
 
 	//utils method's
 	private Stage findStage (Competition competition, Stage testingStage) {

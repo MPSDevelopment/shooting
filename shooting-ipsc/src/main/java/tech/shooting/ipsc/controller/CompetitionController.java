@@ -21,6 +21,7 @@ import tech.shooting.ipsc.repository.CompetitionRepository;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(ControllerAPI.COMPETITION_CONTROLLER)
@@ -135,6 +136,17 @@ public class CompetitionController {
 	public ResponseEntity<Stage> getStageById (@PathVariable(value = "competitionId", required = true) Long competitionId, @PathVariable(value = "stageId") Long stageId) throws BadRequestException {
 		Competition competition = checkCompetitionsIfExist(competitionId);
 		return new ResponseEntity<>(checkStageIfExistById(competition, stageId), HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Delete stage by id", notes = "Return removed stage object")
+	public ResponseEntity<Stage> deleteStageById (@PathVariable(value = "competitionId", required = true) Long competitionId, @PathVariable(value = "stageId") Long stageId) throws BadRequestException {
+		Competition competition = checkCompetitionsIfExist(competitionId);
+		Stage stage = checkStageIfExistById(competition, stageId);
+		List<Stage> collect = competition.getStages().stream().filter((item) -> !item.getId().equals(stage.getId())).collect(Collectors.toList());
+
+		competitionRepository.save(competition.setStages(collect));
+		return new ResponseEntity<>(stage, HttpStatus.OK);
 	}
 
 
