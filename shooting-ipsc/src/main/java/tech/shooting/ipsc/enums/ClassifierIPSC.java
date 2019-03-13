@@ -1,10 +1,11 @@
 package tech.shooting.ipsc.enums;
 
-import lombok.Getter;
-import lombok.ToString;
+import tech.shooting.ipsc.pojo.Stage;
 
-@ToString
-@Getter
+import java.util.ArrayList;
+import java.util.List;
+
+
 public enum ClassifierIPSC {
 	CLC_01("CLC-01", TypeOfCourse.ShortCourse, 2, 3, 3, 7, 35),
 	CLC_03("CLC-03", TypeOfCourse.ShortCourse, 2, 2, 0, 6, 30),
@@ -52,5 +53,17 @@ public enum ClassifierIPSC {
 		this.noShoots = noShoots;
 		this.numberOfRoundToBeScored = numberOfRoundToBeScored;
 		this.maximumPoints = maximumPoints;
+	}
+
+	public static List<Stage> getListStage () {
+		List<Stage> result = new ArrayList<>();
+		for(ClassifierIPSC value : ClassifierIPSC.values()) {
+			result.add(new Stage().setNameOfStage(value.name).setMaximumPoints(value.maximumPoints).setNumberOfRoundToBeScored(value.numberOfRoundToBeScored).setPopper(value.popper).setTargets(value.targets).setNoShoots(value.noShoots));
+		}
+		return result;
+	}
+
+	public static Integer getcount () {
+		return ClassifierIPSC.values().length;
 	}
 }

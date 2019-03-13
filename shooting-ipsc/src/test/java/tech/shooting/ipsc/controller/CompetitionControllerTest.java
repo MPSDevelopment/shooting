@@ -31,6 +31,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
@@ -505,13 +506,15 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkGetEnum () throws Exception {
+		//try access to getEnum from admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
 			                         .andExpect(MockMvcResultMatchers.status().isOk())
 			                         .andReturn()
 			                         .getResponse()
 			                         .getContentAsString();
 
-		System.out.println(contentAsString);
+		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
+		assertEquals(ClassifierIPSC.getcount(), listFromJson.size());
 
 	}
 

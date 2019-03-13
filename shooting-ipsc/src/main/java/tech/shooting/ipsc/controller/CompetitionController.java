@@ -171,8 +171,9 @@ public class CompetitionController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_GET_CONST_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get const of ClassifierIPSC standard", notes = "Return list of ClassifierIPSC")
-	public ResponseEntity<ClassifierIPSC[]> getEnum () {
-		return new ResponseEntity<>(ClassifierIPSC.class.getEnumConstants(), HttpStatus.OK);
+	public ResponseEntity<List<Stage>> getEnum () {
+
+		return new ResponseEntity<>(ClassifierIPSC.getListStage(), HttpStatus.OK);
 	}
 
 	//Util method's
