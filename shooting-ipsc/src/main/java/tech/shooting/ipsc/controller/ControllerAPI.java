@@ -45,4 +45,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/{competitionId}/stages";
 	public static final String COMPETITION_CONTROLLER_POST_STAGES = "/{competitionId}/stages";
 	public static final String COMPETITION_CONTROLLER_POST_STAGE = "/{competitionId}/stage";
+	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/{competitionId}/{stageId}";
 }
