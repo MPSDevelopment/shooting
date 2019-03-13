@@ -77,10 +77,14 @@ public class CompetitionControllerTest {
 	private Competition testing;
 	private Competition save;
 
+	private Stage testingStage;
+	private String stageJson;
+
 	private String adminToken;
 
 
 	private String userToken;
+	private List<Stage> stages;
 
 	@BeforeEach
 	public void before () {
@@ -89,6 +93,8 @@ public class CompetitionControllerTest {
 		testing = new Competition().setName("Alladin").setLocation("Cave!");
 		save = competitionRepository.save(new Competition().setName("Test name Competition"));
 
+		testingStage = new Stage().setNameOfStage("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
+		stageJson = JacksonUtils.getJson(testingStage);
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -332,6 +338,35 @@ public class CompetitionControllerTest {
 			assertEquals(listFromJson.get(i).getMaximumPoints(), setupList.get(i).getMaximumPoints());
 			assertEquals(listFromJson.get(i).getTargets(), setupList.get(i).getTargets());
 		}
+
+	}
+
+	@Test
+	public void checkPostStage () throws Exception {
+		List<Stage> stages = competitionRepository.findById(save.getId()).get().getStages();
+		//try access to postStage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace("{competitionId}", save.getId().toString()))
+			                .content(stageJson)
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+
+		//try access to postStage with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace("{competitionId}", save.getId().toString()))
+			                .content(stageJson)
+			                .header(Token.TOKEN_HEADER, userToken)
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to postStage with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace("{competitionId}",
+			save.getId().toString())).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(stageJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		Stage stage = JacksonUtils.fromJson(Stage.class, contentAsString);
+
+		assertEquals(stages.size() + 1, competitionRepository.findById(save.getId()).get().getStages().size());
+		assertEquals(stage.getTargets(), testingStage.getTargets());
+		assertEquals(stage.getNameOfStage(), testingStage.getNameOfStage());
+		assertEquals(stage.getMaximumPoints(), testingStage.getMaximumPoints());
+		assertEquals(stage.getNumberOfRoundToBeScored(), testingStage.getNumberOfRoundToBeScored());
 
 	}
 

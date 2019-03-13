@@ -43,6 +43,6 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE = "/all/{pageNumber}/{pageSize}";
 
 	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/{competitionId}/stages";
-
 	public static final String COMPETITION_CONTROLLER_POST_STAGES = "/{competitionId}/stages";
+	public static final String COMPETITION_CONTROLLER_POST_STAGE = "/{competitionId}/stage";
 }

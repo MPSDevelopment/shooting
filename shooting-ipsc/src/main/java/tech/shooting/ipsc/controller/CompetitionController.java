@@ -113,4 +113,22 @@ public class CompetitionController {
 		competition.getStages().addAll(toAdded);
 		return new ResponseEntity<>(competitionRepository.save(competition).getStages(), HttpStatus.OK);
 	}
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Add stage to exist stages", notes = "Return created stage")
+	public ResponseEntity<Stage> postStage (@PathVariable(value = "competitionId") Long id, @RequestBody @Valid Stage toAdded) throws BadRequestException {
+		Competition competition = competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
+
+		competition.getStages().add(toAdded);
+		List<Stage> stages = competitionRepository.save(competition).getStages();
+		int index = 0;
+		for(int i = 0; i < stages.size(); i++) {
+			if(stages.get(i).getNameOfStage().equals(toAdded.getNameOfStage()) && stages.get(i).getMaximumPoints().equals(toAdded.getMaximumPoints()) && stages.get(i).getTargets().equals(toAdded.getTargets())) {
+				index = i;
+			}
+		}
+		return new ResponseEntity<>(stages.get(index), HttpStatus.OK);
+	}
+
+
 }
