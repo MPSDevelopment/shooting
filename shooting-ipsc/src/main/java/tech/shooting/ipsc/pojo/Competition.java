@@ -12,6 +12,7 @@ import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -66,6 +67,6 @@ public class Competition extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
-	private List<Stage> stages;
+	private List<Stage> stages = new ArrayList<>();
 
 }
