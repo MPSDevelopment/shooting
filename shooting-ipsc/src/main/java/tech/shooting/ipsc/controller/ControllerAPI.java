@@ -6,6 +6,8 @@ public class ControllerAPI {
 
 	public static final String CONTROLLER_GENERAL_REQUEST = "";
 	public static final String CONTROLLER_SPECIFIC_REQUEST = "/{id}";
+	public static final String COMPETITION_ID_REQUEST = "{competitionId}";
+	public static final String STAGE_ID_REQUEST = "{stageId}";
 
 	public static final String AUTH_CONTROLLER = "/api/auth";
 	public static final String AUTH_CONTROLLER_POST_LOGIN = "/login";
@@ -47,4 +49,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_STAGE = "/{competitionId}/stage";
 	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/{competitionId}/{stageId}";
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/{competitionId}/{stageId}";
+	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/{competitionId}/{stageId}";
 }
