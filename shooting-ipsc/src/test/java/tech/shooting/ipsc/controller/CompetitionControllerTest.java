@@ -32,10 +32,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
-import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.pojo.Competition;
-import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
@@ -66,6 +63,9 @@ public class CompetitionControllerTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PersonRepository personRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -515,6 +515,23 @@ public class CompetitionControllerTest {
 
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(ClassifierIPSC.getcount(), listFromJson.size());
+
+	}
+
+	@Test
+	public void checkGetCompetitors () throws Exception {
+		List<Competitor> competitors = testingCompetition.getCompetitors();
+		Person person = personRepository.save(new Person().setName("testing person for competitor"));
+		Competitor testing_competitors = new Competitor().setName("Testing competitors").setRfidCode("1234567890").setPerson(person);
+		competitors.add(testing_competitors);
+		testingCompetition = competitionRepository.save(testingCompetition.setCompetitors(competitors));
+
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITORS.replace(ControllerAPI.COMPETITION_ID_REQUEST, testingCompetition.getId().toString()))
+			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		List<Competitor> listFromJson = JacksonUtils.getListFromJson(Competitor[].class, contentAsString);
+		assertEquals(competitors.size(),listFromJson.size());
 
 	}
 

@@ -53,4 +53,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + COMPETITION_ID_REQUEST + "/" + STAGE_ID_REQUEST;
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + COMPETITION_ID_REQUEST + "/" + STAGE_ID_REQUEST;
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + COMPETITION_ID_REQUEST + "/competitors";
 }

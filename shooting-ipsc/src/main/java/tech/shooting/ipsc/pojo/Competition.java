@@ -69,4 +69,7 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "List of stages", notes = "Competition's list stages")
 	private List<Stage> stages = new ArrayList<>();
 
+	@JsonProperty
+	@ApiModelProperty(value = "List of competitors", notes = "Competitor's list")
+	private List<Competitor> competitors = new ArrayList<>();
 }
