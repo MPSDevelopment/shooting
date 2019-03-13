@@ -507,7 +507,7 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkGetEnum () throws Exception {
 		//try access to getEnum from admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
 			                         .andExpect(MockMvcResultMatchers.status().isOk())
 			                         .andReturn()
 			                         .getResponse()
