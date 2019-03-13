@@ -14,6 +14,7 @@ import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -166,6 +167,12 @@ public class CompetitionController {
 		competitionRepository.save(competition.setStages(stages));
 
 		return new ResponseEntity<>(stageFromDB, HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_GET_CONST_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get const of ClassifierIPSC standard", notes = "Return list of ClassifierIPSC")
+	public ResponseEntity<ClassifierIPSC[]> getEnum () {
+		return new ResponseEntity<>(ClassifierIPSC.class.getEnumConstants(), HttpStatus.OK);
 	}
 
 	//Util method's

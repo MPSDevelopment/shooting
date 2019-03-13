@@ -1,5 +1,10 @@
 package tech.shooting.ipsc.enums;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@Getter
 public enum ClassifierIPSC {
 	CLC_01("CLC-01", TypeOfCourse.ShortCourse, 2, 3, 3, 7, 35),
 	CLC_03("CLC-03", TypeOfCourse.ShortCourse, 2, 2, 0, 6, 30),
@@ -47,33 +52,5 @@ public enum ClassifierIPSC {
 		this.noShoots = noShoots;
 		this.numberOfRoundToBeScored = numberOfRoundToBeScored;
 		this.maximumPoints = maximumPoints;
-	}
-
-	public String getName () {
-		return name;
-	}
-
-	public TypeOfCourse getTypeOfCourse () {
-		return typeOfCourse;
-	}
-
-	public Integer getTargets () {
-		return targets;
-	}
-
-	public Integer getPopper () {
-		return popper;
-	}
-
-	public Integer getNoShoots () {
-		return noShoots;
-	}
-
-	public Integer getNumberOfRoundToBeScored () {
-		return numberOfRoundToBeScored;
-	}
-
-	public Integer getMaximumPoints () {
-		return maximumPoints;
 	}
 }

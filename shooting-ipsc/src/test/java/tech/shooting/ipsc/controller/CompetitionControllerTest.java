@@ -503,4 +503,16 @@ public class CompetitionControllerTest {
 			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.nameOfStage").value("update name"));
 	}
 
+	@Test
+	public void checkGetEnum () throws Exception {
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
+			                         .andExpect(MockMvcResultMatchers.status().isOk())
+			                         .andReturn()
+			                         .getResponse()
+			                         .getContentAsString();
+
+		System.out.println(contentAsString);
+
+	}
+
 }
