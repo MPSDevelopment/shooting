@@ -21,8 +21,7 @@ public class Competitor extends BaseDocument {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Competitor's rfid code", required = true)
-	@Indexed(unique = true)
+	@ApiModelProperty(value = "Competitor's rfid code")
 	private String rfidCode;
 
 	@DBRef
