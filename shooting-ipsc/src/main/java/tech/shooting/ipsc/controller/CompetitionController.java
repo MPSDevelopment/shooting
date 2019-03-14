@@ -43,7 +43,7 @@ public class CompetitionController {
 
 	private static final String PATH_VARIABLE_STAGE_ID = "stageId";
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
 	public ResponseEntity<Competition> createCompetition (@RequestBody @Valid CompetitionBean competitionBean) throws BadRequestException {
 		Competition competition = new Competition();
@@ -64,14 +64,14 @@ public class CompetitionController {
 		competitionRepository.save(competition);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get competition by id", notes = "Return competition object")
 	public ResponseEntity<Competition> getCompetitionById (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Remove competition", notes = "Return removed competition object")
 	public ResponseEntity<Competition> deleteCompetitionById (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
@@ -79,7 +79,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_BY_ID, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update competition", notes = "Return update competition object")
 	public ResponseEntity<Competition> updateCompetition (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id, @RequestBody @Valid CompetitionBean competition) throws BadRequestException {
 		Competition existCompetition = checkCompetition(id);
@@ -93,13 +93,13 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionRepository.count(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITIONS, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list competitions", notes = "Return List competition object")
 	public ResponseEntity<List<Competition>> getAllCompetitions () throws BadRequestException {
 		return new ResponseEntity<>(competitionRepository.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ALL_COMPETITION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get competition by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class),
 		@ResponseHeader(name = "total", description = "Total " + "records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
@@ -188,17 +188,7 @@ public class CompetitionController {
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor, competitorToDB);
-		List<Competitor> competitors = competition.getCompetitors();
-		competitors.add(competitorToDB);
-		competition.setCompetitors(competitors);
-		competitors = competitionRepository.save(competition).getCompetitors();
-		int index = 0;
-		for(int i = 0; i < competitors.size(); i++) {
-			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) {
-				index = i;
-			}
-		}
-		return new ResponseEntity<>(competitors.get(index), HttpStatus.CREATED);
+		return new ResponseEntity<>(saveAndReturn(competition, competitorToDB), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -212,6 +202,16 @@ public class CompetitionController {
 		competition.setCompetitors(competitors);
 		competitionRepository.save(competition);
 		return new ResponseEntity<>(competitor, HttpStatus.OK);
+	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update competitor from competition", notes = "Return updated competitor")
+	public ResponseEntity<Competitor> putCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id, @PathVariable(value = PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId,
+		@RequestBody @Valid Competitor competitor) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
+		BeanUtils.copyProperties(competitor, competitorFromDB);
+		return new ResponseEntity<>(saveAndReturn(competition, competitorFromDB), HttpStatus.OK);
 	}
 
 	//Util method's
@@ -229,5 +229,19 @@ public class CompetitionController {
 
 	private Stage checkStage (Competition competition, Long stageId) throws BadRequestException {
 		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findAny().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+	}
+
+	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB) {
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.add(competitorToDB);
+		competition.setCompetitors(competitors);
+		competitors = competitionRepository.save(competition).getCompetitors();
+		int index = 0;
+		for(int i = 0; i < competitors.size(); i++) {
+			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) {
+				index = i;
+			}
+		}
+		return competitors.get(index);
 	}
 }

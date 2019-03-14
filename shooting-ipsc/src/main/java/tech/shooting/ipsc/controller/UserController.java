@@ -42,7 +42,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
 	public ResponseEntity<User> signupJudge (HttpServletRequest request, @RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
 		User user = new User();
@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_UPDATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
 	public ResponseEntity<User> updateUser (@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
 
@@ -119,7 +119,7 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all users", notes = "Returns all user objects")
 	public ResponseEntity<List<User>> getUsers () throws BadRequestException {
 		return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
@@ -131,7 +131,7 @@ public class UserController {
 		return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get users by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
@@ -140,7 +140,7 @@ public class UserController {
 		return PageAble.getPage(page, size, userRepository);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_ALL_JUDGES, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
 	public ResponseEntity<List<User>> getJudges () {
 		return new ResponseEntity<>(userRepository.findByRoleName(RoleName.JUDGE), HttpStatus.OK);
