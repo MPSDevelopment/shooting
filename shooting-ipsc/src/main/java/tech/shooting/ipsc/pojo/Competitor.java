@@ -25,6 +25,8 @@ public class Competitor extends BaseDocument {
 	private String rfidCode;
 
 	@DBRef
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor")
 	private Person person;
 
 }

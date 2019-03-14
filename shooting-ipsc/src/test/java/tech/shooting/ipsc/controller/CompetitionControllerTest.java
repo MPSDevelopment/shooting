@@ -79,6 +79,9 @@ public class CompetitionControllerTest {
 	private Competition competition;
 	private Competition testingCompetition;
 
+	private Person testingPerson;
+	private Competitor testingCompetitor;
+
 	private Stage testingStage;
 	private String stageJson;
 
@@ -94,6 +97,9 @@ public class CompetitionControllerTest {
 		String password = RandomStringUtils.randomAscii(14);
 		competition = new Competition().setName("Alladin").setLocation("Cave!");
 		testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition"));
+
+		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
+		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
 
 		testingStage = new Stage().setNameOfStage("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
 		stageJson = JacksonUtils.getJson(testingStage);
@@ -521,9 +527,7 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkGetCompetitors () throws Exception {
 		List<Competitor> competitors = testingCompetition.getCompetitors();
-		Person person = personRepository.save(new Person().setName("testing person for competitor"));
-		Competitor testing_competitors = new Competitor().setName("Testing competitors").setRfidCode("1234567890").setPerson(person);
-		competitors.add(testing_competitors);
+		competitors.add(testingCompetitor);
 		testingCompetition = competitionRepository.save(testingCompetition.setCompetitors(competitors));
 
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
@@ -531,7 +535,18 @@ public class CompetitionControllerTest {
 			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		List<Competitor> listFromJson = JacksonUtils.getListFromJson(Competitor[].class, contentAsString);
-		assertEquals(competitors.size(),listFromJson.size());
+		assertEquals(competitors.size(), listFromJson.size());
+
+	}
+
+	@Test
+	public void checkPostCompetitor () throws Exception {
+
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR.replace(ControllerAPI.COMPETITION_ID_REQUEST, testingCompetition.getId().toString()))
+			                .header(Token.TOKEN_HEADER, adminToken)
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isCreated());
 
 	}
 

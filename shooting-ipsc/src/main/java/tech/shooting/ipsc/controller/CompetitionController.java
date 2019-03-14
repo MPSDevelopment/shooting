@@ -19,6 +19,7 @@ import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
+import tech.shooting.ipsc.repository.PersonRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class CompetitionController {
 
 	@Autowired
 	private CompetitionRepository competitionRepository;
+
+	@Autowired
+	private PersonRepository personRepository;
 
 	private static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 	private static final String PATH_VARIABLE_STAGE_ID = "stageId";
@@ -186,9 +190,36 @@ public class CompetitionController {
 		return new ResponseEntity<>(checkCompetition(id).getCompetitors(), HttpStatus.OK);
 	}
 
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added competitor to the list competitors", notes = "Return competitor object")
+	public ResponseEntity<Competitor> postCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id, @RequestBody @Valid Competitor competitor) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		checkCompetitor(competitor.getPerson().getId());
+		Competitor competitorToDB = new Competitor();
+		BeanUtils.copyProperties(competitor, competitorToDB);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.add(competitorToDB);
+		competition.setCompetitors(competitors);
+		competitors = competitionRepository.save(competition).getCompetitors();
+		int index = 0;
+		for(int i = 0; i < competitors.size(); i++) {
+			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) {
+				index = i;
+			}
+		}
+
+		return new ResponseEntity<>(competitors.get(index), HttpStatus.CREATED);
+
+	}
+
 	//Util method's
 	private Competition checkCompetition (Long id) throws BadRequestException {
 		return competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
+	}
+
+	private void checkCompetitor (Long id) throws BadRequestException {
+		personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
 	}
 
 	private Stage checkStage (Competition competition, Long stageId) throws BadRequestException {
