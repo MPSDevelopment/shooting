@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @Api(value = ControllerAPI.COMPETITION_CONTROLLER)
 @Slf4j
 public class CompetitionController {
+	private static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
 
 	@Autowired
 	private CompetitionRepository competitionRepository;
@@ -39,8 +40,8 @@ public class CompetitionController {
 	private PersonRepository personRepository;
 
 	private static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
-	private static final String PATH_VARIABLE_STAGE_ID = "stageId";
 
+	private static final String PATH_VARIABLE_STAGE_ID = "stageId";
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_CREATE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
@@ -67,7 +68,6 @@ public class CompetitionController {
 	@ApiOperation(value = "Get competition by id", notes = "Return competition object")
 	public ResponseEntity<Competition> getCompetitionById (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-
 		return new ResponseEntity<>(competition, HttpStatus.OK);
 	}
 
@@ -112,7 +112,6 @@ public class CompetitionController {
 	@ApiOperation(value = "Get stages from competition", notes = "Return list of stages object")
 	public ResponseEntity<List<Stage>> getStagesFromCompetitionById (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-
 		return new ResponseEntity<>(competition.getStages(), HttpStatus.OK);
 	}
 
@@ -120,7 +119,6 @@ public class CompetitionController {
 	@ApiOperation(value = "Added list stages to exist stages", notes = "Return list of stages")
 	public ResponseEntity<List<Stage>> postStages (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid List<Stage> toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-
 		competition.getStages().addAll(toAdded);
 		return new ResponseEntity<>(competitionRepository.save(competition).getStages(), HttpStatus.OK);
 	}
@@ -129,7 +127,6 @@ public class CompetitionController {
 	@ApiOperation(value = "Add stage to exist stages", notes = "Return created stage")
 	public ResponseEntity<Stage> postStage (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid Stage toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-
 		competition.getStages().add(toAdded);
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
@@ -154,7 +151,6 @@ public class CompetitionController {
 		Competition competition = checkCompetition(competitionId);
 		Stage stage = checkStage(competition, stageId);
 		List<Stage> collect = competition.getStages().stream().filter((item) -> !item.getId().equals(stage.getId())).collect(Collectors.toList());
-
 		competitionRepository.save(competition.setStages(collect));
 		return new ResponseEntity<>(stage, HttpStatus.OK);
 	}
@@ -166,21 +162,16 @@ public class CompetitionController {
 		Competition competition = checkCompetition(competitionId);
 		Stage stageFromDB = checkStage(competition, stageId);
 		BeanUtils.copyProperties(stage, stageFromDB);
-
 		List<Stage> stages = competition.getStages();
-
 		stages.remove(stageFromDB);
 		stages.add(stageFromDB);
-
 		competitionRepository.save(competition.setStages(stages));
-
 		return new ResponseEntity<>(stageFromDB, HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get const of ClassifierIPSC standard", notes = "Return list of ClassifierIPSC")
 	public ResponseEntity<List<Stage>> getEnum () {
-
 		return new ResponseEntity<>(ClassifierIPSC.getListStage(), HttpStatus.OK);
 	}
 
@@ -190,12 +181,11 @@ public class CompetitionController {
 		return new ResponseEntity<>(checkCompetition(id).getCompetitors(), HttpStatus.OK);
 	}
 
-
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added competitor to the list competitors", notes = "Return competitor object")
 	public ResponseEntity<Competitor> postCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id, @RequestBody @Valid Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkCompetitor(competitor.getPerson().getId());
+		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor, competitorToDB);
 		List<Competitor> competitors = competition.getCompetitors();
@@ -208,17 +198,32 @@ public class CompetitionController {
 				index = i;
 			}
 		}
-
 		return new ResponseEntity<>(competitors.get(index), HttpStatus.CREATED);
+	}
 
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Remove competitor from competition", notes = "Return removed competitor")
+	public ResponseEntity<Competitor> deleteCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id,
+		@PathVariable(value = PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.remove(competitor);
+		competition.setCompetitors(competitors);
+		competitionRepository.save(competition);
+		return new ResponseEntity<>(competitor, HttpStatus.OK);
 	}
 
 	//Util method's
+	private Competitor checkCompetitor (List<Competitor> competitors, Long competitorId) throws BadRequestException {
+		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
+	}
+
 	private Competition checkCompetition (Long id) throws BadRequestException {
 		return competitionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitionId %s", id)));
 	}
 
-	private void checkCompetitor (Long id) throws BadRequestException {
+	private void checkPerson (Long id) throws BadRequestException {
 		personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
 	}
 

@@ -10,6 +10,7 @@ public class ControllerAPI {
 	public static final String PAGE_SIZE = "{pageSize}";
 	public static final String PERSON_ID = "{personId}";
 	public static final String USER_ID = "{userId}";
+	public static final String COMPETITOR_ID_REQUEST = "{competitorId}";
 
 	public static final String AUTH_CONTROLLER = "/api/auth";
 	public static final String AUTH_CONTROLLER_POST_LOGIN = "/login";
@@ -53,6 +54,7 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + COMPETITION_ID_REQUEST + "/" + STAGE_ID_REQUEST;
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + COMPETITION_ID_REQUEST + "/" + STAGE_ID_REQUEST;
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
-	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + COMPETITION_ID_REQUEST + "/competitors";
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + COMPETITION_ID_REQUEST + "/competitor/all";
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor";
+	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
 }
