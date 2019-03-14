@@ -55,7 +55,7 @@ public class CompetitionController {
 	private void createCompetition (Competition competition) {
 		log.info("Create competition with name %s ", competition.getName());
 		if(competitionRepository.findByName(competition.getName()) != null) {
-			throw new ValidationException(Competition.NAME, "Competition with name %s is already exist", competition.getName());
+			throw new ValidationException(Competition.NAME_FIELD, "Competition with name %s is already exist", competition.getName());
 		}
 		competition.setActive(true);
 		if(competition.getStages() == null) {

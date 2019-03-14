@@ -21,7 +21,10 @@ import java.util.List;
 @Accessors(chain = true)
 public class Competition extends BaseDocument {
 
-	public static final String NAME = "name";
+	public static final String NAME_FIELD = "name";
+	
+	public static final String STAGES_FIELD = "stages";
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	private String name;

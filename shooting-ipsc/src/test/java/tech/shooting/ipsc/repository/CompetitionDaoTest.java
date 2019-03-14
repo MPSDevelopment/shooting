@@ -17,6 +17,7 @@ import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.db.CompetitionDao;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.repository.CompetitionRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,19 +48,33 @@ public class CompetitionDaoTest {
 		competition = new Competition().setName("Test name");
 		stage = new Stage().setNameOfStage("Test stage");
 		competition.getStages().add(stage);
-
 		competition = competitionRepository.save(competition);
 		stage = competition.getStages().get(0);
+		
+		
 
 		checkStagesId(competitionRepository.findById(competition.getId()).get());
 	}
-	
-	@Test 
+
+	@Test
+	public void checkGetByStageId() {
+		var dbCompetition = competitionDao.getByStageId(stage.getId());
+		assertNotNull(dbCompetition);
+		assertEquals(competition, dbCompetition);
+		dbCompetition = competitionDao.getByStageId(1L);
+		assertNull(dbCompetition);
+	}
+
+	@Test
 	public void checkGetStageById() {
-		var dbStage = competitionRepository.findByStageId(stage.getId()); // competitionDao.getStageById(competition.getId(), stage.getId());
+		// var dbStage = competitionRepository.findByStageId(stage.getId());
+		var dbStage = competitionDao.getStageById(stage.getId());
 		assertNotNull(dbStage);
 		log.info("Got a stage %s", dbStage);
-//		assertEquals(stage.getId(), dbStage.getId());
+		assertEquals(stage.getId(), dbStage.getId());
+		
+		dbStage = competitionDao.getStageById(1L);
+		assertNull(dbStage);
 	}
 
 	@Test
@@ -70,7 +85,7 @@ public class CompetitionDaoTest {
 		assertEquals(2, competitionRepository.findById(competition.getId()).get().getStages().size());
 		checkStagesId(competitionRepository.findById(competition.getId()).get());
 	}
-	
+
 	@Test
 	public void checkPullStage() {
 		assertEquals(1, competitionRepository.findById(competition.getId()).get().getStages().size());
