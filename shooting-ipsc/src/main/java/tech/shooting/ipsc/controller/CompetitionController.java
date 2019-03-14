@@ -55,7 +55,7 @@ public class CompetitionController {
 	private void createCompetition (Competition competition) {
 		log.info("Create competition with name %s ", competition.getName());
 		if(competitionRepository.findByName(competition.getName()) != null) {
-			throw new ValidationException(Competition.NAME, "Competition with name %s is already exist", competition.getName());
+			throw new ValidationException(Competition.NAME_FIELD, "Competition with name %s is already exist", competition.getName());
 		}
 		competition.setActive(true);
 		if(competition.getStages() == null) {
@@ -188,7 +188,7 @@ public class CompetitionController {
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor, competitorToDB);
-		return new ResponseEntity<>(saveAndReturn(competition, competitorToDB), HttpStatus.CREATED);
+		return new ResponseEntity<>(saveAndReturn(competition, competitorToDB,true), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -204,14 +204,14 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitor, HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update competitor from competition", notes = "Return updated competitor")
 	public ResponseEntity<Competitor> putCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id, @PathVariable(value = PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId,
 		@RequestBody @Valid Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
 		BeanUtils.copyProperties(competitor, competitorFromDB);
-		return new ResponseEntity<>(saveAndReturn(competition, competitorFromDB), HttpStatus.OK);
+		return new ResponseEntity<>(saveAndReturn(competition, competitorFromDB, false), HttpStatus.OK);
 	}
 
 	//Util method's
@@ -231,9 +231,20 @@ public class CompetitionController {
 		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findAny().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
 	}
 
-	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB) {
+	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
 		List<Competitor> competitors = competition.getCompetitors();
-		competitors.add(competitorToDB);
+		if(flag){
+			competitors.add(competitorToDB);
+		}else {
+			int indexF = 0;
+			for(int i = 0; i < competitors.size(); i++) {
+				if(competitors.get(i).getId().equals(competitorToDB.getId())) {
+					indexF = i;
+					break;
+				}
+			}
+			competitors.set(indexF, competitorToDB);
+		}
 		competition.setCompetitors(competitors);
 		competitors = competitionRepository.save(competition).getCompetitors();
 		int index = 0;
