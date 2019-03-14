@@ -188,7 +188,7 @@ public class CompetitionController {
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor, competitorToDB);
-		return new ResponseEntity<>(saveAndReturn(competition, competitorToDB,true), HttpStatus.CREATED);
+		return new ResponseEntity<>(saveAndReturn(competition, competitorToDB, true), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -214,6 +214,13 @@ public class CompetitionController {
 		return new ResponseEntity<>(saveAndReturn(competition, competitorFromDB, false), HttpStatus.OK);
 	}
 
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get competitor.", notes = "Return competitor")
+	public ResponseEntity<Competitor> getCompetitor (@PathVariable(value = PATH_VARIABLE_COMPETITION_ID, required = true) Long id,
+		@PathVariable(value = PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId) throws BadRequestException {
+		return new ResponseEntity<>(checkCompetitor(checkCompetition(id).getCompetitors(), competitorId), HttpStatus.OK);
+	}
+
 	//Util method's
 	private Competitor checkCompetitor (List<Competitor> competitors, Long competitorId) throws BadRequestException {
 		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
@@ -233,9 +240,9 @@ public class CompetitionController {
 
 	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
 		List<Competitor> competitors = competition.getCompetitors();
-		if(flag){
+		if(flag) {
 			competitors.add(competitorToDB);
-		}else {
+		} else {
 			int indexF = 0;
 			for(int i = 0; i < competitors.size(); i++) {
 				if(competitors.get(i).getId().equals(competitorToDB.getId())) {

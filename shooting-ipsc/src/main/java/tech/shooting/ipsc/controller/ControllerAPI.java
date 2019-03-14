@@ -59,4 +59,5 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor";
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
 	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
 }
