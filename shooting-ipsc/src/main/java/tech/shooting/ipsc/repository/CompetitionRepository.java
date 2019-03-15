@@ -8,7 +8,7 @@ import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
 
 @Repository
-public interface CompetitionRepository extends MongoRepository<Competition, Long> {
+public interface CompetitionRepository extends MongoRepository<Competition, Long>,CustomCompetitionRepository {
 	
 	public Competition findByName (String name);
 	
