@@ -4,13 +4,16 @@ public class ControllerAPI {
 
 	public static final String VERSION_1_0 = "/v1.0";
 
-	public static final String COMPETITION_ID_REQUEST = "{competitionId}";
-	public static final String STAGE_ID_REQUEST = "{stageId}";
+	public static final String REQUEST_COMPETITION_ID = "{competitionId}";
+	public static final String REQUEST_STAGE_ID = "{stageId}";
+	public static final String REQUEST_COMPETITOR_ID = "{competitorId}";
+	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
+	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
+	public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
 	public static final String PAGE_NUMBER_REQUEST = "{pageNumber}";
 	public static final String PAGE_SIZE_REQUEST = "{pageSize}";
 	public static final String PERSON_ID_REQUEST = "{personId}";
 	public static final String USER_ID_REQUEST = "{userId}";
-	public static final String COMPETITOR_ID_REQUEST = "{competitorId}";
 
 	public static final String AUTH_CONTROLLER = "/api/auth";
 	public static final String AUTH_CONTROLLER_POST_LOGIN = "/login";
@@ -40,24 +43,24 @@ public class ControllerAPI {
 
 	public static final String COMPETITION_CONTROLLER = "/api/competition";
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITION = "/create";
-	public static final String COMPETITION_CONTROLLER_GET_COMPETITION = "/" + COMPETITION_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITION = "/" + COMPETITION_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_PUT_COMPETITION = "/" + COMPETITION_ID_REQUEST;
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITION = "/" + REQUEST_COMPETITION_ID;
+	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITION = "/" + REQUEST_COMPETITION_ID;
+	public static final String COMPETITION_CONTROLLER_PUT_COMPETITION = "/" + REQUEST_COMPETITION_ID;
 	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITIONS = "/all";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + PAGE_NUMBER_REQUEST + "/" + PAGE_SIZE_REQUEST;
 
-	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/" + COMPETITION_ID_REQUEST + "/stage/all";
-	public static final String COMPETITION_CONTROLLER_POST_STAGES = "/" + COMPETITION_ID_REQUEST + "/stages";
-	public static final String COMPETITION_CONTROLLER_POST_STAGE = "/" + COMPETITION_ID_REQUEST + "/stage";
-	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/" + COMPETITION_ID_REQUEST + "/stage/" + STAGE_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + COMPETITION_ID_REQUEST + "/stage/" + STAGE_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + COMPETITION_ID_REQUEST + "/stage/" + STAGE_ID_REQUEST;
+	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/" + REQUEST_COMPETITION_ID + "/stage/all";
+	public static final String COMPETITION_CONTROLLER_POST_STAGES = "/" + REQUEST_COMPETITION_ID + "/stages";
+	public static final String COMPETITION_CONTROLLER_POST_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage";
+	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
+	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
+	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
 
-	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + COMPETITION_ID_REQUEST + "/competitor/all";
-	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor";
-	public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
-	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + COMPETITION_ID_REQUEST + "/competitor/" + COMPETITOR_ID_REQUEST;
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + REQUEST_COMPETITION_ID + "/competitor/all";
+	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
+	public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
+	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
+	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
 }
