@@ -41,13 +41,13 @@ public class Stage extends BaseDocument {
 	@ApiModelProperty(value = "Count of IPSC no shoots target")
 	private Integer noShoots;
 
-	@JsonProperty
+	@JsonProperty("minShoots")
 	@ApiModelProperty(value = "Count of round", required = true)
 	@NotNull(message = ValidationConstants.STAGE_ROUND_COUNT_MESSAGE)
 	@Min(value = 1, message = ValidationConstants.STAGE_ROUND_COUNT_MESSAGE)
 	private Integer numberOfRoundToBeScored;
 
-	@JsonProperty
+	@JsonProperty("maxPoints")
 	@ApiModelProperty(value = "Count of max points for the stage", required = true)
 	@NotNull(message = ValidationConstants.STAGE_STAGE_MAXIMUM_POINTS_MESSAGE)
 	@Min(value = 5, message = ValidationConstants.STAGE_STAGE_MAXIMUM_POINTS_MESSAGE)
