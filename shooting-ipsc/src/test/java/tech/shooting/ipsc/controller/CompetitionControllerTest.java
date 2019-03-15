@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,6 +28,7 @@ import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -129,9 +131,22 @@ public class CompetitionControllerTest {
 		assertEquals(stageFromResponse.getMaximumPoints(), testingStage.getMaximumPoints());
 		assertEquals(stageFromResponse.getNumberOfRoundToBeScored(), testingStage.getNumberOfRoundToBeScored());
 	}
+	private CompetitionBean setupCompetitionBean (Competition competition) {
+		CompetitionBean competitionBean = new CompetitionBean();
+		BeanUtils.copyProperties(competition, competitionBean,Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
+		if(competition.getRangeMaster()!= null){
+			competitionBean.setRangeMaster(competition.getRangeMaster().getId());}
+		if(competition.getMatchDirector()!= null){
+			competitionBean.setMatchDirector(competition.getMatchDirector().getId());}
+		if(competition.getStatsOfficer()!= null){
+			competitionBean.setStatsOfficer(competition.getStatsOfficer().getId());}
+		return competitionBean;
+	}
 
 	@Test
 	public void checkCreateCompetition () throws Exception {
+		CompetitionBean competitionBean = setupCompetitionBean(competition);
+
 		// try access to createCompetition() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createCompetition() with authorized non admin
@@ -145,7 +160,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 			                .header(Token.TOKEN_HEADER, adminToken)
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(JacksonUtils.getFullJson(competition))).andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(competition.getName()));
+			                .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isCreated());
 	}
 
 	@Test
@@ -605,7 +620,7 @@ public class CompetitionControllerTest {
 		List<User> byRoleName = userRepository.findByRoleName(RoleName.JUDGE);
 		competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj");
 		competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));
-		String fullJson = JacksonUtils.getJson(competition);
+		String fullJson = JacksonUtils.getJson(setupCompetitionBean(competition));
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 			                                         .header(Token.TOKEN_HEADER, adminToken)
 			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)

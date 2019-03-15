@@ -28,6 +28,7 @@ public class Competition extends BaseDocument {
 	
 	public static final String MATCH_DIRECTOR_FIELD = "matchDirector";
 	public static final String RANGE_MASTER_FIELD = "rangeMaster";
+	public static final String STATS_OFFICER_FIELD = "statsOfficer";
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
