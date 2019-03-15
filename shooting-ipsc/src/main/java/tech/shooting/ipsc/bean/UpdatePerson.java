@@ -20,7 +20,7 @@ public class UpdatePerson {
 	@ApiModelProperty(value = "Person's id")
 	private long id;
 
-	@JsonProperty
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	@NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)
 	@Size(min = 3, max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)

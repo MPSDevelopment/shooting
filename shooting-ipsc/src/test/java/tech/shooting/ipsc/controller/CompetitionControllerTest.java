@@ -100,6 +100,7 @@ public class CompetitionControllerTest {
 
 	@BeforeEach
 	public void before () {
+		userRepository.findByRoleName(RoleName.JUDGE);
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		competition = new Competition().setName("Alladin").setLocation("Cave!");
@@ -612,6 +613,9 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkCreateCompetitionWithJudge () throws Exception {
+		userRepository.deleteByRoleName(RoleName.JUDGE);
+		userRepository.saveAll(List.of(new User().setName("asdfg").setLogin("asdghjkklll").setPassword("tsgaudjscc").setRoleName(RoleName.JUDGE),
+			new User().setName("asdjhjhfg").setLogin("asdgjhjhhjkklll").setPassword("tsgagfgudjscc").setRoleName(RoleName.JUDGE)));
 		List<User> byRoleName = userRepository.findByRoleName(RoleName.JUDGE);
 		competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj");
 		competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));

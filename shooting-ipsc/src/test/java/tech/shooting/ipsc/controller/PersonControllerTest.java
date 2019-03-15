@@ -177,14 +177,12 @@ public class PersonControllerTest {
 
 		//try to access updatePerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace("{personId}", String.valueOf(testing.getId())))
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+			.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		//try to access updatePerson() with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace("{personId}", String.valueOf(testing.getId())))
 			.header(Token.TOKEN_HEADER, userToken)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(JacksonUtils.getFullJson(testing))).andExpect(MockMvcResultMatchers.status().isForbidden());
+			.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(testing))).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		//try to access updatePerson() with admin
 		UpdatePerson updatePerson = new UpdatePerson();
@@ -192,8 +190,7 @@ public class PersonControllerTest {
 		updatePerson.setHandgunCodeIpsc("123");
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace("{personId}", String.valueOf(updatePerson.getId())))
 			.header(Token.TOKEN_HEADER, adminToken)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(JacksonUtils.getFullJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
+			.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
 
 		Optional<Person> byId = personRepository.findById(updatePerson.getId());
 		assertEquals(byId.get().getHandgunCodeIpsc(), updatePerson.getHandgunCodeIpsc());
