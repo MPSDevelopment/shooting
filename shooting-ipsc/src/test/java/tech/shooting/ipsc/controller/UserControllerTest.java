@@ -215,7 +215,7 @@ public class UserControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken))
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.login").value(testUser.getLogin()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testUser.getName()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(testUser.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testUser.getId()));
 
 	}
