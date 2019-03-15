@@ -43,7 +43,8 @@ public class CompetitionController {
 	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
 	public ResponseEntity<Competition> createCompetition (@RequestBody @Valid CompetitionBean competitionBean) throws BadRequestException {
 		Competition competition = new Competition();
-		BeanUtils.copyProperties(competitionBean, competition);
+		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD);
+		// competition.setRangeMaster(competitionBean.getRangeMaster());
 		createCompetition(competition);
 		return new ResponseEntity<>(competition, HttpStatus.CREATED);
 	}

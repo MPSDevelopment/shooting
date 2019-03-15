@@ -60,20 +60,18 @@ public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition active ")
 	private boolean active = true;
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
-	@DBRef
-	private User matchDirector;
+	private Long matchDirector;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Range Master", notes = "Competition's Range Master")
-	@DBRef
-	private User rangeMaster;
+	private Long rangeMaster;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
-	@DBRef
-	private User statsOfficer;
+	private Long statsOfficer;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
