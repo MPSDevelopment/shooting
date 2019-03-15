@@ -8,7 +8,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 
 import java.time.OffsetDateTime;
 
@@ -59,7 +59,7 @@ public class Person extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's type weapon")
-	private ExerciseWeaponTypeEnum typeWeapon;
+	private WeaponTypeEnum typeWeapon;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's qualifier rank")

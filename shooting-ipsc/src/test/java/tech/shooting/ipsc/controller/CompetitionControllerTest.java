@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,6 +33,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -614,5 +616,18 @@ public class CompetitionControllerTest {
 		assertEquals(competitionResponse.getMatchDirector().getLogin(), byRoleName.get(0).getLogin());
 		assertEquals(competitionResponse.getRangeMaster().getLogin(), byRoleName.get(1).getLogin());
 		System.out.println(competitionResponse);
+	}
+
+	@Test
+	public void checkGetWeaponEnum () throws Exception {
+		//try access to getEnumWeapon from admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER,
+			adminToken))
+			                         .andExpect(MockMvcResultMatchers.status().isOk())
+			                         .andReturn()
+			                         .getResponse()
+			                         .getContentAsString();
+		List<TypeWeapon> listFromJson = JacksonUtils.getListFromJson(TypeWeapon[].class, contentAsString);
+		assertEquals(WeaponTypeEnum.getCount(), listFromJson.size());
 	}
 }

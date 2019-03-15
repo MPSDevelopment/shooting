@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -56,7 +56,7 @@ public class UpdatePerson {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's type weapon", required = true)
-	private ExerciseWeaponTypeEnum typeWeapon;
+	private WeaponTypeEnum typeWeapon;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's qualifier rank")

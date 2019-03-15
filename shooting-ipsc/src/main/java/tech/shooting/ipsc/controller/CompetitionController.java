@@ -15,9 +15,11 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.pojo.TypeWeapon;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 
@@ -213,6 +215,11 @@ public class CompetitionController {
 	public ResponseEntity<Competitor> getCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long id,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId) throws BadRequestException {
 		return new ResponseEntity<>(checkCompetitor(checkCompetition(id).getCompetitors(), competitorId), HttpStatus.OK);
+	}
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get weapon type lis", notes = "Return list of weapon type")
+	public ResponseEntity<List<TypeWeapon>> getEnumWeapon () {
+		return new ResponseEntity<>(WeaponTypeEnum.getList(), HttpStatus.OK);
 	}
 
 	//Util method's

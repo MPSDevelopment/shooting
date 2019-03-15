@@ -10,7 +10,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.validator.ValidationConstants;
@@ -45,7 +45,7 @@ public class CompetitionBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition type weapon", required = true)
-	private ExerciseWeaponTypeEnum typeWeapon;
+	private WeaponTypeEnum typeWeapon;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition rank", notes = "Level Competition")

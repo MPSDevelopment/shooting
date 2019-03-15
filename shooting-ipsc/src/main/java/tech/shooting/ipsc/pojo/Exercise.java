@@ -8,7 +8,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 
 /**
  * СТРЕЛКОВОЕ ЗАДАНИЕ. Отдельная, выполняемая спортсменом на время и с учетом
@@ -40,6 +40,6 @@ public class Exercise extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Exercise's weapon type", required = true)
-	private ExerciseWeaponTypeEnum weaponType;
+	private WeaponTypeEnum weaponType;
 
 }
