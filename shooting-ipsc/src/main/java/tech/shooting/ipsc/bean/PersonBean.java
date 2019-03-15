@@ -23,8 +23,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class PersonBean {
-
-	@JsonProperty
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	@NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)
 	@Size(min = 3, max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)
@@ -58,11 +57,11 @@ public class PersonBean {
 	@ApiModelProperty(value = "Person's handgun IPSC code")
 	private String handgunCodeIpsc;
 
-	@JsonProperty
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Person's type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
-	@JsonProperty
+	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private String qualifierRank;
 }

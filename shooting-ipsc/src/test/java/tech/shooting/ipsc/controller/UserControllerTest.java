@@ -32,6 +32,7 @@ import tech.shooting.commons.pojo.Token.TokenType;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
+import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -102,7 +103,7 @@ public class UserControllerTest {
 		String password = RandomStringUtils.randomAscii(14);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-		userJson = JacksonUtils.getFullJson(user);
+		userJson = JacksonUtils.getJson(user);
 
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -124,7 +125,7 @@ public class UserControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		long count = userRepository.count();
-
+		userJson = JacksonUtils.getJson(new UserSignupBean().setPassword("fsdfkjdhsfjdhskjfs").setName("fdfdfdfd").setLogin("fdfdfdfdfdfd"));
 		// try to create user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)
 			.header(Token.TOKEN_HEADER, adminToken)
@@ -148,8 +149,7 @@ public class UserControllerTest {
 		// try to access update with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER.replace("{userId}", user.getId().toString())))
 			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-
-		userJson = JacksonUtils.getFullJson(user.setName("test"));
+		userJson = JacksonUtils.getJson(user.setName("test"));
 
 		// try to access update with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER.replace("{userId}", user.getId().toString()))

@@ -20,7 +20,7 @@ public class UserUpdateBean {
 	@ApiModelProperty(value = "User's id")
 	private long id;
 
-	@JsonProperty
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "User's name")
 	@NotNull(message = ValidationConstants.USER_NAME_MESSAGE)
 	@Size(min = 3, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)

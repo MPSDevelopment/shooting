@@ -37,13 +37,13 @@ public class UserSignupBean {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "User's password", required = true)
 	@NotEmpty(message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
+	@Size(min = 5, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	private String password;
 
-	@JsonProperty
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "User's name")
 	@NotNull(message = ValidationConstants.USER_NAME_MESSAGE)
-	@Size(min = 1, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
+	@Size(min = 5, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
 	private String name;
 
 	@JsonProperty

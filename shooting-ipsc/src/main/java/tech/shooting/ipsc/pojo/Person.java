@@ -21,7 +21,7 @@ public class Person extends BaseDocument {
 
 	public static final String NAME_AND_IPSC_FIELD = "name and ipsc code";
 
-	@JsonProperty
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	private String name;
 

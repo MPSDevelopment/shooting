@@ -8,11 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -35,15 +33,15 @@ public class CompetitionBean {
 	@Size(min = 5, max = 50, message = ValidationConstants.COMPETITION_NAME_MESSAGE)
 	private String name;
 
-	@JsonProperty
+	@JsonProperty("eventDate")
 	@ApiModelProperty(value = "Competition date", required = true)
 	private OffsetDateTime competitionDate;
 
-	@JsonProperty
+	@JsonProperty("level")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
 	private ClassificationBreaks qualifierRank;
 
-	@JsonProperty
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
@@ -60,16 +58,16 @@ public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition active ")
 	private boolean active = true;
-	
-	@JsonProperty
+
+	@JsonProperty("director")
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
 	private Long matchDirector;
 
-	@JsonProperty
+	@JsonProperty("mainJudge")
 	@ApiModelProperty(value = "Competition's Range Master", notes = "Competition's Range Master")
 	private Long rangeMaster;
 
-	@JsonProperty
+	@JsonProperty("statisticsJudge")
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
 	private Long statsOfficer;
 
