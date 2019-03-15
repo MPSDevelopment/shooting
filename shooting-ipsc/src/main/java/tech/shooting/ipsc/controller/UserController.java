@@ -69,7 +69,7 @@ public class UserController {
 	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
-	public ResponseEntity<User> updateUser (@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
+	public ResponseEntity<User> updateUser (@PathVariable(value =ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
 
 		if(!userId.equals(bean.getId())) {
 			throw new BadRequestException(new ErrorMessage("Path userId %s does not match bean userId %s", userId, bean.getId()));
@@ -91,7 +91,7 @@ public class UserController {
 	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update user password", notes = "Update user password")
-	public ResponseEntity<User> updatePassword (@PathVariable(value = "userId", required = true) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
+	public ResponseEntity<User> updatePassword (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
 
 		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
 		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));
@@ -103,7 +103,7 @@ public class UserController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete User", notes = "Returns deleted user object")
-	public ResponseEntity<User> deleteUser (@PathVariable(value = "userId", required = true) Long userId) throws BadRequestException {
+	public ResponseEntity<User> deleteUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId) throws BadRequestException {
 		log.info("Trying to delete user by id %s", userId);
 
 		User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", userId)));
@@ -113,7 +113,7 @@ public class UserController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get User", notes = "Returns user object")
-	public ResponseEntity<User> getUser (@PathVariable(value = "userId", required = true) Long userId) throws BadRequestException {
+	public ResponseEntity<User> getUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId) throws BadRequestException {
 
 		User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", userId)));
 		return new ResponseEntity<>(user, HttpStatus.OK);
@@ -135,8 +135,8 @@ public class UserController {
 	@ApiOperation(value = "Get users by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
-	public ResponseEntity<List<User>> getUsers (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
-	                                            @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+	public ResponseEntity<List<User>> getUsers (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page,
+	                                            @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) throws BadRequestException {
 		return PageAble.getPage(page, size, userRepository);
 	}
 

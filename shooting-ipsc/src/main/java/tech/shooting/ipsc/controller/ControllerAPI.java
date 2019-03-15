@@ -4,16 +4,21 @@ public class ControllerAPI {
 
 	public static final String VERSION_1_0 = "/v1.0";
 
-	public static final String REQUEST_COMPETITION_ID = "{competitionId}";
-	public static final String REQUEST_STAGE_ID = "{stageId}";
-	public static final String REQUEST_COMPETITOR_ID = "{competitorId}";
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
 	public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
-	public static final String PAGE_NUMBER_REQUEST = "{pageNumber}";
-	public static final String PAGE_SIZE_REQUEST = "{pageSize}";
-	public static final String PERSON_ID_REQUEST = "{personId}";
-	public static final String USER_ID_REQUEST = "{userId}";
+	public static final String PATH_VARIABLE_PAGE_NUMBER = "pageNumber";
+	public static final String PATH_VARIABLE_PAGE_SIZE = "pageSize";
+	public static final String PATH_VARIABLE_PERSON_ID = "personId";
+	public static final String PATH_VARIABLE_USER_ID = "userId";
+
+	public static final String REQUEST_COMPETITION_ID = "{"+PATH_VARIABLE_COMPETITION_ID+"}";
+	public static final String REQUEST_STAGE_ID = "{"+PATH_VARIABLE_STAGE_ID+"}";
+	public static final String REQUEST_COMPETITOR_ID = "{"+PATH_VARIABLE_COMPETITOR_ID+"}";
+	public static final String PAGE_NUMBER_REQUEST = "{"+PATH_VARIABLE_PAGE_NUMBER+"}";
+	public static final String PAGE_SIZE_REQUEST = "{"+PATH_VARIABLE_PAGE_SIZE+"}";
+	public static final String PERSON_ID_REQUEST = "{"+PATH_VARIABLE_PERSON_ID+"}";
+	public static final String USER_ID_REQUEST = "{"+PATH_VARIABLE_USER_ID+"}";
 
 	public static final String AUTH_CONTROLLER = "/api/auth";
 	public static final String AUTH_CONTROLLER_POST_LOGIN = "/login";

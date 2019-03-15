@@ -53,14 +53,14 @@ public class PersonController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by id", notes = "Return person object")
-	public ResponseEntity<Person> getPerson (@PathVariable(value = "personId", required = true) Long personId) throws BadRequestException {
+	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
 		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 		return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")
-	public ResponseEntity<Person> updatePerson (@PathVariable(value = "personId", required = true) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
+	public ResponseEntity<Person> updatePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
 
 		if(!personId.equals(personBean.getId())) {
 			throw new BadRequestException(new ErrorMessage("Path personId %s does not match bean personId %s", personId, personBean.getId()));
@@ -74,7 +74,7 @@ public class PersonController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
-	public ResponseEntity<Person> deletePerson (@PathVariable(value = "personId", required = true) Long personId) throws BadRequestException {
+	public ResponseEntity<Person> deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
 		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 		personRepository.delete(person);
 		return new ResponseEntity<>(person, HttpStatus.OK);
@@ -90,8 +90,8 @@ public class PersonController {
 	@ApiOperation(value = "Get persons by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
 		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
-	public ResponseEntity<List<Person>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = "pageNumber") Integer page,
-	                                                @PathVariable(value = "pageSize") Integer size) throws BadRequestException {
+	public ResponseEntity<List<Person>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page,
+	                                                @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) throws BadRequestException {
 		return PageAble.getPage(page, size, personRepository);
 	}
 
