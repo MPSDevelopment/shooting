@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
@@ -597,5 +596,23 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.person.name").value(testingCompetitor.getPerson().getName()));
+	}
+
+	@Test
+	public void checkCreateCompetitionWithJudge () throws Exception {
+		List<User> byRoleName = userRepository.findByRoleName(RoleName.JUDGE);
+		competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj");
+		competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));
+		String fullJson = JacksonUtils.getJson(competition);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
+			                                         .header(Token.TOKEN_HEADER, adminToken)
+			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                                         .content(fullJson)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		Competition competitionResponse = JacksonUtils.fromJson(Competition.class, contentAsString);
+		assertEquals(competitionResponse.getName(), competition.getName());
+		assertEquals(competitionResponse.getLocation(), competition.getLocation());
+		assertEquals(competitionResponse.getMatchDirector().getLogin(), byRoleName.get(0).getLogin());
+		assertEquals(competitionResponse.getRangeMaster().getLogin(), byRoleName.get(1).getLogin());
+		System.out.println(competitionResponse);
 	}
 }

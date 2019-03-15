@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.repository;
 
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,8 +30,8 @@ public class CustomCompetitionRepositoryImpl implements CustomCompetitionReposit
 
 	@Override
 	public void pushStageToCompetition(Long competitionId, Stage stage) {
-		Update push = new Update().push(Competition.STAGES_FIELD, stage);
-		mongoTemplate.updateFirst(Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)), push, Competition.class);
+		UpdateResult updateResult = mongoTemplate.updateFirst(Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)), new Update().push(Competition.STAGES_FIELD, stage), Competition.class);
+		System.out.println(updateResult);
 	}
 	@Override
 	public void pullStageFromCompetition(Long competitionId, Stage stage) {

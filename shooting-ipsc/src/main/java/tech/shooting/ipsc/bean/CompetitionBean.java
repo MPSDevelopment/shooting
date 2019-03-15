@@ -8,9 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ExerciseWeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -58,18 +60,20 @@ public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition active ")
 	private boolean active = true;
-
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
-	private Long matchDirector;
+	@DBRef
+	private User matchDirector;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Range Master", notes = "Competition's Range Master")
-	private Long rangeMaster;
+	@DBRef
+	private User rangeMaster;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
-	private Long statsOfficer;
+	@DBRef
+	private User statsOfficer;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
