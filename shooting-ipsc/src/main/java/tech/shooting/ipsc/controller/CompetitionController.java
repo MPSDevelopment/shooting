@@ -125,7 +125,7 @@ public class CompetitionController {
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
 		for(int i = 0; i < stages.size(); i++) {
-			if(stages.get(i).getNameOfStage().equals(toAdded.getNameOfStage()) && stages.get(i).getMaximumPoints().equals(toAdded.getMaximumPoints()) && stages.get(i).getTargets().equals(toAdded.getTargets())) {
+			if(stages.get(i).getName().equals(toAdded.getName()) && stages.get(i).getMaximumPoints().equals(toAdded.getMaximumPoints()) && stages.get(i).getTargets().equals(toAdded.getTargets())) {
 				index = i;
 			}
 		}

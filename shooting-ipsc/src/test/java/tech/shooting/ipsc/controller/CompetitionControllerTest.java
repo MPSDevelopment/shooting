@@ -103,7 +103,7 @@ public class CompetitionControllerTest {
 		testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition"));
 		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
-		testingStage = new Stage().setNameOfStage("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
+		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
 		stageJson = JacksonUtils.getJson(testingStage);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -115,7 +115,7 @@ public class CompetitionControllerTest {
 	private Stage findStage (Competition competition, Stage testingStage) {
 		return competition.getStages()
 			       .stream()
-			       .filter((stage) -> stage.getNameOfStage().equals(testingStage.getNameOfStage()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) &&
+			       .filter((stage) -> stage.getName().equals(testingStage.getName()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) &&
 			                          stage.getTargets().equals(testingStage.getTargets()) && stage.getMaximumPoints().equals(testingStage.getMaximumPoints()))
 			       .findAny()
 			       .get();
@@ -123,7 +123,7 @@ public class CompetitionControllerTest {
 
 	private void testRequiredFields (Stage stageFromResponse, Stage testingStage) {
 		assertEquals(stageFromResponse.getTargets(), testingStage.getTargets());
-		assertEquals(stageFromResponse.getNameOfStage(), testingStage.getNameOfStage());
+		assertEquals(stageFromResponse.getName(), testingStage.getName());
 		assertEquals(stageFromResponse.getMaximumPoints(), testingStage.getMaximumPoints());
 		assertEquals(stageFromResponse.getNumberOfRoundToBeScored(), testingStage.getNumberOfRoundToBeScored());
 	}
@@ -286,7 +286,7 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkGetStagesFromCompetitionById () throws Exception {
 		List<Stage> stages = testingCompetition.getStages();
-		Stage first_blood = new Stage().setNameOfStage("first blood").setTargets(5).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
+		Stage first_blood = new Stage().setName("first blood").setTargets(5).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
 		stages.add(first_blood);
 		testingCompetition = competitionRepository.save(this.testingCompetition.setStages(stages));
 		//try access to getStagesFromCompetitionById with unauthorized user
@@ -311,10 +311,10 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkPostStages () throws Exception {
-		Stage blood1 = new Stage().setNameOfStage("blood").setTargets(5).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
-		Stage blood2 = new Stage().setNameOfStage("blood").setTargets(4).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
-		Stage blood3 = new Stage().setNameOfStage("blood").setTargets(3).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
-		Stage blood4 = new Stage().setNameOfStage("blood").setTargets(2).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
+		Stage blood1 = new Stage().setName("blood").setTargets(5).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
+		Stage blood2 = new Stage().setName("blood").setTargets(4).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
+		Stage blood3 = new Stage().setName("blood").setTargets(3).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
+		Stage blood4 = new Stage().setName("blood").setTargets(2).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
 		List<Stage> setupList = List.of(blood1, blood2, blood3, blood4);
 		String fullJson = JacksonUtils.getFullJson(setupList);
 		//try to access postStages with unauthorized user
@@ -397,7 +397,7 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkDeleteStageById () throws Exception {
-		Stage removeStage = new Stage().setNameOfStage("Removed stage").setMaximumPoints(60).setNumberOfRoundToBeScored(12).setTargets(5);
+		Stage removeStage = new Stage().setName("Removed stage").setMaximumPoints(60).setNumberOfRoundToBeScored(12).setTargets(5);
 		List<Stage> stages = testingCompetition.getStages();
 		stages.add(testingStage);
 		stages.add(removeStage);
@@ -429,7 +429,7 @@ public class CompetitionControllerTest {
 		testingCompetition.setStages(stages);
 		Competition save = competitionRepository.save(testingCompetition);
 		Stage saveStage = findStage(save, testingStage);
-		saveStage.setNameOfStage("update name");
+		saveStage.setName("update name");
 		//try access to putStage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
@@ -446,7 +446,7 @@ public class CompetitionControllerTest {
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)
 			                .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))
-			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.nameOfStage").value("update name"));
+			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("update name"));
 	}
 
 	@Test

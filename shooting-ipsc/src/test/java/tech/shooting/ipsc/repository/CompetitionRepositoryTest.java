@@ -43,7 +43,7 @@ public class CompetitionRepositoryTest {
 		competitionRepository.deleteAll();
 
 		competition = new Competition().setName("Test name");
-		stage = new Stage().setNameOfStage("Test stage");
+		stage = new Stage().setName("Test stage");
 		competition.getStages().add(stage);
 		competition = competitionRepository.save(competition);
 		stage = competition.getStages().get(0);
@@ -85,7 +85,7 @@ public class CompetitionRepositoryTest {
 	public void checkPushStage() {
 		assertEquals(1, competitionRepository.findById(competition.getId()).get().getStages().size());
 		// put another stage and check stage count and ids
-		competitionRepository.pushStageToCompetition(competition.getId(), new Stage().setNameOfStage("Test stage 2"));
+		competitionRepository.pushStageToCompetition(competition.getId(), new Stage().setName("Test stage 2"));
 		assertEquals(2, competitionRepository.findById(competition.getId()).get().getStages().size());
 		checkStagesId(competitionRepository.findById(competition.getId()).get());
 	}
@@ -101,7 +101,7 @@ public class CompetitionRepositoryTest {
 	private void checkStagesId(Competition competition) {
 		log.info("Competition id %s ", competition.getId());
 		competition.getStages().forEach(item -> {
-			log.info("Stage id %s and name %s", item.getId(), item.getNameOfStage());
+			log.info("Stage id %s and name %s", item.getId(), item.getName());
 			assertNotNull(item.getId());
 		});
 	}

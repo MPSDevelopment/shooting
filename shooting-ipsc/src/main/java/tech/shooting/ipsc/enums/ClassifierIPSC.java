@@ -58,7 +58,7 @@ public enum ClassifierIPSC {
 	public static List<Stage> getListStage () {
 		List<Stage> result = new ArrayList<>();
 		for(ClassifierIPSC value : ClassifierIPSC.values()) {
-			result.add(new Stage().setNameOfStage(value.name).setMaximumPoints(value.maximumPoints).setNumberOfRoundToBeScored(value.numberOfRoundToBeScored).setPopper(value.popper).setTargets(value.targets).setNoShoots(value.noShoots));
+			result.add(new Stage().setName(value.name).setMaximumPoints(value.maximumPoints).setNumberOfRoundToBeScored(value.numberOfRoundToBeScored).setPopper(value.popper).setTargets(value.targets).setNoShoots(value.noShoots));
 		}
 		return result;
 	}
