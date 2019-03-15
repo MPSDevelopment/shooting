@@ -340,7 +340,7 @@ public class CompetitionControllerTest {
 		Stage blood3 = new Stage().setName("blood").setTargets(3).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
 		Stage blood4 = new Stage().setName("blood").setTargets(2).setNumberOfRoundToBeScored(6).setMaximumPoints(30);
 		List<Stage> setupList = List.of(blood1, blood2, blood3, blood4);
-		String fullJson = JacksonUtils.getFullJson(setupList);
+		String fullJson = JacksonUtils.getJson(setupList);
 		//try to access postStages with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
