@@ -34,15 +34,15 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "Competition name", required = true)
 	private String name;
 
-	@JsonProperty
+	@JsonProperty("eventDate")
 	@ApiModelProperty(value = "Competition date", required = true)
 	private OffsetDateTime competitionDate;
 
-	@JsonProperty
+	@JsonProperty("level")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
 	private ClassificationBreaks qualifierRank;
 
-	@JsonProperty
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
@@ -58,17 +58,17 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "Competition active ")
 	private boolean active = true;
 
-	@JsonProperty
+	@JsonProperty("director")
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
 	@DBRef
 	private User matchDirector;
 
-	@JsonProperty
+	@JsonProperty("mainJudge")
 	@ApiModelProperty(value = "Competition's Range Master", notes = "Competition's Range Master")
 	@DBRef
 	private User rangeMaster;
 
-	@JsonProperty
+	@JsonProperty("statisticsJudge")
 	@ApiModelProperty(value = "Competition's Stats Officer ", notes = "Competition's Stats Officer ")
 	@DBRef
 	private User statsOfficer;
