@@ -57,11 +57,11 @@ public class Person extends BaseDocument {
 	@ApiModelProperty(value = "Person's handgun IPSC code")
 	private String handgunCodeIpsc;
 
-	@JsonProperty
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Person's type weapon")
 	private WeaponTypeEnum typeWeapon;
 
-	@JsonProperty
+	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private ClassificationBreaks qualifierRank;
 }
