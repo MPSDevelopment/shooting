@@ -100,10 +100,9 @@ public class PersonControllerTest {
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-
-		personJsonWithRifleCode = JacksonUtils.getFullJson(personWithRifleCode);
-		personJsonHandgunCode = JacksonUtils.getFullJson(personWithHandgunCode);
-		personJsonWithShotgunCode = JacksonUtils.getFullJson(personShotgunCode);
+		personJsonWithRifleCode = JacksonUtils.getJson(personWithRifleCode);
+		personJsonHandgunCode = JacksonUtils.getJson(personWithHandgunCode);
+		personJsonWithShotgunCode = JacksonUtils.getJson(personShotgunCode);
 
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -130,8 +129,7 @@ public class PersonControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken)
 			.contentType(MediaType.APPLICATION_JSON_UTF8)
 			.content(personJsonWithRifleCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithRifleCode.getName()))
+			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personWithRifleCode.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rifleCodeIpsc").value(personWithRifleCode.getRifleCodeIpsc()));
 
 		// try access to createPerson() with authorized admin create person with handgunCodeIpsc
@@ -139,8 +137,7 @@ public class PersonControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken)
 			.contentType(MediaType.APPLICATION_JSON_UTF8)
 			.content(personJsonHandgunCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personWithHandgunCode.getName()))
+			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personWithHandgunCode.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.handgunCodeIpsc").value(personWithHandgunCode.getHandgunCodeIpsc()));
 
 		// try access to createPerson() with authorized admin create person with shotgunCodeIpsc
@@ -148,8 +145,7 @@ public class PersonControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken)
 			.contentType(MediaType.APPLICATION_JSON_UTF8)
 			.content(personJsonWithShotgunCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(personShotgunCode.getName()))
+			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personShotgunCode.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.shotgunCodeIpsc").value(personShotgunCode.getShotgunCodeIpsc()));
 
 	}

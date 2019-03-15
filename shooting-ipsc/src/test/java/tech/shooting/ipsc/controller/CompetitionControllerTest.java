@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -521,8 +520,7 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isCreated())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.name").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 	}
 
 	@Test
@@ -550,8 +548,7 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.name").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 		assertEquals(competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size(), 0);
 	}
 
@@ -586,8 +583,7 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.name").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 		assertEquals(competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size(), testingCompetition.getCompetitors().size());
 	}
 
@@ -611,8 +607,7 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.name").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 	}
 
 	@Test
