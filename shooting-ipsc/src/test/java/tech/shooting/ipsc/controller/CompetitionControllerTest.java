@@ -126,16 +126,9 @@ public class CompetitionControllerTest {
 	}
 
 	private void testRequiredFields (Stage stageFromResponse, Stage testingStage) {
-
 		assertEquals(stageFromResponse.getTargets(), testingStage.getTargets());
-
-
 		assertEquals(stageFromResponse.getName(), testingStage.getName());
 		assertEquals(stageFromResponse.getMaximumPoints(), testingStage.getMaximumPoints());
-
-		System.out.println(stageFromResponse);
-		System.out.println(stageFromResponse.getNumberOfRoundToBeScored());
-		System.out.println(testingStage.getNumberOfRoundToBeScored());
 		assertEquals(stageFromResponse.getNumberOfRoundToBeScored(), testingStage.getNumberOfRoundToBeScored());
 	}
 	private CompetitionBean setupCompetitionBean (Competition competition) {
@@ -637,7 +630,6 @@ public class CompetitionControllerTest {
 		assertEquals(competitionResponse.getLocation(), competition.getLocation());
 		assertEquals(competitionResponse.getMatchDirector().getLogin(), byRoleName.get(0).getLogin());
 		assertEquals(competitionResponse.getRangeMaster().getLogin(), byRoleName.get(1).getLogin());
-		System.out.println(competitionResponse);
 	}
 
 	@Test
