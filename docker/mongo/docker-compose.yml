@@ -6,20 +6,21 @@ services:
     image: 'bitnami/mongodb:latest'
     user: root
     command: chown -R 1001:1001 /bitnami
-#    volumes:
-#      - /usr/share/servers/shooting/docker/mongo/data:/bitnami
+    volumes:
+      - ./data:/bitnami
   mongodb:
     image: bitnami/mongodb:latest
 #    restart: always
     container_name: bitnami
     mem_limit: 2G
     environment:
-      MONGODB_USERNAME : "ipsc"
-      MONGODB_PASSWORD : "ipasdfb14235346jsbcfdhasbf3q234sc"
-      MONGODB_DATABASE : "shooting"
-      MONGODB_PORT_NUMBER : 27017
-      MONGODB_EXTRA_FLAGS : --smallfiles  # --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
-#    volumes:
-#      - ../../data:/bitnami:rw  
+      MONGODB_USERNAME: "ipsc"
+      MONGODB_PASSWORD: "ipasdfb14235346jsbcfdhasbf3q234sc"
+      MONGODB_DATABASE: "shooting"
+      MONGODB_PORT_NUMBER: 27017
+      MONGODB_EXTRA_FLAGS: --smallfiles  # --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
+      
+    volumes:
+      - ./data:/bitnami:rw  
     ports:
     - 27018:27017

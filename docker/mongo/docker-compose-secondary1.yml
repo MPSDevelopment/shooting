@@ -1,0 +1,36 @@
+# https://hub.docker.com/r/bitnami/mongodb/dockerfile 
+
+version: '3.3'
+services:      
+  mongodb-secondary1: 
+    image: bitnami/mongodb:latest
+#    depends_on:
+#      - mongodb-primary
+#    restart: always
+#    mem_limit: 8G
+    environment:
+      MONGODB_USERNAME: ipsc
+      MONGODB_PASSWORD: ipasdfb14235346jsbcfdhasbf3q234sc
+      MONGODB_DATABASE: shooting
+      MONGODB_PORT_NUMBER: 27017
+      MONGODB_EXTRA_FLAGS: --smallfiles --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
+      
+      MONGODB_REPLICA_SET_NAME: replicaset
+      MONGODB_REPLICA_SET_MODE: secondary
+      
+      MONGODB_PRIMARY_HOST: 127.0.0.1
+      MONGODB_ADVERTISED_HOSTNAME: mongodb-secondary1
+      MONGODB_PRIMARY_PORT_NUMBER: 27000
+      MONGODB_PRIMARY_ROOT_PASSWORD: password123
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
+      
+      NAMI_DEBUG: 1
+      
+#    volumes:
+#      - './data/mongodb_master_data:/bitnami'
+    ports:
+      - 27001:27017      
+    
+#volumes:
+#  mongodb_master_data:
+#    driver: local
