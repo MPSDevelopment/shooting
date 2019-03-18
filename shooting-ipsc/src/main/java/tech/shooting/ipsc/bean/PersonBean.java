@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.WeaponIpscCode;
@@ -43,17 +44,21 @@ public class PersonBean {
 	@ApiModelProperty(value = "Person's team")
 	private String team;
 
-	@JsonProperty
-	@ApiModelProperty(value = "Person's rank", required = true)
-	private String rank;
-
 	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Person's type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
+	@JsonProperty
+	@ApiModelProperty(value = "Person's active ")
+	private boolean active;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Person's rank")
+	private String rank;
+
 	@JsonProperty("level")
-	@ApiModelProperty(value = "Person's qualifier rank")
-	private String qualifierRank;
+	@ApiModelProperty(value = "Person's qualifier rank", required = true)
+	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's IPSC codes")
