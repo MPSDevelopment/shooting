@@ -12,6 +12,9 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_PERSON_ID = "personId";
 	public static final String PATH_VARIABLE_USER_ID = "userId";
 
+	public static final String PATH_VARIABLE_DIVISION_ID = "divisionId";
+
+	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 	public static final String REQUEST_COMPETITION_ID = "{"+PATH_VARIABLE_COMPETITION_ID+"}";
 	public static final String REQUEST_STAGE_ID = "{"+PATH_VARIABLE_STAGE_ID+"}";
 	public static final String REQUEST_COMPETITOR_ID = "{"+PATH_VARIABLE_COMPETITOR_ID+"}";
@@ -73,5 +76,5 @@ public class ControllerAPI {
 
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
 
-	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/create";
+	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
 }

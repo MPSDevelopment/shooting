@@ -31,6 +31,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Address;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.UserRepository;
@@ -43,10 +44,12 @@ import tech.shooting.ipsc.service.DivisionService;
 import java.util.Date;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CompetitionController.class, ValidationErrorHandler.class, DivisionService.class})
+	TokenAuthenticationFilter.class, IpscUserDetailsService.class, DivisionController.class, ValidationErrorHandler.class, DivisionService.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -88,19 +91,21 @@ class DivisionControllerTest {
 
 	@Test
 	void createDivision () throws Exception {
-		//try access unauthorized user
+		//try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		//try access non admin user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
+			                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
 			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access admin role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
+			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                                         .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
+			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		Division division = JacksonUtils.fromJson(Division.class, contentAsString);
+		assertEquals(division.getName(), divisionBean.getName());
+		assertEquals(division.getParent(), divisionBean.getParent());
 	}
 }
