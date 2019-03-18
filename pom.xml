@@ -43,6 +43,7 @@
 		<source.plugin.version>2.4</source.plugin.version>
 		<javadoc.plugin.version>2.10.4</javadoc.plugin.version>
 		<exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
+		<dockerfile.plugin.version>1.4.10</dockerfile.plugin.version>
 
 		<plasticine.version>0.9</plasticine.version>
 		<logback.version>1.2.3</logback.version>
