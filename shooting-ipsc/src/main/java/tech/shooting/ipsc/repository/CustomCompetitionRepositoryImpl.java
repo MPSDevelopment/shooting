@@ -1,14 +1,12 @@
 package tech.shooting.ipsc.repository;
 
+import com.mpsdevelopment.plasticine.commons.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
-import com.mpsdevelopment.plasticine.commons.IdGenerator;
-
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
 

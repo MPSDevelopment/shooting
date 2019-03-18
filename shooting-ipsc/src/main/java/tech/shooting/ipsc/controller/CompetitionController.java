@@ -72,10 +72,10 @@ public class CompetitionController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Remove competition", notes = "Return removed competition object")
-	public ResponseEntity<Competition> deleteCompetitionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long id) throws BadRequestException {
+	public ResponseEntity deleteCompetitionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		competitionRepository.delete(competition);
-		return new ResponseEntity<>(competition, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -147,13 +147,13 @@ public class CompetitionController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete stage by id", notes = "Return removed stage object")
-	public ResponseEntity<Stage> deleteStage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long competitionId,
+	public ResponseEntity deleteStage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long competitionId,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID, required = true) Long stageId) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
 		Stage stage = checkStage(competition, stageId);
 		List<Stage> collect = competition.getStages().stream().filter((item) -> !item.getId().equals(stage.getId())).collect(Collectors.toList());
 		competitionRepository.save(competition.setStages(collect));
-		return new ResponseEntity<>(stage, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
@@ -194,7 +194,7 @@ public class CompetitionController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Remove competitor from competition", notes = "Return removed competitor")
-	public ResponseEntity<Competitor> deleteCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long id,
+	public ResponseEntity deleteCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID, required = true) Long id,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID, required = true) Long competitorId) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
@@ -202,7 +202,7 @@ public class CompetitionController {
 		competitors.remove(competitor);
 		competition.setCompetitors(competitors);
 		competitionRepository.save(competition);
-		return new ResponseEntity<>(competitor, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)

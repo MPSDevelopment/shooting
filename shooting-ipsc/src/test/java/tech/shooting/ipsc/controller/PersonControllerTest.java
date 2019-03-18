@@ -33,9 +33,11 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.pojo.WeaponIpscCode;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
@@ -43,9 +45,9 @@ import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -92,11 +94,10 @@ public class PersonControllerTest {
 	public void before () {
 		personRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
-		testing = personRepository.save(new Person().setName("testing").setHandgunCodeIpsc("445645645"));
-
-		personWithRifleCode = new Person().setName("Test personRifle").setRifleCodeIpsc("123456789");
-		personWithHandgunCode = new Person().setName("Test personHandgun").setHandgunCodeIpsc("789456123");
-		personShotgunCode = new Person().setName("Test personShotgun").setShotgunCodeIpsc("73285945654123");
+		WeaponIpscCode weaponIpscCode = new WeaponIpscCode().setCode("445645645").setTypeWeapon(WeaponTypeEnum.HANDGUN);
+		List<WeaponIpscCode> codes = new ArrayList<>();
+		codes.add(weaponIpscCode);
+		testing = personRepository.save(new Person().setName("testing").setCodes(codes));
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -124,29 +125,6 @@ public class PersonControllerTest {
 			.header(Token.TOKEN_HEADER, adminToken)
 			.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-		// try access to createPerson() with authorized admin create person with rifleCodeIpsc
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)
-			.header(Token.TOKEN_HEADER, adminToken)
-			.contentType(MediaType.APPLICATION_JSON_UTF8)
-			.content(personJsonWithRifleCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personWithRifleCode.getName()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.rifleCodeIpsc").value(personWithRifleCode.getRifleCodeIpsc()));
-
-		// try access to createPerson() with authorized admin create person with handgunCodeIpsc
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)
-			.header(Token.TOKEN_HEADER, adminToken)
-			.contentType(MediaType.APPLICATION_JSON_UTF8)
-			.content(personJsonHandgunCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personWithHandgunCode.getName()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.handgunCodeIpsc").value(personWithHandgunCode.getHandgunCodeIpsc()));
-
-		// try access to createPerson() with authorized admin create person with shotgunCodeIpsc
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)
-			.header(Token.TOKEN_HEADER, adminToken)
-			.contentType(MediaType.APPLICATION_JSON_UTF8)
-			.content(personJsonWithShotgunCode))
-			.andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.userName").value(personShotgunCode.getName()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.shotgunCodeIpsc").value(personShotgunCode.getShotgunCodeIpsc()));
 
 	}
 
@@ -191,9 +169,6 @@ public class PersonControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace("{personId}", String.valueOf(updatePerson.getId())))
 			.header(Token.TOKEN_HEADER, adminToken)
 			.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
-
-		Optional<Person> byId = personRepository.findById(updatePerson.getId());
-		assertEquals(byId.get().getHandgunCodeIpsc(), updatePerson.getHandgunCodeIpsc());
 
 		//try to access updatePerson() with admin but without context
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace("{personId}", String.valueOf(updatePerson.getId())))

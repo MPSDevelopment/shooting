@@ -16,6 +16,8 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Person;
 
+import java.time.OffsetDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
@@ -39,9 +41,8 @@ public class PersonRepositoryTest {
 	@Test
 	public void checkFindByNameAndCodeIPSC () {
 		String name = "Tigran";
-		String codeIPSC = "123456789";
-
-		personRepository.save(new Person().setName(name).setRifleCodeIpsc(codeIPSC));
-		assertNotNull(personRepository.findByNameAndRifleCodeIpsc(name, codeIPSC));
+		OffsetDateTime offsetDateTime = OffsetDateTime.now();
+		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime));
+		assertNotNull(personRepository.findByNameAndBirthDate(name, offsetDateTime));
 	}
 }

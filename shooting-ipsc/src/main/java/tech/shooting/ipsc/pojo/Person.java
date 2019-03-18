@@ -8,7 +8,6 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.WeaponTypeEnum;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -19,8 +18,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class Person extends BaseDocument {
-
-	public static final String NAME_AND_IPSC_FIELD = "name and ipsc code";
+	public static final String NAME_AND_BIRTHDAY = "name and birthday";
 
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)

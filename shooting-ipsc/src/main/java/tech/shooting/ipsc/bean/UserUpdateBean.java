@@ -23,7 +23,7 @@ public class UserUpdateBean {
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "User's name")
 	@NotNull(message = ValidationConstants.USER_NAME_MESSAGE)
-	@Size(min = 3, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
+	@Size(min = 5, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
 	private String name;
 
 	@JsonProperty

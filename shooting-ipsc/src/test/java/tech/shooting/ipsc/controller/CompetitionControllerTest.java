@@ -435,7 +435,6 @@ public class CompetitionControllerTest {
 			                                                                       .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString()))
 			                                         .header(Token.TOKEN_HEADER, adminToken)
 			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		testRequiredFields(Objects.requireNonNull(JacksonUtils.fromJson(Stage.class, contentAsString)), removeStage);
 		assertEquals(testingCompetition.getStages().size() - 1, competitionRepository.findById(testingCompetition.getId()).get().getStages().size());
 	}
 
@@ -546,10 +545,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
 			                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size(), 0);
 	}
 

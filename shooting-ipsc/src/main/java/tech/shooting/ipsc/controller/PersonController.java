@@ -41,9 +41,8 @@ public class PersonController {
 	}
 
 	private void createPerson (Person person) {
-		log.info("Create person with name %s and code ipsc %s", person.getName(), person.getRifleCodeIpsc());
-		if(personRepository.findByNameAndRifleCodeIpsc(person.getName(), person.getRifleCodeIpsc()) != null) {
-			throw new ValidationException(Person.NAME_AND_IPSC_FIELD, "Person with name %s and rifle ipsc code %s is already exist", person.getName(), person.getRifleCodeIpsc());
+		if(personRepository.findByNameAndBirthDate(person.getName(), person.getBirthDate()) != null) {
+			throw new ValidationException(Person.NAME_AND_BIRTHDAY, "Person with name %s and date of birthday %s is already exist", person.getName(), person.getBirthDate());
 		}
 		person.setActive(true);
 		person.setQualifierRank(ClassificationBreaks.D);
