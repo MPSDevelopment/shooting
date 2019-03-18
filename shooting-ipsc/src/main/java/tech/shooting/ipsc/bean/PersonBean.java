@@ -10,11 +10,13 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
+import tech.shooting.ipsc.pojo.WeaponIpscCode;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,18 +47,6 @@ public class PersonBean {
 	@ApiModelProperty(value = "Person's rank", required = true)
 	private String rank;
 
-	@JsonProperty
-	@ApiModelProperty(value = "Person's rifle IPSC code")
-	private String rifleCodeIpsc;
-
-	@JsonProperty
-	@ApiModelProperty(value = "Person's shotgun IPSC code")
-	private String shotgunCodeIpsc;
-
-	@JsonProperty
-	@ApiModelProperty(value = "Person's handgun IPSC code")
-	private String handgunCodeIpsc;
-
 	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Person's type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
@@ -64,4 +54,8 @@ public class PersonBean {
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private String qualifierRank;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Person's IPSC codes")
+	private List<WeaponIpscCode> codes;
 }
