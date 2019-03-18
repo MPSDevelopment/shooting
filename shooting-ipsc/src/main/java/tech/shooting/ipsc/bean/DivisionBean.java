@@ -23,8 +23,7 @@ import java.util.List;
 public class DivisionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Parent name", required = true)
-	@DBRef
-	private Division parent;
+	private Long parent;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Division name", required = true)
@@ -33,11 +32,11 @@ public class DivisionBean {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List of children", required = true)
+	@ApiModelProperty(value = "List of children")
 	@DBRef
 	private List<Division> children;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Status division", required = true)
+	@ApiModelProperty(value = "Status division")
 	private boolean active;
 }

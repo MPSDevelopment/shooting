@@ -46,7 +46,7 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_USERS_BY_PAGE = "/all/" + PAGE_NUMBER_REQUEST + "/" + PAGE_SIZE_REQUEST;
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
 
-	public static final String COMPETITION_CONTROLLER = "/api/competition";
+	public static final String COMPETITION_CONTROLLER = "/api/competitions";
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITION = "/create";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION = "/" + REQUEST_COMPETITION_ID;
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITION = "/" + REQUEST_COMPETITION_ID;
@@ -70,4 +70,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
 
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
+
+	public static final String DIVISION_CONTROLLER = "/api/divisions";
+
+	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/create";
 }
