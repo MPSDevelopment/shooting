@@ -73,10 +73,10 @@ public class PersonController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
-	public ResponseEntity<Person> deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
+	public ResponseEntity deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
 		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 		personRepository.delete(person);
-		return new ResponseEntity<>(person, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
