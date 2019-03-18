@@ -10,6 +10,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -74,5 +75,9 @@ public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "List stages", notes = "Competition's list stages")
 	private List<Stage> stages;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor's list", notes = "Competition list competitors")
+	private List<Competitor> competitors;
 
 }

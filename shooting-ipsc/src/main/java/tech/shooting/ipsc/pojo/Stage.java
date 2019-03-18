@@ -66,6 +66,10 @@ public class Stage extends BaseDocument {
 	private String procedure;
 
 	@JsonProperty
+	@ApiModelProperty(value = "Description of point count")
+	private String pointCount;
+
+	@JsonProperty
 	@ApiModelProperty(value = "Counted stage or not")
 	private boolean notCounted;
 
