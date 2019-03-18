@@ -255,29 +255,29 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId>
-						<version>${dockerfile.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>default</id>
-								<goals>
-									<goal>build</goal>
-									<goal>push</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<repository>mpsdevelopment/shooting-frontend</repository>
-							<tag>${project.version}-latest</tag>
-							<repository>docker.mpsdevelopment.com/mpsdevelopment/image</repository>
-							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-							<buildArgs>
-								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-							</buildArgs>
-						</configuration>
-					</plugin>
+<!-- 					<plugin> -->
+<!-- 						<groupId>com.spotify</groupId> -->
+<!-- 						<artifactId>dockerfile-maven-plugin</artifactId> -->
+<!-- 						<version>${dockerfile.plugin.version}</version> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<id>default</id> -->
+<!-- 								<goals> -->
+<!-- 									<goal>build</goal> -->
+<!-- 									<goal>push</goal> -->
+<!-- 								</goals> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 						<configuration> -->
+<!-- 							<repository>mpsdevelopment/shooting-frontend</repository> -->
+<!-- 							<tag>${project.version}-latest</tag> -->
+<!-- 							<repository>docker.mpsdevelopment.com/mpsdevelopment/image</repository> -->
+<!-- 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
+<!-- 							<buildArgs> -->
+<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
+<!-- 							</buildArgs> -->
+<!-- 						</configuration> -->
+<!-- 					</plugin> -->
 				</plugins>
 			</build>
 		</profile>
