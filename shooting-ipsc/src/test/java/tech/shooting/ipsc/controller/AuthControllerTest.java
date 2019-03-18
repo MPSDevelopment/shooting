@@ -26,6 +26,7 @@ import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
+import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
@@ -37,7 +38,7 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
-@ContextConfiguration(classes = {IpscMongoConfig.class, TokenUtils.class, IpscUserDetailsService.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, SecurityConfig.class, AuthController.class, UserService.class,
+@ContextConfiguration(classes = {DatabaseCreator.class, UserDao.class, IpscMongoConfig.class, TokenUtils.class, IpscUserDetailsService.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class, SecurityConfig.class, AuthController.class, UserService.class,
 	UserLockUtils.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
