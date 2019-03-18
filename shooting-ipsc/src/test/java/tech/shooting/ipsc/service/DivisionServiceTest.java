@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
-@ContextConfiguration(classes = {DivisionService.class})
+@ContextConfiguration(classes = {DivisionService.class, IpscMongoConfig.class})
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j

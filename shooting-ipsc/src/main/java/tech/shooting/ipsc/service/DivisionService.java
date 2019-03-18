@@ -2,6 +2,7 @@ package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.ipsc.bean.DivisionBean;
@@ -11,6 +12,7 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 @Service
 @Slf4j
 public class DivisionService {
+	@Autowired
 	private DivisionRepository divisionRepository;
 
 	public DivisionService (DivisionRepository divisionRepository) {
@@ -23,7 +25,6 @@ public class DivisionService {
 		}
 		Division division = new Division();
 		BeanUtils.copyProperties(divisionBean, division);
-		Division save = divisionRepository.save(division);
-		return save;
+		return divisionRepository.save(division);
 	}
 }

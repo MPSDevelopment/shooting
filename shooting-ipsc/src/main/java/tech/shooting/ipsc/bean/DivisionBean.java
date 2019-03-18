@@ -3,9 +3,8 @@ package tech.shooting.ipsc.bean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,8 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @ApiModel(value = "Division create")
 @EqualsAndHashCode(callSuper = false)

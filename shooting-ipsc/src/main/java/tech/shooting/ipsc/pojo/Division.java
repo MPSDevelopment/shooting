@@ -3,6 +3,7 @@ package tech.shooting.ipsc.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,6 +16,7 @@ import java.util.List;
 @TypeAlias("division")
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
 public class Division extends BaseDocument {
 	public static final String NAME_WITH_PARENT = "name and parent id";
 
@@ -28,11 +30,11 @@ public class Division extends BaseDocument {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List of children", required = true)
+	@ApiModelProperty(value = "List of children")
 	@DBRef
 	private List<Division> children;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Status division", required = true)
+	@ApiModelProperty(value = "Status division")
 	private boolean active;
 }
