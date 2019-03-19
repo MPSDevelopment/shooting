@@ -79,4 +79,6 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
 
 	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
+
+	public static final String DIVISION_CONTROLLER_GET_ALL = "/division/all";
 }

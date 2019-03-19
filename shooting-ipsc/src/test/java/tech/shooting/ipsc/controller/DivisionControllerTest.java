@@ -143,4 +143,32 @@ class DivisionControllerTest {
 			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
 		assertEquals(0, divisionService.getCount());
 	}
+
+	@Test
+	public void checkGetAllDivision () throws Exception {
+		assertEquals(0, divisionService.getCount());
+		createDivisions(20);
+		assertEquals(20, divisionService.getCount());
+		//try access to getAllDivision with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getAllDivision with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getAllDivision with admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+			                         .andExpect(MockMvcResultMatchers.status().isOk())
+			                         .andReturn()
+			                         .getResponse()
+			                         .getContentAsString();
+		Division[] divisions = JacksonUtils.fromJson(Division[].class, contentAsString);
+		assertEquals(20, divisions.length);
+	}
+
+	private void createDivisions (int count) {
+		for(int i = 0; i < count; i++) {
+			var division = new DivisionBean().setActive(true).setName("test + " + i).setParent(null);
+			divisionService.createDivision(division, division.getParent());
+			log.info("Division %s has been created", division.getName());
+		}
+	}
 }

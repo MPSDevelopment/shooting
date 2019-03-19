@@ -14,6 +14,7 @@ import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.service.DivisionService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.DIVISION_CONTROLLER)
@@ -34,5 +35,11 @@ public class DivisionController {
 	public ResponseEntity removeDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
 		divisionService.removeDivision(id);
 		return new ResponseEntity(HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)
+	@ApiOperation(value = "Get all division", notes = "Return list divisions")
+	public ResponseEntity<List<DivisionBean>> getAllDivision () throws BadRequestException {
+		return new ResponseEntity<>(divisionService.findAllDivisions(), HttpStatus.OK);
 	}
 }

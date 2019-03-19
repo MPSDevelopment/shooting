@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class DivisionService {
-
 	private DivisionRepository divisionRepository;
 
 	public DivisionService (DivisionRepository divisionRepository) {
@@ -27,11 +26,15 @@ public class DivisionService {
 		if(divisionRepository.findByNameAndParent(divisionBean.getName(), parentId) != null) {
 			throw new ValidationException(Division.NAME_WITH_PARENT + "Division with name %s and parent id %s is already exist", divisionBean.getName(), parentId);
 		}
+		Division division = createDivisionWithCheck(divisionBean, parentId);
+		return convertDivisionToFront(division);
+	}
+
+	private Division createDivisionWithCheck (DivisionBean divisionBean, Long parentId) {
 		Division division = new Division();
 		if(parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);
 			division = divisionRepository.save(division);
-			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
 		} else {
 			BeanUtils.copyProperties(divisionBean, division, Division.PARENT_FIELD);
 			Division divisionParent = divisionRepository.findById(parentId).get();
@@ -44,9 +47,8 @@ public class DivisionService {
 			children.add(division);
 			divisionParent.setChildren(children);
 			divisionRepository.save(divisionParent);
-			divisionBean.setName(division.getName()).setParent(divisionParent.getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
 		}
-		return divisionBean;
+		return division;
 	}
 
 	public void deleteAllDivision () {
@@ -64,5 +66,24 @@ public class DivisionService {
 
 	public Division checkDivision (Long id) throws BadRequestException {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division %s", id)));
+	}
+
+	public List<DivisionBean> findAllDivisions () {
+		List<Division> all = divisionRepository.findAll();
+		List<DivisionBean> result = new ArrayList<>();
+		for(Division s : all) {
+			result.add(convertDivisionToFront(s));
+		}
+		return result;
+	}
+
+	private DivisionBean convertDivisionToFront (Division division) {
+		DivisionBean divisionBean = new DivisionBean();
+		if(division.getParent() == null) {
+			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
+		} else {
+			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
+		}
+		return divisionBean;
 	}
 }
