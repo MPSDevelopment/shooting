@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.service.DivisionService;
@@ -29,5 +27,12 @@ public class DivisionController {
 	@ApiOperation(value = "Add new division", notes = "Return created division")
 	public ResponseEntity<DivisionBean> createDivision (@RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.createDivision(divisionBean, divisionBean.getParent()), HttpStatus.CREATED);
+	}
+
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION)
+	@ApiOperation(value = "Remove division by id", notes = "Return status ok if removed successfully")
+	public ResponseEntity removeDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
+		divisionService.removeDivision(id);
+		return new ResponseEntity(HttpStatus.CREATED);
 	}
 }

@@ -90,7 +90,7 @@ class DivisionControllerTest {
 	}
 
 	@Test
-	void checkCreateDivision () throws Exception {
+	public void checkCreateDivision () throws Exception {
 		//try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -111,7 +111,7 @@ class DivisionControllerTest {
 	}
 
 	@Test
-	void checkAddedChildToTheRoot () throws Exception {
+	public void checkAddedChildToTheRoot () throws Exception {
 		assertEquals(0, divisionService.getCount());
 		DivisionBean division = divisionService.createDivision(divisionBean, null);
 		assertEquals(1, divisionService.getCount());
@@ -125,5 +125,22 @@ class DivisionControllerTest {
 		assertEquals(division.getId(), divisionBeanFromBack.getParent());
 		assertEquals(divisionBean.getName(), divisionBeanFromBack.getName());
 		assertEquals(2, divisionService.getCount());
+	}
+
+	@Test
+	public void checkRemoveDivision () throws Exception {
+		assertEquals(0, divisionService.getCount());
+		DivisionBean test1 = divisionService.createDivision(new DivisionBean().setName("test1").setParent(null).setActive(true), null);
+		assertEquals(1, divisionService.getCount());
+		//try access to remove division unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString())))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to remove division non admin user
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString()))
+			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to remove division admin user
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString()))
+			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		assertEquals(0, divisionService.getCount());
 	}
 }

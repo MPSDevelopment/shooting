@@ -3,7 +3,9 @@ package tech.shooting.ipsc.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
@@ -14,6 +16,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class DivisionService {
+
 	private DivisionRepository divisionRepository;
 
 	public DivisionService (DivisionRepository divisionRepository) {
@@ -25,7 +28,6 @@ public class DivisionService {
 			throw new ValidationException(Division.NAME_WITH_PARENT + "Division with name %s and parent id %s is already exist", divisionBean.getName(), parentId);
 		}
 		Division division = new Division();
-		DivisionBean divisionBeanToFront = new DivisionBean();
 		if(parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);
 			division = divisionRepository.save(division);
@@ -53,5 +55,14 @@ public class DivisionService {
 
 	public int getCount () {
 		return divisionRepository.findAll().size();
+	}
+
+	public void removeDivision (Long id) throws BadRequestException {
+		Division division = checkDivision(id);
+		divisionRepository.delete(division);
+	}
+
+	public Division checkDivision (Long id) throws BadRequestException {
+		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division %s", id)));
 	}
 }

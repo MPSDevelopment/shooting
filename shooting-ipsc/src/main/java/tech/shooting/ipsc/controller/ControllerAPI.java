@@ -11,8 +11,8 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_PAGE_SIZE = "pageSize";
 	public static final String PATH_VARIABLE_PERSON_ID = "personId";
 	public static final String PATH_VARIABLE_USER_ID = "userId";
-
 	public static final String PATH_VARIABLE_DIVISION_ID = "divisionId";
+
 
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 	public static final String REQUEST_COMPETITION_ID = "{"+PATH_VARIABLE_COMPETITION_ID+"}";
@@ -77,4 +77,6 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
 
 	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
+
+	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
 }
