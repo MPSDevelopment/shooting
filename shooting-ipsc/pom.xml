@@ -273,6 +273,7 @@
 						<configuration>
 							<repository>mpsdevelopment/shooting-frontend</repository>
 							<tag>${docker.image.version}-latest</tag>
+							<dockerfile>Dockerfile</dockerfile>
 							<repository>docker.mpsdevelopment.com/shooting/${docker.image.name}</repository>
 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 							<buildArgs>

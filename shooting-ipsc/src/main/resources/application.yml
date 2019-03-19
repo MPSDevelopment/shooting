@@ -86,6 +86,7 @@ spring:
       max-request-size: 10MB
   data:
     mongodb:
+#      host: ipsc-mongodb
       host: ipsc-mongodb
       port: 27017
       database: shooting
