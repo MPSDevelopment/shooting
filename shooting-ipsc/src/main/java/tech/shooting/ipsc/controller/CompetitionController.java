@@ -162,4 +162,9 @@ public class CompetitionController {
 		return new ResponseEntity<>(WeaponTypeEnum.getList(), HttpStatus.OK);
 	}
 
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_LIST_COMPETITOR, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added list competitors", notes = "Return list competitor")
+	public ResponseEntity<List<Competitor>> postListCompetitors (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid List<Long> competitorsIdList) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.addedAllCompetitors(id, competitorsIdList), HttpStatus.CREATED);
+	}
 }

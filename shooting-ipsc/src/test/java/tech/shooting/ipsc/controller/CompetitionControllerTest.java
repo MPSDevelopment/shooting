@@ -45,12 +45,12 @@ import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.CompetitionService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
@@ -121,8 +121,8 @@ public class CompetitionControllerTest {
 	private Stage findStage (Competition competition, Stage testingStage) {
 		return competition.getStages()
 			       .stream()
-			       .filter((stage) -> stage.getName().equals(testingStage.getName()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) &&
-			                          stage.getTargets().equals(testingStage.getTargets()) && stage.getMaximumPoints().equals(testingStage.getMaximumPoints()))
+			       .filter((stage) -> stage.getName().equals(testingStage.getName()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) && stage.getTargets().equals(testingStage.getTargets()) &&
+			                          stage.getMaximumPoints().equals(testingStage.getMaximumPoints()))
 			       .findAny()
 			       .get();
 	}
@@ -133,22 +133,25 @@ public class CompetitionControllerTest {
 		assertEquals(stageFromResponse.getMaximumPoints(), testingStage.getMaximumPoints());
 		assertEquals(stageFromResponse.getNumberOfRoundToBeScored(), testingStage.getNumberOfRoundToBeScored());
 	}
+
 	private CompetitionBean setupCompetitionBean (Competition competition) {
 		CompetitionBean competitionBean = new CompetitionBean();
-		BeanUtils.copyProperties(competition, competitionBean,Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
-		if(competition.getRangeMaster()!= null){
-			competitionBean.setRangeMaster(competition.getRangeMaster().getId());}
-		if(competition.getMatchDirector()!= null){
-			competitionBean.setMatchDirector(competition.getMatchDirector().getId());}
-		if(competition.getStatsOfficer()!= null){
-			competitionBean.setStatsOfficer(competition.getStatsOfficer().getId());}
+		BeanUtils.copyProperties(competition, competitionBean, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
+		if(competition.getRangeMaster() != null) {
+			competitionBean.setRangeMaster(competition.getRangeMaster().getId());
+		}
+		if(competition.getMatchDirector() != null) {
+			competitionBean.setMatchDirector(competition.getMatchDirector().getId());
+		}
+		if(competition.getStatsOfficer() != null) {
+			competitionBean.setStatsOfficer(competition.getStatsOfficer().getId());
+		}
 		return competitionBean;
 	}
 
 	@Test
 	public void checkCreateCompetition () throws Exception {
 		CompetitionBean competitionBean = setupCompetitionBean(competition);
-
 		// try access to createCompetition() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createCompetition() with authorized non admin
@@ -523,7 +526,8 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isCreated())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 	}
 
 	@Test
@@ -583,7 +587,8 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 		assertEquals(competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size(), testingCompetition.getCompetitors().size());
 	}
 
@@ -607,7 +612,8 @@ public class CompetitionControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetitor.getName()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.rfidCode").value(testingCompetitor.getRfidCode()))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId())).andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.id").value(testingCompetitor.getPerson().getId()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.person.userName").value(testingCompetitor.getPerson().getName()));
 	}
 
 	@Test
@@ -633,13 +639,42 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkGetWeaponEnum () throws Exception {
 		//try access to getEnumWeapon from admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER,
-			adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 		List<TypeWeapon> listFromJson = JacksonUtils.getListFromJson(TypeWeapon[].class, contentAsString);
 		assertEquals(WeaponTypeEnum.getCount(), listFromJson.size());
+	}
+
+	@Test
+	public void checkPostsCompetitors () throws Exception {
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getCompetitors().size());
+		List<Long> result = createPersons(20);
+		assertEquals(20, result.size());
+		String json = JacksonUtils.getJson(result);
+		assertNotNull(json);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_LIST_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()))
+			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                                         .content(json)
+			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		Competitor[] competitors = JacksonUtils.fromJson(Competitor[].class, contentAsString);
+		assertEquals(20, competitors.length);
+		assertEquals(20, competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size());
+	}
+
+	private List<Long> createPersons (int count) {
+		List<Long> result = new ArrayList<>();
+		for(int i = 0; i < count; i++) {
+			var user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person save = personRepository.save(user);
+			result.add(save.getId());
+			log.info("Person %s has been created", user.getName());
+		}
+		return result;
 	}
 }

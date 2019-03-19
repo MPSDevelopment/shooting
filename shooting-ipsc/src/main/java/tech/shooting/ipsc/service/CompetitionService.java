@@ -12,6 +12,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -149,8 +150,8 @@ public class CompetitionService {
 		return saveAndReturn(competition, competitorToDB, true);
 	}
 
-	private void checkPerson (Long id) throws BadRequestException {
-		personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
+	private Person checkPerson (Long id) throws BadRequestException {
+		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
 	}
 
 	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
@@ -196,5 +197,19 @@ public class CompetitionService {
 
 	public Competitor getCompetitor (Long id, Long competitorId) throws BadRequestException {
 		return checkCompetitor(checkCompetition(id).getCompetitors(), competitorId);
+	}
+
+	public List<Competitor> addedAllCompetitors (Long id, List<Long> competitorsIdList) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.clear();
+		for(Long idPerson : competitorsIdList) {
+			Person person = checkPerson(idPerson);
+			Competitor competitor = new Competitor();
+			competitor.setPerson(person).setName(person.getName());
+			competitors.add(competitor);
+		}
+		competition.setCompetitors(competitors);
+		return competitionRepository.save(competition).getCompetitors();
 	}
 }
