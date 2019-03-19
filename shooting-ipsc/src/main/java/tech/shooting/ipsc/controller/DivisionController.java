@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.service.DivisionService;
 
@@ -41,5 +41,14 @@ public class DivisionController {
 	@ApiOperation(value = "Get all division", notes = "Return list divisions")
 	public ResponseEntity<List<DivisionBean>> getAllDivision () throws BadRequestException {
 		return new ResponseEntity<>(divisionService.findAllDivisions(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get division by page")
+	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class),
+		@ResponseHeader(name = "total", description = "Total " + "records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
+	public ResponseEntity getDivisionByPage (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) throws BadRequestException {
+		return divisionService.getDivisionByPage(page, size);
 	}
 }

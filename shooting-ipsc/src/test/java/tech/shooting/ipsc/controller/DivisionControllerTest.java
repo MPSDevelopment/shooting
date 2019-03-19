@@ -13,10 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
@@ -42,6 +44,7 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.DivisionService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -163,6 +166,56 @@ class DivisionControllerTest {
 		Division[] divisions = JacksonUtils.fromJson(Division[].class, contentAsString);
 		assertEquals(20, divisions.length);
 	}
+
+	@Test
+	public void checkGetAllPersonsByPage () throws Exception {
+		createDivisions(40);
+		// try to access getAllDivisionsByPage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5))))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getAllDivisionsByPage with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
+			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try to access getAllDivisionsByPage with admin user
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
+			                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		List<DivisionBean> list = JacksonUtils.getListFromJson(DivisionBean[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(10, list.size());
+		// try to access getAllDivisionsByPage with admin user with size 30
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
+			                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		String contentAsString = mvcResult.getResponse().getContentAsString();
+		System.out.println("******************************************************");
+		System.out.println(contentAsString);
+		System.out.println("******************************************************");
+		list = JacksonUtils.getListFromJson(DivisionBean[].class, contentAsString);
+		assertEquals(20, list.size());
+	}
+
+	@Test
+	public void checkGetAllPersonsByPagePart2 () throws Exception {
+		// try to access to header
+		int sizeAllUser = divisionService.getCount();
+		int page = 250;
+		int size = 0;
+		int countInAPage = size <= 10 ? 10 : 20;
+		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(page)).replace("{pageSize}", String.valueOf(size)))
+			                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		MockHttpServletResponse response = mvcResult.getResponse();
+		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
+		assertEquals(response.getHeader("page"), String.valueOf(page));
+		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
+	}
+
+
+
+
 
 	private void createDivisions (int count) {
 		for(int i = 0; i < count; i++) {

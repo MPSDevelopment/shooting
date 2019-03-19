@@ -76,9 +76,9 @@ public class ControllerAPI {
 
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
 
-	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
-
-	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
-
 	public static final String DIVISION_CONTROLLER_GET_ALL = "/division/all";
+
+	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE = "/all/" + PAGE_NUMBER_REQUEST + "/" + PAGE_SIZE_REQUEST;
+	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
+	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
 }

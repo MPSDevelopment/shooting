@@ -2,11 +2,13 @@ package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
@@ -85,5 +87,9 @@ public class DivisionService {
 			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
 		}
 		return divisionBean;
+	}
+
+	public ResponseEntity getDivisionByPage (int page, int size) {
+		return PageAble.getPage(page, size, divisionRepository);
 	}
 }
