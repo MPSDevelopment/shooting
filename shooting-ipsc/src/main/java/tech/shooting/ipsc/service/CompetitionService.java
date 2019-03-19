@@ -11,12 +11,15 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.Competition;
+import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -87,5 +90,118 @@ public class CompetitionService {
 
 	public ResponseEntity getCompetitionsByPage (Integer page, Integer size) {
 		return PageAble.getPage(page, size, competitionRepository);
+	}
+
+	public List<Stage> getStages (Long id) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		return competition.getStages();
+	}
+
+	public List<Stage> addedAllStages (Long id, List<Stage> toAdded) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		List<Stage> stages = competition.getStages();
+		stages.addAll(toAdded);
+		competition.setStages(stages);
+		return competitionRepository.save(competition).getStages();
+	}
+
+	public Stage addStage (Long id, Stage toAdded) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		competition.getStages().add(toAdded);
+		List<Stage> stages = competitionRepository.save(competition).getStages();
+		int index = 0;
+		for(int i = 0; i < stages.size(); i++) {
+			if(stages.get(i).getName().equals(toAdded.getName()) && stages.get(i).getMaximumPoints().equals(toAdded.getMaximumPoints()) && stages.get(i).getTargets().equals(toAdded.getTargets())) {
+				index = i;
+			}
+		}
+		return stages.get(index);
+	}
+
+	public Stage getStage (Long competitionId, Long stageId) throws BadRequestException {
+		return checkStage(checkCompetition(competitionId), stageId);
+	}
+
+	private Stage checkStage (Competition competition, Long stageId) throws BadRequestException {
+		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findAny().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+	}
+
+	public void deleteStage (Long competitionId, Long stageId) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		Stage stage = checkStage(competition, stageId);
+		List<Stage> collect = competition.getStages().stream().filter((item) -> !item.getId().equals(stage.getId())).collect(Collectors.toList());
+		competitionRepository.save(competition.setStages(collect));
+	}
+
+	public Stage updateStage (Long competitionId, Long stageId, Stage stage) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		Stage stageFromDB = checkStage(competition, stageId);
+		BeanUtils.copyProperties(stage, stageFromDB);
+		List<Stage> stages = competition.getStages();
+		stages.remove(stageFromDB);
+		stages.add(stageFromDB);
+		competitionRepository.save(competition.setStages(stages));
+		return stageFromDB;
+	}
+
+	public Competitor addedCompetitor (Long id, Competitor competitor) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		checkPerson(competitor.getPerson().getId());
+		Competitor competitorToDB = new Competitor();
+		BeanUtils.copyProperties(competitor, competitorToDB);
+		return saveAndReturn(competition, competitorToDB, true);
+	}
+
+	private void checkPerson (Long id) throws BadRequestException {
+		personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
+	}
+
+	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
+		List<Competitor> competitors = competition.getCompetitors();
+		if(flag) {
+			competitors.add(competitorToDB);
+		} else {
+			int indexF = 0;
+			for(int i = 0; i < competitors.size(); i++) {
+				if(competitors.get(i).getId().equals(competitorToDB.getId())) {
+					indexF = i;
+					break;
+				}
+			}
+			competitors.set(indexF, competitorToDB);
+		}
+		competition.setCompetitors(competitors);
+		competitors = competitionRepository.save(competition).getCompetitors();
+		int index = 0;
+		for(int i = 0; i < competitors.size(); i++) {
+			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) {
+				index = i;
+			}
+		}
+		return competitors.get(index);
+	}
+
+	public Competitor updateCompetitor (Long id, Long competitorId, Competitor competitor) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
+		BeanUtils.copyProperties(competitor, competitorFromDB);
+		return saveAndReturn(competition, competitorFromDB, false);
+	}
+
+	private Competitor checkCompetitor (List<Competitor> competitors, Long competitorId) throws BadRequestException {
+		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
+	}
+
+	public void deleteCompetitor (Long id, Long competitorId) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.remove(competitor);
+		competition.setCompetitors(competitors);
+		competitionRepository.save(competition);
+	}
+
+	public Competitor getCompetitor (Long id, Long competitorId) throws BadRequestException {
+		return checkCompetitor(checkCompetition(id).getCompetitors(), competitorId);
 	}
 }
