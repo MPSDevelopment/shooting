@@ -13,4 +13,8 @@ public interface CustomCompetitionRepository  {
 	
 	public void pullStageFromCompetition(Long competitionId, Stage stage);
 
+	public void pullStageFromCompetition (Long competitionId, Long stage);
+
+	public void pullCompetitorFromCompetition (Long competitionId, Long competitorId);
+
 }

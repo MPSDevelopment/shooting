@@ -19,7 +19,6 @@ import tech.shooting.ipsc.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -127,10 +126,8 @@ public class CompetitionService {
 	}
 
 	public void deleteStage (Long competitionId, Long stageId) throws BadRequestException {
-		Competition competition = checkCompetition(competitionId);
-		Stage stage = checkStage(competition, stageId);
-		List<Stage> collect = competition.getStages().stream().filter((item) -> !item.getId().equals(stage.getId())).collect(Collectors.toList());
-		competitionRepository.save(competition.setStages(collect));
+		checkCompetition(competitionId);
+		competitionRepository.pullStageFromCompetition(competitionId, stageId);
 	}
 
 	public Stage updateStage (Long competitionId, Long stageId, Stage stage) throws BadRequestException {
@@ -193,12 +190,8 @@ public class CompetitionService {
 	}
 
 	public void deleteCompetitor (Long id, Long competitorId) throws BadRequestException {
-		Competition competition = checkCompetition(id);
-		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
-		List<Competitor> competitors = competition.getCompetitors();
-		competitors.remove(competitor);
-		competition.setCompetitors(competitors);
-		competitionRepository.save(competition);
+		checkCompetition(id);
+		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
 	}
 
 	public Competitor getCompetitor (Long id, Long competitorId) throws BadRequestException {

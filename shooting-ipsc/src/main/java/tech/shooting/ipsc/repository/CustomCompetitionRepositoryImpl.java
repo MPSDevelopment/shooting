@@ -43,4 +43,13 @@ import tech.shooting.ipsc.pojo.Stage;
 		// mongoTemplate.updateFirst(Query.query(Criteria.where("id").is(competitionId)), new Update().pull("stages", stage.getId()), Competition.class);
 		mongoTemplate.updateFirst(Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)), new Update().pull(Competition.STAGES_FIELD, Query.query(Criteria.where(Competition.ID_FIELD).is(stage.getId()))), Competition.class);
 	}
+
+	public void pullStageFromCompetition (Long competitionId, Long stage) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)), new Update().pull(Competition.STAGES_FIELD, Query.query(Criteria.where(Competition.ID_FIELD).is(stage))), Competition.class);
+	}
+
+	@Override
+	public void pullCompetitorFromCompetition (Long competitionId, Long competitorId) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)), new Update().pull(Competition.COMPETITOR_FIELD, Query.query(Criteria.where(Competition.ID_FIELD).is(competitorId))), Competition.class);
+	}
 }

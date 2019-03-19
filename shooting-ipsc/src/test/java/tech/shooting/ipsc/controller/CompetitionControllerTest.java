@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
@@ -437,6 +438,7 @@ public class CompetitionControllerTest {
 			                                         .header(Token.TOKEN_HEADER, adminToken)
 			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(testingCompetition.getStages().size() - 1, competitionRepository.findById(testingCompetition.getId()).get().getStages().size());
+		assertTrue(competitionRepository.findById(removeStage.getId()).isEmpty());
 	}
 
 	@Test
