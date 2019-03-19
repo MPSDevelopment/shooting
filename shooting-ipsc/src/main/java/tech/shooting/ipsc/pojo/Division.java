@@ -18,7 +18,10 @@ import java.util.List;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class Division extends BaseDocument {
+
 	public static final String NAME_WITH_PARENT = "name and parent id";
+
+	public static final String PARENT_FIELD = "parent";
 
 	@JsonProperty
 	@ApiModelProperty(value = "Parent name", required = true)

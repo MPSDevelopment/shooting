@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.DivisionBean;
-import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.service.DivisionService;
 
 import javax.validation.Valid;
@@ -28,7 +27,7 @@ public class DivisionController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new division", notes = "Return created division")
-	public ResponseEntity<Division> createDivision (@RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
+	public ResponseEntity<DivisionBean> createDivision (@RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.createDivision(divisionBean, divisionBean.getParent()), HttpStatus.CREATED);
 	}
 }

@@ -19,7 +19,7 @@ public class PageAble {
 		page = Math.max(1, page);
 		page--;
 		Page<?> pageOfUsers = PageAble.countPage(page, size, personRepository);
-		return new ResponseEntity(pageOfUsers.getContent(), PageAble.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
+		return new ResponseEntity(pageOfUsers.getContent(), setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
 	public static Page<? extends BaseDocument> countPage (Integer page, Integer size, MongoRepository<? extends BaseDocument, Long> personRepository) {

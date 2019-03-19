@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @ApiModel(value = "Division create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class DivisionBean {
+public class DivisionBean extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Parent name", required = true)
 	private Long parent;
@@ -33,7 +33,6 @@ public class DivisionBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "List of children")
-	@DBRef
 	private List<Division> children;
 
 	@JsonProperty

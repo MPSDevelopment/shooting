@@ -90,14 +90,15 @@ class DivisionControllerTest {
 	}
 
 	@Test
-	void createDivision () throws Exception {
+	void checkCreateDivision () throws Exception {
 		//try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
 			                .contentType(MediaType.APPLICATION_JSON_UTF8)
 			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access with user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
+			                .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                .content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean)))
 			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
@@ -107,5 +108,22 @@ class DivisionControllerTest {
 		Division division = JacksonUtils.fromJson(Division.class, contentAsString);
 		assertEquals(division.getName(), divisionBean.getName());
 		assertEquals(division.getParent(), divisionBean.getParent());
+	}
+
+	@Test
+	void checkAddedChildToTheRoot () throws Exception {
+		assertEquals(0, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, null);
+		assertEquals(1, divisionService.getCount());
+		divisionBean = new DivisionBean().setParent(division.getId()).setName("first child").setActive(true);
+		String json = JacksonUtils.getJson(divisionBean);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION)
+			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+			                                         .content(Objects.requireNonNull(json))
+			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		DivisionBean divisionBeanFromBack = JacksonUtils.fromJson(DivisionBean.class, contentAsString);
+		assertEquals(division.getId(), divisionBeanFromBack.getParent());
+		assertEquals(divisionBean.getName(), divisionBeanFromBack.getName());
+		assertEquals(2, divisionService.getCount());
 	}
 }
