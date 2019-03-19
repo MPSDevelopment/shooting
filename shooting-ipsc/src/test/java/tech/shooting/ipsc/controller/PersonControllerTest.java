@@ -236,9 +236,6 @@ public class PersonControllerTest {
 			ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_USERS_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
 			                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		String contentAsString = mvcResult.getResponse().getContentAsString();
-		System.out.println("******************************************************");
-		System.out.println(contentAsString);
-		System.out.println("******************************************************");
 		list = JacksonUtils.getListFromJson(User[].class, contentAsString);
 		assertEquals(20, list.size());
 	}

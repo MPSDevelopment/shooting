@@ -92,4 +92,8 @@ public class DivisionService {
 	public ResponseEntity getDivisionByPage (int page, int size) {
 		return PageAble.getPage(page, size, divisionRepository);
 	}
+
+	public DivisionBean getDivision (Long id) throws BadRequestException {
+		return convertDivisionToFront(checkDivision(id));
+	}
 }

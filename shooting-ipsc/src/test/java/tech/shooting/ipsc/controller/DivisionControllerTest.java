@@ -168,7 +168,7 @@ class DivisionControllerTest {
 	}
 
 	@Test
-	public void checkGetAllPersonsByPage () throws Exception {
+	public void checkGetAllDivisionsByPage () throws Exception {
 		createDivisions(40);
 		// try to access getAllDivisionsByPage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
@@ -189,15 +189,12 @@ class DivisionControllerTest {
 			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
 			                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		String contentAsString = mvcResult.getResponse().getContentAsString();
-		System.out.println("******************************************************");
-		System.out.println(contentAsString);
-		System.out.println("******************************************************");
 		list = JacksonUtils.getListFromJson(DivisionBean[].class, contentAsString);
 		assertEquals(20, list.size());
 	}
 
 	@Test
-	public void checkGetAllPersonsByPagePart2 () throws Exception {
+	public void checkGetAllDivisionsByPagePart2 () throws Exception {
 		// try to access to header
 		int sizeAllUser = divisionService.getCount();
 		int page = 250;
@@ -213,9 +210,25 @@ class DivisionControllerTest {
 		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
 	}
 
-
-
-
+	@Test
+	public void checkFindOneDivisionById () throws Exception {
+		assertEquals(0, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
+		assertEquals(1, divisionService.getCount());
+		//try access to getDivisionById() with unauthorized user
+		mockMvc.perform(
+			MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getDivisionById() with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID,
+			division.getId().toString()))
+			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getDivisionById() with non admin user
+		String contentAsString = mockMvc.perform(
+			MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
+	}
 
 	private void createDivisions (int count) {
 		for(int i = 0; i < count; i++) {

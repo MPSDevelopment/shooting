@@ -51,4 +51,10 @@ public class DivisionController {
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) throws BadRequestException {
 		return divisionService.getDivisionByPage(page, size);
 	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID)
+	@ApiOperation(value = "Get division by id", notes = "Return division object")
+	public ResponseEntity<DivisionBean> getDivisionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(divisionService.getDivision(id), HttpStatus.OK);
+	}
 }
