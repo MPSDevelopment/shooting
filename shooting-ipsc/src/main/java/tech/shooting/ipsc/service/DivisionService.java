@@ -96,4 +96,11 @@ public class DivisionService {
 	public DivisionBean getDivision (Long id) throws BadRequestException {
 		return convertDivisionToFront(checkDivision(id));
 	}
+
+	public DivisionBean updateDivision (DivisionBean divisionBean, Long id) throws BadRequestException {
+		Division division = checkDivision(id);
+		BeanUtils.copyProperties(divisionBean, division);
+		division = divisionRepository.save(division);
+		return convertDivisionToFront(division);
+	}
 }

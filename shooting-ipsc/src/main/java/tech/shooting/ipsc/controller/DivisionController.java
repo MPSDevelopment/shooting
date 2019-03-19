@@ -57,4 +57,10 @@ public class DivisionController {
 	public ResponseEntity<DivisionBean> getDivisionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.getDivision(id), HttpStatus.OK);
 	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update division", notes = "Return update division object")
+	public ResponseEntity<DivisionBean> updateDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id, @RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
+		return new ResponseEntity<>(divisionService.updateDivision(divisionBean, id), HttpStatus.OK);
+	}
 }

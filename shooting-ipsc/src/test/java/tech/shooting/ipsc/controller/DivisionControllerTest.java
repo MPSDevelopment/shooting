@@ -223,9 +223,30 @@ class DivisionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID,
 			division.getId().toString()))
 			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-		//try access to getDivisionById() with non admin user
+		//try access to getDivisionById() with admin user
 		String contentAsString = mockMvc.perform(
 			MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
+	}
+
+	@Test
+	public void checkUpdateDivision () throws Exception {
+		assertEquals(0, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
+		assertEquals(1, divisionService.getCount());
+		division.setName("updateeee");
+		//try access to getDivisionById() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())))
+			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getDivisionById() with non admin user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getDivisionById() with admin user
+		String contentAsString = mockMvc.perform(
+			MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(Objects.requireNonNull(JacksonUtils.getJson(division)))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
 	}
