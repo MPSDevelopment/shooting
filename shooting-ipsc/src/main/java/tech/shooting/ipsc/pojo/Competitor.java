@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
@@ -15,8 +14,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Data
 @Accessors(chain = true)
 public class Competitor extends BaseDocument {
-
-	@JsonProperty
+	@JsonProperty("username")
 	@ApiModelProperty(value = "Competitor's name", required = true)
 	private String name;
 
