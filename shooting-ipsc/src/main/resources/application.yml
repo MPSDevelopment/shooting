@@ -45,7 +45,6 @@ server:
     min-response-size: 1024
 
 ipsc:
-  frontendFolder: /files/
 
 ---
 spring:
@@ -74,4 +73,31 @@ server:
     min-response-size: 1024
   connection-timeout: 20000
 ipsc:
-  frontendFolder: /usr/share/servers/ipsc-frontend/
+
+---
+spring:
+  profiles: docker
+  main:
+    banner-mode: "off"
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: ipsc-mongodb
+      port: 27017
+      database: shooting
+      authentication-database: admin
+      username: ipsc
+      password: ipasdfb14235346jsbcfdhasbf3q234sc
+server:
+  address: 127.0.0.1
+  port: 9901
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  connection-timeout: 20000
+ipsc:

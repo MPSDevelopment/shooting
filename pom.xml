@@ -24,7 +24,8 @@
 
 	<properties>
 
-		<product.version>0.1-SNAPSHOT</product.version>
+		<docker.image.name>ipsc</docker.image.name>
+		<docker.image.version>0.1</docker.image.version>
 		<jdk.version>11</jdk.version>
 		
 		<lib.property>lib</lib.property>

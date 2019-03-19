@@ -142,6 +142,7 @@
 					<include>*.sh</include>
 					<include>*.bat</include>
 					<include>*.service</include>
+					<include>Dockerfile</include>
 				</includes>
 			</resource>
 		</resources>
@@ -202,6 +203,7 @@
 							<customClasspathLayout>
 								${lib.property}/${artifact.artifactId}${artifact.dashClassifier?}.${artifact.extension}
 							</customClasspathLayout>
+							<mainClass>tech.shooting.ipsc.IpscApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -255,29 +257,29 @@
 							</execution>
 						</executions>
 					</plugin>
-<!-- 					<plugin> -->
-<!-- 						<groupId>com.spotify</groupId> -->
-<!-- 						<artifactId>dockerfile-maven-plugin</artifactId> -->
-<!-- 						<version>${dockerfile.plugin.version}</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<id>default</id> -->
-<!-- 								<goals> -->
-<!-- 									<goal>build</goal> -->
-<!-- 									<goal>push</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 						<configuration> -->
-<!-- 							<repository>mpsdevelopment/shooting-frontend</repository> -->
-<!-- 							<tag>${project.version}-latest</tag> -->
-<!-- 							<repository>docker.mpsdevelopment.com/mpsdevelopment/image</repository> -->
-<!-- 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
-<!-- 							<buildArgs> -->
-<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
-<!-- 							</buildArgs> -->
-<!-- 						</configuration> -->
-<!-- 					</plugin> -->
+					<plugin>
+						<groupId>com.spotify</groupId>
+						<artifactId>dockerfile-maven-plugin</artifactId>
+						<version>${dockerfile.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default</id>
+								<goals>
+									<goal>build</goal>
+									<goal>push</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<repository>mpsdevelopment/shooting-frontend</repository>
+							<tag>${docker.image.version}-latest</tag>
+							<repository>docker.mpsdevelopment.com/shooting/${docker.image.name}</repository>
+							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+							<buildArgs>
+								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+							</buildArgs>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
