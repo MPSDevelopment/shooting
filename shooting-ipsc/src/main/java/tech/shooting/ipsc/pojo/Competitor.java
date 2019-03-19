@@ -14,7 +14,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Data
 @Accessors(chain = true)
 public class Competitor extends BaseDocument {
-	@JsonProperty("username")
+	@JsonProperty("userName")
 	@ApiModelProperty(value = "Competitor's name", required = true)
 	private String name;
 

@@ -53,7 +53,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@EnableMongoRepositories(basePackageClasses = PersonRepository.class)
+@EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
 	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CompetitionController.class, ValidationErrorHandler.class, CompetitionService.class})
 @EnableAutoConfiguration
