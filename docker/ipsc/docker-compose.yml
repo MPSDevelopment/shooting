@@ -1,5 +1,19 @@
 version: '2'
 services:
+  ipsc-nginx:
+    container_name: ipsc-nginx
+    image: nginx:1.13
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+       - ./ipsc:/etc/nginx/conf.d/default.conf
+       - ./data/logs/nginx:/var/log/nginx
+    networks:   
+      - ipsc-network_v4
+    depends_on: 
+      - ipsc-backend
   ipsc-backend:
     container_name: ipsc-backend
     image: docker.mpsdevelopment.com/shooting/ipsc:0.1-latest
@@ -8,10 +22,13 @@ services:
 #    network_mode: host
     volumes:
       - ./data/logs:/usr/share/servers/ipsc/logs
+    expose:
+      - 9901
     ports:
       - 9901:9901 
-    networks:  
-      - ipsc-network
+    networks:   
+      - ipsc-network_v4 
+#        ipv4_address: 127.0.0.1
   ipsc-mongodb: 
     image: mongo:latest
     restart: always
@@ -26,9 +43,15 @@ services:
     ports:
       - 27018:27017
     networks:  
-      - ipsc-network
+      - ipsc-network_v4
     command: mongod --logpath=/data/log/mongo.log --smallfiles  --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
 
 networks:
-  ipsc-network: 
+  ipsc-network_v4: 
     driver: bridge 
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+#    ipam:
+#      config: 
+#        - subnet: 127.0.0.0/8
+#         gateway: 127.0.0.1
