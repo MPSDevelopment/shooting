@@ -43,6 +43,10 @@ public class Person extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
 	private String rank;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Person's division")
+	private Division division;
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Person's IPSC codes")

@@ -25,7 +25,7 @@ public class Competitor extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's number in case we do not have a rfid code")
 	private String number;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's active, if he passed all the docs and other checks")
 	private String active;
