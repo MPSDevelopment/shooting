@@ -106,4 +106,8 @@ public class DivisionService {
 		division = divisionRepository.save(division);
 		return convertDivisionToFront(division);
 	}
+
+	public DivisionBean getRoot () {
+		return convertDivisionToFront(divisionRepository.findOneByParent(null));
+	}
 }
