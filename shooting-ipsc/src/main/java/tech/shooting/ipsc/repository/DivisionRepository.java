@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import tech.shooting.ipsc.pojo.Division;
 
 @Repository
-public interface DivisionRepository extends MongoRepository<Division, Long> {
+public interface DivisionRepository extends MongoRepository<Division, Long>, CustomDivisionRepository {
+	
 	public Division findByNameAndParent (String name, Long parent);
 }

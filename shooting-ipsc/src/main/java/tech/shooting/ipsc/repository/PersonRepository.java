@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 
 @Repository
 public interface PersonRepository extends MongoRepository<Person, Long> {
+	
 	Person findByNameAndBirthDate (String name, OffsetDateTime birthDate);
 
 }
