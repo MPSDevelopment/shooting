@@ -108,7 +108,6 @@ public class CompetitionControllerTest {
 
 	@BeforeEach
 	public void before () {
-		userRepository.findByRoleName(RoleName.JUDGE);
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		competition = new Competition().setName("Alladin").setLocation("Cave!");
@@ -120,7 +119,10 @@ public class CompetitionControllerTest {
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN) == null ? userRepository.save(new User().setLogin("judge")
+		                                                                                                        .setRoleName(RoleName.JUDGE)
+		                                                                                                        .setName("judge_name")
+		                                                                                                        .setPassword(RandomStringUtils.randomAscii(14))) : userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -713,14 +715,46 @@ public class CompetitionControllerTest {
 		CompetitorMark competitorMark = new CompetitorMark().setName("aqua").setActive(true).setType(TypeMarkEnum.RFID).setMark("1032132548798");
 		String json = JacksonUtils.getJson(competitorMark);
 		assertNotNull(json);
+		//try access to addedMarkForCompetitor with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                        .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(json))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to addedMarkForCompetitor with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                        .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(json)
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to addedMarkForCompetitor with judge role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
 		                                                                                                                                 .replace(ControllerAPI.REQUEST_COMPETITOR_ID,
 			                                                                                                                                 testingCompetitor.getId().toString()))
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(json)
-		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		                                                               .content(json).header(Token.TOKEN_HEADER, judgeToken))
+		                                .andExpect(MockMvcResultMatchers.status().isOk())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
+		testing(competitor, competitorMark, testingCompetitor);
+		//try access to addedMarkForCompetitor with admin role
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                             ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                                          .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                        .content(json)
+		                                                        .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
+		testing(competitor, competitorMark, testingCompetitor);
+	}
+
+	private void testing (Competitor competitor, CompetitorMark competitorMark, Competitor testingCompetitor) {
+
 		assertNotNull(competitor);
 		assertEquals(competitorMark.getName(), competitor.getName());
 		if(competitorMark.getType().equals(TypeMarkEnum.RFID)) {
