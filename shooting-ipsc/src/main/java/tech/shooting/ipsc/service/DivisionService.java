@@ -36,14 +36,14 @@ public class DivisionService {
 		Division division = new Division();
 		if(parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);
+			if(division.getChildren() == null) {
+				division.setChildren(new ArrayList<>());
+			}
 			division = divisionRepository.save(division);
 		} else {
 			BeanUtils.copyProperties(divisionBean, division, Division.PARENT_FIELD);
 			Division divisionParent = divisionRepository.findById(parentId).get();
 			division.setParent(divisionParent);
-			if(division.getChildren() == null) {
-				division.setChildren(new ArrayList<>());
-			}
 			division = divisionRepository.save(division);
 			List<Division> children = divisionParent.getChildren();
 			if(children == null) {
