@@ -1,6 +1,8 @@
 package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
@@ -9,6 +11,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class Division extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Parent name", required = true, hidden=true)
 	@DBRef
+	@JsonSerialize(using = BaseDocumentIdSerializer.class)
 	private Division parent;
 
 	@JsonProperty
