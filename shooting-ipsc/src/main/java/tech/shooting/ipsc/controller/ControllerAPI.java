@@ -83,4 +83,6 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_ID = "/division/" + REQUEST_DIVISION_ID;
 	public static final String DIVISION_CONTROLLER_PUT_DIVISION = "/division/" + REQUEST_DIVISION_ID;
+
+	public static final String DIVISION_CONTROLLER_GET_DIVISION_ROOT = "/division/root";
 }

@@ -63,4 +63,10 @@ public class DivisionController {
 	public ResponseEntity<DivisionBean> updateDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id, @RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.updateDivision(divisionBean, id), HttpStatus.OK);
 	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_ROOT)
+	@ApiOperation(value = "Return root division", notes = "Return root division object")
+	public ResponseEntity<DivisionBean> getRoot () {
+		return new ResponseEntity<>(divisionService.getRoot(), HttpStatus.OK);
+	}
 }

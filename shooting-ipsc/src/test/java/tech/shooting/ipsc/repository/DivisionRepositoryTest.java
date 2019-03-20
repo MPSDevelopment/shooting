@@ -50,7 +50,7 @@ public class DivisionRepositoryTest {
 		assertNotNull(divisionRepository.findByNameAndParent(ROOT_NAME, null));
 	}
 
-	@Test
+//	@Test
 	public void check() {
 		Division child1 = divisionRepository.save(new Division().setParent(root).setName("child1"));
 		List<Division> list = divisionRepository.findByDivisionId(root.getId());
