@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competition;
@@ -166,5 +167,12 @@ public class CompetitionController {
 	@ApiOperation(value = "Added list competitors", notes = "Return list competitor")
 	public ResponseEntity<List<Competitor>> postListCompetitors (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid List<Long> competitorsIdList) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedAllCompetitors(id, competitorsIdList), HttpStatus.CREATED);
+	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
+	public ResponseEntity<Competitor> addedMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
 }

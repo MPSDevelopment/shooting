@@ -9,7 +9,9 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Person;
@@ -215,5 +217,17 @@ public class CompetitionService {
 			}
 		}
 		return competitors.get(index);
+	}
+
+	public Competitor addedMarkToCompetitor (Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
+		if(competitorMark.getType().equals(TypeMarkEnum.RFID)) {
+			competitor.setRfidCode(competitorMark.getMark());
+		} else {
+			competitor.setNumber(competitorMark.getMark());
+		}
+		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
+		return saveAndReturn(competition, competitor, false);
 	}
 }
