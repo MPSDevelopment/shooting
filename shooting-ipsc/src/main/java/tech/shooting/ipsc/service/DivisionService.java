@@ -50,6 +50,9 @@ public class DivisionService {
 			divisionParent.setChildren(children);
 			divisionRepository.save(divisionParent);
 		}
+		if(division.getChildren() == null) {
+			division.setChildren(new ArrayList<>());
+		}
 		return division;
 	}
 
