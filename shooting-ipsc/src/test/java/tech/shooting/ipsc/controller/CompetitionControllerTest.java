@@ -84,6 +84,8 @@ public class CompetitionControllerTest {
 
 	private User admin;
 
+	private User judge;
+
 	private Competition competition;
 
 	private Competition testingCompetition;
@@ -97,6 +99,8 @@ public class CompetitionControllerTest {
 	private String stageJson;
 
 	private String adminToken;
+
+	private String judgeToken;
 
 	private String userToken;
 
@@ -113,10 +117,15 @@ public class CompetitionControllerTest {
 		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
 		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
 		stageJson = JacksonUtils.getJson(testingStage);
+
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
+		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+
 	}
 
 	//utils method's

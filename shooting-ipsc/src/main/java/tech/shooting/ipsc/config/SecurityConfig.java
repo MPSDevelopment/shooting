@@ -52,15 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.userDetailsService(userDetailsService);
 		http.addFilterBefore(tokenAuthenticationFilter, TokenAuthenticationFilter.class);
 		http.antMatcher("/api/**")
-			.authorizeRequests()
-			.antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
-			.permitAll()
-			.antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
-			.permitAll()
-			.and()
-			.authorizeRequests()
-			.anyRequest()
-			.hasRole("ADMIN");
+		    .authorizeRequests()
+		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
+		    .permitAll()
+		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
+		    .permitAll().antMatchers(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK).hasAnyRole("ADMIN", "JUDGE")
+		    .and()
+		    .authorizeRequests()
+		    .anyRequest()
+		    .hasRole("ADMIN");
 	}
 
 	@Bean
