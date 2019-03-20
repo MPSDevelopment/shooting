@@ -28,7 +28,7 @@ public class Competitor extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's active, if he passed all the docs and other checks")
-	private String active;
+	private boolean active;
 
 	@DBRef
 	@JsonProperty

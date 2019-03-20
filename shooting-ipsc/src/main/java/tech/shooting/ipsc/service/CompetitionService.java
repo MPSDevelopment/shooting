@@ -36,13 +36,16 @@ public class CompetitionService {
 	private Competition useBeanUtilsWithOutJudges (CompetitionBean competitionBean, Competition competition) throws BadRequestException {
 		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
 		if(competitionBean.getRangeMaster() != null) {
-			competition.setRangeMaster(userRepository.findById(competitionBean.getRangeMaster()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Range Master id %s", competitionBean.getRangeMaster()))));
+			competition.setRangeMaster(userRepository.findById(competitionBean.getRangeMaster())
+			                                         .orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Range Master id %s", competitionBean.getRangeMaster()))));
 		}
 		if(competitionBean.getMatchDirector() != null) {
-			competition.setMatchDirector(userRepository.findById(competitionBean.getMatchDirector()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Match Director id %s", competitionBean.getMatchDirector()))));
+			competition.setMatchDirector(userRepository.findById(competitionBean.getMatchDirector())
+			                                           .orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Match Director id %s", competitionBean.getMatchDirector()))));
 		}
 		if(competitionBean.getStatsOfficer() != null) {
-			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
+			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer())
+			                                          .orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
 		return competition;
 	}
@@ -146,12 +149,46 @@ public class CompetitionService {
 		Competition competition = checkCompetition(id);
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
-		BeanUtils.copyProperties(competitor, competitorToDB);
+		BeanUtils.copyProperties(competitor.setActive(false), competitorToDB);
 		return saveAndReturn(competition, competitorToDB, true);
 	}
 
 	private Person checkPerson (Long id) throws BadRequestException {
 		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitorId %s", id)));
+	}
+
+	public void deleteCompetitor (Long id, Long competitorId) throws BadRequestException {
+		checkCompetition(id);
+		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
+	}
+
+	public Competitor getCompetitor (Long id, Long competitorId) throws BadRequestException {
+		return checkCompetitor(checkCompetition(id).getCompetitors(), competitorId);
+	}
+
+	public Competitor updateCompetitor (Long id, Long competitorId, Competitor competitor) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
+		BeanUtils.copyProperties(competitor, competitorFromDB);
+		return saveAndReturn(competition, competitorFromDB, false);
+	}
+
+	public List<Competitor> addedAllCompetitors (Long id, List<Long> competitorsIdList) throws BadRequestException {
+		Competition competition = checkCompetition(id);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.clear();
+		for(Long idPerson : competitorsIdList) {
+			Person person = checkPerson(idPerson);
+			Competitor competitor = new Competitor();
+			competitor.setPerson(person).setName(person.getName());
+			competitors.add(competitor);
+		}
+		competition.setCompetitors(competitors);
+		return competitionRepository.save(competition).getCompetitors();
+	}
+
+	private Competitor checkCompetitor (List<Competitor> competitors, Long competitorId) throws BadRequestException {
+		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
 	}
 
 	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
@@ -172,44 +209,11 @@ public class CompetitionService {
 		competitors = competitionRepository.save(competition).getCompetitors();
 		int index = 0;
 		for(int i = 0; i < competitors.size(); i++) {
-			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) {
+			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) &&
+			   (competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) || competitors.get(i).getNumber().equals(competitorToDB.getNumber())) {
 				index = i;
 			}
 		}
 		return competitors.get(index);
-	}
-
-	public Competitor updateCompetitor (Long id, Long competitorId, Competitor competitor) throws BadRequestException {
-		Competition competition = checkCompetition(id);
-		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
-		BeanUtils.copyProperties(competitor, competitorFromDB);
-		return saveAndReturn(competition, competitorFromDB, false);
-	}
-
-	private Competitor checkCompetitor (List<Competitor> competitors, Long competitorId) throws BadRequestException {
-		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
-	}
-
-	public void deleteCompetitor (Long id, Long competitorId) throws BadRequestException {
-		checkCompetition(id);
-		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
-	}
-
-	public Competitor getCompetitor (Long id, Long competitorId) throws BadRequestException {
-		return checkCompetitor(checkCompetition(id).getCompetitors(), competitorId);
-	}
-
-	public List<Competitor> addedAllCompetitors (Long id, List<Long> competitorsIdList) throws BadRequestException {
-		Competition competition = checkCompetition(id);
-		List<Competitor> competitors = competition.getCompetitors();
-		competitors.clear();
-		for(Long idPerson : competitorsIdList) {
-			Person person = checkPerson(idPerson);
-			Competitor competitor = new Competitor();
-			competitor.setPerson(person).setName(person.getName());
-			competitors.add(competitor);
-		}
-		competition.setCompetitors(competitors);
-		return competitionRepository.save(competition).getCompetitors();
 	}
 }
