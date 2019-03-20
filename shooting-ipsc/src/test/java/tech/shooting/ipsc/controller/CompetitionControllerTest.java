@@ -116,18 +116,15 @@ public class CompetitionControllerTest {
 		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
 		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
 		stageJson = JacksonUtils.getJson(testingStage);
-
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN) == null ? userRepository.save(new User().setLogin("judge")
 		                                                                                                        .setRoleName(RoleName.JUDGE)
 		                                                                                                        .setName("judge_name")
 		                                                                                                        .setPassword(RandomStringUtils.randomAscii(14))) : userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
-
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-
 	}
 
 	//utils method's
@@ -719,9 +716,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
 		                                                                                                        .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(json))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to addedMarkForCompetitor with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
@@ -734,8 +729,7 @@ public class CompetitionControllerTest {
 		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
 		                                                                                                                                 .replace(ControllerAPI.REQUEST_COMPETITOR_ID,
 			                                                                                                                                 testingCompetitor.getId().toString()))
-		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(json).header(Token.TOKEN_HEADER, judgeToken))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken))
 		                                .andExpect(MockMvcResultMatchers.status().isOk())
 		                                .andReturn()
 		                                .getResponse()
@@ -753,8 +747,23 @@ public class CompetitionControllerTest {
 		testing(competitor, competitorMark, testingCompetitor);
 	}
 
-	private void testing (Competitor competitor, CompetitorMark competitorMark, Competitor testingCompetitor) {
+	@Test
+	public void checkGetLevelEnum () throws Exception {
+		//try access to getLevelEnum from unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getLevelEnum from user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getLevelEnum from judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getLevelEnum from admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL).header(Token.TOKEN_HEADER, adminToken))
+		       .andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
+	private void testing (Competitor competitor, CompetitorMark competitorMark, Competitor testingCompetitor) {
 		assertNotNull(competitor);
 		assertEquals(competitorMark.getName(), competitor.getName());
 		if(competitorMark.getType().equals(TypeMarkEnum.RFID)) {

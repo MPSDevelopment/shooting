@@ -11,11 +11,9 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
-import tech.shooting.ipsc.pojo.Competition;
-import tech.shooting.ipsc.pojo.Competitor;
-import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
@@ -229,5 +227,9 @@ public class CompetitionService {
 		}
 		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
 		return saveAndReturn(competition, competitor, false);
+	}
+
+	public List<LevelBean> getLevelEnum () {
+		return ClassificationBreaks.getList();
 	}
 }

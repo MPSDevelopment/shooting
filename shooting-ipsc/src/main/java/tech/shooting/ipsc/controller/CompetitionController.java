@@ -14,10 +14,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
-import tech.shooting.ipsc.pojo.Competition;
-import tech.shooting.ipsc.pojo.Competitor;
-import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.pojo.TypeWeapon;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.service.CompetitionService;
 
 import javax.validation.Valid;
@@ -174,5 +171,11 @@ public class CompetitionController {
 	public ResponseEntity<Competitor> addedMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL)
+	@ApiOperation(value = "Return level description for competitors", notes = "Return list LevelBean object")
+	public ResponseEntity<List<LevelBean>> getLevelEnum () {
+		return new ResponseEntity<>(competitionService.getLevelEnum(), HttpStatus.OK);
 	}
 }

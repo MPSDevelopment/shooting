@@ -64,7 +64,6 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
-	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
 
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + REQUEST_COMPETITION_ID + "/competitor/all";
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
@@ -74,7 +73,6 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge";
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
 	public static final String COMPETITION_CONTROLLER_POST_LIST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitors";
-	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
 
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
 	public static final String DIVISION_CONTROLLER_GET_ALL = "/division/all";
@@ -84,4 +82,10 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_ID = "/division/" + REQUEST_DIVISION_ID;
 	public static final String DIVISION_CONTROLLER_PUT_DIVISION = "/division/" + REQUEST_DIVISION_ID;
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_ROOT = "/division/root";
+
+	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
+
+	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
+
+	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL = "/enum/level";
 }
