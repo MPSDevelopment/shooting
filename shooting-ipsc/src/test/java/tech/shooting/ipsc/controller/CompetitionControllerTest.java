@@ -28,12 +28,14 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -120,11 +122,11 @@ public class CompetitionControllerTest {
 	//utils method's
 	private Stage findStage (Competition competition, Stage testingStage) {
 		return competition.getStages()
-			       .stream()
-			       .filter((stage) -> stage.getName().equals(testingStage.getName()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) && stage.getTargets().equals(testingStage.getTargets()) &&
-			                          stage.getMaximumPoints().equals(testingStage.getMaximumPoints()))
-			       .findAny()
-			       .get();
+		                  .stream()
+		                  .filter((stage) -> stage.getName().equals(testingStage.getName()) && stage.getNumberOfRoundToBeScored().equals(testingStage.getNumberOfRoundToBeScored()) &&
+		                                     stage.getTargets().equals(testingStage.getTargets()) && stage.getMaximumPoints().equals(testingStage.getMaximumPoints()))
+		                  .findAny()
+		                  .get();
 	}
 
 	private void testRequiredFields (Stage stageFromResponse, Stage testingStage) {
@@ -153,19 +155,20 @@ public class CompetitionControllerTest {
 	public void checkCreateCompetition () throws Exception {
 		CompetitionBean competitionBean = setupCompetitionBean(competition);
 		// try access to createCompetition() with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createCompetition() with authorized non admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createCompetition() with authorized admin but without content
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
-			                .header(Token.TOKEN_HEADER, adminToken)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		                                      .header(Token.TOKEN_HEADER, adminToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try access to createCompetition() with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
-			                .header(Token.TOKEN_HEADER, adminToken)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isCreated());
+		                                      .header(Token.TOKEN_HEADER, adminToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isCreated());
 	}
 
 	@Test
@@ -173,31 +176,37 @@ public class CompetitionControllerTest {
 		// try access to getCompetitionById with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to getCompetitionById with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to getCompetitionById with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
+		                                      .header(Token.TOKEN_HEADER, adminToken))
+		       .andExpect(MockMvcResultMatchers.status().isOk())
+		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
 	}
 
 	@Test
 	public void checkDeleteCompetitionById () throws Exception {
 		// try access to deleteCompetitionById with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to deleteCompetitionById with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID,
+				testingCompetition.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to deleteCompetitionById with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID,
+				testingCompetition.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, adminToken))
+		       .andExpect(MockMvcResultMatchers.status().isOk())
+		       .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
 	}
 
 	@Test
@@ -205,53 +214,56 @@ public class CompetitionControllerTest {
 		Competition test = competitionRepository.findByName(testingCompetition.getName());
 		test.setName("Update Name").setLocation("cave number 2");
 		// try access to updateCompetition with unauthorized user
-		mockMvc.perform(
-			MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.put(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to updateCompetition with authorized user
-		mockMvc.perform(
-			MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.put(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to updateCompetition with authorized admin
-		mockMvc.perform(
-			MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
+		mockMvc.perform(MockMvcRequestBuilders.put(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
+		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
 	}
 
 	@Test
 	public void checkGetCount () throws Exception {
 		// try access to getCount with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to getCount with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to getCount with authorized admin
-		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER,
-			adminToken))
-			                                   .andExpect(MockMvcResultMatchers.status().isOk())
-			                                   .andReturn()
-			                                   .getResponse();
+		MockHttpServletResponse response =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse();
 		assertEquals(response.getContentAsString(), String.valueOf(competitionRepository.count()));
 	}
 
 	@Test
 	public void checkGetAllCompetitions () throws Exception {
 		// try access to getAllCompetitions with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to getAllCompetitions with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to getAllCompetitions with authorized admin
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS).header(Token.TOKEN_HEADER, adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
 		Competition[] actual = JacksonUtils.fromJson(Competition[].class, contentAsString);
 		Competition[] exact = competitionRepository.findAll().toArray(new Competition[0]);
 		assertEquals(actual.length, exact.length);
@@ -264,23 +276,23 @@ public class CompetitionControllerTest {
 	public void checkGetAllUsersByPage () throws Exception {
 		createCompetition(40);
 		// try to access getCompetitionsByPage with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5))))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5))))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access getCompetitionsByPage with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
-			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access getCompetitionsByPage with admin user
-		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
-			                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                 ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
+		                                                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		List<Competition> list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(10, list.size());
 		// try to access getCompetitionsByPage with admin user with size 30
-		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
-			                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                       ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
+		                                                  .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(20, list.size());
 		// try to access to getCompetitionsByPage header with admin
@@ -289,9 +301,10 @@ public class CompetitionControllerTest {
 		int size = 0;
 		int countInAPage = size <= 10 ? 10 : 20;
 		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
-		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber" + "}", String.valueOf(page)).replace("{pageSize}", String.valueOf(size)))
-			                                                   .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
+		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                              ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber" + "}", String.valueOf(page))
+		                                                                                                                                          .replace("{pageSize}", String.valueOf(size)))
+		                                                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
 		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
 		assertEquals(response.getHeader("page"), String.valueOf(page));
 		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
@@ -312,18 +325,17 @@ public class CompetitionControllerTest {
 		stages.add(first_blood);
 		testingCompetition = competitionRepository.save(this.testingCompetition.setStages(stages));
 		//try access to getStagesFromCompetitionById with unauthorized user
-		mockMvc.perform(
-			MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID,
-				testingCompetition.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to getStagesFromCompetitionById with non admin user
-		mockMvc.perform(
-			MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to getStagesFromCompetitionById with admin user
-		String contentAsString = mockMvc.perform(
-			MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(stages.size(), listFromJson.size());
 		for(int i = 0; i < listFromJson.size(); i++) {
@@ -342,20 +354,20 @@ public class CompetitionControllerTest {
 		//try to access postStages with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(fullJson))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(fullJson))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try to access postStages with user
 		mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, userToken)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(fullJson))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(fullJson))).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try to access postStages with admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGES.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(fullJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(fullJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(4, listFromJson.size());
 		for(int i = 0; i < listFromJson.size(); i++) {
@@ -367,25 +379,22 @@ public class CompetitionControllerTest {
 	public void checkPostStage () throws Exception {
 		List<Stage> stages = competitionRepository.findById(testingCompetition.getId()).get().getStages();
 		//try access to postStage with unauthorized user
-		mockMvc.perform(
-			MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID,
-				testingCompetition.getId().toString()))
-				.content(stageJson)
-				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                      .content(stageJson)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to postStage with user role
-		mockMvc.perform(
-			MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID,
-				testingCompetition.getId().toString()))
-				.content(stageJson)
-				.header(Token.TOKEN_HEADER, userToken)
-				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                      .content(stageJson)
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to postStage with admin role
-		String contentAsString = mockMvc.perform(
-			MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID,
-				testingCompetition.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken)
-				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(stageJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(stageJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Stage stage = JacksonUtils.fromJson(Stage.class, contentAsString);
 		assertEquals(stages.size() + 1, competitionRepository.findById(testingCompetition.getId()).get().getStages().size());
 		testRequiredFields(stage, testingStage);
@@ -400,20 +409,20 @@ public class CompetitionControllerTest {
 		//try access to getPost with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                                                                         .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to getPost with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                         .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to getPost with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                    ControllerAPI.COMPETITION_CONTROLLER_GET_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                                                    .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		                                                                                                                  .replace(ControllerAPI.REQUEST_STAGE_ID, stageDB.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		testRequiredFields(Objects.requireNonNull(JacksonUtils.fromJson(Stage.class, contentAsString)), testingStage);
 	}
 
@@ -428,18 +437,20 @@ public class CompetitionControllerTest {
 		//try access to deleteStage with non unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                              .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                                                                               .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to deleteStage with non admin role
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                              .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString())).header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                               .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to deleteStage with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                       ControllerAPI.COMPETITION_CONTROLLER_DELETE_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                                                       .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		                                                                                                                        .replace(ControllerAPI.REQUEST_STAGE_ID, stageToRemove.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(testingCompetition.getStages().size() - 1, competitionRepository.findById(testingCompetition.getId()).get().getStages().size());
 		assertTrue(competitionRepository.findById(removeStage.getId()).isEmpty());
 	}
@@ -454,31 +465,35 @@ public class CompetitionControllerTest {
 		saveStage.setName("update name");
 		//try access to putStage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString())
+		                                                                                         .replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to putStage with non admin role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))
-			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString())
+		                                                                                         .replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to putStage with admin role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))
-			                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("update name"));
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString())
+		                                                                                         .replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(saveStage)))
+		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("update name"));
 	}
 
 	@Test
 	public void checkGetEnum () throws Exception {
 		//try access to getEnum from admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
 		List<Stage> listFromJson = JacksonUtils.getListFromJson(Stage[].class, contentAsString);
 		assertEquals(ClassifierIPSC.getcount(), listFromJson.size());
 	}
@@ -491,15 +506,15 @@ public class CompetitionControllerTest {
 		//try access to getCompetitors with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITORS.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to getCompetitors with non admin role
 		mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITORS.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to getCompetitors with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITORS.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Competitor> listFromJson = JacksonUtils.getListFromJson(Competitor[].class, contentAsString);
 		assertEquals(competitors.size(), listFromJson.size());
 	}
@@ -509,20 +524,24 @@ public class CompetitionControllerTest {
 		//try access to postCompetitor with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to postCompetitor with non admin role
 		mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                .header(Token.TOKEN_HEADER, userToken)
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to postCompetitor with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor))))
+		                                .andExpect(MockMvcResultMatchers.status().isCreated())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
 		assertEquals(testingCompetitor.getName(), competitor.getName());
 		assertEquals(testingCompetitor.getRfidCode(), competitor.getRfidCode());
@@ -540,19 +559,21 @@ public class CompetitionControllerTest {
 		//try access to deleteCompetitor with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                                                                                    .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to deleteCompetitor with non admin
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                                    .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to deleteCompetitor with admin
 		assertEquals(testingCompetition.getCompetitors().size(), 1);
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                              ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken))
-			.andExpect(MockMvcResultMatchers.status().isOk());
+		                                                                                                    .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size(), 0);
 	}
 
@@ -566,24 +587,28 @@ public class CompetitionControllerTest {
 		//try access to deleteCompetitor with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                                                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to deleteCompetitor with non admin
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
-			                .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                .header(Token.TOKEN_HEADER, userToken)
-			                .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                              .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to deleteCompetitor with admin
 		assertEquals(testingCompetition.getCompetitors().size(), 1);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())
-			                                                                    .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor)))).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		                                                                                                                       .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(testingCompetitor))))
+		                                .andExpect(MockMvcResultMatchers.status().isOk())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
 		assertEquals(testingCompetitor.getName(), competitor.getName());
 		assertEquals(testingCompetitor.getRfidCode(), competitor.getRfidCode());
@@ -600,19 +625,19 @@ public class CompetitionControllerTest {
 		//try access to getCompetitor with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetition.getCompetitors().get(0).getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                                                                              .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to getCompetitor with non admin role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetition.getCompetitors().get(0).getId().toString())
-			                                           .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                              .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to getCompetitor with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                                    ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetition.getCompetitors().get(0).getId().toString())
-			                                                                    .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
-			                         .andExpect(MockMvcResultMatchers.status().isOk())
-			                         .andReturn()
-			                         .getResponse()
-			                         .getContentAsString();
+		                                                                    ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITOR_ID,
+			                                                                    testingCompetition.getCompetitors().get(0).getId().toString())
+		                                                                                                                       .replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
 		assertEquals(testingCompetitor.getName(), competitor.getName());
 		assertEquals(testingCompetitor.getRfidCode(), competitor.getRfidCode());
@@ -630,9 +655,9 @@ public class CompetitionControllerTest {
 		competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));
 		String fullJson = JacksonUtils.getJson(setupCompetitionBean(competition));
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
-			                                         .header(Token.TOKEN_HEADER, adminToken)
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(fullJson)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(fullJson)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Competition competitionResponse = JacksonUtils.fromJson(Competition.class, contentAsString);
 		assertEquals(competitionResponse.getName(), competition.getName());
 		assertEquals(competitionResponse.getLocation(), competition.getLocation());
@@ -643,12 +668,8 @@ public class CompetitionControllerTest {
 	@Test
 	public void checkGetWeaponEnum () throws Exception {
 		//try access to getEnumWeapon from admin user
-		String contentAsString =
-			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER, adminToken))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<TypeWeapon> listFromJson = JacksonUtils.getListFromJson(TypeWeapon[].class, contentAsString);
 		assertEquals(WeaponTypeEnum.getCount(), listFromJson.size());
 	}
@@ -663,12 +684,43 @@ public class CompetitionControllerTest {
 		assertNotNull(json);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_LIST_COMPETITOR.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()))
-			                                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-			                                         .content(json)
-			                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(json)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Competitor[] competitors = JacksonUtils.fromJson(Competitor[].class, contentAsString);
 		assertEquals(20, competitors.length);
 		assertEquals(20, competitionRepository.findById(testingCompetition.getId()).get().getCompetitors().size());
+	}
+
+	@Test
+	public void checkAddedMarkForCompetitor () throws Exception {
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getCompetitors().size());
+		competition.getCompetitors().add(testingCompetitor);
+		competition = competitionRepository.save(competition);
+		assertEquals(1, competition.getCompetitors().size());
+		testingCompetitor = competition.getCompetitors().get(0);
+		assertNotNull(testingCompetitor);
+		CompetitorMark competitorMark = new CompetitorMark().setName("aqua").setActive(true).setType(TypeMarkEnum.RFID).setMark("1032132548798");
+		String json = JacksonUtils.getJson(competitorMark);
+		assertNotNull(json);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                                                 .replace(ControllerAPI.REQUEST_COMPETITOR_ID,
+			                                                                                                                                 testingCompetitor.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(json)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
+		assertNotNull(competitor);
+		assertEquals(competitorMark.getName(), competitor.getName());
+		if(competitorMark.getType().equals(TypeMarkEnum.RFID)) {
+			assertEquals(competitorMark.getMark(), competitor.getRfidCode());
+		} else {
+			assertEquals(competitorMark.getMark(), competitor.getNumber());
+		}
+		assertEquals(testingCompetitor.getId(), competitor.getId());
+		assertEquals(testingCompetitor.getPerson(), competitor.getPerson());
 	}
 
 	private List<Long> createPersons (int count) {

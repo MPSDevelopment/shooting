@@ -70,21 +70,17 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
 	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
+
+	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge";
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
-
 	public static final String COMPETITION_CONTROLLER_POST_LIST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitors";
-
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
 
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
-
 	public static final String DIVISION_CONTROLLER_GET_ALL = "/division/all";
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE = "/all/" + PAGE_NUMBER_REQUEST + "/" + PAGE_SIZE_REQUEST;
 	public static final String DIVISION_CONTROLLER_POST_DIVISION = "/division/create";
-
 	public static final String DIVISION_CONTROLLER_DELETE_DIVISION = "/division/" + REQUEST_DIVISION_ID;
-
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_ID = "/division/" + REQUEST_DIVISION_ID;
-
 	public static final String DIVISION_CONTROLLER_PUT_DIVISION = "/division/" + REQUEST_DIVISION_ID;
 }
