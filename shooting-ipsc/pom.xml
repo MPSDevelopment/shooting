@@ -271,7 +271,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<repository>mpsdevelopment/shooting-frontend</repository>
+							<repository>docker.mpsdevelopment.com</repository>
 							<tag>${docker.image.version}-latest</tag>
 							<dockerfile>Dockerfile</dockerfile>
 							<repository>docker.mpsdevelopment.com/shooting/${docker.image.name}</repository>
