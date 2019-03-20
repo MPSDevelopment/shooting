@@ -24,7 +24,7 @@ public class Division extends BaseDocument {
 	public static final String PARENT_FIELD = "parent";
 
 	@JsonProperty
-	@ApiModelProperty(value = "Parent name", required = true)
+	@ApiModelProperty(value = "Parent name", required = true, hidden=true)
 	@DBRef
 	private Division parent;
 
@@ -33,7 +33,7 @@ public class Division extends BaseDocument {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List of children")
+	@ApiModelProperty(value = "List of children", hidden=true)
 	@DBRef
 	private List<Division> children;
 
