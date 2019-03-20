@@ -41,6 +41,9 @@ public class DivisionService {
 			BeanUtils.copyProperties(divisionBean, division, Division.PARENT_FIELD);
 			Division divisionParent = divisionRepository.findById(parentId).get();
 			division.setParent(divisionParent);
+			if(division.getChildren() == null) {
+				division.setChildren(new ArrayList<>());
+			}
 			division = divisionRepository.save(division);
 			List<Division> children = divisionParent.getChildren();
 			if(children == null) {
@@ -49,9 +52,6 @@ public class DivisionService {
 			children.add(division);
 			divisionParent.setChildren(children);
 			divisionRepository.save(divisionParent);
-		}
-		if(division.getChildren() == null) {
-			division.setChildren(new ArrayList<>());
 		}
 		return division;
 	}
