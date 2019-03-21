@@ -112,14 +112,6 @@ public class UserControllerTest {
 
 	@Test
 	public void checkSignUp () throws Exception {
-
-		// try to access status with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-
-		// try to create user with non admin user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
-
 		// try to create empty user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER).header(Token.TOKEN_HEADER, adminToken))
 			.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -144,18 +136,7 @@ public class UserControllerTest {
 	public void checkUpdate () throws Exception {
 
 		user = userRepository.save(user);
-
-		// try to access update with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER.replace("{userId}", user.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		userJson = JacksonUtils.getJson(user.setName("testds"));
-
-		// try to access update with non admin user
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER.replace("{userId}", user.getId().toString()))
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(userJson)
-			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-
 		// try to access update with admin user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER.replace("{userId}", user.getId().toString()))
 			.header(Token.TOKEN_HEADER, adminToken)
@@ -169,23 +150,11 @@ public class UserControllerTest {
 
 	@Test
 	public void checkUpdatePassword () throws Exception {
-
-		// try to access update password with unauthorized user
-		user = userRepository.save(user);
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", user.getId().toString())))
-			.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-
-		// try to acess update password with non admin user
-		user = userRepository.save(user);
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", user.getId().toString()))
-			.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-
-		// try to access update password with admin user
 		User testUser = userRepository.save(user);
 		ChangePasswordBean changePasswordBean = new ChangePasswordBean();
 		changePasswordBean.setId(testUser.getId());
 		changePasswordBean.setNewPassword("54321");
-
+		// try to access update password with admin user
 		userJson = JacksonUtils.getFullJson(changePasswordBean);
 
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD.replace("{userId}", testUser.getId().toString()))

@@ -163,15 +163,20 @@ public class CompetitionControllerTest {
 	public void checkCreateCompetition () throws Exception {
 		CompetitionBean competitionBean = setupCompetitionBean(competition);
 		// try access to createCompetition() with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to createCompetition() with authorized non admin
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION).header(Token.TOKEN_HEADER, userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
-		// try access to createCompetition() with authorized admin but without content
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
-		                                      .header(Token.TOKEN_HEADER, adminToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to createCompetition() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to createCompetition() with judge
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
+		                                      .header(Token.TOKEN_HEADER, judgeToken)
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
+
 		// try access to createCompetition() with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, adminToken)

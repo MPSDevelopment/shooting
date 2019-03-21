@@ -102,11 +102,6 @@ public class PersonControllerTest {
 
 	@Test
 	public void checkCreatePerson () throws Exception {
-		// try access to createPerson() with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to createPerson() with authorized non admin
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).header(Token.TOKEN_HEADER, userToken))
-			.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createPerson() with authorized admin but without content
 		mockMvc.perform(
 			MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8))

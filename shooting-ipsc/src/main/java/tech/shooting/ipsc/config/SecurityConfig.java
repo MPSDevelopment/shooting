@@ -57,11 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .authorizeRequests()
 		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
 		    .permitAll()
-		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
-		    .permitAll()
-		    .and()
-		    .authorizeRequests()
-		    .anyRequest().hasAnyRole("ADMIN", "JUDGE");
+		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout").permitAll();
 	}
 
 	@Bean

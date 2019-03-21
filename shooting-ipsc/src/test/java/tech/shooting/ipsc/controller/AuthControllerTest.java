@@ -22,7 +22,6 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
-import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
@@ -104,13 +103,12 @@ public class AuthControllerTest {
 		// try to access status with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, token))
 			.andExpect(MockMvcResultMatchers.status().isForbidden());
-
-		// login with admin user
-		UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
-		token = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
-
+		// // login with admin user
+		// UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
+		// token = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
+		// 	.contentType(MediaType.APPLICATION_JSON)
+		// 	.content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
+		//
 
 	}
 }

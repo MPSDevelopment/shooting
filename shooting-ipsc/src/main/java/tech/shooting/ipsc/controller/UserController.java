@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
 	public ResponseEntity<User> signupJudge (HttpServletRequest request, @RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
@@ -66,7 +67,7 @@ public class UserController {
 
 	}
 
-	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
 	public ResponseEntity<User> updateUser (@PathVariable(value =ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
@@ -88,7 +89,7 @@ public class UserController {
 		return new ResponseEntity<>(dbUser, HttpStatus.OK);
 	}
 
-	//	@PreAuthorize(IpscConstants.ADMIN_ROLE)
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update user password", notes = "Update user password")
 	public ResponseEntity<User> updatePassword (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
@@ -101,6 +102,7 @@ public class UserController {
 		return new ResponseEntity<>(dbUser, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete User", notes = "Returns deleted user object")
 	public ResponseEntity<User> deleteUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId) throws BadRequestException {
@@ -111,6 +113,7 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get User", notes = "Returns user object")
 	public ResponseEntity<User> getUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId) throws BadRequestException {
@@ -119,18 +122,21 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all users", notes = "Returns all user objects")
 	public ResponseEntity<List<User>> getUsers () throws BadRequestException {
 		return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all users count", notes = "Returns all users count")
 	public ResponseEntity<Long> getCount () throws BadRequestException {
 		return new ResponseEntity<>(userRepository.count(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get users by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
@@ -140,6 +146,7 @@ public class UserController {
 		return PageAble.getPage(page, size, userRepository);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
 	public ResponseEntity<List<User>> getJudges () {

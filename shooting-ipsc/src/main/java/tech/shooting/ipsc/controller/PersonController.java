@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
@@ -31,6 +32,7 @@ public class PersonController {
 	@Autowired
 	private PersonRepository personRepository;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new person", notes = "Create new person")
 	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) throws BadRequestException {
@@ -50,6 +52,7 @@ public class PersonController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by id", notes = "Return person object")
 	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
@@ -57,6 +60,7 @@ public class PersonController {
 		return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")
 	public ResponseEntity<Person> updatePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
@@ -71,6 +75,7 @@ public class PersonController {
 		return new ResponseEntity<>(dbPerson, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
 	public ResponseEntity deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
@@ -79,12 +84,14 @@ public class PersonController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
 	public ResponseEntity<List<Person>> getUsers () throws BadRequestException {
 		return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get persons by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
@@ -94,6 +101,7 @@ public class PersonController {
 		return PageAble.getPage(page, size, personRepository);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons count", notes = "Returns all persons count")
 	public ResponseEntity<Long> getCount () throws BadRequestException {
