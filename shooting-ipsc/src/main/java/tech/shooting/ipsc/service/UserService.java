@@ -1,11 +1,9 @@
 package tech.shooting.ipsc.service;
 
-import com.auth0.jwt.exceptions.InvalidClaimException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.enums.RoleName;
@@ -15,17 +13,16 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
+import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.utils.UserLockUtils;
+
+import java.util.List;
 
 @Slf4j
 @Service
 public class UserService {
-	@Autowired
-	private TokenUtils tokenUtils;
-
 	@Autowired
 	private UserLockUtils userLockUtils;
 
@@ -34,21 +31,6 @@ public class UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	public User getByToken (String value) {
-		if(value != null && !value.isEmpty()) {
-			String login;
-			try {
-				login = tokenUtils.getLoginFromToken(value);
-				if(login != null && !login.isEmpty()) {
-					return userRepository.findByLogin(login);
-				}
-			} catch(InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
-				log.error("Cannot get a user by token %s because %s", value, e.getMessage());
-			}
-		}
-		return null;
-	}
 
 	public User checkUserInDB (String userLogin, String userPassword) {
 		String login = userLogin.trim().toLowerCase();
@@ -89,15 +71,19 @@ public class UserService {
 
 	public User updateJudge (Long userId, UserUpdateBean bean) throws BadRequestException {
 		checkPathIdAndCurrentId(userId, bean.getId());
-		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
+		User dbUser = getDbUserIfExist(bean.getId());
 		BeanUtils.copyProperties(bean, dbUser);
 		userRepository.save(dbUser);
 		return dbUser;
 	}
 
+	public User getDbUserIfExist (long id) throws BadRequestException {
+		return userRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", id)));
+	}
+
 	public User changePassword (Long userId, ChangePasswordBean bean) throws BadRequestException {
 		checkPathIdAndCurrentId(userId, bean.getId());
-		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
+		User dbUser = getDbUserIfExist(bean.getId());
 		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));
 		dbUser = userRepository.save(dbUser);
 		log.info("Password has been changed for the user %s", dbUser.getLogin());
@@ -112,7 +98,23 @@ public class UserService {
 
 	public void deleteUser (Long userId) throws BadRequestException {
 		log.info("Trying to delete user by id %s", userId);
-		User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", userId)));
+		User user = getDbUserIfExist(userId);
 		userRepository.delete(user);
+	}
+
+	public List<User> getAll () {
+		return userRepository.findAll();
+	}
+
+	public Long getCount () {
+		return userRepository.count();
+	}
+
+	public ResponseEntity<List<User>> getUsersByPage (Integer page, Integer size) {
+		return PageAble.getPage(page, size, userRepository);
+	}
+
+	public List<User> getListJudges () {
+		return userRepository.findByRoleName(RoleName.JUDGE);
 	}
 }
