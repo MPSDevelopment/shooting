@@ -2,6 +2,7 @@ package tech.shooting.ipsc.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,7 @@ public class DivisionRepositoryTest {
 	}
 
 	@Test
+	@Disabled
 	public void check() {
 		Division child1 = divisionRepository.save(new Division().setParent(root).setName("child1"));
 		List<Division> list = divisionRepository.findByDivisionId(root.getId());
