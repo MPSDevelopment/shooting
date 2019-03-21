@@ -13,6 +13,7 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,7 +34,7 @@ public class DivisionBean extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "List of children")
-	private List<Division> children;
+	private List<Division> children = new ArrayList<>();
 
 	@JsonProperty
 	@ApiModelProperty(value = "Status division")

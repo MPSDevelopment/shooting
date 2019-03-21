@@ -84,8 +84,6 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_ROOT = "/division/root";
 
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
-
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
-
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL = "/enum/level";
 }
