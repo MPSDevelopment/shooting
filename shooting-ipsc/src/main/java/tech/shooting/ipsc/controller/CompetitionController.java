@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
@@ -28,6 +29,7 @@ public class CompetitionController {
 	@Autowired
 	private CompetitionService competitionService;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new Competition", notes = "Creates new Competition")
 	public ResponseEntity<Competition> createCompetition (@RequestBody @Valid CompetitionBean competitionBean) throws BadRequestException {
@@ -173,6 +175,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL)
 	@ApiOperation(value = "Return level description for competitors", notes = "Return list LevelBean object")
 	public ResponseEntity<List<LevelBean>> getLevelEnum () {

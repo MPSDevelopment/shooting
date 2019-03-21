@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 
 	@Autowired
+	@Qualifier("ipscUserDetailsService")
 	private UserDetailsService userDetailsService;
 
 	@Autowired
@@ -57,12 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .permitAll()
 		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
 		    .permitAll()
-		    .antMatchers(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK)
-		    .hasAnyRole("ADMIN,JUDGE")
 		    .and()
 		    .authorizeRequests()
-		    .anyRequest()
-		    .hasRole("ADMIN");
+		    .anyRequest().hasAnyRole("ADMIN", "JUDGE");
 	}
 
 	@Bean
