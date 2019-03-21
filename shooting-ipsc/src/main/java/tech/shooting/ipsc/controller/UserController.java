@@ -2,7 +2,6 @@ package tech.shooting.ipsc.controller;
 
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
@@ -23,7 +21,6 @@ import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -45,72 +42,30 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
-	public ResponseEntity<User> signupJudge (HttpServletRequest request, @RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
-		User user = new User();
-		BeanUtils.copyProperties(signupUser, user);
-		signupJudge(request, user);
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
-	}
-
-	private void signupJudge (HttpServletRequest request, User user) {
-		log.info("Signing up judge with login %s", user.getLogin());
-
-		if(userRepository.findByLogin(user.getLogin()) != null) {
-			throw new ValidationException(User.LOGIN_FIELD, "User with login %s already exists", user.getLogin());
-		}
-
-		user.setRoleName(RoleName.JUDGE);
-		user.setActive(true);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-		userRepository.save(user);
-
+	public ResponseEntity<User> signupJudge (@RequestBody @Valid UserSignupBean signupUser) throws BadRequestException {
+		return new ResponseEntity<>(userService.addJudge(signupUser), HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
-	public ResponseEntity<User> updateUser (@PathVariable(value =ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
-
-		if(!userId.equals(bean.getId())) {
-			throw new BadRequestException(new ErrorMessage("Path userId %s does not match bean userId %s", userId, bean.getId()));
-		}
-
-		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
-
-		dbUser.setName(bean.getName());
-		dbUser.setAddress(bean.getAddress());
-		dbUser.setActive(bean.isActive());
-		dbUser.setLogin(bean.getLogin());
-		dbUser.setBirthDate(bean.getBirthDate());
-
-		userRepository.save(dbUser);
-
-		return new ResponseEntity<>(dbUser, HttpStatus.OK);
+	public ResponseEntity<User> updateJudge (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
+		return new ResponseEntity<>(userService.updateJudge(userId, bean), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update user password", notes = "Update user password")
-	public ResponseEntity<User> updatePassword (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
-
-		User dbUser = userRepository.findById(bean.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", bean.getId())));
-		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));
-		userRepository.save(dbUser);
-
-		log.info("Password has been changed for the user %s", dbUser.getLogin());
-		return new ResponseEntity<>(dbUser, HttpStatus.OK);
+	public ResponseEntity<User> updatePassword (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {
+		return new ResponseEntity<>(userService.changePassword(userId, bean), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete User", notes = "Returns deleted user object")
-	public ResponseEntity<User> deleteUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID, required = true) Long userId) throws BadRequestException {
-		log.info("Trying to delete user by id %s", userId);
-
-		User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", userId)));
-		userRepository.delete(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+	public ResponseEntity deleteUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId) throws BadRequestException {
+		userService.deleteUser(userId);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")

@@ -111,7 +111,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void checkSignUp () throws Exception {
+	public void checkSignupJudge () throws Exception {
 		// try to create empty user with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER).header(Token.TOKEN_HEADER, adminToken))
 			.andExpect(MockMvcResultMatchers.status().isBadRequest());
