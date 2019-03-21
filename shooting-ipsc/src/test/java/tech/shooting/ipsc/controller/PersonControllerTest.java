@@ -91,6 +91,12 @@ public class PersonControllerTest {
 
 	private String userToken;
 
+	private WeaponIpscCode handgun;
+
+	private WeaponIpscCode shotgun;
+
+	private WeaponIpscCode rifle;
+
 	@BeforeEach
 	public void before () {
 		personRepository.deleteAll();
@@ -105,6 +111,9 @@ public class PersonControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		handgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.HANDGUN).setCode("121212121212121");
+		shotgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121");
+		rifle = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121");
 	}
 
 	@Test
@@ -112,9 +121,9 @@ public class PersonControllerTest {
 		//prepare
 		PersonBean personBean = new PersonBean().setName("qwerty").setRank("noobs").setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
 		List<WeaponIpscCode> codes = new ArrayList<>();
-		codes.add(new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.HANDGUN).setCode("121212121212121"));
-		codes.add(new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121"));
-		codes.add(new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121"));
+		codes.add(handgun);
+		codes.add(shotgun);
+		codes.add(rifle);
 		personBean.setCodes(codes);
 		String json = JacksonUtils.getJson(personBean);
 		//try access to createPerson() with unauthorized user
@@ -185,8 +194,8 @@ public class PersonControllerTest {
 		UpdatePerson updatePerson = new UpdatePerson();
 		BeanUtils.copyProperties(testing, updatePerson);
 		List<WeaponIpscCode> codes = updatePerson.getCodes();
-		codes.add(new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121"));
-		codes.add(new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121"));
+		codes.add(shotgun);
+		codes.add(rifle);
 		updatePerson.setCodes(codes);
 		//try to access updatePerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(
@@ -324,9 +333,9 @@ public class PersonControllerTest {
 		                                                                                                                  .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(size)))
 		                                                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		MockHttpServletResponse response = mvcResult.getResponse();
-		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
-		assertEquals(response.getHeader("page"), String.valueOf(page));
-		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(countPages));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(page));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(sizeAllUser));
 	}
 
 	private void createUsers (int count) {

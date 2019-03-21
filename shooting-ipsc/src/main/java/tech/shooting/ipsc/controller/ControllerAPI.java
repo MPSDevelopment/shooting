@@ -4,6 +4,12 @@ public class ControllerAPI {
 
 	public static final String VERSION_1_0 = "/v1.0";
 
+	public static final String HEADER_VARIABLE_TOTAL = "total";
+
+	public static final String HEADER_VARIABLE_PAGE = "page";
+
+	public static final String HEADER_VARIABLE_PAGES = "pages";
+
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
 	public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
