@@ -176,7 +176,6 @@ public class CompetitionControllerTest {
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
-
 		// try access to createCompetition() with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, adminToken)
@@ -290,21 +289,25 @@ public class CompetitionControllerTest {
 		createCompetition(40);
 		// try to access getCompetitionsByPage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5))))
+		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                       .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5))))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access getCompetitionsByPage with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                           ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                       .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5))).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access getCompetitionsByPage with admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                                 ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize}", String.valueOf(5)))
+		                                                                 ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                                             .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5)))
 		                                                            .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		List<Competition> list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(10, list.size());
 		// try to access getCompetitionsByPage with admin user with size 30
 		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                       ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber}", String.valueOf(1)).replace("{pageSize" + "}", String.valueOf(30)))
+		                                                       ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                                   .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(30)))
 		                                                  .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		list = JacksonUtils.getListFromJson(Competition[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(20, list.size());
@@ -315,12 +318,12 @@ public class CompetitionControllerTest {
 		int countInAPage = size <= 10 ? 10 : 20;
 		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
 		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                                              ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace("{pageNumber" + "}", String.valueOf(page))
-		                                                                                                                                          .replace("{pageSize}", String.valueOf(size)))
+		                                                                              ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(page))
+		                                                                                                                                          .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(size)))
 		                                                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
-		assertEquals(response.getHeader("pages"), String.valueOf(countPages));
-		assertEquals(response.getHeader("page"), String.valueOf(page));
-		assertEquals(response.getHeader("total"), String.valueOf(sizeAllUser));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(countPages));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(page));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(sizeAllUser));
 	}
 
 	private void createCompetition (int count) {
@@ -721,7 +724,8 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
 		                                                                                                        .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to addedMarkForCompetitor with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
@@ -734,11 +738,9 @@ public class CompetitionControllerTest {
 		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
 		                                                                                                                                 .replace(ControllerAPI.REQUEST_COMPETITOR_ID,
 			                                                                                                                                 testingCompetitor.getId().toString()))
-		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken))
-		                                .andExpect(MockMvcResultMatchers.status().isOk())
-		                                .andReturn()
-		                                .getResponse()
-		                                .getContentAsString();
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(json)
+		                                                               .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
 		testing(competitor, competitorMark, testingCompetitor);
 		//try access to addedMarkForCompetitor with admin role
