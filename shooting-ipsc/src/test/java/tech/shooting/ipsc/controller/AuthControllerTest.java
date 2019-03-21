@@ -41,7 +41,6 @@ import tech.shooting.ipsc.utils.UserLockUtils;
 import java.util.Date;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
@@ -137,10 +136,8 @@ public class AuthControllerTest {
 		       .andExpect(MockMvcResultMatchers.status().isOk());
 		//try to login with admin user
 		UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
-		token = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                              .contentType(MediaType.APPLICATION_JSON)
-		                                              .content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
-		assertEquals(token, tokenAdmin);
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
+		                                      .contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
@@ -150,12 +147,6 @@ public class AuthControllerTest {
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to logout with a user header
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenUser))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
-		// try to logout with a judge header
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenJudge))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
-		// try to logout with a admin header
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenAdmin))
 		       .andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }

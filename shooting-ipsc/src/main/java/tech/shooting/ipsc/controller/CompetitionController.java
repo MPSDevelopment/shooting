@@ -188,7 +188,6 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.addedAllCompetitors(id, competitorsIdList), HttpStatus.CREATED);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
 	public ResponseEntity<Competitor> addedMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
