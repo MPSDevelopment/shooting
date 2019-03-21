@@ -12,7 +12,9 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -231,5 +233,13 @@ public class CompetitionService {
 
 	public List<LevelBean> getLevelEnum () {
 		return ClassificationBreaks.getList();
+	}
+
+	public List<Stage> getEnum () {
+		return ClassifierIPSC.getListStage();
+	}
+
+	public List<TypeWeapon> getListTypeWeapon () {
+		return WeaponTypeEnum.getList();
 	}
 }
