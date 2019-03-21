@@ -17,20 +17,17 @@ import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Stage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
-@ContextConfiguration(classes = { IpscMongoConfig.class })
+@ContextConfiguration(classes = {IpscMongoConfig.class})
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class CompetitionRepositoryTest {
-
 	@Autowired
 	private CompetitionRepository competitionRepository;
 
@@ -39,29 +36,26 @@ public class CompetitionRepositoryTest {
 	private Stage stage;
 
 	@BeforeEach
-	public void before() {
+	public void before () {
 		competitionRepository.deleteAll();
-
 		competition = new Competition().setName("Test name");
 		stage = new Stage().setName("Test stage");
 		competition.getStages().add(stage);
 		competition = competitionRepository.save(competition);
 		stage = competition.getStages().get(0);
-
 		checkStagesId(competitionRepository.findById(competition.getId()).get());
 	}
 
 	@Test
-	public void checkFindByName() {
+	public void checkFindByName () {
 		String name = "Alladin";
 		String location = "Cave777";
-
 		competitionRepository.save(new Competition().setName(name).setLocation(location));
 		assertNotNull(competitionRepository.findByName(name));
 	}
 
 	@Test
-	public void checkGetByStageId() {
+	public void checkGetByStageId () {
 		var dbCompetition = competitionRepository.getByStageId(stage.getId());
 		assertNotNull(dbCompetition);
 		assertEquals(competition, dbCompetition);
@@ -70,19 +64,18 @@ public class CompetitionRepositoryTest {
 	}
 
 	@Test
-	public void checkGetStageById() {
+	public void checkGetStageById () {
 		// var dbStage = competitionRepository.findByStageId(stage.getId());
 		var dbStage = competitionRepository.getStageById(stage.getId());
 		assertNotNull(dbStage);
 		log.info("Got a stage %s", dbStage);
 		assertEquals(stage.getId(), dbStage.getId());
-
 		dbStage = competitionRepository.getStageById(1L);
 		assertNull(dbStage);
 	}
 
 	@Test
-	public void checkPushStage() {
+	public void checkPushStage () {
 		assertEquals(1, competitionRepository.findById(competition.getId()).get().getStages().size());
 		// put another stage and check stage count and ids
 		competitionRepository.pushStageToCompetition(competition.getId(), new Stage().setName("Test stage 2"));
@@ -91,19 +84,18 @@ public class CompetitionRepositoryTest {
 	}
 
 	@Test
-	public void checkPullStage() {
+	public void checkPullStage () {
 		assertEquals(1, competitionRepository.findById(competition.getId()).get().getStages().size());
 		// pull stage and check stage count
 		competitionRepository.pullStageFromCompetition(competition.getId(), stage);
 		assertEquals(0, competitionRepository.findById(competition.getId()).get().getStages().size());
 	}
 
-	private void checkStagesId(Competition competition) {
+	private void checkStagesId (Competition competition) {
 		log.info("Competition id %s ", competition.getId());
 		competition.getStages().forEach(item -> {
 			log.info("Stage id %s and name %s", item.getId(), item.getName());
 			assertNotNull(item.getId());
 		});
 	}
-
 }

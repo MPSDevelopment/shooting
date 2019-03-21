@@ -5,10 +5,11 @@ package tech.shooting.ipsc.enums;
  * <p>
  * Открытый класс, Стандартный класс, Открытый класс с ручным перезаряжанием, Стандартный класс с ручным перезаряжанием
  */
-
 public enum RifleEnum {
-
-	OPEN("Open"), STANDARD("Standard"), OPEN_MANUAL("Open manual"), STANDARD_MANUAL("Standard manual");
+	OPEN("Open"),
+	STANDARD("Standard"),
+	OPEN_MANUAL("Open manual"),
+	STANDARD_MANUAL("Standard manual");
 
 	private String value;
 

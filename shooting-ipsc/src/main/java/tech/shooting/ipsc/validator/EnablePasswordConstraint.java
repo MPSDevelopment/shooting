@@ -9,7 +9,6 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PasswordValidator.class)
 @Documented
 public @interface EnablePasswordConstraint {
-
 	String message () default ValidationConstants.USER_OLD_PASSWORD_MATCH_MESSAGE;
 
 	Class<?>[] groups () default {};

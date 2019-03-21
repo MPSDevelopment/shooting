@@ -21,8 +21,8 @@ import javax.validation.constraints.Size;
 @Accessors(chain = true)
 @EnablePasswordConstraint
 public class ChangePasswordBean {
-
 	public static final String NEW_PASSWORD = "newPassword";
+
 	private static final String USER_ID = "id";
 
 	@JsonProperty(USER_ID)
@@ -34,5 +34,4 @@ public class ChangePasswordBean {
 	@NotBlank(message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	private String newPassword;
-
 }

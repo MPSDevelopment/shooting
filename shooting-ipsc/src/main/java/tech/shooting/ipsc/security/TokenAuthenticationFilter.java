@@ -20,15 +20,12 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
 	@Autowired(required = true)
 	private TokenUtils tokenUtils;
-
 	//	@Autowired
 	//	private IpscSettings settings;
 
 	public TokenAuthenticationFilter () {
-
 		setAuthenticationSuccessHandler((request, response, authentication) -> {
 			log.debug("GO SuccessHandler !!!");
 			// SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -89,7 +86,6 @@ public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFil
 			log.debug("RETURN AUTH EMPTY= %s ", authenticationEmpty);
 			return authenticationEmpty;
 		}
-
 		TokenAuthentication tokenAuthentication = new TokenAuthentication(tokenUtils, token);
 		log.debug("Start creating AUTH ");
 		Authentication authentication = getAuthenticationManager().authenticate(tokenAuthentication);
@@ -106,5 +102,4 @@ public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFil
 			log.error("ERROR in Filter Chain -  %s ", e);
 		}
 	}
-
 }

@@ -17,7 +17,6 @@ import java.util.List;
 
 @Data
 public class UpdatePerson {
-
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@ApiModelProperty(value = "Person's id")
@@ -28,6 +27,7 @@ public class UpdatePerson {
 	@NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)
 	@Size(min = 3, max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)
 	private String name;
+
 	@JsonProperty
 	@ApiModelProperty(value = "Person's birthday")
 	private OffsetDateTime birthDate;

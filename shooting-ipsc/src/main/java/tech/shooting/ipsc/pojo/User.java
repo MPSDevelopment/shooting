@@ -18,7 +18,6 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 public class User extends BaseDocument {
-
 	public static final String LOGIN_FIELD = "login";
 
 	public static final String PASSWORD_FIELD = "password";

@@ -17,7 +17,6 @@ import javax.validation.constraints.Size;
 @Accessors(chain = true)
 @EnablePasswordConstraint
 public class UserLogin {
-
 	@JsonProperty
 	@ApiModelProperty(value = "User's login", required = true)
 	@NotBlank(message = ValidationConstants.USER_LOGIN_REQUIRED_MESSAGE)
@@ -30,5 +29,4 @@ public class UserLogin {
 	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
 	@ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
 	private String password;
-
 }

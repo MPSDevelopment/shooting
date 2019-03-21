@@ -4,8 +4,10 @@ package tech.shooting.ipsc.enums;
  * Класс ружье
  */
 public enum ShotgunEnum {
-
-	OPEN("Open"), MODIFIED("Modified"), STANDARD("Standard"), PUMP("Pump");
+	OPEN("Open"),
+	MODIFIED("Modified"),
+	STANDARD("Standard"),
+	PUMP("Pump");
 
 	private String value;
 

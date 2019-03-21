@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,28 +13,27 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class ValidationBean {
-
 	@JsonProperty
 	private String fieldName;
-	
+
 	@JsonProperty
 	private String name;
-	
+
 	@JsonProperty
 	private String message;
-	
+
 	@JsonProperty
 	private String pattern;
-	
+
 	@JsonProperty
 	private Integer min;
-	
+
 	@JsonProperty
 	private Integer max;
-	
+
 	@JsonProperty
 	private Integer size;
-	
+
 	@JsonProperty
 	private Long value;
 }

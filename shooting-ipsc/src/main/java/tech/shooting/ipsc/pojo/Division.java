@@ -21,13 +21,12 @@ import java.util.List;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class Division extends BaseDocument {
-
 	public static final String NAME_WITH_PARENT = "name and parent id";
 
 	public static final String PARENT_FIELD = "parent";
 
 	@JsonProperty
-	@ApiModelProperty(value = "Parent name", required = true, hidden=true)
+	@ApiModelProperty(value = "Parent name", required = true, hidden = true)
 	@DBRef
 	@JsonSerialize(using = BaseDocumentIdSerializer.class)
 	private Division parent;
@@ -37,7 +36,7 @@ public class Division extends BaseDocument {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List of children", hidden=true)
+	@ApiModelProperty(value = "List of children", hidden = true)
 	@DBRef
 	private List<Division> children = new ArrayList<>();
 

@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -23,10 +22,12 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class UserSignupBean {
-
 	public static final String LOGIN_FIELD = "login";
+
 	public static final String PASSWORD_FIELD = "password";
+
 	public static final String NAME_FIELD = "name";
+
 	public static final String BIRTHDATE_FIELD = "birthDate";
 
 	@JsonProperty
@@ -49,5 +50,4 @@ public class UserSignupBean {
 	@JsonProperty
 	@ApiModelProperty(value = "User's birthday")
 	private OffsetDateTime birthDate;
-
 }

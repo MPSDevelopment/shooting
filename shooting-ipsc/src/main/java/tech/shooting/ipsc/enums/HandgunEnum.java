@@ -4,8 +4,12 @@ package tech.shooting.ipsc.enums;
  * Класс пистолет
  */
 public enum HandgunEnum {
-
-	OPEN("Open"), STANDARD("Standard"), CLASSIC("Classic"), PRODUCTION("Production"), REVOLVER("Revolver"), MODIFIED("Modified");
+	OPEN("Open"),
+	STANDARD("Standard"),
+	CLASSIC("Classic"),
+	PRODUCTION("Production"),
+	REVOLVER("Revolver"),
+	MODIFIED("Modified");
 
 	private String value;
 

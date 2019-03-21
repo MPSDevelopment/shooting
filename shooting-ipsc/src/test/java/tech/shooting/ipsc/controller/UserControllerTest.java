@@ -257,10 +257,8 @@ public class UserControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID, "1")))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access delete user with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID, "1")).header(
-			Token.TOKEN_HEADER,
-			userToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID, "1"))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access delete user with judge user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID, "1"))
 		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -270,7 +268,8 @@ public class UserControllerTest {
 		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		user = userRepository.save(user);
 		// try to delete user with admin user
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID, user.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_DELETE_USER.replace(ControllerAPI.REQUEST_USER_ID,
+			user.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertFalse(userRepository.existsById(user.getId()));
 	}
@@ -309,12 +308,14 @@ public class UserControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER,
 			String.valueOf(1))
 		                                                                                                                                                      .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5)))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access getAllUsersByPage with judge user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER,
 			String.valueOf(1))
 		                                                                                                                                                      .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5)))
-		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access getAllUsersByPage with admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                 ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))

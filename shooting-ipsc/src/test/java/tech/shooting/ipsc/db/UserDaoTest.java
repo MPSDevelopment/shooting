@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserDaoTest {
-
 	@Autowired
 	private UserDao userDao;
 
@@ -39,17 +38,13 @@ public class UserDaoTest {
 	@Test
 	public void checkUpsert () {
 		long count = userRepository.count();
-
 		String login = RandomStringUtils.randomAlphabetic(16);
 		userDao.upsert(new User().setLogin(login));
 		assertEquals(count + 1, userRepository.count());
-
 		userDao.upsert(new User().setLogin(login));
 		assertEquals(count + 1, userRepository.count());
-
 		userRepository.findAll().forEach(user -> {
 			log.info("User is %s", JacksonUtils.getFullJson(user));
 		});
-
 	}
 }

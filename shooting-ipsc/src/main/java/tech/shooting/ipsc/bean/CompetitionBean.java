@@ -26,8 +26,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class CompetitionBean {
-
-
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)
@@ -79,5 +77,4 @@ public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's list", notes = "Competition list competitors")
 	private List<Competitor> competitors;
-
 }

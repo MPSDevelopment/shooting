@@ -1,8 +1,13 @@
 package tech.shooting.ipsc.enums;
 
 public enum TournamentTypeEnum {
-
-	HANDGUN_SHOTGUN_RIFLE("Handgun, shotgun and rifle"), HANDGUN_RIFLE("Handgun and rifle"), HANDGUN_SHOTGUN("Handgun and shotgun"), SHOTGUN_RIFLE("Shotgun and rifle"), RIFLE("Rifle"), SHOTGUN("Shotgun"), HANDGUN("Handgun");
+	HANDGUN_SHOTGUN_RIFLE("Handgun, shotgun and rifle"),
+	HANDGUN_RIFLE("Handgun and rifle"),
+	HANDGUN_SHOTGUN("Handgun and shotgun"),
+	SHOTGUN_RIFLE("Shotgun and rifle"),
+	RIFLE("Rifle"),
+	SHOTGUN("Shotgun"),
+	HANDGUN("Handgun");
 
 	private String value;
 

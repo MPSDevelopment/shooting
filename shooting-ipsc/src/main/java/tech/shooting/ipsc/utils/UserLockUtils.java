@@ -14,8 +14,8 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class UserLockUtils {
-
 	private final static int MAX_ATTEMPT_NUMBER = 7;
+
 	private Map<String, Integer> unsuccessfulAttemptLoginMap = new HashMap<>();
 
 	@Autowired
@@ -30,7 +30,6 @@ public class UserLockUtils {
 	public void unsuccessfulLogin (String login) {
 		Optional.ofNullable(login).orElseThrow(() -> new IllegalArgumentException("Login must not be null"));
 		Integer attemptNumber = unsuccessfulAttemptLoginMap.get(login);
-
 		if(attemptNumber == null) {
 			attemptNumber = 1;
 			unsuccessfulAttemptLoginMap.put(login, attemptNumber);

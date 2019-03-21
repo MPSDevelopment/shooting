@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class TokenUtilsTest {
-
 	@Autowired
 	private TokenUtils tokenUtils = new TokenUtils();
 
@@ -35,7 +34,6 @@ public class TokenUtilsTest {
 	private String userLogin = "12345678909";
 
 	public TokenUtilsTest () {
-
 	}
 
 	@Test
@@ -51,7 +49,6 @@ public class TokenUtilsTest {
 			log.info("Token is %s", token);
 			assertEquals(userLogin, tokenUtils.getLoginFromToken(token + "sdsd"));
 		});
-
 	}
 
 	@Test
@@ -62,9 +59,7 @@ public class TokenUtilsTest {
 		assertEquals(tokenType, tokenUtils.getTypeFromToken(token));
 		assertEquals(role, tokenUtils.getRoleFromToken(token));
 		assertEquals(userId, tokenUtils.getIdFromToken(token));
-
 		token = tokenUtils.createToken(userId, tokenTypeLostPassword, userLogin, role, DateUtils.getNextMidnight(new Date()), null);
-
 		assertEquals(userLogin, tokenUtils.getLoginFromToken(token).toString());
 		assertEquals(tokenTypeLostPassword, tokenUtils.getTypeFromToken(token));
 	}
@@ -84,7 +79,6 @@ public class TokenUtilsTest {
 		String token = tokenUtils.createToken(userId, tokenType, userLogin, role, DateUtils.removeTimePart(new Date()), null);
 		log.info("Token is %s", token);
 		assertFalse(tokenUtils.verifyToken(token));
-
 		token = tokenUtils.createToken(userId, tokenType, userLogin, role, new Date(), null);
 		assertTrue(tokenUtils.verifyToken(token));
 	}

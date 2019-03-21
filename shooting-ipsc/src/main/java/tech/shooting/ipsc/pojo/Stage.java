@@ -20,7 +20,6 @@ import javax.validation.constraints.Size;
 @Document(collection = "stage")
 @TypeAlias("stage")
 public class Stage extends BaseDocument {
-
 	@JsonProperty
 	@ApiModelProperty(value = "Name or № of stage", required = true)
 	@NotNull(message = ValidationConstants.STAGE_NAME_MESSAGE)
@@ -76,6 +75,4 @@ public class Stage extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Name of fire position")
 	private String location;
-
-
 }

@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Address {
-
 	public String street;
 
 	public String city;

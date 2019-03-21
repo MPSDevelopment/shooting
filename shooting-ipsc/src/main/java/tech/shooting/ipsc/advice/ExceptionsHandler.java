@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 @Slf4j
 public class ExceptionsHandler {
-
 	@ExceptionHandler({InvalidClaimException.class, TokenExpiredException.class, SignatureVerificationException.class})
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public @ResponseBody

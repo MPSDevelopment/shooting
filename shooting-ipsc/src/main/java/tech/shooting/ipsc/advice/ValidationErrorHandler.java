@@ -21,7 +21,6 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class ValidationErrorHandler {
-
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Map<String, String> processValidationError (MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -69,7 +68,6 @@ public class ValidationErrorHandler {
 		return e.getErrorMessage();
 	}
 
-
 	@ExceptionHandler(NotAcceptableException.class)
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	public ErrorMessage processNotAcceptableException (NotAcceptableException e) {
@@ -103,5 +101,4 @@ public class ValidationErrorHandler {
 	private ValidationException resolveValidationError (FieldError fieldError) {
 		return new ValidationException(fieldError.getField(), fieldError.getDefaultMessage());
 	}
-
 }

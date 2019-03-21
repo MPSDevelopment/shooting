@@ -14,6 +14,5 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
 		if(!resp.isCommitted()) {
 			resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 		}
-
 	}
 }

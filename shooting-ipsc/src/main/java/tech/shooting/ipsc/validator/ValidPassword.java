@@ -7,13 +7,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ValidPassword {
-
 	String message () default "{Incorrect password}";
 
 	Class<?>[] groups () default {};
 
 	Class<? extends Payload>[] payload () default {};
-
 	// String[] patterns();
-
 }

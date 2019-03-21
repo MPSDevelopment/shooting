@@ -20,14 +20,16 @@ import java.util.List;
 @TypeAlias("competition")
 @Accessors(chain = true)
 public class Competition extends BaseDocument {
-
 	public static final String NAME_FIELD = "name";
-	
+
 	public static final String STAGES_FIELD = "stages";
+
 	public static final String COMPETITOR_FIELD = "competitors";
-	
+
 	public static final String MATCH_DIRECTOR_FIELD = "matchDirector";
+
 	public static final String RANGE_MASTER_FIELD = "rangeMaster";
+
 	public static final String STATS_OFFICER_FIELD = "statsOfficer";
 
 	@JsonProperty

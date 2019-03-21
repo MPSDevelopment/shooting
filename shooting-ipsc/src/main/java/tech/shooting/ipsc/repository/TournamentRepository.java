@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TournamentRepository extends MongoRepository<Tournament, Long> {
-
 	public List<Tournament> findByName (String value);
-
 }

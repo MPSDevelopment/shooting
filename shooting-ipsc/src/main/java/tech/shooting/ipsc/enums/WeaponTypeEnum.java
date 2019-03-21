@@ -1,6 +1,5 @@
 package tech.shooting.ipsc.enums;
 
-import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.pojo.TypeWeapon;
 
 import java.util.ArrayList;
@@ -20,6 +19,18 @@ public enum WeaponTypeEnum {
 		this.value = value;
 	}
 
+	public static List<TypeWeapon> getList () {
+		List<TypeWeapon> result = new ArrayList<>();
+		for(WeaponTypeEnum value : WeaponTypeEnum.values()) {
+			result.add(new TypeWeapon().setId(value.id).setName(value.value));
+		}
+		return result;
+	}
+
+	public static Integer getCount () {
+		return WeaponTypeEnum.values().length;
+	}
+
 	@Override
 	public String toString () {
 		return String.valueOf(value);
@@ -31,16 +42,5 @@ public enum WeaponTypeEnum {
 
 	public int getId () {
 		return id;
-	}
-
-	public static List<TypeWeapon> getList () {
-		List<TypeWeapon> result = new ArrayList<>();
-		for(WeaponTypeEnum value : WeaponTypeEnum.values()) {
-			result.add(new TypeWeapon().setId(value.id).setName(value.value));
-		}
-		return result;
-	}
-	public static Integer getCount(){
-		return WeaponTypeEnum.values().length;
 	}
 }

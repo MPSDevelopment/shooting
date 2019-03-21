@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.utils;
 
 public class TestViews {
-
 	public static class Public {
 	}
 

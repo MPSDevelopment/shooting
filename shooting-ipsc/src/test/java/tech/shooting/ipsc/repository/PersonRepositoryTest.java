@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class PersonRepositoryTest {
-
 	@Autowired
 	private PersonRepository personRepository;
 

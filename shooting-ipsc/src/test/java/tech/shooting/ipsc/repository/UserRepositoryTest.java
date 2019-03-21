@@ -29,10 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class UserRepositoryTest {
-
 	@Autowired
 	private UserRepository userRepository;
-
 
 	@BeforeEach
 	public void before () {
@@ -42,7 +40,6 @@ public class UserRepositoryTest {
 	@Test
 	public void checkFindByFields () {
 		userRepository.save(new User().setName("Суворов Антон"));
-
 		assertNotNull(userRepository.findByName("Суворов Антон"));
 	}
 
@@ -61,5 +58,4 @@ public class UserRepositoryTest {
 		assertEquals(userRepository.findByRoleName(RoleName.JUDGE).size(), 25);
 		assertEquals(userRepository.findByRoleName(RoleName.USER).size(), 24);
 	}
-
 }

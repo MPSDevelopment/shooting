@@ -26,13 +26,11 @@ import tech.shooting.ipsc.enums.WeaponTypeEnum;
  *
  * @author Viking
  */
-
 @Document(collection = "exercise")
 @TypeAlias("exercise")
 @Data
 @Accessors(chain = true)
 public class Exercise extends BaseDocument {
-
 	@JsonProperty
 	@ApiModelProperty(value = "Exercise's name", required = true)
 	@Indexed(unique = true)
@@ -41,5 +39,4 @@ public class Exercise extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Exercise's weapon type", required = true)
 	private WeaponTypeEnum weaponType;
-
 }

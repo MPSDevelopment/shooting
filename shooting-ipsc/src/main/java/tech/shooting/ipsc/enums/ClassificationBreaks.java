@@ -25,15 +25,6 @@ public enum ClassificationBreaks {
 		this.max = max;
 	}
 
-	@Override
-	public String toString () {
-		return String.valueOf(value);
-	}
-
-	public String getValue () {
-		return value;
-	}
-
 	public static List<LevelBean> getList () {
 		List<LevelBean> result = new ArrayList<>();
 		for(ClassificationBreaks value : ClassificationBreaks.values()) {
@@ -44,5 +35,14 @@ public enum ClassificationBreaks {
 
 	public static Integer getCount () {
 		return ClassificationBreaks.values().length;
+	}
+
+	@Override
+	public String toString () {
+		return String.valueOf(value);
+	}
+
+	public String getValue () {
+		return value;
 	}
 }

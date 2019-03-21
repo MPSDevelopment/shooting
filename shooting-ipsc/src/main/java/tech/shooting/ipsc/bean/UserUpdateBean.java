@@ -14,7 +14,6 @@ import java.time.OffsetDateTime;
 
 @Data
 public class UserUpdateBean {
-
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@ApiModelProperty(value = "User's id")
@@ -42,6 +41,4 @@ public class UserUpdateBean {
 	@JsonProperty
 	@ApiModelProperty(value = "User's active ")
 	private boolean active;
-
-
 }

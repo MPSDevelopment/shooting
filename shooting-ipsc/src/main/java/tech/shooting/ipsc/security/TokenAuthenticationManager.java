@@ -20,7 +20,6 @@ import java.util.HashSet;
 @Component
 @Slf4j
 public class TokenAuthenticationManager implements AuthenticationManager {
-
 	@Autowired
 	private TokenUtils tokenUtils;
 
@@ -52,23 +51,17 @@ public class TokenAuthenticationManager implements AuthenticationManager {
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
-
 		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-
 		try {
-
 			String grantedRole = "ROLE_UNKNOWN";
-
 			if(token != null) {
 				grantedRole = "ROLE_".concat(tokenUtils.getRoleFromToken(token).name());
 			}
-
 			authorities.add(new SimpleGrantedAuthority(grantedRole));
 		} catch(InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
 			log.error(" AUTH ERROR %s", e);
 			return null;
 		}
-
 		User newUser = null;
 		boolean isAuthenticated = false;
 		if(token != null) {
@@ -78,7 +71,6 @@ public class TokenAuthenticationManager implements AuthenticationManager {
 			newUser = new User("unknown", "empty", false, false, false, false, authorities);
 		}
 		TokenAuthentication fullTokenAuthentication = new TokenAuthentication(tokenUtils, authentication.getToken(), authorities, isAuthenticated, newUser);
-
 		return fullTokenAuthentication;
 	}
 }

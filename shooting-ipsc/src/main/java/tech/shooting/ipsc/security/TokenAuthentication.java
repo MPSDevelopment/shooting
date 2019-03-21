@@ -15,14 +15,18 @@ import java.util.Collection;
 @Slf4j
 @ToString
 public class TokenAuthentication implements Authentication {
-
 	private static final long serialVersionUID = -8128975069190073254L;
 
 	private String token;
+
 	private Collection<? extends GrantedAuthority> authorities;
+
 	private boolean isAuthenticated;
+
 	private UserDetails principal;
+
 	private Object details;
+
 	private TokenUtils tokenUtils;
 
 	public TokenAuthentication (TokenUtils tokenUtils, String token) {
@@ -116,5 +120,4 @@ public class TokenAuthentication implements Authentication {
 			return null;
 		}
 	}
-
 }

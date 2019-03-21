@@ -15,7 +15,6 @@ import java.lang.reflect.Field;
 @Component
 @Slf4j
 public class PasswordValidator implements ConstraintValidator<EnablePasswordConstraint, Object> {
-
 	@Autowired
 	private UserRepository userRepository;
 
@@ -34,10 +33,8 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 			String idField = null;
 			String loginField = null;
 			String password, userId, login;
-
 			final Class<?> clazz = o.getClass();
 			final Field[] fields = clazz.getDeclaredFields();
-
 			for(Field field : fields) {
 				if(field.isAnnotationPresent(UserIdForValidPassword.class)) {
 					idField = field.getName();
@@ -47,15 +44,12 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 					passwordField = field.getName();
 				}
 				if(passwordField != null && (idField != null || loginField != null)) {
-
 					User user = null;
-
 					password = BeanUtils.getProperty(o, passwordField).trim();
 					if(idField != null) {
 						userId = BeanUtils.getProperty(o, idField);
 						log.info("UserId for password to check is %s", userId);
 						user = userRepository.findById(Long.valueOf(userId)).orElse(null);
-
 						if(user == null) {
 							log.info("UserId with id %s does not exists", userId);
 							context.disableDefaultConstraintViolation();
@@ -66,7 +60,6 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 						login = loginField == null ? null : BeanUtils.getProperty(o, loginField);
 						log.info("Login for password to check is %s", login);
 						user = userRepository.findByLogin(login.trim().toLowerCase());
-
 						if(user == null) {
 							log.info("UserId with login %s does not exists", login);
 							context.disableDefaultConstraintViolation();
@@ -74,7 +67,6 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 							return false;
 						}
 					}
-
 					if(passwordEncoder.matches(password, user.getPassword())) {
 						log.info("Password is correct");
 						return true;
@@ -83,7 +75,6 @@ public class PasswordValidator implements ConstraintValidator<EnablePasswordCons
 					context.disableDefaultConstraintViolation();
 					context.buildConstraintViolationWithTemplate("Password is not correct").addPropertyNode(passwordField).addConstraintViolation();
 					return false;
-
 				}
 			}
 		} catch(final Exception e) {

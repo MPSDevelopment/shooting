@@ -11,7 +11,6 @@ import java.util.List;
 
 @Configuration
 public class IpscMongoConfig extends MongoConfig {
-
 	@Bean
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder();
@@ -22,12 +21,9 @@ public class IpscMongoConfig extends MongoConfig {
 		List<Converter<?, ?>> converterList = super.customConversions();
 		return converterList;
 	}
-
 	//
 	//    @Bean
 	//    public com.fasterxml.jackson.databind.Module registerGeoJsonModule() {
 	//        return new GeoJsonModule();
 	//    }
-
-
 }

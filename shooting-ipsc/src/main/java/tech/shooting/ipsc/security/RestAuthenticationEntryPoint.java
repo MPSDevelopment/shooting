@@ -16,7 +16,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
 	// this class just returns HTTP code 401 (Unauthorized) when authentication
 	// fails, overriding default Spring’s redirecting.
 

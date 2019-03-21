@@ -16,7 +16,6 @@ import java.time.ZoneOffset;
 
 @Component
 public class UserDao {
-
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
@@ -27,10 +26,8 @@ public class UserDao {
 	private UserRepository userRepository;
 
 	public User createIfNotExists (User user) {
-
 		// encode password
 		user.setPassword(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : null);
-
 		User dbUser = userRepository.findByLogin(user.getLogin());
 		if(dbUser == null) {
 			dbUser = userRepository.save(user);
@@ -41,15 +38,13 @@ public class UserDao {
 	public void upsert (User user) {
 		// encode password
 		user.setPassword(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : null);
-
 		var query = Query.query(Criteria.where(User.LOGIN_FIELD).is(user.getLogin()));
 		var update = new Update().set(User.UPDATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
-			.setOnInsert(User.ID_FIELD, IdGenerator.nextId())
-			.setOnInsert(User.CREATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
-			.setOnInsert(User.PASSWORD_FIELD, user.getPassword());
+		                         .setOnInsert(User.ID_FIELD, IdGenerator.nextId())
+		                         .setOnInsert(User.CREATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC))
+		                         .setOnInsert(User.PASSWORD_FIELD, user.getPassword());
 		mongoTemplate.upsert(query, update, User.class);
 	}
-
 	//	public void createIfNotExists(User user) {
 	//		var query = Query.query(Criteria.where(User.LOGIN_FIELD).is(user.getLogin()));
 	//		var update = new Update().set(User.UPDATED_DATE_FIELD, OffsetDateTime.now(ZoneOffset.UTC));

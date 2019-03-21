@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class DatabaseCreator {
-
 	public static final String ADMIN_PASSWORD = "test";
 
 	public static final String JUDGE_PASSWORD = "judgeTest";
@@ -18,7 +17,6 @@ public class DatabaseCreator {
 
 	public static final String JUDGE_LOGIN = "judge";
 
-
 	@Autowired
 	private DatabaseCreator databaseCreator;
 
@@ -26,7 +24,6 @@ public class DatabaseCreator {
 	private UserDao userDao;
 
 	public DatabaseCreator () {
-
 	}
 
 	@PostConstruct

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 public class TypeWeapon {
 	@JsonProperty
 	private int id;
+
 	@JsonProperty
 	private String name;
 }

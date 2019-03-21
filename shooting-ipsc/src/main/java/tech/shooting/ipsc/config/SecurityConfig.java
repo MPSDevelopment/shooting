@@ -27,7 +27,6 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
 	private static final String[] AUTH_WHITELIST = {
 		// -- swagger ui
 		"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error"
@@ -56,7 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.antMatcher("/api/**")
 		    .authorizeRequests()
 		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
-		    .permitAll().antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout").permitAll().and().authorizeRequests().anyRequest().hasAnyRole("ADMIN", "JUDGE");
+		    .permitAll()
+		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
+		    .permitAll()
+		    .and()
+		    .authorizeRequests()
+		    .anyRequest()
+		    .hasAnyRole("ADMIN", "JUDGE");
 	}
 
 	@Bean
@@ -73,5 +78,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public RequestContextListener requestContextListener () {
 		return new RequestContextListener();
 	}
-
 }

@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class User {
-
 	@JsonProperty("n")
 	@JsonView(TestViews.Public.class)
 	private String name;

@@ -12,7 +12,6 @@ import tech.shooting.ipsc.enums.ClassificationBreaks;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-
 @Document(collection = "person")
 @TypeAlias("person")
 @Data
@@ -47,7 +46,7 @@ public class Person extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
 	private Division division;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Person's IPSC codes")
 	private List<WeaponIpscCode> codes;

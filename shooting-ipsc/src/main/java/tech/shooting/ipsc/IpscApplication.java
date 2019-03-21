@@ -18,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableScheduling
 @Slf4j
 public class IpscApplication {
-
 	public static void main (String[] args) {
 		log.info("Starting IpscApplication");
 		SpringApplication application = new SpringApplication(IpscApplication.class);

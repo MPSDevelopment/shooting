@@ -14,5 +14,4 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ConfigurationProperties(prefix = "ipsc")
 public class IpscSettings {
-
 }

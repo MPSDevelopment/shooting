@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, Long> {
-
 	public User findByLogin (String value);
 
 	public List<User> findByRoleName (RoleName roleName);
@@ -19,5 +18,4 @@ public interface UserRepository extends MongoRepository<User, Long> {
 	public User findByLoginAndActive (String login, boolean active);
 
 	public void deleteByRoleName (RoleName roleName);
-
 }

@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @NoArgsConstructor
 public class IpscUserDetailsService implements UserDetailsService {
-
 	@Autowired
 	private UserRepository userRepository;
 
@@ -36,11 +35,9 @@ public class IpscUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername (String login) throws UsernameNotFoundException {
 		log.info("TEST REQUEST - %s", login);
 		tech.shooting.ipsc.pojo.User domainUser = userRepository.findByLogin(login);
-
 		if(domainUser == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;

@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.validator;
 
 public class ValidationConstants {
-
 	public static final String PHONE_PATTERN = "^[\\+]?([0-9]{1,2})?[-\\s]?[(]?[0-9]{3}[)]?[-\\s]?[0-9]{3}[-\\s]?[0-9]{2,4}[-\\s]?[0-9]{0,2}$";
 
 	public static final String USER_ID_MESSAGE = "Required";

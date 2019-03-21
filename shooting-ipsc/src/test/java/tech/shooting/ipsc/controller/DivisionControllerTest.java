@@ -182,8 +182,8 @@ class DivisionControllerTest {
 		// try to access getAllDivisionsByPage with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                           ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
-		                                                                                                 .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5)))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                                                                                 .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5))).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access getAllDivisionsByPage with admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                 ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
@@ -194,8 +194,9 @@ class DivisionControllerTest {
 		// try to access getAllDivisionsByPage with admin user with size 30
 		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                       ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
-		                                                                                                             .replace("{pageSize" + "}", String.valueOf(30)))
-		                                                  .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		                                                                                                             .replace("{pageSize" + "}", String.valueOf(30))).header(Token.TOKEN_HEADER, adminToken))
+		                   .andExpect(MockMvcResultMatchers.status().isOk())
+		                   .andReturn();
 		String contentAsString = mvcResult.getResponse().getContentAsString();
 		list = JacksonUtils.getListFromJson(DivisionBean[].class, contentAsString);
 		assertEquals(20, list.size());

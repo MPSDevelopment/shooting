@@ -9,7 +9,6 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = MatchValidator.class)
 @Documented
 public @interface EnableMatchConstraint {
-
 	String message () default "";
 
 	Class<?>[] groups () default {};

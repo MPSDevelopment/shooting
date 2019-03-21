@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 @Slf4j
 public class CachingConfig extends CachingConfigurerSupport {
-
 	public static final String OPERATIONS_CACHE = "operations";
-
 	//	@Bean
 	//	public CacheManager cacheManager() {
 	//		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
@@ -39,7 +37,6 @@ public class CachingConfig extends CachingConfigurerSupport {
 	@Bean
 	public CacheErrorHandler errorHandler () {
 		return new CacheErrorHandler() {
-
 			@Override
 			public void handleCacheGetError (RuntimeException exception, Cache cache, Object key) {
 				log.debug(cache.getName(), exception);

@@ -27,13 +27,11 @@ import java.util.List;
  *
  * @author Viking
  */
-
 @Document(collection = "tournament")
 @TypeAlias("tournament")
 @Data
 @Accessors(chain = true)
 public class Tournament extends BaseDocument {
-
 	public static final String NAME_FIELD = "name";
 
 	@JsonProperty

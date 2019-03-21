@@ -13,8 +13,6 @@ import tech.shooting.commons.utils.HeaderUtils;
 import tech.shooting.ipsc.pojo.User;
 
 public class PageAble {
-
-
 	public static ResponseEntity getPage (int page, int size, MongoRepository<? extends BaseDocument, Long> personRepository) {
 		page = Math.max(1, page);
 		page--;
@@ -23,12 +21,9 @@ public class PageAble {
 	}
 
 	public static Page<? extends BaseDocument> countPage (Integer page, Integer size, MongoRepository<? extends BaseDocument, Long> personRepository) {
-
 		size = Math.min(Math.max(10, size), 20);
-
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, User.ID_FIELD);
 		return personRepository.findAll(pageable);
-
 	}
 
 	public static MultiValueMap<String, String> setHeaders (Integer page, Long totalElements, Integer totalPages) {

@@ -42,7 +42,8 @@
 //
 //	@Bean
 //	public Docket apiVersion10(ServletContext servletContext) {
-//		return new Docket(DocumentationType.SWAGGER_2).groupName("Version 1.0").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build()).select()
+//		return new Docket(DocumentationType.SWAGGER_2).groupName("Version 1.0").pathMapping(SLASH_API).apiInfo(new ApiInfoBuilder().title("IPSC Service REST API").description("All the methods of the REST API").build())
+//		.select()
 //				.apis(RequestHandlerSelectors.basePackage("tech.shooting.ipsc")).paths(PathSelectors.regex(INCLUDE_VERSION_REGEXP)).build();
 //	}
 //

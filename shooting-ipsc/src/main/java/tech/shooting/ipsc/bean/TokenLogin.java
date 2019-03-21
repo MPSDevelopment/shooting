@@ -11,10 +11,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenLogin {
-
 	public static final String TOKEN_FIELD = "token";
 
 	@JsonProperty(value = TOKEN_FIELD)
 	private String token;
-
 }
