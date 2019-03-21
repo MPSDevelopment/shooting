@@ -84,6 +84,9 @@ public class AuthControllerTest {
 
 	private String tokenAdmin;
 
+	@Autowired
+	private UserDao userDao;
+
 	@BeforeEach
 	public void before () {
 		userRepository.deleteByRoleName(RoleName.USER);
@@ -134,10 +137,6 @@ public class AuthControllerTest {
 		//try to login to the system from other server, check cors
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token))
 		       .andExpect(MockMvcResultMatchers.status().isOk());
-		//try to login with admin user
-		UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                      .contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
@@ -148,5 +147,15 @@ public class AuthControllerTest {
 		// try to logout with a user header
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenUser))
 		       .andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void checkAdminLogin () throws Exception {
+		//try to login with admin user
+		userDao.createIfNotExists(new User().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
+		UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
+		                                      .contentType(MediaType.APPLICATION_JSON)
+		                                      .content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
