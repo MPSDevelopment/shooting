@@ -2,7 +2,6 @@ package tech.shooting.ipsc.controller;
 
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,14 +10,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.commons.exception.ValidationException;
-import tech.shooting.commons.pojo.ErrorMessage;
-import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
-import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.service.PersonService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,86 +22,53 @@ import java.util.List;
 @RequestMapping(ControllerAPI.PERSON_CONTROLLER)
 @Api(value = ControllerAPI.PERSON_CONTROLLER)
 @Slf4j
+@PreAuthorize("hasRole('ADMIN')")
 public class PersonController {
-
 	@Autowired
-	private PersonRepository personRepository;
+	private PersonService personService;
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new person", notes = "Create new person")
-	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) throws BadRequestException {
-		Person person = new Person();
-		BeanUtils.copyProperties(personBean, person);
-		createPerson(person);
-		return new ResponseEntity<>(person, HttpStatus.CREATED);
+	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) {
+		return new ResponseEntity<>(personService.createPerson(personBean), HttpStatus.CREATED);
 	}
 
-	private void createPerson (Person person) {
-		if(personRepository.findByNameAndBirthDate(person.getName(), person.getBirthDate()) != null) {
-			throw new ValidationException(Person.NAME_AND_BIRTHDAY, "Person with name %s and date of birthday %s is already exist", person.getName(), person.getBirthDate());
-		}
-		person.setActive(true);
-		person.setQualifierRank(ClassificationBreaks.D);
-		personRepository.save(person);
-
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by id", notes = "Return person object")
-	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
-		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
-		return new ResponseEntity<>(person, HttpStatus.OK);
+	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+		return new ResponseEntity<>(personService.getPersonByIdIfExist(personId), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")
-	public ResponseEntity<Person> updatePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
-
-		if(!personId.equals(personBean.getId())) {
-			throw new BadRequestException(new ErrorMessage("Path personId %s does not match bean personId %s", personId, personBean.getId()));
-		}
-
-		Person dbPerson = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
-		BeanUtils.copyProperties(personBean, dbPerson);
-		personRepository.save(dbPerson);
-		return new ResponseEntity<>(dbPerson, HttpStatus.OK);
+	public ResponseEntity<Person> updatePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
+		return new ResponseEntity<>(personService.updatePerson(personId, personBean), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
-	public ResponseEntity deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID, required = true) Long personId) throws BadRequestException {
-		Person person = personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
-		personRepository.delete(person);
-		return new ResponseEntity(HttpStatus.OK);
+	public ResponseEntity<Void> deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+		personService.removePersonIfExist(personId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
-	public ResponseEntity<List<Person>> getUsers () throws BadRequestException {
-		return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<Person>> getUsers () {
+		return new ResponseEntity<>(personService.getAllPerson(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get persons by page")
-	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class), @ResponseHeader(name = "total", description = "Total " +
-		"records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
-	public ResponseEntity<List<Person>> getPersons (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page,
-	                                                @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) throws BadRequestException {
-		return PageAble.getPage(page, size, personRepository);
+	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = "page", description = "Current page number", response = String.class),
+		@ResponseHeader(name = "total", description = "Total " + "records in database", response = String.class), @ResponseHeader(name = "pages", description = "Total pages in database", response = String.class)})})
+	public ResponseEntity<List<Person>> getPersons (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
+		return personService.getPersonByPage(page, size);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons count", notes = "Returns all persons count")
-	public ResponseEntity<Long> getCount () throws BadRequestException {
-		return new ResponseEntity<>(personRepository.count(), HttpStatus.OK);
+	public ResponseEntity<Long> getCount () {
+		return new ResponseEntity<>(personService.getCount(), HttpStatus.OK);
 	}
-
-
 }

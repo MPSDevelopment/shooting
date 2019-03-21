@@ -46,6 +46,7 @@ import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
+import tech.shooting.ipsc.service.PersonService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-	TokenAuthenticationFilter.class, IpscUserDetailsService.class, PersonController.class, ValidationErrorHandler.class})
+	TokenAuthenticationFilter.class, IpscUserDetailsService.class, PersonController.class, PersonService.class, ValidationErrorHandler.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
