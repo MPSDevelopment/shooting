@@ -16,10 +16,10 @@ import lombok.experimental.Accessors;
 public class ValidationBean {
 
 	@JsonProperty
-	private String name;
+	private String fieldName;
 	
 	@JsonProperty
-	private String fieldName;
+	private String name;
 	
 	@JsonProperty
 	private String message;
