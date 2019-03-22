@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.GraphLookupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import tech.shooting.ipsc.pojo.Division;
 
 import java.util.List;
@@ -27,5 +29,11 @@ class CustomDivisionRepositoryImpl implements CustomDivisionRepository {
 		Aggregation aggregation = Aggregation.newAggregation(Aggregation.match(Criteria.where("parent22").exists(false)), graphLookupOperation);
 		List<Division> results = mongoTemplate.aggregate(aggregation, "division", Division.class).getMappedResults();
 		return results;
+	}
+
+	@Override
+	public Division updateDivisionName (Long id, String name) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(id)), new Update().set("name", name), Division.class);
+		return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), Division.class);
 	}
 }

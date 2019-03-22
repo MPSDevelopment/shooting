@@ -279,4 +279,12 @@ class DivisionControllerTest {
 			log.info("Division %s has been created", division.getName());
 		}
 	}
+
+	@Test
+	public void ceee () throws Exception {
+		DivisionBean division = divisionService.createDivision(divisionBean, null);
+		divisionService.createDivision(new DivisionBean().setName("fdfdfd").setParent(division.getId()), division.getId());
+		DivisionBean qyqy = divisionService.checkkkk(division.getId(), "qyqy");
+		assertEquals(qyqy.getChildren().size(), 1);
+	}
 }

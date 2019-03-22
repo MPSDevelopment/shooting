@@ -5,5 +5,7 @@ import tech.shooting.ipsc.pojo.Division;
 import java.util.List;
 
 public interface CustomDivisionRepository {
-	public List<Division> findByDivisionId (Long id);
+	List<Division> findByDivisionId (Long id);
+
+	Division updateDivisionName (Long id, String name);
 }

@@ -104,4 +104,8 @@ public class DivisionService {
 	public DivisionBean getRoot () {
 		return convertDivisionToFront(divisionRepository.findOneByParent(null));
 	}
+
+	public DivisionBean checkkkk (Long id, String name) {
+		return convertDivisionToFront(divisionRepository.updateDivisionName(id, name));
+	}
 }
