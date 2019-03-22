@@ -27,6 +27,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.bean.UpdateDivisionBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -264,10 +265,9 @@ class DivisionControllerTest {
 		assertEquals(1, divisionService.getCount());
 		division.setName("updateeee");
 		//try access to getDivisionById() with admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(
-			ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION)
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(division)))
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new UpdateDivisionBean().setId(division.getId()).setName(division.getName()))))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
 	}
@@ -281,10 +281,10 @@ class DivisionControllerTest {
 	}
 
 	@Test
-	public void ceee () throws Exception {
+	public void checkUpdateCustom () throws Exception {
 		DivisionBean division = divisionService.createDivision(divisionBean, null);
 		divisionService.createDivision(new DivisionBean().setName("fdfdfd").setParent(division.getId()), division.getId());
-		DivisionBean qyqy = divisionService.checkkkk(division.getId(), "qyqy");
+		DivisionBean qyqy = divisionService.updateDivision(division.getId(), "qyqy");
 		assertEquals(qyqy.getChildren().size(), 1);
 	}
 }

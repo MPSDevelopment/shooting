@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.bean.UpdateDivisionBean;
 import tech.shooting.ipsc.service.DivisionService;
 
 import javax.validation.Valid;
@@ -61,8 +62,8 @@ public class DivisionController {
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update division", notes = "Return update division object")
-	public ResponseEntity<DivisionBean> updateDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id, @RequestBody @Valid DivisionBean divisionBean) throws BadRequestException {
-		return new ResponseEntity<>(divisionService.checkkkk(divisionBean.getId(), divisionBean.getName()), HttpStatus.OK);
+	public ResponseEntity<DivisionBean> updateDivision (@RequestBody @Valid UpdateDivisionBean updateDivisionBean) {
+		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_ROOT)

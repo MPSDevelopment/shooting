@@ -83,6 +83,9 @@ public class DivisionService {
 		} else {
 			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
 		}
+		if(divisionBean.getChildren().contains(null)) {
+			divisionBean.setChildren(new ArrayList<>());
+		}
 		return divisionBean;
 	}
 
@@ -94,18 +97,11 @@ public class DivisionService {
 		return convertDivisionToFront(checkDivision(id));
 	}
 
-	public DivisionBean updateDivision (DivisionBean divisionBean, Long id) throws BadRequestException {
-		Division division = checkDivision(id);
-		BeanUtils.copyProperties(divisionBean, division);
-		division = divisionRepository.save(division);
-		return convertDivisionToFront(division);
-	}
-
 	public DivisionBean getRoot () {
 		return convertDivisionToFront(divisionRepository.findOneByParent(null));
 	}
 
-	public DivisionBean checkkkk (Long id, String name) {
+	public DivisionBean updateDivision (Long id, String name) {
 		return convertDivisionToFront(divisionRepository.updateDivisionName(id, name));
 	}
 }
