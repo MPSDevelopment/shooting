@@ -13,6 +13,7 @@ import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -83,8 +84,8 @@ public class DivisionService {
 		} else {
 			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
 		}
-		if(divisionBean.getChildren().contains(null)) {
-			divisionBean.setChildren(new ArrayList<>());
+		if(divisionBean.getChildren().contains(null) || divisionBean.getChildren().size() == 0) {
+			divisionBean.setChildren(Collections.EMPTY_LIST);
 		}
 		return divisionBean;
 	}
