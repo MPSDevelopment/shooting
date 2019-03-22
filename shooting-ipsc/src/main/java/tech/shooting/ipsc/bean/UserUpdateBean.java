@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -13,7 +14,7 @@ import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
 @Data
-public class UserUpdateBean {
+public class UserUpdateBean  implements ValiationExportable{
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@ApiModelProperty(value = "User's id")

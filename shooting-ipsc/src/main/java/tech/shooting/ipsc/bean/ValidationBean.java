@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 
 @Data
 @Accessors(chain = true)
 @ApiModel(value = "validation data")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class ValidationBean {
+public class ValidationBean implements ValiationExportable {
 	@JsonProperty
 	private String fieldName;
 

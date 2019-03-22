@@ -183,4 +183,9 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
 
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL = "/enum/level";
+	
+	
+	public static final String VALIDATION_CONTROLLER = "/api/validation";
+	
+	public static final String VALIDATION_CONTROLLER_GET_VALIDATIONS = "/";
 }

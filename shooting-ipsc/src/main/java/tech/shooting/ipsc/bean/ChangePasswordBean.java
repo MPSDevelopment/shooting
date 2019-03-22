@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.validator.EnablePasswordConstraint;
 import tech.shooting.ipsc.validator.UserIdForValidPassword;
 import tech.shooting.ipsc.validator.ValidationConstants;
@@ -20,7 +21,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EnablePasswordConstraint
-public class ChangePasswordBean {
+public class ChangePasswordBean implements ValiationExportable {
 	public static final String NEW_PASSWORD = "newPassword";
 
 	private static final String USER_ID = "id";

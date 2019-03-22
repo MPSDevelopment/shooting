@@ -83,6 +83,13 @@
 			<version>${jwt.version}</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>${reflections.version}</version>
+		</dependency>
+
 		<!-- Dependency for TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -235,31 +242,31 @@
 			</activation>
 			<build>
 				<plugins>
-<!-- 					<plugin> -->
-<!-- 						<groupId>org.jsonschema2pojo</groupId> -->
-<!-- 						<artifactId>jsonschema2pojo-maven-plugin</artifactId> -->
-<!-- 						<version>1.0.0</version> -->
-<!-- 						<configuration> -->
-<!-- 							<sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory> -->
+					<!-- <plugin> -->
+					<!-- <groupId>org.jsonschema2pojo</groupId> -->
+					<!-- <artifactId>jsonschema2pojo-maven-plugin</artifactId> -->
+					<!-- <version>1.0.0</version> -->
+					<!-- <configuration> -->
+					<!-- <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory> -->
 
-<!-- 							package name for the models -->
-<!-- 							<targetPackage>com.rizvan.json</targetPackage> -->
+					<!-- package name for the models -->
+					<!-- <targetPackage>com.rizvan.json</targetPackage> -->
 
-<!-- 							output folder folder for the generated code -->
-<!-- 							<outputDirectory>target/generated-sources/jsonpojo</outputDirectory> -->
-<!-- 							<annotationStyle>jackson2</annotationStyle> -->
+					<!-- output folder folder for the generated code -->
+					<!-- <outputDirectory>target/generated-sources/jsonpojo</outputDirectory> -->
+					<!-- <annotationStyle>jackson2</annotationStyle> -->
 
-<!-- 							this is required for validating json -->
-<!-- 							<includeJsr303Annotations>true</includeJsr303Annotations> -->
-<!-- 						</configuration> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<goals> -->
-<!-- 									<goal>generate</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 					</plugin> -->
+					<!-- this is required for validating json -->
+					<!-- <includeJsr303Annotations>true</includeJsr303Annotations> -->
+					<!-- </configuration> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <goals> -->
+					<!-- <goal>generate</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>${assembly.plugin.version}</version>

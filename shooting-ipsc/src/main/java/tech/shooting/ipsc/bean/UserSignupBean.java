@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotEmpty;
@@ -21,7 +22,7 @@ import java.time.OffsetDateTime;
 @ApiModel(value = "User signup")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class UserSignupBean {
+public class UserSignupBean  implements ValiationExportable{
 	public static final String LOGIN_FIELD = "login";
 
 	public static final String PASSWORD_FIELD = "password";

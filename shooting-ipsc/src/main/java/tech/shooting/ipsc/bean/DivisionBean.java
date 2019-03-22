@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.validator.ValidationConstants;
@@ -21,7 +22,7 @@ import java.util.List;
 @ApiModel(value = "Division create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class DivisionBean extends BaseDocument {
+public class DivisionBean extends BaseDocument  implements ValiationExportable{
 	@JsonProperty
 	@ApiModelProperty(value = "Parent name", required = true)
 	private Long parent;

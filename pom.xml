@@ -76,6 +76,7 @@
 		<nimbus.jose.jwt.version>7.0</nimbus.jose.jwt.version>
 		<jwt.version>3.4.0</jwt.version>
 		<greenmail.version>1.5.8</greenmail.version>
+		<reflections.version>0.9.11</reflections.version>
 		
 		<jaxb.version>2.3.1</jaxb.version>
 		<snakeyaml.version>1.23</snakeyaml.version>

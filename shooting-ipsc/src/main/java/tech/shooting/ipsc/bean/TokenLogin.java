@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenLogin {
+public class TokenLogin implements ValiationExportable {
 	public static final String TOKEN_FIELD = "token";
 
 	@JsonProperty(value = TOKEN_FIELD)

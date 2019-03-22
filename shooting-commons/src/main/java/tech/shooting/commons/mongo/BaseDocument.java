@@ -16,20 +16,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 
 @Getter
 @Setter
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode()
-public class BaseDocument implements ShootingDocument {
+public class BaseDocument implements ShootingDocument, ValiationExportable {
 
 	public static final String ID_FIELD = "id";
-	
+
 	public static final String ID_FIELD_GS = "id";
-	
+
 	public static final String CREATED_DATE_FIELD = "createdDate";
-	
+
 	public static final String UPDATED_DATE_FIELD = "updatedDate";
 
 	@Id

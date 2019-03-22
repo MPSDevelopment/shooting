@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.validator.EnablePasswordConstraint;
 import tech.shooting.ipsc.validator.LoginForValidPassword;
 import tech.shooting.ipsc.validator.ValidPassword;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 @Data
 @Accessors(chain = true)
 @EnablePasswordConstraint
-public class UserLogin {
+public class UserLogin  implements ValiationExportable{
 	@JsonProperty
 	@ApiModelProperty(value = "User's login", required = true)
 	@NotBlank(message = ValidationConstants.USER_LOGIN_REQUIRED_MESSAGE)

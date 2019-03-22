@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 

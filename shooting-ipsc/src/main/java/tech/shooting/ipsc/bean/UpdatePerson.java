@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
@@ -16,7 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
-public class UpdatePerson {
+public class UpdatePerson  implements ValiationExportable{
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@ApiModelProperty(value = "Person's id")

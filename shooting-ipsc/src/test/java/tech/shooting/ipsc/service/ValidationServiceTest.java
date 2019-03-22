@@ -6,9 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.utils.JacksonUtils;
@@ -17,12 +21,12 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.bean.UserUpdateBean;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ValidationService.class})
-@EnableAutoConfiguration
-@SpringBootTest
+@EnableAutoConfiguration(exclude = { WebMvcAutoConfiguration.class })
+@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration")
+@SpringBootTest(classes = { ValidationService.class })
 @Slf4j
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
@@ -31,12 +35,19 @@ public class ValidationServiceTest {
 	private ValidationService validationService;
 
 	@Test
-	public void checkConstraints () {
+	public void checkConstraintsForClass() {
 		var result = validationService.getConstraints(UserLogin.class);
 		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
 		assertEquals(3, validationService.getConstraints(UserLogin.class).size());
 		assertEquals(3, validationService.getConstraints(ChangePasswordBean.class).size());
 		assertEquals(4, validationService.getConstraints(CompetitionBean.class).size());
 		assertEquals(3, validationService.getConstraints(UserUpdateBean.class).size());
+	}
+
+	@Test
+	public void checkConstraintsForPackage() {
+		var result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo");
+		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
+		assertTrue(result.size() > 8);
 	}
 }
