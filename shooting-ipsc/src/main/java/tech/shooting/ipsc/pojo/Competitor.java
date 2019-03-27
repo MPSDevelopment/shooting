@@ -7,9 +7,9 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.commons.mongo.BaseDocument;
+
+import java.util.List;
 
 @Document(collection = "competitor")
 @TypeAlias("competitor")
@@ -36,4 +36,8 @@ public class Competitor extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor")
 	private Person person;
+
+	@JsonProperty
+	@ApiModelProperty(value = "List of score")
+	private List<Score> result;
 }

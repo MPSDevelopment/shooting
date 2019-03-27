@@ -38,4 +38,16 @@ public class ValidationConstants {
 	public static final String STAGE_STAGE_MAXIMUM_POINTS_MESSAGE = "Stage maximum points must be min 5";
 
 	public static final String DIVISION_NAME_MESSAGE = "Division name must be min 3 characters";
+
+	public static final String STAGE_ID = "Stage id is required, must be not null";
+
+	public static final String STAGE_ID_POSITIVE = "Stage id is required, must be positive";
+
+	public static final String PERSON_ID = "Person id is required, must be not null";
+
+	public static final String PERSON_ID_POSITIVE = "Person id is required, must be positive";
+
+	public static final String SCORE_MESSAGE = "Must be not null";
+
+	public static final String TIME_MESSAGE = "Must be not null and positive";
 }

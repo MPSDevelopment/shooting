@@ -140,16 +140,6 @@ public class AuthControllerTest {
 	}
 
 	@Test
-	public void checkPostLogOut () throws Exception {
-		// try to logout with a bad header
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token + "test"))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try to logout with a user header
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenUser))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
-	}
-
-	@Test
 	public void checkAdminLogin () throws Exception {
 		//try to login with admin user
 		userDao.createIfNotExists(new User().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
@@ -157,5 +147,15 @@ public class AuthControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
 		                                      .contentType(MediaType.APPLICATION_JSON)
 		                                      .content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void checkPostLogOut () throws Exception {
+		// try to logout with a bad header
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token + "test"))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to logout with a user header
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenUser))
+		       .andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
