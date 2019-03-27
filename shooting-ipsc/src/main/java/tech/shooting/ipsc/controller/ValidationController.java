@@ -33,7 +33,7 @@ public class ValidationController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VALIDATION_CONTROLLER_GET_VALIDATIONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all validations", notes = "Returns all validation objects")
-	public ResponseEntity<Map<String, List<ValidationBean>>> getUsers () {
+	public ResponseEntity<Map<String, Map<String, ValidationBean>>> getUsers () {
 		return new ResponseEntity<>(validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo"), HttpStatus.OK);
 	}
 }

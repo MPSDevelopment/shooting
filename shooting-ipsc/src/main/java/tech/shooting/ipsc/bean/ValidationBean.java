@@ -16,16 +16,13 @@ import tech.shooting.commons.annotation.ValiationExportable;
 public class ValidationBean implements ValiationExportable {
 
 	@JsonProperty
-	private String fieldName;
-
-	@JsonProperty
-	private String name;
-
-	@JsonProperty
-	private String message;
-
-	@JsonProperty
 	private String pattern;
+	
+	@JsonProperty
+	private Integer minLength;
+
+	@JsonProperty
+	private Integer maxLength;
 
 	@JsonProperty
 	private Long min;
@@ -34,18 +31,6 @@ public class ValidationBean implements ValiationExportable {
 	private Long max;
 
 	@JsonProperty
-	private Integer size;
-
-	@JsonProperty
-	private Long value;
-
-	@JsonProperty
-	private Boolean notBlank;
-
-	@JsonProperty
-	private Boolean notNull;
-	
-	@JsonProperty
-	private Boolean notEmpty;
+	private Boolean required;
 
 }

@@ -25,8 +25,8 @@ public class ValidationService {
 
 	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-	public Map<String, List<ValidationBean>> getConstraintsForPackage(String... packageNames) {
-		var result = new HashMap<String, List<ValidationBean>>();
+	public Map<String, Map<String, ValidationBean>> getConstraintsForPackage(String... packageNames) {
+		var result = new HashMap<String, Map<String, ValidationBean>>();
 		Reflections reflections = new Reflections(packageNames);
 		var classes = reflections.getSubTypesOf(ValiationExportable.class);
 		classes.forEach(clazz -> {
@@ -39,12 +39,13 @@ public class ValidationService {
 		return result;
 	}
 
-	public List<ValidationBean> getConstraints(Class clazz) {
+	public Map<String, ValidationBean> getConstraints(Class clazz) {
 		BeanDescriptor descriptor = validator.getConstraintsForClass(clazz);
 		log.info("Descriptor is %s", descriptor);
-		var validationBeans = new ArrayList<ValidationBean>();
+		var validationBeans = new HashMap<String, ValidationBean>();
 		descriptor.getConstrainedProperties().forEach(property -> {
 			String propertyName = property.getPropertyName();
+			String propertyType = property.getElementClass().getSimpleName();
 
 			var validationBean = new ValidationBean();
 
@@ -54,31 +55,31 @@ public class ValidationService {
 				log.info("Constraint is %s %s", annotation.getClass().getSimpleName(), constraint.getAnnotation());
 				// log.info("Annotation is %s", JacksonUtils.getFullJson(constraint.getAnnotation()));
 				if (annotation instanceof javax.validation.constraints.Size) {
-					validationBean.setFieldName(propertyName).setMin((long) ((javax.validation.constraints.Size) annotation).min()).setMax((long) ((javax.validation.constraints.Size) annotation).max());
+					validationBean.setMinLength(((javax.validation.constraints.Size) annotation).min()).setMaxLength(((javax.validation.constraints.Size) annotation).max());
 				} else if (annotation instanceof javax.validation.constraints.Max) {
-					validationBean.setFieldName(propertyName).setMax(((javax.validation.constraints.Max) annotation).value());
+					validationBean.setMax(((javax.validation.constraints.Max) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.Min) {
-					validationBean.setFieldName(propertyName).setMin(((javax.validation.constraints.Min) annotation).value());
+					validationBean.setMin(((javax.validation.constraints.Min) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.NotBlank) {
-					validationBean.setFieldName(propertyName).setNotBlank(true);
+					validationBean.setRequired(true);
 				} else if (annotation instanceof javax.validation.constraints.NotEmpty) {
-					validationBean.setFieldName(propertyName).setNotEmpty(true);
+					validationBean.setRequired(true);
 				} else if (annotation instanceof javax.validation.constraints.Null) {
-					validationBean.setFieldName(propertyName).setNotNull(false);
+					validationBean.setRequired(false);
 				} else if (annotation instanceof javax.validation.constraints.NotNull) {
-					validationBean.setFieldName(propertyName).setNotNull(true);
+					validationBean.setRequired(true);
 				} else if (annotation instanceof javax.validation.constraints.Positive) {
-					validationBean.setFieldName(propertyName).setMin(1L);
+					validationBean.setMin(1L);
 				} else if (annotation instanceof javax.validation.constraints.PositiveOrZero) {
-					validationBean.setFieldName(propertyName).setMin(0L);
+					validationBean.setMin(0L);
 				} else if (annotation instanceof javax.validation.constraints.Pattern) {
-					validationBean.setFieldName(propertyName).setPattern(((javax.validation.constraints.Pattern) annotation).regexp());
+					validationBean.setPattern(((javax.validation.constraints.Pattern) annotation).regexp());
 				} else {
 					log.error("Unrecognizable constraint annotation %s", annotation);
 				}
 			});
 
-			validationBeans.add(validationBean);
+			validationBeans.put(propertyName, validationBean);
 
 		});
 		return validationBeans;
