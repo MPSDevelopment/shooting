@@ -217,7 +217,7 @@ public class CompetitionService {
 		int index = 0;
 		for(int i = 0; i < competitors.size(); i++) {
 			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) &&
-			   (competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) || competitors.get(i).getNumber().equals(competitorToDB.getNumber())) {
+			   (competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode()) || competitors.get(i).getNumber().equals(competitorToDB.getNumber()))) {
 				index = i;
 			}
 		}
@@ -251,23 +251,7 @@ public class CompetitionService {
 	public Score addedScoreRow (Long competitionId, Long stageId, ScoreBean scoreBean) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
 		checkStage(competition, stageId);
-		Competitor competitor;
-		if(scoreBean.getType().equals(TypeMarkEnum.RFID)) {
-			competitor = checkCompetitorByRfidCode(competition, scoreBean.getMark());
-		} else {
-			competitor = checkCompetitorByNumberCode(competition, scoreBean.getMark());
-		}
-		Score score = new Score().setStageId(stageId)
-		                         .setPersonId(competitor.getPerson().getId())
-		                         .setScore(scoreBean.getScore())
-		                         .setTimeOfExercise(scoreBean.getTimeOfExercise())
-		                         .setDisqualificationReason(scoreBean.getDisqualificationReason());
-		score = scoreRepository.save(score);
-		List<Score> result = competitor.getResult();
-		result.add(score);
-		competitor.setResult(result);
-		saveAndReturn(competition, competitor, false);
-		return score;
+		return addedScoreWithoutCheck(competition, stageId, scoreBean);
 	}
 
 	private Competitor checkCompetitorByRfidCode (Competition competition, String mark) throws BadRequestException {
@@ -276,5 +260,35 @@ public class CompetitionService {
 
 	private Competitor checkCompetitorByNumberCode (Competition competition, String mark) throws BadRequestException {
 		return competition.getCompetitors().stream().filter(member -> member.getNumber().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor number $s", mark)));
+	}
+
+	public List<Score> addedBulk (Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {
+		List<Score> result = new ArrayList<>();
+		Competition competition = checkCompetition(competitionId);
+		checkStage(competition, stageId);
+		for(ScoreBean score : scoreBean) {
+			result.add(addedScoreWithoutCheck(competition, stageId, score));
+		}
+		return result;
+	}
+
+	private Score addedScoreWithoutCheck (Competition competition, Long stageId, ScoreBean score) throws BadRequestException {
+		Competitor competitor;
+		if(score.getType().equals(TypeMarkEnum.RFID)) {
+			competitor = checkCompetitorByRfidCode(competition, score.getMark());
+		} else {
+			competitor = checkCompetitorByNumberCode(competition, score.getMark());
+		}
+		Score scoreResult = new Score().setStageId(stageId)
+		                               .setPersonId(competitor.getPerson().getId())
+		                               .setScore(score.getScore())
+		                               .setTimeOfExercise(score.getTimeOfExercise())
+		                               .setDisqualificationReason(score.getDisqualificationReason());
+		scoreResult = scoreRepository.save(scoreResult);
+		List<Score> result = competitor.getResult();
+		result.add(scoreResult);
+		competitor.setResult(result);
+		saveAndReturn(competition, competitor, false);
+		return scoreResult;
 	}
 }

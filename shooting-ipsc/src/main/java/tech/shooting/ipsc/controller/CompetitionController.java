@@ -186,4 +186,12 @@ public class CompetitionController {
 	public ResponseEntity<Score> createScoreRow (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID) Long stageId, @RequestBody @Valid ScoreBean scoreBean) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedScoreRow(competitionId, stageId, scoreBean), HttpStatus.CREATED);
 	}
+
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE_LIST, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added single score to the stage", notes = "Return score object")
+	public ResponseEntity<List<Score>> createScoreOfListRows (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID) Long stageId, @RequestBody @Valid List<ScoreBean> scoreBean) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.addedBulk(competitionId, stageId, scoreBean), HttpStatus.CREATED);
+	}
 }

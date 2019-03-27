@@ -828,8 +828,6 @@ public class CompetitionControllerTest {
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(scoreBean)))).andExpect(MockMvcResultMatchers.status().isCreated());
-
-
 		//try access to create score with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                     ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
@@ -848,5 +846,59 @@ public class CompetitionControllerTest {
 		assertEquals(scoreBean.getDisqualificationReason(), score.getDisqualificationReason());
 		assertEquals(scoreBean.getTimeOfExercise(), score.getTimeOfExercise());
 		assertEquals(scoreBean.getScore(), score.getScore());
+	}
+
+	@Test
+	public void checkCreateScoreFromList () throws Exception {
+		//prepare
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getStages().size());
+		competition.getStages().add(testingStage);
+		assertEquals(0, competition.getCompetitors().size());
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.add(testingCompetitor.setRfidCode("46384672364823648263"));
+		competitors.add(new Competitor().setName("test for2").setPerson(personRepository.save(new Person().setName("test2"))).setRfidCode("434342342342342"));
+		competition.setCompetitors(competitors);
+		competition = competitionRepository.save(competition);
+		assertEquals(2, competition.getCompetitors().size());
+		assertEquals(1, competition.getStages().size());
+		Long competitorId = competition.getCompetitors().get(0).getPerson().getId();
+		Long stageId = competition.getStages().get(0).getId();
+		List<ScoreBean> res = new ArrayList<>();
+		res.add(new ScoreBean().setType(TypeMarkEnum.RFID).setMark("46384672364823648263").setScore(50).setTimeOfExercise(4564646L));
+		res.add(new ScoreBean().setType(TypeMarkEnum.RFID).setMark("434342342342342").setScore(40).setTimeOfExercise(434343434L));
+		//try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE_LIST.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(res)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access with  user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE_LIST.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, userToken)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(res)))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access with  judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE_LIST.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, judgeToken)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(res)))).andExpect(MockMvcResultMatchers.status().isCreated());
+		//try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                     ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE_LIST.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                                         .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(res))))
+		                                .andExpect(MockMvcResultMatchers.status().isCreated())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
+		Score[] scores = JacksonUtils.fromJson(Score[].class, contentAsString);
+		assertEquals(scores.length, res.size());
 	}
 }
