@@ -74,7 +74,9 @@ public class ValidationService {
 				log.info("Constraint is %s %s", annotation.getClass().getSimpleName(), constraint.getAnnotation());
 				// log.info("Annotation is %s", JacksonUtils.getFullJson(constraint.getAnnotation()));
 				if (annotation instanceof javax.validation.constraints.Size) {
-					validationBean.setMinLength(((javax.validation.constraints.Size) annotation).min()).setMaxLength(((javax.validation.constraints.Size) annotation).max());
+					int min = ((javax.validation.constraints.Size) annotation).min();
+					int max = ((javax.validation.constraints.Size) annotation).max();
+					validationBean.setMinLength(min == Integer.MIN_VALUE ? null : min).setMaxLength(max == Integer.MAX_VALUE ? null : max);
 				} else if (annotation instanceof javax.validation.constraints.Max) {
 					validationBean.setMax(((javax.validation.constraints.Max) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.Min) {
