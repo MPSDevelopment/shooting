@@ -2,8 +2,11 @@ package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.bean.ValidationBean;
@@ -13,7 +16,9 @@ import javax.validation.Validator;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +50,21 @@ public class ValidationService {
 		var validationBeans = new HashMap<String, ValidationBean>();
 		descriptor.getConstrainedProperties().forEach(property -> {
 			String propertyName = property.getPropertyName();
+			String propertyJsonName = property.getPropertyName();
 			String propertyType = property.getElementClass().getSimpleName();
+
+			try {
+				var field = clazz.getDeclaredField(propertyName);
+				var annotation = field.getAnnotation(JsonProperty.class);
+				if (StringUtils.isNotBlank(annotation.value())) {
+					log.info("Field name will be changed from %s to %s", propertyName, annotation.value());
+					propertyJsonName = annotation.value();
+				}
+			} catch (NoSuchFieldException | SecurityException e) {
+				log.error("Cannot find fieldName %s for class %s", propertyName, clazz);
+				Arrays.asList(clazz.getDeclaredFields()).forEach(field -> log.info("Field is %s", field.getName()));
+				e.printStackTrace();
+			}
 
 			var validationBean = new ValidationBean();
 
@@ -79,7 +98,7 @@ public class ValidationService {
 				}
 			});
 
-			validationBeans.put(propertyName, validationBean);
+			validationBeans.put(propertyJsonName, validationBean);
 
 		});
 		return validationBeans;

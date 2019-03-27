@@ -19,6 +19,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.UserLogin;
+import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,8 +37,9 @@ public class ValidationServiceTest {
 
 	@Test
 	public void checkConstraintsForClass() {
-		var result = validationService.getConstraints(UserLogin.class);
-		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
+//		var result = validationService.getConstraints(UserLogin.class);
+//		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
+		assertEquals(3, validationService.getConstraints(UserSignupBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserLogin.class).size());
 		assertEquals(2, validationService.getConstraints(ChangePasswordBean.class).size());
 		assertEquals(2, validationService.getConstraints(CompetitionBean.class).size());
