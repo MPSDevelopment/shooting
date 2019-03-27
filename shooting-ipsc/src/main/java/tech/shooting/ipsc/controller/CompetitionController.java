@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.service.CompetitionService;
 
@@ -177,5 +178,12 @@ public class CompetitionController {
 	@ApiOperation(value = "Return level description for competitors", notes = "Return list LevelBean object")
 	public ResponseEntity<List<LevelBean>> getLevelEnum () {
 		return new ResponseEntity<>(competitionService.getLevelEnum(), HttpStatus.OK);
+	}
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added single score to the stage", notes = "Return score object")
+	public ResponseEntity<Score> createScoreRow (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID) Long stageId,
+		@RequestBody @Valid ScoreBean scoreBean) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.addedScoreRow(competitionId, stageId, scoreBean), HttpStatus.CREATED);
 	}
 }

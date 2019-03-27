@@ -29,6 +29,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -791,5 +792,39 @@ public class CompetitionControllerTest {
 			log.info("Person %s has been created", user.getName());
 		}
 		return result;
+	}
+
+	@Test
+	public void checkCreateScoreRow () throws Exception {
+		//prepare
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getStages().size());
+		competition.getStages().add(testingStage);
+		assertEquals(0, competition.getCompetitors().size());
+		competition.getCompetitors().add(testingCompetitor.setRfidCode("46384672364823648263"));
+		competition = competitionRepository.save(competition);
+		assertEquals(1, competition.getCompetitors().size());
+		assertEquals(1, competition.getStages().size());
+		Long competitorId = competition.getCompetitors().get(0).getPerson().getId();
+		Long stageId = competition.getStages().get(0).getId();
+		ScoreBean scoreBean = new ScoreBean().setType(TypeMarkEnum.RFID).setMark("46384672364823648263").setScore(50).setTimeOfExercise(4564646L);
+		//try access to create score with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                     ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                                    .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(scoreBean))))
+		                                .andExpect(MockMvcResultMatchers.status().isCreated())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
+		Score score = JacksonUtils.fromJson(Score.class, contentAsString);
+		assertEquals(stageId, score.getStageId());
+		assertEquals(competitorId, score.getPersonId());
+		assertEquals(competitorId, score.getPersonId());
+		assertEquals(scoreBean.getDisqualificationReason(), score.getDisqualificationReason());
+		assertEquals(scoreBean.getTimeOfExercise(), score.getTimeOfExercise());
+		assertEquals(scoreBean.getScore(), score.getScore());
 	}
 }

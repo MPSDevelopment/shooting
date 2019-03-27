@@ -188,4 +188,6 @@ public class ControllerAPI {
 	public static final String VALIDATION_CONTROLLER = "/api/validation";
 	
 	public static final String VALIDATION_CONTROLLER_GET_VALIDATIONS = "/";
+
+	public static final String COMPETITION_CONTROLLER_POST_SCORE = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score";
 }

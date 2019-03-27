@@ -10,6 +10,7 @@ import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
@@ -18,6 +19,7 @@ import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.repository.ScoreRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ public class CompetitionService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private ScoreRepository scoreRepository;
 
 	private Competition useBeanUtilsWithOutJudges (CompetitionBean competitionBean, Competition competition) throws BadRequestException {
 		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
@@ -241,5 +246,35 @@ public class CompetitionService {
 
 	public List<TypeWeapon> getListTypeWeapon () {
 		return WeaponTypeEnum.getList();
+	}
+
+	public Score addedScoreRow (Long competitionId, Long stageId, ScoreBean scoreBean) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		checkStage(competition, stageId);
+		Competitor competitor;
+		if(scoreBean.getType().equals(TypeMarkEnum.RFID)) {
+			competitor = checkCompetitorByRfidCode(competition, scoreBean.getMark());
+		} else {
+			competitor = checkCompetitorByNumberCode(competition, scoreBean.getMark());
+		}
+		Score score = new Score().setStageId(stageId)
+		                         .setPersonId(competitor.getPerson().getId())
+		                         .setScore(scoreBean.getScore())
+		                         .setTimeOfExercise(scoreBean.getTimeOfExercise())
+		                         .setDisqualificationReason(scoreBean.getDisqualificationReason());
+		score = scoreRepository.save(score);
+		List<Score> result = competitor.getResult();
+		result.add(score);
+		competitor.setResult(result);
+		saveAndReturn(competition, competitor, false);
+		return score;
+	}
+
+	private Competitor checkCompetitorByRfidCode (Competition competition, String mark) throws BadRequestException {
+		return competition.getCompetitors().stream().filter(member -> member.getRfidCode().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
+	}
+
+	private Competitor checkCompetitorByNumberCode (Competition competition, String mark) throws BadRequestException {
+		return competition.getCompetitors().stream().filter(member -> member.getNumber().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor number $s", mark)));
 	}
 }

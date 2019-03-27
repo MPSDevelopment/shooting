@@ -32,6 +32,8 @@ class ScoreRepositoryTest {
 
 	private Score score;
 
+	private Score save;
+
 	@BeforeEach
 	public void before () {
 		scoreRepository.deleteAll();
@@ -41,14 +43,14 @@ class ScoreRepositoryTest {
 	@Test
 	public void checkCreateEntity () {
 		assertEquals(0, scoreRepository.count());
-		Score save = scoreRepository.save(score);
+		save = scoreRepository.save(score);
 		assertEquals(1, scoreRepository.count());
 	}
 
 	@Test
 	public void checkFindAllByPersonId () {
 		assertEquals(0, scoreRepository.count());
-		Score save = scoreRepository.save(score);
+		save = scoreRepository.save(score);
 		assertEquals(1, scoreRepository.count());
 		score = new Score().setPersonId(113187979686798L).setStageId(67235467325467235L).setScore(40).setTimeOfExercise(5353478263L);
 		save = scoreRepository.save(score);
@@ -59,7 +61,7 @@ class ScoreRepositoryTest {
 	@Test
 	public void checkFindAllByStageId () {
 		assertEquals(0, scoreRepository.count());
-		Score save = scoreRepository.save(score);
+		save = scoreRepository.save(score);
 		assertEquals(1, scoreRepository.count());
 		score = new Score().setPersonId(113187979686798L).setStageId(6723534673325467235L).setScore(40).setTimeOfExercise(5353478263L);
 		save = scoreRepository.save(score);

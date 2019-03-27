@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "competitor")
@@ -39,5 +40,5 @@ public class Competitor extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "List of score")
-	private List<Score> result;
+	private List<Score> result = new ArrayList<>();
 }
