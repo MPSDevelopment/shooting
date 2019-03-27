@@ -1,5 +1,10 @@
 package tech.shooting.ipsc.enums;
 
+import tech.shooting.ipsc.pojo.TypePresent;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TypeOfPresence {
 	UNDEFINED(1, "Unidentified location"),
 	MISSION(2, "In official journey"),
@@ -8,7 +13,8 @@ public enum TypeOfPresence {
 	HOSP(5, "In hospital"),
 	OUTFIT(6, "In order"),
 	DAY_OFF(7, "Day off"),
-	PRESENT(8, "Is present");
+	PRESENT(8, "Is present"),
+	DELAY(9, "Be late");
 
 	private String state;
 
@@ -17,6 +23,14 @@ public enum TypeOfPresence {
 	TypeOfPresence (Integer id, String state) {
 		this.state = state;
 		this.id = id;
+	}
+
+	public static List<TypePresent> getList () {
+		List<TypePresent> result = new ArrayList<>();
+		for(TypeOfPresence value : TypeOfPresence.values()) {
+			result.add(new TypePresent().setId(value.id).setState(value.getState()));
+		}
+		return result;
 	}
 
 	public static Integer getCount () {

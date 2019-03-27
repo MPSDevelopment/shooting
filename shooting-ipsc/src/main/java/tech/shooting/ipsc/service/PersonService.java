@@ -12,7 +12,9 @@ import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.TypePresent;
 import tech.shooting.ipsc.repository.PersonRepository;
 
 import java.util.List;
@@ -68,5 +70,9 @@ public class PersonService {
 
 	public Long getCount () {
 		return personRepository.count();
+	}
+
+	public List<TypePresent> getTypePresent () {
+		return TypeOfPresence.getList();
 	}
 }

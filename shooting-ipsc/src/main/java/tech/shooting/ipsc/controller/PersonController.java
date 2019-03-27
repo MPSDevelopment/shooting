@@ -13,6 +13,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.TypePresent;
 import tech.shooting.ipsc.service.PersonService;
 
 import javax.validation.Valid;
@@ -71,5 +72,11 @@ public class PersonController {
 	@ApiOperation(value = "Get all persons count", notes = "Returns all persons count")
 	public ResponseEntity<Long> getCount () {
 		return new ResponseEntity<>(personService.getCount(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM)
+	@ApiOperation(value = "Get all form's of present type", notes = "Return list TypePresent object")
+	public ResponseEntity<List<TypePresent>> getTypePresent () {
+		return new ResponseEntity<>(personService.getTypePresent(), HttpStatus.OK);
 	}
 }

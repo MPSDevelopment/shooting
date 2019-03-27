@@ -35,11 +35,9 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
-import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.pojo.WeaponIpscCode;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
@@ -365,5 +363,27 @@ public class PersonControllerTest {
 		                             .andExpect(MockMvcResultMatchers.status().isOk())
 		                             .andReturn();
 		assertEquals(mvcResult.getResponse().getContentAsString(), String.valueOf(count));
+	}
+
+	@Test
+	public void checkPresentEnum () throws Exception {
+		//try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access with admin role
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
+		TypePresent[] typePresents = JacksonUtils.fromJson(TypePresent[].class, contentAsString);
+		assertEquals(TypeOfPresence.getCount(), typePresents.length);
 	}
 }
