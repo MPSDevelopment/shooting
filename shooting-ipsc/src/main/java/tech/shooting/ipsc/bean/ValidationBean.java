@@ -14,6 +14,7 @@ import tech.shooting.commons.annotation.ValiationExportable;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class ValidationBean implements ValiationExportable {
+
 	@JsonProperty
 	private String fieldName;
 
@@ -27,14 +28,24 @@ public class ValidationBean implements ValiationExportable {
 	private String pattern;
 
 	@JsonProperty
-	private Integer min;
+	private Long min;
 
 	@JsonProperty
-	private Integer max;
+	private Long max;
 
 	@JsonProperty
 	private Integer size;
 
 	@JsonProperty
 	private Long value;
+
+	@JsonProperty
+	private Boolean notBlank;
+
+	@JsonProperty
+	private Boolean notNull;
+	
+	@JsonProperty
+	private Boolean notEmpty;
+
 }

@@ -45,37 +45,41 @@ public class ValidationService {
 		var validationBeans = new ArrayList<ValidationBean>();
 		descriptor.getConstrainedProperties().forEach(property -> {
 			String propertyName = property.getPropertyName();
+
+			var validationBean = new ValidationBean();
+
 			PropertyDescriptor constraints = descriptor.getConstraintsForProperty(propertyName);
 			constraints.getConstraintDescriptors().forEach(constraint -> {
 				Annotation annotation = constraint.getAnnotation();
 				log.info("Constraint is %s %s", annotation.getClass().getSimpleName(), constraint.getAnnotation());
 				// log.info("Annotation is %s", JacksonUtils.getFullJson(constraint.getAnnotation()));
 				if (annotation instanceof javax.validation.constraints.Size) {
-					validationBeans.add(new ValidationBean().setName("Size").setFieldName(propertyName).setMessage(((javax.validation.constraints.Size) annotation).message()).setMin(((javax.validation.constraints.Size) annotation).min())
-							.setMax(((javax.validation.constraints.Size) annotation).max()));
+					validationBean.setFieldName(propertyName).setMin((long) ((javax.validation.constraints.Size) annotation).min()).setMax((long) ((javax.validation.constraints.Size) annotation).max());
 				} else if (annotation instanceof javax.validation.constraints.Max) {
-					validationBeans.add(new ValidationBean().setName("Max").setFieldName(propertyName).setMessage(((javax.validation.constraints.Max) annotation).message()).setValue(((javax.validation.constraints.Max) annotation).value()));
+					validationBean.setFieldName(propertyName).setMax(((javax.validation.constraints.Max) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.Min) {
-					validationBeans.add(new ValidationBean().setName("Min").setFieldName(propertyName).setMessage(((javax.validation.constraints.Min) annotation).message()).setValue(((javax.validation.constraints.Min) annotation).value()));
+					validationBean.setFieldName(propertyName).setMin(((javax.validation.constraints.Min) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.NotBlank) {
-					validationBeans.add(new ValidationBean().setName("NotBlank").setFieldName(propertyName).setMessage(((javax.validation.constraints.NotBlank) annotation).message()));
+					validationBean.setFieldName(propertyName).setNotBlank(true);
 				} else if (annotation instanceof javax.validation.constraints.NotEmpty) {
-					validationBeans.add(new ValidationBean().setName("NotEmpty").setFieldName(propertyName).setMessage(((javax.validation.constraints.NotEmpty) annotation).message()));
+					validationBean.setFieldName(propertyName).setNotEmpty(true);
 				} else if (annotation instanceof javax.validation.constraints.Null) {
-					validationBeans.add(new ValidationBean().setName("Null").setFieldName(propertyName).setMessage(((javax.validation.constraints.Null) annotation).message()));
+					validationBean.setFieldName(propertyName).setNotNull(false);
 				} else if (annotation instanceof javax.validation.constraints.NotNull) {
-					validationBeans.add(new ValidationBean().setName("NotNull").setFieldName(propertyName).setMessage(((javax.validation.constraints.NotNull) annotation).message()));
+					validationBean.setFieldName(propertyName).setNotNull(true);
 				} else if (annotation instanceof javax.validation.constraints.Positive) {
-					validationBeans.add(new ValidationBean().setName("Min").setFieldName(propertyName).setMin(1).setMessage(((javax.validation.constraints.Positive) annotation).message()));
+					validationBean.setFieldName(propertyName).setMin(1L);
 				} else if (annotation instanceof javax.validation.constraints.PositiveOrZero) {
-					validationBeans.add(new ValidationBean().setName("Min").setFieldName(propertyName).setMin(0).setMessage(((javax.validation.constraints.PositiveOrZero) annotation).message()));
+					validationBean.setFieldName(propertyName).setMin(0L);
 				} else if (annotation instanceof javax.validation.constraints.Pattern) {
-					validationBeans.add(new ValidationBean().setName("Pattern").setFieldName(propertyName).setMessage(((javax.validation.constraints.Pattern) annotation).message())
-							.setPattern(((javax.validation.constraints.Pattern) annotation).regexp()));
+					validationBean.setFieldName(propertyName).setPattern(((javax.validation.constraints.Pattern) annotation).regexp());
 				} else {
 					log.error("Unrecognizable constraint annotation %s", annotation);
 				}
 			});
+
+			validationBeans.add(validationBean);
+
 		});
 		return validationBeans;
 	}

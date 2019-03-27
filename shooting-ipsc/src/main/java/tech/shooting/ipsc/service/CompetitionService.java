@@ -259,7 +259,7 @@ public class CompetitionService {
 	}
 
 	private Competitor checkCompetitorByNumberCode (Competition competition, String mark) throws BadRequestException {
-		return competition.getCompetitors().stream().filter(member -> member.getNumber().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor number $s", mark)));
+		return competition.getCompetitors().stream().filter(member -> mark.equals(member.getNumber())).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor number $s", mark)));
 	}
 
 	public List<Score> addedBulk (Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {

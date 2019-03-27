@@ -38,10 +38,10 @@ public class ValidationServiceTest {
 	public void checkConstraintsForClass() {
 		var result = validationService.getConstraints(UserLogin.class);
 		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
-		assertEquals(3, validationService.getConstraints(UserLogin.class).size());
-		assertEquals(3, validationService.getConstraints(ChangePasswordBean.class).size());
-		assertEquals(4, validationService.getConstraints(CompetitionBean.class).size());
-		assertEquals(3, validationService.getConstraints(UserUpdateBean.class).size());
+		assertEquals(2, validationService.getConstraints(UserLogin.class).size());
+		assertEquals(2, validationService.getConstraints(ChangePasswordBean.class).size());
+		assertEquals(2, validationService.getConstraints(CompetitionBean.class).size());
+		assertEquals(2, validationService.getConstraints(UserUpdateBean.class).size());
 	}
 
 	@Test
