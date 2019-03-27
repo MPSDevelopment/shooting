@@ -71,6 +71,7 @@ public class CompetitionService {
 
 	public Competition updateCompetition (Long id, CompetitionBean competition) throws BadRequestException {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
+		checkToAddedRow(existCompetition);
 		BeanUtils.copyProperties(competition, existCompetition);
 		return competitionRepository.save(existCompetition);
 	}
@@ -109,6 +110,7 @@ public class CompetitionService {
 
 	public List<Stage> addedAllStages (Long id, List<Stage> toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		checkToAddedRow(competition);
 		List<Stage> stages = competition.getStages();
 		stages.addAll(toAdded);
 		competition.setStages(stages);
@@ -117,6 +119,7 @@ public class CompetitionService {
 
 	public Stage addStage (Long id, Stage toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		checkToAddedRow(competition);
 		competition.getStages().add(toAdded);
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
@@ -143,6 +146,7 @@ public class CompetitionService {
 
 	public Stage updateStage (Long competitionId, Long stageId, Stage stage) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
+		checkToAddedRow(competition);
 		Stage stageFromDB = checkStage(competition, stageId);
 		BeanUtils.copyProperties(stage, stageFromDB);
 		List<Stage> stages = competition.getStages();
@@ -154,6 +158,7 @@ public class CompetitionService {
 
 	public Competitor addedCompetitor (Long id, Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		checkToAddedRow(competition);
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor.setActive(false), competitorToDB);
@@ -175,6 +180,7 @@ public class CompetitionService {
 
 	public Competitor updateCompetitor (Long id, Long competitorId, Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		checkToAddedRow(competition);
 		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
 		BeanUtils.copyProperties(competitor, competitorFromDB);
 		return saveAndReturn(competition, competitorFromDB, false);
@@ -182,6 +188,7 @@ public class CompetitionService {
 
 	public List<Competitor> addedAllCompetitors (Long id, List<Long> competitorsIdList) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		checkToAddedRow(competition);
 		List<Competitor> competitors = competition.getCompetitors();
 		competitors.clear();
 		for(Long idPerson : competitorsIdList) {
@@ -198,7 +205,8 @@ public class CompetitionService {
 		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
 	}
 
-	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) {
+	private Competitor saveAndReturn (Competition competition, Competitor competitorToDB, boolean flag) throws BadRequestException {
+		checkToAddedRow(competition);
 		List<Competitor> competitors = competition.getCompetitors();
 		if(flag) {
 			competitors.add(competitorToDB);
@@ -217,7 +225,8 @@ public class CompetitionService {
 		int index = 0;
 		for(int i = 0; i < competitors.size(); i++) {
 			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) &&
-			   (competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode()) || competitors.get(i).getNumber().equals(competitorToDB.getNumber()))) {
+			   ((competitors.get(i).getRfidCode() != null && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) ||
+			    (competitors.get(i).getNumber() != null && competitors.get(i).getNumber().equals(competitorToDB.getNumber())))) {
 				index = i;
 			}
 		}
@@ -226,6 +235,7 @@ public class CompetitionService {
 
 	public Competitor addedMarkToCompetitor (Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
+		checkToAddedRow(competition);
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
 		if(competitorMark.getType().equals(TypeMarkEnum.RFID)) {
 			competitor.setRfidCode(competitorMark.getMark());
@@ -250,12 +260,19 @@ public class CompetitionService {
 
 	public Score addedScoreRow (Long competitionId, Long stageId, ScoreBean scoreBean) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
+		checkToAddedRow(competition);
 		checkStage(competition, stageId);
 		return addedScoreWithoutCheck(competition, stageId, scoreBean);
 	}
 
+	private void checkToAddedRow (Competition competition) throws BadRequestException {
+		if(!competition.isActive()) {
+			throw new BadRequestException(new ErrorMessage("You try added state to the archive competition"));
+		}
+	}
+
 	private Competitor checkCompetitorByRfidCode (Competition competition, String mark) throws BadRequestException {
-		return competition.getCompetitors().stream().filter(member -> member.getRfidCode().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
+		return competition.getCompetitors().stream().filter(member -> mark.equals(member.getRfidCode())).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
 	}
 
 	private Competitor checkCompetitorByNumberCode (Competition competition, String mark) throws BadRequestException {
@@ -265,6 +282,7 @@ public class CompetitionService {
 	public List<Score> addedBulk (Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {
 		List<Score> result = new ArrayList<>();
 		Competition competition = checkCompetition(competitionId);
+		checkToAddedRow(competition);
 		checkStage(competition, stageId);
 		for(ScoreBean score : scoreBean) {
 			result.add(addedScoreWithoutCheck(competition, stageId, score));
