@@ -808,6 +808,28 @@ public class CompetitionControllerTest {
 		Long competitorId = competition.getCompetitors().get(0).getPerson().getId();
 		Long stageId = competition.getStages().get(0).getId();
 		ScoreBean scoreBean = new ScoreBean().setType(TypeMarkEnum.RFID).setMark("46384672364823648263").setScore(50).setTimeOfExercise(4564646L);
+		//try access to create score with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                           .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(scoreBean)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to create score with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                           .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, user)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(scoreBean)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to create score with judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                            ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                           .replace(ControllerAPI.REQUEST_STAGE_ID, stageId.toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .header(Token.TOKEN_HEADER, judgeToken)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(scoreBean)))).andExpect(MockMvcResultMatchers.status().isCreated());
+
+
 		//try access to create score with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
 		                                                                     ControllerAPI.COMPETITION_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
