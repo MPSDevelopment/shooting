@@ -217,7 +217,8 @@ public class CompetitionService {
 		int index = 0;
 		for(int i = 0; i < competitors.size(); i++) {
 			if(competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson()) &&
-			   (competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode()) || competitors.get(i).getNumber().equals(competitorToDB.getNumber()))) {
+			   ((competitors.get(i).getRfidCode() != null && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode())) ||
+			    (competitors.get(i).getNumber() != null && competitors.get(i).getNumber().equals(competitorToDB.getNumber())))) {
 				index = i;
 			}
 		}
@@ -255,7 +256,7 @@ public class CompetitionService {
 	}
 
 	private Competitor checkCompetitorByRfidCode (Competition competition, String mark) throws BadRequestException {
-		return competition.getCompetitors().stream().filter(member -> member.getRfidCode().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
+		return competition.getCompetitors().stream().filter(member -> mark.equals(member.getRfidCode())).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
 	}
 
 	private Competitor checkCompetitorByNumberCode (Competition competition, String mark) throws BadRequestException {
