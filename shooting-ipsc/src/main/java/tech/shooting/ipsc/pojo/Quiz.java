@@ -8,7 +8,9 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.Subject;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class Quiz extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Time for answer")
+	@Positive(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
 	@JsonProperty
