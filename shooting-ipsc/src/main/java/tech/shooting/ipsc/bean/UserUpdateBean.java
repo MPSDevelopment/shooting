@@ -32,7 +32,7 @@ public class UserUpdateBean  implements ValiationExportable{
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's login")
-	@NotEmpty(message = ValidationConstants.USER_LOGIN_MESSAGE)
+	@NotEmpty(message = ValidationConstants.USER_INCORRECT_LOGIN_MESSAGE)
 	private String login;
 
 	@JsonProperty
