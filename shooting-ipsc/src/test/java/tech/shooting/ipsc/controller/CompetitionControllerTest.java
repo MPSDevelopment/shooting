@@ -35,6 +35,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
@@ -112,8 +113,8 @@ public class CompetitionControllerTest {
 	public void before () {
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
-		competition = new Competition().setName("Alladin").setLocation("Cave!");
-		testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition"));
+		competition = new Competition().setName("Alladin").setLocation("Cave!").setQualifierRank(ClassificationBreaks.D);
+		testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition").setQualifierRank(ClassificationBreaks.D));
 		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
 		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
@@ -177,12 +178,12 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .content(JacksonUtils.getJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createCompetition() with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, adminToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isCreated());
+		                                      .content(JacksonUtils.getJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isCreated());
 	}
 
 	@Test
@@ -242,7 +243,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(test)))
 		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
 	}
 
@@ -669,7 +670,7 @@ public class CompetitionControllerTest {
 		userRepository.saveAll(List.of(new User().setName("asdfg").setLogin("asdghjkklll").setPassword("tsgaudjscc").setRoleName(RoleName.JUDGE),
 			new User().setName("asdjhjhfg").setLogin("asdgjhjhhjkklll").setPassword("tsgagfgudjscc").setRoleName(RoleName.JUDGE)));
 		List<User> byRoleName = userRepository.findByRoleName(RoleName.JUDGE);
-		competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj");
+		competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj").setQualifierRank(ClassificationBreaks.D);
 		competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));
 		String fullJson = JacksonUtils.getJson(setupCompetitionBean(competition));
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
