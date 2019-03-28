@@ -26,6 +26,8 @@ public class ValidationConstants {
 	public static final String LOGIN_INCORRECT = "The account or password is incorrect. Please try again";
 
 	public static final String PERSON_NAME_MESSAGE = "Min 3 character";
+	
+	public static final String LEVEL_MESSAGE = "Level required";
 
 	public static final String COMPETITION_NAME_MESSAGE = "Name min 5, max 50 character";
 

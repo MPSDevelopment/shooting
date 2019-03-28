@@ -5,14 +5,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.utils.JacksonUtils;
@@ -25,13 +20,15 @@ import tech.shooting.ipsc.bean.UserUpdateBean;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@EnableAutoConfiguration(exclude = { WebMvcAutoConfiguration.class })
-@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration")
+//@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class, WebMvcAutoConfiguration.class})
+//@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration")
 @SpringBootTest(classes = { ValidationService.class })
 @Slf4j
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
+@ActiveProfiles("simple")
 public class ValidationServiceTest {
+	
 	@Autowired
 	private ValidationService validationService;
 
@@ -42,7 +39,7 @@ public class ValidationServiceTest {
 		assertEquals(3, validationService.getConstraints(UserSignupBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserLogin.class).size());
 		assertEquals(2, validationService.getConstraints(ChangePasswordBean.class).size());
-		assertEquals(2, validationService.getConstraints(CompetitionBean.class).size());
+		assertEquals(3, validationService.getConstraints(CompetitionBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserUpdateBean.class).size());
 	}
 

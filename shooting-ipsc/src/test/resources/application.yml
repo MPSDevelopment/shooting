@@ -64,6 +64,12 @@ ipsc:
 
 ---
 spring:
+  profiles: simple
+  main:
+    banner-mode: "off"
+
+---
+spring:
   profiles: development
   main:
     banner-mode: "off"

@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Accessors(chain = true)
@@ -18,6 +20,7 @@ public class LevelBean implements ValiationExportable {
 
 	@JsonProperty()
 	@ApiModelProperty(value = "Level mark", required = true)
+	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks classificationBreaks;
 
 	@JsonProperty()

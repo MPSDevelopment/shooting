@@ -39,6 +39,7 @@ public class CompetitionBean  implements ValiationExportable{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
+	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty("weaponType")

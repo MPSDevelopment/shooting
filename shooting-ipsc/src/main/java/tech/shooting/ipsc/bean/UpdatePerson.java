@@ -55,6 +55,7 @@ public class UpdatePerson  implements ValiationExportable{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
+	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty

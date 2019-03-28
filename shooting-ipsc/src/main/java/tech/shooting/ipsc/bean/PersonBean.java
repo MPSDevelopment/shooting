@@ -64,7 +64,7 @@ public class PersonBean  implements ValiationExportable{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
-	@NotNull
+	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty
