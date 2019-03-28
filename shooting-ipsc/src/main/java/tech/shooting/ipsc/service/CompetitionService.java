@@ -294,9 +294,7 @@ public class CompetitionService {
 		} else {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
-		Score scoreResult = new Score().setStageId(stageId)
-		                               .setPersonId(competitor.getPerson().getId())
-		                               .setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
+		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
 		if(score.getDisqualificationReason() != null) {
 			switch(score.getDisqualificationReason()) {
 				case "DISQUALIFICATION":
@@ -314,6 +312,8 @@ public class CompetitionService {
 				default:
 					scoreResult.setDisqualificationReason(score.getDisqualificationReason());
 			}
+		} else {
+			scoreResult.setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
 		}
 		scoreResult = scoreRepository.save(scoreResult);
 		List<Score> result = competitor.getResult();
