@@ -297,21 +297,23 @@ public class CompetitionService {
 		Score scoreResult = new Score().setStageId(stageId)
 		                               .setPersonId(competitor.getPerson().getId())
 		                               .setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
-		switch(score.getDisqualificationReason()) {
-			case "DISQUALIFICATION":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
-				break;
-			case "ABSENT":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.getType());
-				break;
-			case "INJURED":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.getType());
-				break;
-			case "BROKEN_RULE":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.getType());
-				break;
-			default:
-				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
+		if(score.getDisqualificationReason() != null) {
+			switch(score.getDisqualificationReason()) {
+				case "DISQUALIFICATION":
+					scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
+					break;
+				case "ABSENT":
+					scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.getType());
+					break;
+				case "INJURED":
+					scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.getType());
+					break;
+				case "BROKEN_RULE":
+					scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.getType());
+					break;
+				default:
+					scoreResult.setDisqualificationReason(score.getDisqualificationReason());
+			}
 		}
 		scoreResult = scoreRepository.save(scoreResult);
 		List<Score> result = competitor.getResult();

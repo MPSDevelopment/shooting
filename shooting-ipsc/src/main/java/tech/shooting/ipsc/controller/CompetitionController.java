@@ -198,14 +198,14 @@ public class CompetitionController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get mark's type lis", notes = "Return list of mark's type")
+	@ApiOperation(value = "Get mark's type list", notes = "Return list of mark's type")
 	public ResponseEntity<List<String>> getEnumTypeMark () {
 		return new ResponseEntity<>(competitionService.getListTypeMark(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get Disqualification's type lis", notes = "Return list of Disqualification's type")
+	@ApiOperation(value = "Get Disqualification's type list", notes = "Return list of Disqualification's type")
 	public ResponseEntity<DisqualificationEnum[]> getEnumDisqualification () {
 		return new ResponseEntity<>(DisqualificationEnum.values(), HttpStatus.OK);
 	}
