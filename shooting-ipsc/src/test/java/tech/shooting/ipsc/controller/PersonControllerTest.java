@@ -102,7 +102,7 @@ public class PersonControllerTest {
 		WeaponIpscCode weaponIpscCode = new WeaponIpscCode().setCode("445645645").setTypeWeapon(WeaponTypeEnum.HANDGUN);
 		List<WeaponIpscCode> codes = new ArrayList<>();
 		codes.add(weaponIpscCode);
-		testing = personRepository.save(new Person().setName("testing").setCodes(codes));
+		testing = personRepository.save(new Person().setName("testing").setCodes(codes).setQualifierRank(ClassificationBreaks.D));
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
