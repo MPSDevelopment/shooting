@@ -194,4 +194,11 @@ public class CompetitionController {
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID) Long stageId, @RequestBody @Valid List<ScoreBean> scoreBean) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedBulk(competitionId, stageId, scoreBean), HttpStatus.CREATED);
 	}
+
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get mark's type lis", notes = "Return list of mark's type")
+	public ResponseEntity<List<String>> getEnumTypeMark () {
+		return new ResponseEntity<>(competitionService.getListTypeMark(), HttpStatus.OK);
+	}
 }

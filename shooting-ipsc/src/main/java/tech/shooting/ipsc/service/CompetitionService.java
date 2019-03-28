@@ -309,4 +309,8 @@ public class CompetitionService {
 		saveAndReturn(competition, competitor, false);
 		return scoreResult;
 	}
+
+	public List<String> getListTypeMark () {
+		return TypeMarkEnum.getList();
+	}
 }

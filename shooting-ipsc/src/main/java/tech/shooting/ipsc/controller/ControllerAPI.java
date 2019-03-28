@@ -183,6 +183,10 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
 
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL = "/enum/level";
+
+	public static final String PERSON_CONTROLLER_GET_PRESENT_ENUM = "/enum/present";
+
+	public static final String PERSON_CONTROLLER_GET_TYPE_MARK_ENUM = "/enum/mark";
 	
 	
 	public static final String VALIDATION_CONTROLLER = "/api/validation";
@@ -193,5 +197,4 @@ public class ControllerAPI {
 
 	public static final String COMPETITION_CONTROLLER_POST_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
 
-	public static final String PERSON_CONTROLLER_GET_PRESENT_ENUM = "/enum/present";
 }

@@ -901,4 +901,32 @@ public class CompetitionControllerTest {
 		Score[] scores = JacksonUtils.fromJson(Score[].class, contentAsString);
 		assertEquals(scores.length, res.size());
 	}
+
+	@Test
+	public void checkGetTypeMark () throws Exception {
+		//try access to getMarkType with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getMarkType with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getMarkType with judge role
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM).header(Token.TOKEN_HEADER, judgeToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
+		String[] strings = JacksonUtils.fromJson(String[].class, contentAsString);
+		assertEquals(TypeMarkEnum.values().length, strings.length);
+		//try access to getMarkType with admin role
+		contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_MARK_ENUM).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
+		strings = JacksonUtils.fromJson(String[].class, contentAsString);
+		assertEquals(TypeMarkEnum.values().length, strings.length);
+	}
 }

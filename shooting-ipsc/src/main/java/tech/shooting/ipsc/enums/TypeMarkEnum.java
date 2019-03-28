@@ -1,8 +1,11 @@
 package tech.shooting.ipsc.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TypeMarkEnum {
-	RFID("rfid"),
-	NUMBER("number");
+	RFID("RFID"),
+	NUMBER("NUMBER");
 
 	private String value;
 
@@ -17,5 +20,13 @@ public enum TypeMarkEnum {
 
 	public String getValue () {
 		return value;
+	}
+
+	public static List<String> getList () {
+		List<String> res = new ArrayList<>();
+		for(TypeMarkEnum issue : TypeMarkEnum.values()) {
+			res.add(issue.getValue());
+		}
+		return res;
 	}
 }
