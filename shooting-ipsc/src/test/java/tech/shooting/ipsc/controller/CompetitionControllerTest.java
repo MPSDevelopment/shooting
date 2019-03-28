@@ -36,6 +36,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
@@ -928,5 +929,26 @@ public class CompetitionControllerTest {
 			       .getContentAsString();
 		strings = JacksonUtils.fromJson(String[].class, contentAsString);
 		assertEquals(TypeMarkEnum.values().length, strings.length);
+	}
+
+	@Test
+	public void checkGetDisqualificationEnum () throws Exception {
+		//try access to getMarkType with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to getMarkType with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM).header(Token.TOKEN_HEADER,
+			userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to getMarkType with judge role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM)
+		                                                               .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		DisqualificationEnum[] disqualificationEnums = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
+		assertEquals(DisqualificationEnum.values().length, disqualificationEnums.length);
+		//try access to getMarkType with admin role
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM)
+		                                                        .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		disqualificationEnums = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
+		assertEquals(DisqualificationEnum.values().length, disqualificationEnums.length);
 	}
 }

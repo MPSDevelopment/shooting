@@ -13,6 +13,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.ScoreBean;
+import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.service.CompetitionService;
 
@@ -200,5 +201,12 @@ public class CompetitionController {
 	@ApiOperation(value = "Get mark's type lis", notes = "Return list of mark's type")
 	public ResponseEntity<List<String>> getEnumTypeMark () {
 		return new ResponseEntity<>(competitionService.getListTypeMark(), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get Disqualification's type lis", notes = "Return list of Disqualification's type")
+	public ResponseEntity<DisqualificationEnum[]> getEnumDisqualification () {
+		return new ResponseEntity<>(DisqualificationEnum.values(), HttpStatus.OK);
 	}
 }

@@ -12,10 +12,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.PageAble;
-import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.ClassifierIPSC;
-import tech.shooting.ipsc.enums.TypeMarkEnum;
-import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.enums.*;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -299,9 +296,23 @@ public class CompetitionService {
 		}
 		Score scoreResult = new Score().setStageId(stageId)
 		                               .setPersonId(competitor.getPerson().getId())
-		                               .setScore(score.getScore())
-		                               .setTimeOfExercise(score.getTimeOfExercise())
-		                               .setDisqualificationReason(score.getDisqualificationReason());
+		                               .setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
+		switch(score.getDisqualificationReason()) {
+			case "DISQUALIFICATION":
+				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
+				break;
+			case "ABSENT":
+				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.getType());
+				break;
+			case "INJURED":
+				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.getType());
+				break;
+			case "BROKEN_RULE":
+				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.getType());
+				break;
+			default:
+				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
+		}
 		scoreResult = scoreRepository.save(scoreResult);
 		List<Score> result = competitor.getResult();
 		result.add(scoreResult);

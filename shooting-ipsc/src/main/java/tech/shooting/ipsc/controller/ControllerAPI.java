@@ -197,4 +197,5 @@ public class ControllerAPI {
 
 	public static final String COMPETITION_CONTROLLER_POST_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
 
+	public static final String PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM = "/enum/disqualification";
 }
