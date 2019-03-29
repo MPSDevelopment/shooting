@@ -9,10 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.SubjectsName;
@@ -47,4 +45,11 @@ public class QuizController {
 	public ResponseEntity<List<Quiz>> getAll () {
 		return new ResponseEntity<>(quizService.getAllQuiz(), HttpStatus.OK);
 	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ)
+	@ApiOperation(value = "Get quiz from db by id", notes = "Return quiz")
+	public ResponseEntity<Quiz> getQuiz (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(quizService.getQuiz(id), HttpStatus.OK);
+	}
+
 }

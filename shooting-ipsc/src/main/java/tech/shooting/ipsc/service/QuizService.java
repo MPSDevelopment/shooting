@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.pojo.Quiz;
@@ -30,5 +32,13 @@ public class QuizService {
 
 	public List<Quiz> getAllQuiz () {
 		return quizRepository.findAll();
+	}
+
+	public Quiz getQuiz (Long id) throws BadRequestException {
+		return checkQuiz(id);
+	}
+
+	private Quiz checkQuiz (Long id) throws BadRequestException {
+		return quizRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect quiz id %s", id)));
 	}
 }
