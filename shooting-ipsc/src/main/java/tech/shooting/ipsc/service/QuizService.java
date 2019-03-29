@@ -75,11 +75,12 @@ public class QuizService {
 	}
 
 	public void deleteQuestion (Long id, Long questionId) throws BadRequestException {
-		Quiz quiz = checkQuiz(id);
-		Question question = checkQuestion(quiz, questionId);
-		List<Question> questionList = quiz.getQuestionList();
-		questionList.remove(question);
-		quizRepository.save(quiz.setQuestionList(questionList));
+		// Quiz quiz = checkQuiz(id);
+		// Question question = checkQuestion(quiz, questionId);
+		// List<Question> questionList = quiz.getQuestionList();
+		// questionList.remove(question);
+		// quizRepository.save(quiz.setQuestionList(questionList));
+		quizRepository.pullQuestion(id, questionId);
 	}
 
 	public Question updateQuestion (Long id, Long questionId, Question question) throws BadRequestException {

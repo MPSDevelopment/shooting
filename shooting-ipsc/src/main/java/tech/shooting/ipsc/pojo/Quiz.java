@@ -20,6 +20,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class Quiz extends BaseDocument {
+	public static final String QUESTIONS = "questionList";
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz")
 	private Subject subject;
