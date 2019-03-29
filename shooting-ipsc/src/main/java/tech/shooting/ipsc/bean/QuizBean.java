@@ -1,31 +1,39 @@
-package tech.shooting.ipsc.pojo;
+package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.Document;
-import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.Subject;
+import tech.shooting.ipsc.pojo.Question;
+import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "quiz")
-@TypeAlias("quiz")
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
-public class Quiz extends BaseDocument {
+@ApiModel(value = "Quiz create")
+@EqualsAndHashCode(callSuper = false)
+@ToString
+public class QuizBean {
 	@JsonProperty
-	@ApiModelProperty(value = "Subject quiz")
+	@ApiModelProperty(value = "Subject quiz", required = true)
+	@NotNull
 	private Subject subject;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Quiz name")
+	@ApiModelProperty(value = "Quiz name", required = true)
+	@NotNull
 	private QuizName name;
 
 	@JsonProperty
@@ -33,17 +41,17 @@ public class Quiz extends BaseDocument {
 	private List<Question> questionList = new ArrayList<>();
 
 	@JsonProperty
-	@ApiModelProperty(value = "Time for answer")
+	@ApiModelProperty(value = "Time for answer", required = true)
 	@Positive(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
 	@JsonProperty
-	@ApiModelProperty(value = "% for satisfactorily mark")
+	@ApiModelProperty(value = "% for satisfactorily mark", required = true)
 	@PositiveOrZero
 	private int satisfactorily;
 
 	@JsonProperty
-	@ApiModelProperty(value = "% for great mark")
+	@ApiModelProperty(value = "% for great mark", required = true)
 	@PositiveOrZero
 	private int great;
 

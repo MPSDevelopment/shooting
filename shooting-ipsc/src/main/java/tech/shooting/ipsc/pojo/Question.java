@@ -12,16 +12,16 @@ import java.util.List;
 @Accessors(chain = true)
 public class Question extends BaseDocument {
 	@JsonProperty
-	@ApiModelProperty(value = "List of choice")
+	@ApiModelProperty(value = "List of choice", required = true)
 	List<Answer> answers;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Question")
+	@ApiModelProperty(value = "Question", required = true)
 	private Ask question;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Right choice")
-	private byte right;
+	@ApiModelProperty(value = "Right choice", required = true)
+	private int right;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Random write")

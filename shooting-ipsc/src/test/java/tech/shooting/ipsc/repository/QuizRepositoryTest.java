@@ -37,7 +37,7 @@ class QuizRepositoryTest {
 	@BeforeEach
 	public void before () {
 		quizRepository.deleteAll();
-		quiz = new Quiz().setSubject(Subject.FIRE).setName(new QuizName().setKz("test").setRus("балалайка"));
+		quiz = new Quiz().setSubject(Subject.FIRE).setSatisfactorily(50).setName(new QuizName().setKz("test").setRus("да ну на"));
 	}
 
 	@Test
