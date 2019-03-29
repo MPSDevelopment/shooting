@@ -32,6 +32,8 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_DIVISION_ID = "divisionId";
 
 	public static final String PATH_VARIABLE_QUIZ_ID = "quizId";
+
+	public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
 	/*
 	request variable
 		*/
@@ -51,8 +53,11 @@ public class ControllerAPI {
 	public static final String REQUEST_PERSON_ID = "{" + PATH_VARIABLE_PERSON_ID + "}";
 
 	public static final String REQUEST_USER_ID = "{" + PATH_VARIABLE_USER_ID + "}";
-
 	public static final String REQUEST_QUIZ_ID = "{" + PATH_VARIABLE_QUIZ_ID + "}";
+
+	public static final String REQUEST_QUESTION_ID = "{" + PATH_VARIABLE_QUESTION_ID + "}";
+
+
 	/*
 	auth controller
 		*/
@@ -64,8 +69,8 @@ public class ControllerAPI {
 	public static final String AUTH_CONTROLLER_POST_LOGOUT = "/logout";
 
 	public static final String AUTH_CONTROLLER_GET_STATUS = "/status";
-
 	public static final String AUTH_CONTROLLER_POST_STATUS = "/status";
+
 	/*
 	user controller
 		*/
@@ -87,8 +92,8 @@ public class ControllerAPI {
 	public static final String USER_CONTROLLER_GET_COUNT = "/count";
 
 	public static final String USER_CONTROLLER_POST_USER = "/create";
-
 	public static final String USER_CONTROLLER_GET_JUDGES = "/all/judge";
+
 	/*
 	person controller
 		*/
@@ -106,8 +111,8 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_PERSONS = "/all";
 
 	public static final String PERSON_CONTROLLER_GET_USERS_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
-
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
+
 	/*
 	competition controller
 		*/
@@ -125,8 +130,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITIONS = "/all";
-
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
+
 	/*
 	competition stage
 		*/
@@ -140,8 +145,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
-
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
+
 	/*
 	competition competitor
 		*/
@@ -157,8 +162,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge";
 
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
-
 	public static final String COMPETITION_CONTROLLER_POST_LIST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitors";
+
 	/*
 	division controller
 		*/
@@ -176,8 +181,8 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_BY_ID = "/division/" + REQUEST_DIVISION_ID;
 
 	public static final String DIVISION_CONTROLLER_PUT_DIVISION = "/division";
-
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_ROOT = "/division/root";
+
 	/*
 	enum
 		 */
@@ -201,8 +206,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
 
 	public static final String PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM = "/enum/disqualification";
-
 	//quiz section
+
 	public static final String QUIZ_CONTROLLER = "/api/quiz";
 
 	public static final String QUIZ_CONTROLLER_POST_QUIZ = "/quiz/create";
@@ -216,4 +221,8 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_PUT_QUIZ = "/quiz/" + REQUEST_QUIZ_ID;
 
 	public static final String QUIZ_CONTROLLER_DELETE_QUIZ = "/quiz/" + REQUEST_QUIZ_ID;
+
+	public static final String QUIZ_CONTROLLER_POST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question";
+
+	public static final String QUIZ_CONTROLLER_GET_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
 }

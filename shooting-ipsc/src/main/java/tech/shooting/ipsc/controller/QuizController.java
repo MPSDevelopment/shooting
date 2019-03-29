@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.QuizBean;
+import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.SubjectsName;
 import tech.shooting.ipsc.service.QuizService;
@@ -63,6 +64,19 @@ public class QuizController {
 	public ResponseEntity deleteQuiz (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		quizService.removeQuiz(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added question to quiz", notes = "Return question object")
+	public ResponseEntity<Question> createQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @RequestBody @Valid Question question) throws BadRequestException {
+		return new ResponseEntity<>(quizService.addQuestion(id, question), HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION)
+	@ApiOperation(value = "Get question", notes = "Return question object")
+	public ResponseEntity<Question> createQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
+		return new ResponseEntity<>(quizService.getQuestion(id, questionId), HttpStatus.OK);
 	}
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.commons.mongo.BaseDocument;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Data
@@ -21,6 +22,7 @@ public class Question extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Right choice", required = true)
+	@Positive
 	private int right;
 
 	@JsonProperty

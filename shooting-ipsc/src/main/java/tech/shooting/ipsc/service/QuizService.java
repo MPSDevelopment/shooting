@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.service;
 
+import com.mpsdevelopment.plasticine.commons.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.enums.Subject;
+import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.SubjectsName;
 import tech.shooting.ipsc.repository.QuizRepository;
@@ -50,5 +52,25 @@ public class QuizService {
 
 	public void removeQuiz (Long id) throws BadRequestException {
 		quizRepository.delete(checkQuiz(id));
+	}
+
+	public Question addQuestion (Long id, Question question) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		if(question.getId() != null) {
+			question.setId(IdGenerator.nextId());
+		}
+		List<Question> questionList = quiz.getQuestionList();
+		questionList.add(question);
+		quizRepository.save(quiz.setQuestionList(questionList));
+		return question;
+	}
+
+	public Question getQuestion (Long id, Long questionId) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		return checkQuestion(quiz, questionId);
+	}
+
+	private Question checkQuestion (Quiz quiz, Long questionId) throws BadRequestException {
+		return quiz.getQuestionList().stream().filter(ask -> ask.getId().equals(questionId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect question id %s", questionId)));
 	}
 }

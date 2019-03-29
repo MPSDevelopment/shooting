@@ -41,6 +41,7 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.QuizService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -87,6 +88,8 @@ class QuizControllerTest {
 
 	private Quiz testQuiz;
 
+	private Question testQuestion;
+
 	@BeforeEach
 	void setUp () {
 		quizRepository.deleteAll();
@@ -99,8 +102,19 @@ class QuizControllerTest {
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		quizBean =
 			new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(Subject.FIRE).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
-		testQuiz =
-			new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(Subject.FIRE).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
+		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... "))
+		                                         .setSubject(Subject.FIRE)
+		                                         .setGreat(90)
+		                                         .setGood(70)
+		                                         .setSatisfactorily(40)
+		                                         .setTime(8000000L));
+		testQuestion = new Question().setQuestion(new Ask().setRus(" аврраоврылоарвларвлоыарвлыора").setKz("What is you name"))
+		                             .setRandom(false)
+		                             .setAnswers(List.of(new Answer().setRus("бояра").setKz("Tom"),
+			                             new Answer().setRus("водяра").setKz("Mike"),
+			                             new Answer().setRus("даун").setKz("Steven"),
+			                             new Answer().setRus("полный ноль").setKz("Undefined")))
+		                             .setRight(3);
 	}
 
 	@Test
@@ -180,8 +194,6 @@ class QuizControllerTest {
 
 	@Test
 	public void checkGetQuiz () throws Exception {
-		//prepare
-		testQuiz = quizRepository.save(testQuiz);
 		//try access to get quiz with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -204,7 +216,6 @@ class QuizControllerTest {
 	@Test
 	public void checkUpdateQuiz () throws Exception {
 		//prepare
-		testQuiz = quizRepository.save(testQuiz);
 		json = JacksonUtils.getJson(testQuiz.setTime(200L));
 		//try access to update quiz with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
@@ -231,8 +242,6 @@ class QuizControllerTest {
 
 	@Test
 	public void checkDeleteQuiz () throws Exception {
-		//prepare
-		testQuiz = quizRepository.save(testQuiz);
 		//try access to remove quiz with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(
 			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())))
@@ -250,5 +259,74 @@ class QuizControllerTest {
 			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(quizRepository.findById(testQuiz.getId()), Optional.empty());
+	}
+
+	@Test
+	public void checkCreateQuestion () throws Exception {
+		//try access to added question to exist quiz
+		//unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//user role
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))
+		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		checkQuestion(testQuestion, JacksonUtils.fromJson(Question.class, contentAsString));
+	}
+
+	private void checkQuestion (Question testQuestion, Question fromJson) {
+		assertEquals(testQuestion.getQuestion(), fromJson.getQuestion());
+		assertEquals(testQuestion.getRight(), fromJson.getRight());
+		assertEquals(testQuestion.getAnswers(), fromJson.getAnswers());
+		assertEquals(testQuestion.isRandom(), fromJson.isRandom());
+	}
+
+	@Test
+	public void checkGetQuestion () throws Exception {
+		//try access to get question by id
+		List<Question> questionList = testQuiz.getQuestionList();
+		questionList.add(testQuestion);
+		testQuiz.setQuestionList(questionList);
+		Quiz save = quizRepository.save(testQuiz);
+		Question question = save.getQuestionList().get(0);
+		//unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())
+		                                                                                     .replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())
+		                                                                                     .replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString())).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())
+		                                                                                     .replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                    ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())
+		                                                                                                              .replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Question fromJson = JacksonUtils.fromJson(Question.class, contentAsString);
+		checkQuestion(question, fromJson);
+		assertEquals(question.getId(), fromJson.getId());
 	}
 }
