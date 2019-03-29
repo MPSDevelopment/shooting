@@ -1,0 +1,26 @@
+version: '2'
+services:
+  rabbit1:
+    image: rabbitmq:3-management
+    restart: always
+    hostname: "avision-rabbitmq"
+    mem_limit: 1G
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "ip34fdsfdasfdsbgsc"
+      RABBITMQ_DEFAULT_PASS: "iprewgbqw43283yausdhasvfassc"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "1883:1883"
+    labels:
+      NAME: "ipsc-rabbitmq"
+    volumes:
+      # - ./data/rabbitmq:/var/lib/rabbitmq
+      # - ./data:/var/lib/rabbitmq:rw
+      - ./log:/var/log/rabbitmq
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+#      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.conf
+#      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      #- ./autocluster-0.4.1.ez:/usr/lib/rabbitmq/lib/rabbitmq_server-3.5.5/plugins/autocluster-0.4.1.ez
