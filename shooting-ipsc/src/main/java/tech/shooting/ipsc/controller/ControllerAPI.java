@@ -212,4 +212,6 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_GET_ALL_QUIZ = "/quiz/all";
 
 	public static final String QUIZ_CONTROLLER_GET_QUIZ = "/quiz/" + REQUEST_QUIZ_ID;
+
+	public static final String QUIZ_CONTROLLER_PUT_QUIZ = "/quiz/" + REQUEST_QUIZ_ID;
 }

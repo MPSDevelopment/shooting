@@ -41,4 +41,10 @@ public class QuizService {
 	private Quiz checkQuiz (Long id) throws BadRequestException {
 		return quizRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect quiz id %s", id)));
 	}
+
+	public Quiz updateQuiz (Long id, QuizBean quizBean) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		BeanUtils.copyProperties(quizBean, quiz);
+		return quizRepository.save(quiz);
+	}
 }
