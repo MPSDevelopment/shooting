@@ -74,9 +74,23 @@ public class QuizController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION)
 	@ApiOperation(value = "Get question", notes = "Return question object")
-	public ResponseEntity<Question> createQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id,
+	public ResponseEntity<Question> getQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuestion(id, questionId), HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUESTION)
+	@ApiOperation(value = "Delete  question", notes = "Return status")
+	public ResponseEntity deleteQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
+		quizService.deleteQuestion(id, questionId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update question to quiz", notes = "Return question object")
+	public ResponseEntity<Question> updateQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId,
+		@RequestBody @Valid Question question) throws BadRequestException {
+		return new ResponseEntity<>(quizService.updateQuestion(id, questionId, question), HttpStatus.OK);
 	}
 
 }

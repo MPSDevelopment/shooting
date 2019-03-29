@@ -225,4 +225,8 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_POST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question";
 
 	public static final String QUIZ_CONTROLLER_GET_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
+
+	public static final String QUIZ_CONTROLLER_DELETE_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
+
+	public static final String QUIZ_CONTROLLER_PUT_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
 }

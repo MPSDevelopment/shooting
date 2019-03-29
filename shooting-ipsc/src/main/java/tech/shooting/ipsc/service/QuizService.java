@@ -73,4 +73,23 @@ public class QuizService {
 	private Question checkQuestion (Quiz quiz, Long questionId) throws BadRequestException {
 		return quiz.getQuestionList().stream().filter(ask -> ask.getId().equals(questionId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect question id %s", questionId)));
 	}
+
+	public void deleteQuestion (Long id, Long questionId) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		Question question = checkQuestion(quiz, questionId);
+		List<Question> questionList = quiz.getQuestionList();
+		questionList.remove(question);
+		quizRepository.save(quiz.setQuestionList(questionList));
+	}
+
+	public Question updateQuestion (Long id, Long questionId, Question question) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		Question questionFromDB = checkQuestion(quiz, questionId);
+		BeanUtils.copyProperties(question, questionFromDB);
+		List<Question> questionList = quiz.getQuestionList();
+		questionList.remove(question);
+		questionList.add(questionFromDB);
+		quizRepository.save(quiz.setQuestionList(questionList));
+		return questionFromDB;
+	}
 }
