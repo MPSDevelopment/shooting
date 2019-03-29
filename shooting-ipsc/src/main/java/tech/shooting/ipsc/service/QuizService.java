@@ -27,4 +27,8 @@ public class QuizService {
 	public List<SubjectsName> getEnum () {
 		return Subject.getList();
 	}
+
+	public List<Quiz> getAllQuiz () {
+		return quizRepository.findAll();
+	}
 }

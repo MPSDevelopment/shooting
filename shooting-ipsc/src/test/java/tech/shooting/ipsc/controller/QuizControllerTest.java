@@ -150,4 +150,23 @@ class QuizControllerTest {
 			       .getContentAsString();
 		assertEquals(Subject.getList().size(), JacksonUtils.fromJson(SubjectsName[].class, contentAsString).length);
 	}
+
+	@Test
+	public void checkGetAllQuiz () throws Exception {
+		//try access to get list quiz with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to get list quiz with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to get list quiz with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to get list quiz with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ).header(Token.TOKEN_HEADER, adminToken))
+		                                .andExpect(MockMvcResultMatchers.status().isOk())
+		                                .andReturn()
+		                                .getResponse()
+		                                .getContentAsString();
+		assertEquals(quizRepository.findAll().size(), JacksonUtils.fromJson(Quiz[].class, contentAsString).length);
+	}
 }

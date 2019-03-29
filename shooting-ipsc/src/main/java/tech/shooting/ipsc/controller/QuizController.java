@@ -41,4 +41,10 @@ public class QuizController {
 	public ResponseEntity<List<SubjectsName>> getEnumSubjects () {
 		return new ResponseEntity<>(quizService.getEnum(), HttpStatus.OK);
 	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ)
+	@ApiOperation(value = "Get all quiz from db", notes = "Return list of exist quiz")
+	public ResponseEntity<List<Quiz>> getAll () {
+		return new ResponseEntity<>(quizService.getAllQuiz(), HttpStatus.OK);
+	}
 }
