@@ -202,4 +202,6 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER = "/api/quiz";
 
 	public static final String QUIZ_CONTROLLER_POST_QUIZ = "/quiz/create";
+
+	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 }

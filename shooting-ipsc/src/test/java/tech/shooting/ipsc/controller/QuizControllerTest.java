@@ -31,10 +31,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.Subject;
-import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.QuizName;
-import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
@@ -132,5 +129,25 @@ class QuizControllerTest {
 		assertEquals(fromFront.getGood(), quiz.getGood());
 		assertEquals(fromFront.getSatisfactorily(), quiz.getSatisfactorily());
 		assertEquals(fromFront.getTime(), quiz.getTime());
+	}
+
+	@Test
+	public void checkGetEnumSubjects () throws Exception {
+		//try access to get subjects enum with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to get subjects enum with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to get subjects enum with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to get subjects enum with admin role
+		String contentAsString =
+			mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM).header(Token.TOKEN_HEADER, adminToken))
+			       .andExpect(MockMvcResultMatchers.status().isOk())
+			       .andReturn()
+			       .getResponse()
+			       .getContentAsString();
+		assertEquals(Subject.getList().size(), JacksonUtils.fromJson(SubjectsName[].class, contentAsString).length);
 	}
 }
