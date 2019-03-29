@@ -134,13 +134,14 @@ class QuizControllerTest {
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(json)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		long count = quizRepository.count();
 		//try access to createQuiz with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ)
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                                               .content(json)
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Quiz quiz = JacksonUtils.fromJson(Quiz.class, contentAsString);
-		assertEquals(1, quizRepository.findAll().size());
+		assertEquals(count + 1, quizRepository.findAll().size());
 		checkQuiz(quizBean, quiz);
 	}
 
