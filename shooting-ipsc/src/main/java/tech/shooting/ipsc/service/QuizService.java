@@ -47,4 +47,8 @@ public class QuizService {
 		BeanUtils.copyProperties(quizBean, quiz);
 		return quizRepository.save(quiz);
 	}
+
+	public void removeQuiz (Long id) throws BadRequestException {
+		quizRepository.delete(checkQuiz(id));
+	}
 }

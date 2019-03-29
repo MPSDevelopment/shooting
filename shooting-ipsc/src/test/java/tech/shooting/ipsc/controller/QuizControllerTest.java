@@ -42,6 +42,7 @@ import tech.shooting.ipsc.service.QuizService;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -226,5 +227,28 @@ class QuizControllerTest {
 		                                                               .content(Objects.requireNonNull(json))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(testQuiz, JacksonUtils.fromJson(Quiz.class, contentAsString));
+	}
+
+	@Test
+	public void checkDeleteQuiz () throws Exception {
+		//prepare
+		testQuiz = quizRepository.save(testQuiz);
+		//try access to remove quiz with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.delete(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to remove quiz with user role
+		mockMvc.perform(MockMvcRequestBuilders.delete(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to remove quiz with judge role
+		mockMvc.perform(MockMvcRequestBuilders.delete(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to remove quiz with admin role
+		mockMvc.perform(MockMvcRequestBuilders.delete(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		assertEquals(quizRepository.findById(testQuiz.getId()), Optional.empty());
 	}
 }

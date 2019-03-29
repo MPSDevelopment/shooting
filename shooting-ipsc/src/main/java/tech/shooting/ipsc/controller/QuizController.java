@@ -58,4 +58,11 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.updateQuiz(id, quizBean), HttpStatus.OK);
 	}
 
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ)
+	@ApiOperation(value = "Delete quiz from db by id", notes = "Return status")
+	public ResponseEntity deleteQuiz (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
+		quizService.removeQuiz(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 }
