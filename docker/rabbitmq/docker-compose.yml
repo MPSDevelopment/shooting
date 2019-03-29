@@ -3,7 +3,7 @@ services:
   rabbit1:
     image: rabbitmq:3-management
     restart: always
-    hostname: "avision-rabbitmq"
+    hostname: "ipsc-rabbitmq"
     mem_limit: 1G
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
@@ -17,10 +17,5 @@ services:
     labels:
       NAME: "ipsc-rabbitmq"
     volumes:
-      # - ./data/rabbitmq:/var/lib/rabbitmq
-      # - ./data:/var/lib/rabbitmq:rw
       - ./log:/var/log/rabbitmq
-      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
-#      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.conf
-#      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-      #- ./autocluster-0.4.1.ez:/usr/lib/rabbitmq/lib/rabbitmq_server-3.5.5/plugins/autocluster-0.4.1.ez
+      - ./rabbitmq:/etc/rabbitmq
