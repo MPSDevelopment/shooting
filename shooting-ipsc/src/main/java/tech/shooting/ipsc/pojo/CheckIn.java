@@ -25,4 +25,10 @@ public class CheckIn extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Status is present")
 	private TypePresent status;
+
+	@DBRef
+	@JsonProperty
+	@ApiModelProperty(value = "Inspection officer")
+	@JsonSerialize(using = BaseDocumentIdSerializer.class)
+	private Person officer;
 }
