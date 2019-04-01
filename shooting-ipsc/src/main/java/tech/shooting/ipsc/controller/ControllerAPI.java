@@ -229,4 +229,8 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_DELETE_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
 
 	public static final String QUIZ_CONTROLLER_PUT_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
+
+	public static final String CHECKIN_CONTROLLER = "/api/checkin";
+
+	public static final String CHECKIN_CONTROLLER_POST_CHECK = "/check";
 }
