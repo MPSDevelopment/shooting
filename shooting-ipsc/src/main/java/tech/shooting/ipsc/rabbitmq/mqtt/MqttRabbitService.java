@@ -23,7 +23,7 @@ public class MqttRabbitService {
 	private String admPsw;
 
 	// - "tcp://127.0.0.1:1883"
-	@Value("${avision.rabbitmq.mqttUrl}")
+	@Value("${ipsc.rabbitmq.mqttUrl}")
 	private String mqttUrl;
 
 	@Autowired(required = true)

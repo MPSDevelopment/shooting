@@ -7,9 +7,9 @@ services:
     hostname: ipsc-rabbitmq
     mem_limit: 1G
     environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "ip34fdsfdasfdsbgsc"
-      RABBITMQ_DEFAULT_PASS: "iprewgbqw43283yausdhasvfassc"
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_USER: ip34fdsfdasfdsbgsc
+      RABBITMQ_DEFAULT_PASS: iprewgbqw43283yausdhasvfassc
       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - "15673:15672"
@@ -19,4 +19,4 @@ services:
       NAME: "ipsc-rabbitmq"
     volumes:
       - ./log:/var/log/rabbitmq
-      - ./rabbitmq:/etc/rabbitmq
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
