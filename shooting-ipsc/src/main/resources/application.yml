@@ -36,6 +36,13 @@ spring:
       #      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5673
+    username: ip34fdsfdasfdsbgsc
+    password: iprewgbqw43283yausdhasvfassc
+    template:
+      reply-timeout: 5000
 server:
   address: 127.0.0.1
   port: 9900
@@ -67,6 +74,13 @@ spring:
       #      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+  rabbitmq:
+    host: 40.69.138.82
+    port: 5673
+    username: ip34fdsfdasfdsbgsc
+    password: iprewgbqw43283yausdhasvfassc
+    template:
+      reply-timeout: 5000
 server:
   address: 10.0.6.4
   port: 9901
