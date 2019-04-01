@@ -8,6 +8,7 @@ import tech.shooting.commons.pojo.TokenUser;
 import tech.shooting.ipsc.bean.CheckinBean;
 import tech.shooting.ipsc.pojo.CheckIn;
 import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.CheckinRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
@@ -25,9 +26,13 @@ public class CheckinService {
 
 	public CheckIn createCheck (TokenUser byToken, CheckinBean bean) throws BadRequestException {
 		CheckIn check = new CheckIn();
-		Person person = checkPerson(bean);
-		check.setPerson(person).setStatus(bean.getStatus());
+		check.setPerson(checkPerson(bean)).setStatus(bean.getStatus()).setOfficer(checkUser(byToken));
+		check = checkinRepository.save(check);
 		return check;
+	}
+
+	private User checkUser (TokenUser byToken) throws BadRequestException {
+		return userRepository.findById(byToken.getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect  user Id %s", byToken.getId())));
 	}
 
 	private Person checkPerson (CheckinBean bean) throws BadRequestException {
