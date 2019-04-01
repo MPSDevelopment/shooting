@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
@@ -43,6 +44,7 @@ public class Person extends BaseDocument {
 	@ApiModelProperty(value = "Person's rank")
 	private String rank;
 
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
 	private Division division;

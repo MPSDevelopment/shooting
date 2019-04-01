@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping(ControllerAPI.CHECKIN_CONTROLLER)
 @Api(ControllerAPI.CHECKIN_CONTROLLER)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN') or hasRole('User')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 public class CheckinController {
 	@Autowired
 	private CheckinService checkinService;

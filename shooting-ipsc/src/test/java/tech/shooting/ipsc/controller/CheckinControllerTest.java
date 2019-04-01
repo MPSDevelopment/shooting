@@ -16,9 +16,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -121,6 +124,30 @@ class CheckinControllerTest {
 		assertTrue(personRepository.findByDivision(root).size() == 0);
 		//create 50 persons
 		createPersons(50, root);
+		//check  size
+		int count = personRepository.findByDivision(root).size();
+		assertEquals(25, count);
+		//try access
+		// unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		CheckIn[] checkIns = JacksonUtils.fromJson(CheckIn[].class, contentAsString);
+		assertEquals(count, checkIns.length);
+		//user
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                                        .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		checkIns = JacksonUtils.fromJson(CheckIn[].class, contentAsString);
+		assertEquals(count, checkIns.length);
 	}
 
 	private void createPersons (int count, Division division) {

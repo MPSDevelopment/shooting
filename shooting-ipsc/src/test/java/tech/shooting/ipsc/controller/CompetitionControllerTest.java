@@ -35,11 +35,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
-import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.ClassifierIPSC;
-import tech.shooting.ipsc.enums.DisqualificationEnum;
-import tech.shooting.ipsc.enums.TypeMarkEnum;
-import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.enums.*;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -172,8 +168,7 @@ public class CompetitionControllerTest {
 		// try access to createCompetition() with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, userToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try access to createCompetition() with judge
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
@@ -237,8 +232,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test)))
-		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try access to updateCompetition with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))

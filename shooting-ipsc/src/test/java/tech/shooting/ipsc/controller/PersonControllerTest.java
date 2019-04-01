@@ -137,8 +137,7 @@ public class PersonControllerTest {
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//try access to createPerson() with user role without body
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)
-		                                      .header(Token.TOKEN_HEADER, userToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		//try access to createPerson() with judge role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
@@ -227,8 +226,7 @@ public class PersonControllerTest {
 		//try to access updatePerson() with authorized user but without context
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(testing.getId())))
-		                                      .header(Token.TOKEN_HEADER, userToken)
-		                                      .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		                                      .header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		//try to access updatePerson() with judge user but without context
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(testing.getId())))

@@ -24,7 +24,6 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
-import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
@@ -139,15 +138,6 @@ public class AuthControllerTest {
 		       .andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	@Test
-	public void checkAdminLogin () throws Exception {
-		//try to login with admin user
-		userDao.createIfNotExists(new User().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
-		UserLogin userLogin = new UserLogin().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD);
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(JacksonUtils.getFullJson(userLogin))).andExpect(MockMvcResultMatchers.status().isOk());
-	}
 
 	@Test
 	public void checkPostLogOut () throws Exception {
