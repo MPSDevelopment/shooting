@@ -233,4 +233,6 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";
 
 	public static final String CHECKIN_CONTROLLER_POST_CHECK = "/check";
+
+	public static final String CHECKIN_CONTROLLER_GET_BY_DIVISION = "/check/division/" + REQUEST_DIVISION_ID;
 }
