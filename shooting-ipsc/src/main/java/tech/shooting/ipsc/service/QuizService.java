@@ -1,6 +1,5 @@
 package tech.shooting.ipsc.service;
 
-import com.mpsdevelopment.plasticine.commons.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +55,7 @@ public class QuizService {
 
 	public Question addQuestion (Long id, Question question) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
-		if(question.getId() != null) {
-			question.setId(IdGenerator.nextId());
-		}
-		List<Question> questionList = quiz.getQuestionList();
-		questionList.add(question);
-		quizRepository.save(quiz.setQuestionList(questionList));
-		return question;
+		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
 
 	public Question getQuestion (Long id, Long questionId) throws BadRequestException {
@@ -75,22 +68,12 @@ public class QuizService {
 	}
 
 	public void deleteQuestion (Long id, Long questionId) throws BadRequestException {
-		// Quiz quiz = checkQuiz(id);
-		// Question question = checkQuestion(quiz, questionId);
-		// List<Question> questionList = quiz.getQuestionList();
-		// questionList.remove(question);
-		// quizRepository.save(quiz.setQuestionList(questionList));
 		quizRepository.pullQuestion(id, questionId);
 	}
 
 	public Question updateQuestion (Long id, Long questionId, Question question) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
-		Question questionFromDB = checkQuestion(quiz, questionId);
-		BeanUtils.copyProperties(question, questionFromDB);
-		List<Question> questionList = quiz.getQuestionList();
-		questionList.remove(question);
-		questionList.add(questionFromDB);
-		quizRepository.save(quiz.setQuestionList(questionList));
-		return questionFromDB;
+		checkQuestion(quiz, questionId);
+		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
 }
