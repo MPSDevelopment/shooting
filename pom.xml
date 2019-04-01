@@ -57,6 +57,7 @@
 		<spring.boot.version>2.1.3.RELEASE</spring.boot.version>
 		<spring.version>5.1.5.RELEASE</spring.version>
 		<spring.security.version>5.1.4.RELEASE</spring.security.version>
+		<spring.integration.version>5.1.3.RELEASE</spring.integration.version>
 		<spring.data.version>2.1.5.RELEASE</spring.data.version>
 		<spring.amqp.version>2.1.4.RELEASE</spring.amqp.version>
 		<servlet.version>3.1.0</servlet.version>

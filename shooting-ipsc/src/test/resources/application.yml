@@ -23,6 +23,11 @@ spring:
       version: 4.0.6
       features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
       storage.database-dir: data/embeddedmongo
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5673
+    username: ip34fdsfdasfdsbgsc
+    password: iprewgbqw43283yausdhasvfassc
 logging:
   level:
     #    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
@@ -31,6 +36,10 @@ logging:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 ipsc:
+  rabbitmq:
+    apiUrl: http://40.69.138.82:15673
+    mqttUrl: tcp://40.69.138.82:1884
+    ipscQueueName: ipsc
 
 ---
 spring:
@@ -52,6 +61,11 @@ spring:
       version: 4.0.6
       features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
       storage.database-dir: data/embeddedmongo
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5673
+    username: ip34fdsfdasfdsbgsc
+    password: iprewgbqw43283yausdhasvfassc
 server:
   address: 127.0.0.1
   port: 9909
@@ -61,6 +75,10 @@ server:
     min-response-size: 1024
 
 ipsc:
+  rabbitmq:
+    apiUrl: http://40.69.138.82:15672
+    mqttUrl: tcp://40.69.138.82:1883
+    ipscQueueName: ipsc
 
 ---
 spring:
@@ -97,5 +115,9 @@ server:
     min-response-size: 1024
 
 ipsc:
+  rabbitmq:
+    apiUrl: http://40.69.138.82:15672
+    mqttUrl: tcp://40.69.138.82:1883
+    ipscQueueName: ipsc
 
 
