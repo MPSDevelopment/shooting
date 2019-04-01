@@ -41,8 +41,7 @@ import tech.shooting.ipsc.service.CheckinService;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
@@ -114,6 +113,25 @@ class CheckinControllerTest {
 		userToken = tokenUtils.createToken(user.getId(), Token.TokenType.USER, user.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+	}
+
+	@Test
+	void getCheckList () throws Exception {
+		//check size of person list if division is new
+		assertTrue(personRepository.findByDivision(root).size() == 0);
+		//create 50 persons
+		createPersons(50, root);
+	}
+
+	private void createPersons (int count, Division division) {
+		for(int i = 0; i < count; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			if(i % 2 == 0) {
+				person.setDivision(division);
+			}
+			personRepository.save(person);
+			log.info("Person %s has been created", person);
+		}
 	}
 
 	@Test
