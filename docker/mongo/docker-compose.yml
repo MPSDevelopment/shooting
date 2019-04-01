@@ -20,7 +20,7 @@ services:
       MONGODB_PORT_NUMBER: 27017
       MONGODB_EXTRA_FLAGS: --smallfiles  # --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
       
-    volumes:
-      - ./data:/bitnami:rw  
+#    volumes:
+#      - ./data:/bitnami:rw  
     ports:
     - 27018:27017

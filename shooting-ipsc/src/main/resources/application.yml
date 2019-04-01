@@ -53,9 +53,10 @@ server:
 
 ipsc:
   rabbitmq:
-    apiUrl: http://localhost:15672
-    mqttUrl: tcp://localhost:1883
+    apiUrl: http://localhost:15673
+    mqttUrl: tcp://localhost:1884
     ipscQueueName: ipsc
+    
 ---
 spring:
   profiles: development
