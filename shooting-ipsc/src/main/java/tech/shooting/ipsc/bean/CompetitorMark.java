@@ -12,6 +12,7 @@ import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -37,5 +38,6 @@ public class CompetitorMark implements ValiationExportable {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's active, if he passed all the docs and other checks", required = true)
+	@NotNull
 	private boolean active;
 }
