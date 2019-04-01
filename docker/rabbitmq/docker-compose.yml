@@ -2,8 +2,9 @@ version: '2'
 services:
   rabbit1:
     image: rabbitmq:3-management
+    container_name: ipsc-rabbitmq
     restart: always
-    hostname: "ipsc-rabbitmq"
+    hostname: ipsc-rabbitmq
     mem_limit: 1G
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
@@ -11,9 +12,9 @@ services:
       RABBITMQ_DEFAULT_PASS: "iprewgbqw43283yausdhasvfassc"
       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
-      - "15672:15672"
-      - "5672:5672"
-      - "1883:1883"
+      - "15673:15672"
+      - "5673:5672"
+      - "1884:1883"
     labels:
       NAME: "ipsc-rabbitmq"
     volumes:

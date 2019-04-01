@@ -64,12 +64,18 @@
 			<version>${spring.boot.version}</version>
 		</dependency>
 
-		<!-- Spring Websocket -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-websocket</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <!--RabbitMQ -->
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>${spring.amqp.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<!--jwt with rsa -->
 		<dependency>
