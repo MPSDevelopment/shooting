@@ -45,7 +45,10 @@ server:
     min-response-size: 1024
 
 ipsc:
-
+  rabbitmq:
+    apiUrl: http://localhost:15672
+    mqttUrl: tcp://localhost:1883
+    ipscQueueName: ipsc
 ---
 spring:
   profiles: development
@@ -73,7 +76,11 @@ server:
     min-response-size: 1024
   connection-timeout: 20000
 ipsc:
-
+  rabbitmq:
+    apiUrl: http://40.69.138.82:15672
+    mqttUrl: tcp://40.69.138.82:1883
+    ipscQueueName: ipsc
+    
 ---
 spring:
   profiles: docker

@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 @Slf4j
 public class CachingConfig extends CachingConfigurerSupport {
-	public static final String OPERATIONS_CACHE = "operations";
+	
+	public static final String IPSC_CACHE = "ipsc";
 	//	@Bean
 	//	public CacheManager cacheManager() {
 	//		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
@@ -31,7 +32,7 @@ public class CachingConfig extends CachingConfigurerSupport {
 	@Bean
 	public CacheManager cacheManager () {
 		log.info("Cache manager initialization");
-		return new ConcurrentMapCacheManager(OPERATIONS_CACHE);
+		return new ConcurrentMapCacheManager(IPSC_CACHE);
 	}
 
 	@Bean
