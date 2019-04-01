@@ -9,6 +9,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 
 @Document("checkin")
@@ -24,7 +25,7 @@ public class CheckIn extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Status is present")
-	private TypePresent status;
+	private TypeOfPresence status;
 
 	@DBRef
 	@JsonProperty
