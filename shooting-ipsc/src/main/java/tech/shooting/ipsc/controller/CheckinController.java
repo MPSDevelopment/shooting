@@ -44,7 +44,7 @@ public class CheckinController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added check", notes = "Return created check")
-	public ResponseEntity<CheckIn> createCheck (@RequestHeader(value = Token.TOKEN_HEADER) String token, @RequestBody @Valid CheckinBean bean) throws BadRequestException {
+	public ResponseEntity<List<CheckIn>> createCheck (@RequestHeader(value = Token.TOKEN_HEADER) String token, @RequestBody @Valid List<CheckinBean> bean) throws BadRequestException {
 		TokenUser byToken = tokenUtils.getByToken(token);
 		return new ResponseEntity<>(checkinService.createCheck(byToken, bean), HttpStatus.CREATED);
 	}

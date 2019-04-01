@@ -15,6 +15,7 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,11 +32,15 @@ public class CheckinService {
 	@Autowired
 	private DivisionRepository divisionRepository;
 
-	public CheckIn createCheck (TokenUser byToken, CheckinBean bean) throws BadRequestException {
-		CheckIn check = new CheckIn();
-		check.setPerson(checkPerson(bean)).setStatus(bean.getStatus()).setOfficer(checkUser(byToken));
-		check = checkinRepository.save(check);
-		return check;
+	public List<CheckIn> createCheck (TokenUser byToken, List<CheckinBean> beans) throws BadRequestException {
+		List<CheckIn> res = new ArrayList<>();
+		for(CheckinBean bean : beans) {
+			CheckIn check = new CheckIn();
+			check.setPerson(checkPerson(bean)).setStatus(bean.getStatus()).setOfficer(checkUser(byToken));
+			check = checkinRepository.save(check);
+			res.add(check);
+		}
+		return res;
 	}
 
 	private User checkUser (TokenUser byToken) throws BadRequestException {
