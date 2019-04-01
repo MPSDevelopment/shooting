@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.mongo.BaseDocument;
@@ -50,4 +51,9 @@ public class User extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "User's address", required = true)
 	private Address address;
+
+	@DBRef
+	@JsonProperty
+	@ApiModelProperty(value = "Person id")
+	private Person person;
 }
