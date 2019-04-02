@@ -1,7 +1,10 @@
 package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.engio.mbassy.listener.Handler;
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.rabbitmq.event.MqttSimpleEvent;
 import tech.shooting.ipsc.rabbitmq.mqtt.MqttRabbitService;
 import tech.shooting.ipsc.rabbitmq.mqtt.SimpleMqttCallBack;
 import tech.shooting.ipsc.security.TokenUtils;
@@ -18,6 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
 import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
@@ -35,46 +41,96 @@ class MqttServiceTest {
 	@Autowired
 	private MqttRabbitService mqttRabbitService;
 
+	private int count = 0;
+
 	@Test
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
 
-		String topicName = "command/topic";
-		
+		EventBus.subscribe(this);
+
+		String topicName1 = "command/topic1";
+
+		String topicName2 = "command/topic2";
+
 		// subscriber
 
+		var subscriber1 = createSubscriber("tcp://127.0.0.1:1884", topicName1);
+		var subscriber2 = createSubscriber("tcp://127.0.0.1:1884", topicName2);
+		var subscriber3 = createSubscriber("tcp://127.0.0.1:1884", topicName2);
+		
+		var subscriberAll = createSubscriber("tcp://127.0.0.1:1884", "command/*");
+
+		// publisher
+
+		var publisher = createPublisher("tcp://localhost:1884");
+
+		// publish a message
+
+		MqttMessage message = createMessage("Crazy message");
+
+		MqttTopic topic1 = publisher.getTopic(topicName1);
+		topic1.publish(message);
+
+		MqttTopic topic2 = publisher.getTopic(topicName2);
+		topic2.publish(message);
+
+		Thread.sleep(2000);
+		
+		publisher.disconnect();
+		subscriber1.disconnect();
+		subscriber2.disconnect();
+		subscriber3.disconnect();
+		subscriberAll.disconnect();
+
+		assertEquals(5, count);
+
+	}
+
+	private MqttMessage createMessage(String payload) {
+		MqttMessage message = new MqttMessage();
+		message.setQos(1);
+		message.setRetained(false);
+		message.setPayload(payload.getBytes());
+		return message;
+	}
+
+	private MqttClient createPublisher(String url) throws MqttException {
 		MqttConnectOptions connOpts = new MqttConnectOptions();
 		connOpts.setCleanSession(true); // no persistent session
 		connOpts.setKeepAliveInterval(10000);
 		connOpts.setUserName(TEST_LOGIN);
 		connOpts.setPassword(TEST_PASSWORD.toCharArray());
 
-		var subscriber = new MqttClient("tcp://127.0.0.1:1884", MqttClient.generateClientId());
+		String publisherId = UUID.randomUUID().toString();
+		var publisher = new MqttClient(url, publisherId);
+		publisher.connect(connOpts);
+		return publisher;
+	}
+
+	private MqttClient createSubscriber(String url, String... topicNames) throws MqttException {
+		MqttConnectOptions connOpts = new MqttConnectOptions();
+		connOpts.setCleanSession(true); // no persistent session
+		connOpts.setKeepAliveInterval(10000);
+		connOpts.setUserName(TEST_LOGIN);
+		connOpts.setPassword(TEST_PASSWORD.toCharArray());
+
+		var subscriber = new MqttClient(url, MqttClient.generateClientId());
 		subscriber.setCallback(new SimpleMqttCallBack());
 		subscriber.connect(connOpts);
-		subscriber.subscribe(topicName);
-		
-		// publisher 
-		
-		String publisherId = UUID.randomUUID().toString();
-		var publisher = new MqttClient("tcp://localhost:1884", publisherId);
-		publisher.connect(connOpts);
-		
-		// publish a message
+		Arrays.asList(topicNames).forEach(topicName -> {
+			try {
+				subscriber.subscribe(topicName);
+			} catch (MqttException e) {
+				e.printStackTrace();
+			}
+		});
 
-		MqttTopic topic1 = publisher.getTopic(topicName);
+		return subscriber;
+	}
 
-		MqttMessage message = new MqttMessage();
-		message.setQos(1);
-		message.setRetained(false);
-		message.setPayload("Hello world from Java".getBytes());
-
-		topic1.publish(message);
-
-		Thread.sleep(1000);
-		subscriber.disconnect();
-		
-		
-
+	@Handler
+	public void handle(MqttSimpleEvent event) {
+		count++;
 	}
 
 //    @Test
