@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomCheckinRepository {
 	List<CheckIn> findAllByDateAndDivision (OffsetDateTime createdDate, Division division);
 
-	List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Long divisionId);
+	List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Division divisionId);
 
 	List<CheckIn> findAllByDivision (Long division);
 

@@ -95,5 +95,18 @@ class CheckinRepositoryTest {
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<CheckIn> allCurrent = checkinRepository.findAllByDateAndDivision(createdDate, root);
 		log.info("Size %s \t of result search by division id %s and create date is %s", allCurrent.size(), root.getId(), createdDate);
+		Division subroot = divisionRepository.save(new Division().setParent(root).setName("subroot").setActive(true));
+		List<Division> children = root.getChildren();
+		children.add(subroot);
+		root.setChildren(children);
+		divisionRepository.save(root);
+		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		person.setDivision(subroot);
+		Person save = personRepository.save(person);
+		checkinRepository.save(new CheckIn().setPerson(save).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(subroot.getId()));
+		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
+		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
+		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
+
 	}
 }

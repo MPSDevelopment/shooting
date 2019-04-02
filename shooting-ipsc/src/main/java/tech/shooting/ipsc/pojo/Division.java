@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -19,7 +18,6 @@ import java.util.List;
 @TypeAlias("division")
 @Data
 @Accessors(chain = true)
-@ToString(callSuper = true)
 public class Division extends BaseDocument {
 	public static final String NAME_WITH_PARENT = "name and parent id";
 
