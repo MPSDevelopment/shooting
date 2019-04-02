@@ -83,7 +83,7 @@ public class MqttRabbitService {
 		}
 	}
 
-	private void publishMessage(String nameTopic, int qos, String json) {
+	public void publishMessage(String nameTopic, int qos, String json) {
 		if (StringUtils.isBlank(nameTopic)) {
 			log.error("Error - You are try SEND MQTT Message on Empty TOPIC");
 			return;
