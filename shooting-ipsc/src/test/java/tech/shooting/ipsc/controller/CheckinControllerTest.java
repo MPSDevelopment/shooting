@@ -25,6 +25,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CheckinBean;
+import tech.shooting.ipsc.bean.CheckinBeanToFront;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -199,17 +200,36 @@ class CheckinControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// judge user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
-		                                      .header(Token.TOKEN_HEADER, judgeToken)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
-		// admin user
+		// user user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
-		                                                               .header(Token.TOKEN_HEADER, adminToken)
+		                                                               .header(Token.TOKEN_HEADER, userToken)
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                                               .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-		List<CheckIn> listFromJson = JacksonUtils.getListFromJson(CheckIn[].class, contentAsString);
-		System.out.println(listFromJson);
-		System.out.println(contentAsString);
+		List<CheckinBeanToFront> listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
+		assertEquals(listFromJson.size(), fromFront.size());
+		for(int i = 0; i < fromFront.size(); i++) {
+			assertEquals(fromFront.get(i).getPerson(), listFromJson.get(i).getPerson());
+			assertEquals(fromFront.get(i).getStatus(), listFromJson.get(i).getStatus());
+		}
+		assertEquals(checkinRepository.count(), fromFront.size());
+		checkinRepository.deleteAll();
+		assertEquals(checkinRepository.count(), 0);
+		// admin user
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
+		                                                        .header(Token.TOKEN_HEADER, adminToken)
+		                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                        .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
+		assertEquals(listFromJson.size(), fromFront.size());
+		for(int i = 0; i < fromFront.size(); i++) {
+			assertEquals(fromFront.get(i).getPerson(), listFromJson.get(i).getPerson());
+			assertEquals(fromFront.get(i).getStatus(), listFromJson.get(i).getStatus());
+		}
+		assertEquals(checkinRepository.count(), fromFront.size());
+
+
 	}
 }

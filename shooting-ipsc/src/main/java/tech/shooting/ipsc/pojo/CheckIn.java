@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,6 +17,7 @@ import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 @TypeAlias("checkin")
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
 public class CheckIn extends BaseDocument {
 	@DBRef
 	@JsonProperty
