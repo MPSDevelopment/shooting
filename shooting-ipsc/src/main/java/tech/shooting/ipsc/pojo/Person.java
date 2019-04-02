@@ -20,6 +20,8 @@ import java.util.List;
 public class Person extends BaseDocument {
 	public static final String NAME_AND_BIRTHDAY = "name and birthday";
 
+	public static final String DIVISION = "division";
+
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	private String name;

@@ -36,7 +36,9 @@ public class CheckinService {
 		List<CheckIn> res = new ArrayList<>();
 		for(CheckinBean bean : beans) {
 			CheckIn check = new CheckIn();
-			check.setPerson(checkPerson(bean)).setStatus(bean.getStatus()).setOfficer(checkUser(byToken));
+			Person person = checkPerson(bean);
+			check.setPerson(person).setStatus(bean.getStatus()).setOfficer(checkUser(byToken));
+			check.setDivisionId(person.getDivision().getId());
 			check = checkinRepository.save(check);
 			res.add(check);
 		}

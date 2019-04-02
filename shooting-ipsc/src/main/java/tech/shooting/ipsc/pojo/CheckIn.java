@@ -19,6 +19,9 @@ import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class CheckIn extends BaseDocument {
+	public static final String DIVISION_ID = "divisionId";
+
+
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Person id from db")
@@ -28,6 +31,10 @@ public class CheckIn extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Status is present")
 	private TypeOfPresence status;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Division id")
+	private Long divisionId;
 
 	@DBRef
 	@JsonProperty

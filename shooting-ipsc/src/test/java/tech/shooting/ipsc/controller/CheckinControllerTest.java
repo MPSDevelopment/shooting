@@ -156,7 +156,7 @@ class CheckinControllerTest {
 		assertEquals(count, checkIns.length);
 	}
 
-	private void createPersons (int count, Division division, boolean flag) {
+	public void createPersons (int count, Division division, boolean flag) {
 		for(int i = 0; i < count; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			if(flag) {
