@@ -11,6 +11,8 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.settings.RabbitmqSettings;
 
 import org.eclipse.paho.client.mqttv3.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,22 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
+import io.moquette.broker.Server;
+import io.moquette.broker.config.ClasspathResourceLoader;
+import io.moquette.broker.config.IConfig;
+import io.moquette.broker.config.IResourceLoader;
+import io.moquette.broker.config.ResourceLoaderConfig;
+import io.moquette.interception.AbstractInterceptHandler;
+import io.moquette.interception.InterceptHandler;
+import io.moquette.interception.messages.InterceptPublishMessage;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
@@ -43,6 +58,25 @@ class MqttServiceTest {
 
 	private int count = 0;
 
+	private static Server mqttBroker;
+
+	@BeforeAll
+	public static void beforeAll() throws IOException {
+		IResourceLoader classpathLoader = new ClasspathResourceLoader();
+		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader);
+
+		mqttBroker = new Server();
+		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
+		mqttBroker.startServer(classPathConfig, userHandlers);
+
+		log.info("Broker started press [CTRL+C] to stop");
+	}
+	
+	@AfterAll
+	public static void afterAll() {
+		mqttBroker.stopServer();
+	}
+
 	@Test
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
 
@@ -54,15 +88,15 @@ class MqttServiceTest {
 
 		// subscriber
 
-		var subscriber1 = createSubscriber("tcp://127.0.0.1:1884", topicName1);
-		var subscriber2 = createSubscriber("tcp://127.0.0.1:1884", topicName2);
-		var subscriber3 = createSubscriber("tcp://127.0.0.1:1884", topicName2);
-		
-		var subscriberAll = createSubscriber("tcp://127.0.0.1:1884", "command/*");
+		var subscriber1 = createSubscriber("tcp://127.0.0.1:1883", topicName1);
+		var subscriber2 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
+		var subscriber3 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
+
+		var subscriberAll = createSubscriber("tcp://127.0.0.1:1883", "command/*");
 
 		// publisher
 
-		var publisher = createPublisher("tcp://localhost:1884");
+		var publisher = createPublisher("tcp://localhost:1883");
 
 		// publish a message
 
@@ -75,7 +109,7 @@ class MqttServiceTest {
 		topic2.publish(message);
 
 		Thread.sleep(2000);
-		
+
 		publisher.disconnect();
 		subscriber1.disconnect();
 		subscriber2.disconnect();
@@ -131,6 +165,20 @@ class MqttServiceTest {
 	@Handler
 	public void handle(MqttSimpleEvent event) {
 		count++;
+	}
+
+	static class PublisherListener extends AbstractInterceptHandler {
+
+		@Override
+		public String getID() {
+			return "EmbeddedLauncherPublishListener";
+		}
+
+		@Override
+		public void onPublish(InterceptPublishMessage msg) {
+			final String decodedPayload = new String(msg.getPayload().array(), StandardCharsets.UTF_8);
+			System.out.println("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
+		}
 	}
 
 //    @Test
