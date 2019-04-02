@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.DisqualificationBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.*;
@@ -206,7 +207,7 @@ public class CompetitionController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get Disqualification's type list", notes = "Return list of Disqualification's type")
-	public ResponseEntity<DisqualificationEnum[]> getEnumDisqualification () {
-		return new ResponseEntity<>(DisqualificationEnum.values(), HttpStatus.OK);
+	public ResponseEntity<List<DisqualificationBean>> getEnumDisqualification () {
+		return new ResponseEntity<>(DisqualificationEnum.getList(), HttpStatus.OK);
 	}
 }
