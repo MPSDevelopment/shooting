@@ -29,6 +29,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.DisqualificationBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -938,12 +939,12 @@ public class CompetitionControllerTest {
 		//try access to getMarkType with judge role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM)
 		                                                               .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		DisqualificationEnum[] disqualificationEnums = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
-		assertEquals(DisqualificationEnum.values().length, disqualificationEnums.length);
+		DisqualificationBean[] disqualificationBeans = JacksonUtils.fromJson(DisqualificationBean[].class, contentAsString);
+		assertEquals(DisqualificationEnum.values().length, disqualificationBeans.length);
 		//try access to getMarkType with admin role
 		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM)
 		                                                        .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		disqualificationEnums = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
-		assertEquals(DisqualificationEnum.values().length, disqualificationEnums.length);
+		disqualificationBeans = JacksonUtils.fromJson(DisqualificationBean[].class, contentAsString);
+		assertEquals(DisqualificationEnum.values().length, disqualificationBeans.length);
 	}
 }
