@@ -122,8 +122,8 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		if(!status.equals(TypeOfPresence.ALL)) {
 			query.addCriteria(where(CheckIn.STATUS).is(status));
 		}
-		List<CheckIn> mappedResults = mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), getGroupOperation(), getProjectOperation()), CheckIn.class).getMappedResults();
-		log.info("Result %s \n\n", mappedResults);
+//		List<CheckIn> mappedResults = mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), getGroupOperation(), getProjectOperation()), CheckIn.class).getMappedResults();
+//		log.info("Result %s \n\n", mappedResults);
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 

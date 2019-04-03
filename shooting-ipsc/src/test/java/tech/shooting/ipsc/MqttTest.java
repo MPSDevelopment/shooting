@@ -2,12 +2,14 @@ package tech.shooting.ipsc;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
+import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.rabbitmq.event.MqttSimpleEvent;
 import tech.shooting.ipsc.rabbitmq.mqtt.SimpleMqttCallBack;
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +41,7 @@ import java.util.UUID;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 @ActiveProfiles("simple")
 class MqttTest {
 
