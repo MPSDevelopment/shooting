@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum TypeOfPresence {
+	ALL(0, "All"), 
 	UNDEFINED(1, "Unidentified location"),
 	MISSION(2, "In official journey"),
 	SICK_LEAVE(3, "Home because is sick"),

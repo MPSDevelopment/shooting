@@ -1,6 +1,8 @@
 package tech.shooting.ipsc.repository;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -114,38 +116,8 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		addedChild(division, divisions);
 		query.addCriteria(Criteria.where(CheckIn.DIVISION_ID).in(divisions));
 		//switch vy status
-		List<String> forSearch = new ArrayList<>();
-		switch(status) {
-			case HOSP:
-				forSearch.add(TypeOfPresence.HOSP.getState());
-				break;
-			case DELAY:
-				forSearch.add(TypeOfPresence.DELAY.getState());
-				break;
-			case OUTFIT:
-				forSearch.add(TypeOfPresence.OUTFIT.getState());
-				break;
-			case DAY_OFF:
-				forSearch.add(TypeOfPresence.DAY_OFF.getState());
-				break;
-			case MISSION:
-				forSearch.add(TypeOfPresence.MISSION.getState());
-				break;
-			case PRESENT:
-				forSearch.add(TypeOfPresence.PRESENT.getState());
-				break;
-			case INFIRMARY:
-				forSearch.add(TypeOfPresence.INFIRMARY.getState());
-				break;
-			case UNDEFINED:
-				forSearch.add(TypeOfPresence.UNDEFINED.getState());
-				break;
-			case SICK_LEAVE:
-				forSearch.add(TypeOfPresence.SICK_LEAVE.getState());
-				break;
-		}
-		if(forSearch.size() != 0) {
-			query.addCriteria(Criteria.where(CheckIn.STATUS).in(forSearch));
+		if(!status.equals(TypeOfPresence.ALL)) {
+			query.addCriteria(Criteria.where(CheckIn.STATUS).is(status));
 		}
 		return mongoTemplate.find(query, CheckIn.class);
 	}
