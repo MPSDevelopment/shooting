@@ -32,6 +32,8 @@ logging:
   level:
     #    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
     #    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
+    
+    io.moquette.broker.metrics.MQTTMessageLogger: ERROR
     org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongo: DEBUG
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
@@ -85,6 +87,10 @@ spring:
   profiles: simple
   main:
     banner-mode: "off"
+    
+logging:
+  level:
+    io.moquette.broker.metrics.MQTTMessageLogger: ERROR
 
 ---
 spring:

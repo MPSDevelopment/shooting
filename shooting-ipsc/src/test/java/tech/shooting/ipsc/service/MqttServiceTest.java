@@ -3,29 +3,18 @@ package tech.shooting.ipsc.service;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.rabbitmq.event.MqttSimpleEvent;
-import tech.shooting.ipsc.rabbitmq.mqtt.MqttRabbitService;
 import tech.shooting.ipsc.rabbitmq.mqtt.SimpleMqttCallBack;
-import tech.shooting.ipsc.security.TokenUtils;
-import tech.shooting.ipsc.settings.RabbitmqSettings;
-
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.client.RestTemplate;
-
 import io.moquette.broker.Server;
 import io.moquette.broker.config.ClasspathResourceLoader;
 import io.moquette.broker.config.IConfig;
@@ -34,6 +23,7 @@ import io.moquette.broker.config.ResourceLoaderConfig;
 import io.moquette.interception.AbstractInterceptHandler;
 import io.moquette.interception.InterceptHandler;
 import io.moquette.interception.messages.InterceptPublishMessage;
+import io.netty.buffer.ByteBufUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -108,7 +98,7 @@ class MqttServiceTest {
 		MqttTopic topic2 = publisher.getTopic(topicName2);
 		topic2.publish(message);
 
-		Thread.sleep(1000);
+		Thread.sleep(100);
 
 		publisher.disconnect();
 		subscriber1.disconnect();
@@ -176,7 +166,7 @@ class MqttServiceTest {
 
 		@Override
 		public void onPublish(InterceptPublishMessage msg) {
-			final String decodedPayload = new String(msg.getPayload().array(), StandardCharsets.UTF_8);
+			final String decodedPayload = new String(ByteBufUtil.getBytes(msg.getPayload()), StandardCharsets.UTF_8);
 			log.info("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
 		}
 	}

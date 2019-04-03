@@ -38,7 +38,7 @@ public class SimpleMqttCallBack implements MqttCallback {
             String topicName = s;
             String json = new String(mqttMessage.getPayload());
 
-            log.info(" Some string = %s  \n\t  Message payload :\n\t %s  ", topicName, json);
+            log.info(" Topic : %s  Message payload : %s  ", topicName, json);
 
             // Send event for Save current position of Drone in DataBase through DroneService
             EventBus.publishEvent(new MqttSimpleEvent(topicName, json));
