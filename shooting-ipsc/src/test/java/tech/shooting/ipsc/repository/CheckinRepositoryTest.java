@@ -17,12 +17,11 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
-import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 
-import java.time.*;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,31 +107,42 @@ class CheckinRepositoryTest {
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
 		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
-		List<CheckIn> findByStatus = checkinRepository.findAllByStatus(TypeOfPresence.DELAY);
-		log.info("find by status service %s", findByStatus);
-		List<CheckIn> findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.DELAY, createdDate, TypeOfInterval.MORNING);
-		log.info("find by custom service %s", findByAll);
 	}
 
 	@Test
 	void checkDate () {
-		OffsetDateTime date = OffsetDateTime.now();
-		log.info("Offset %s", date.getOffset());
-		ZoneId zoneId = ZoneOffset.systemDefault();
-		log.info("Date is %s", date);
-		date = OffsetDateTime.of(LocalDate.of(2019, 4, 3), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC);
-		log.info("Date is %s", date);
-		LocalDate localDate = date.toLocalDate();
-		log.info("date %s", localDate);
-		LocalTime localTime = date.toLocalTime();
-		log.info("time %s", localTime);
-		LocalTime of = LocalTime.of(0, 0, 0, 0);
-		log.info("Start Time %s", of);
-		LocalTime end = LocalTime.of(12, 0, 0, 0);
-		log.info("End Time %s", end);
-		OffsetDateTime of1 = OffsetDateTime.of(localDate, of, ZoneOffset.of("+03:00"));
-		log.info("Start %s", of1);
-		OffsetDateTime of2 = OffsetDateTime.of(localDate, end, ZoneOffset.UTC);
-		log.info("End %s", of2);
+		for(int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+			log.info("Person %s has been created", person);
+		}
+		List<Person> byDivision = personRepository.findByDivision(root);
+		log.info("count person from root %s", byDivision.size());
+		List<CheckIn> toDb = new ArrayList<>();
+		for(Person p : byDivision) {
+			toDb.add(new CheckIn().setPerson(p).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
+		log.info("status row check in from root %s", checkIns);
+		log.info("All rows %s", checkinRepository.findAll().size());
+		for(int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+			log.info("Person %s has been created", person);
+		}
+		byDivision = personRepository.findByDivision(root);
+		log.info("count person from root %s", byDivision.size());
+		toDb = new ArrayList<>();
+		for(Person p : byDivision) {
+			toDb.add(new CheckIn().setPerson(p).setOfficer(officer).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
+		}
+		checkIns = checkinRepository.saveAll(toDb);
+		log.info("status row check in from root %s", checkIns);
+		log.info("All rows %s", checkinRepository.findAll().size());
+		log.info("Status delay is %s", checkinRepository.findAllByStatus(TypeOfPresence.DELAY).size());
+		log.info("Status present is %s", checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size());
+
 	}
 }
