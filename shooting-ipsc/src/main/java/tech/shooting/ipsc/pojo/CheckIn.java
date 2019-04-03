@@ -23,6 +23,7 @@ public class CheckIn extends BaseDocument {
 
 	public static final String STATUS = "status";
 
+	public static final String PERSON = "person";
 
 	@DBRef
 	@JsonProperty

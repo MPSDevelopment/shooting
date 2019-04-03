@@ -9,12 +9,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.ipsc.bean.AggBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfInterval;
@@ -25,6 +31,8 @@ import tech.shooting.ipsc.pojo.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -52,6 +60,9 @@ class CheckinRepositoryTest {
 	private User officer;
 
 	private Person testPerson;
+
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
 	void setUp () {
@@ -110,7 +121,6 @@ class CheckinRepositoryTest {
 		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
 		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
 		log.info("Size %s \t of result search by all id %s and create date is %s", findByAll.size(), root.getId(), createdDate);
-		
 	}
 
 	@Test
@@ -147,6 +157,49 @@ class CheckinRepositoryTest {
 		log.info("All rows %s", checkinRepository.findAll().size());
 		log.info("Status delay is %s", checkinRepository.findAllByStatus(TypeOfPresence.DELAY).size());
 		log.info("Status present is %s", checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size());
+	}
 
+	@Test
+	void checkAggregation () {
+		//prepare
+		for(int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+		}
+		List<Person> byDivision = personRepository.findByDivision(root);
+		List<CheckIn> toDb = new ArrayList<>();
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(i % 2 == 0) {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
+			} else {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
+		log.info("Object in db %s ", toDb.size());
+		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(i % 2 == 0) {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(root.getId()));
+			} else {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DAY_OFF).setDivisionId(root.getId()));
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
+		log.info("Object in db %s ", toDb.size());
+		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
+		Criteria criteria = Criteria.where(CheckIn.PERSON).exists(true);
+		//test criteria
+		Query query = new Query();
+		query.addCriteria(criteria);
+		List<CheckIn> all = mongoTemplate.find(query, CheckIn.class);
+		log.info("query %S", all.size());
+		GroupOperation groupOperation = group("person").last("person").as("person").count().as("time");
+		ProjectionOperation projectionOperation = project("time").and("person").previousOperation();
+		List<AggBean> mappedResults = mongoTemplate.aggregate(newAggregation(match(criteria), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
+		for(int i = 0; i < mappedResults.size(); i++) {
+			log.info(" result %s ", mappedResults.get(i));
+		}
 	}
 }
