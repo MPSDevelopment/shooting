@@ -16,10 +16,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,19 +45,16 @@ import java.util.List;
 import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
-@EnableAutoConfiguration
-@ContextConfiguration(classes = { RestTemplate.class, TokenUtils.class, MqttRabbitService.class, SimpleMqttCallBack.class })
-@SpringBootTest(classes = { RabbitmqSettings.class })
+@ContextConfiguration(classes = {SimpleMqttCallBack.class })
+@SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
+@ActiveProfiles("simple")
 class MqttServiceTest {
 
-	private static final String TEST_LOGIN = "ip34fdsfdasfdsbgsc";
+	private static final String TEST_LOGIN = "login";
 
-	private static final String TEST_PASSWORD = "iprewgbqw43283yausdhasvfassc";
-
-	@Autowired
-	private MqttRabbitService mqttRabbitService;
+	private static final String TEST_PASSWORD = "password";
 
 	private int count = 0;
 
@@ -92,7 +92,7 @@ class MqttServiceTest {
 		var subscriber2 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
 		var subscriber3 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
 
-		var subscriberAll = createSubscriber("tcp://127.0.0.1:1883", "command/*");
+		var subscriberAll = createSubscriber("tcp://127.0.0.1:1883", "command/#");
 
 		// publisher
 
@@ -108,7 +108,7 @@ class MqttServiceTest {
 		MqttTopic topic2 = publisher.getTopic(topicName2);
 		topic2.publish(message);
 
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 
 		publisher.disconnect();
 		subscriber1.disconnect();
@@ -177,84 +177,8 @@ class MqttServiceTest {
 		@Override
 		public void onPublish(InterceptPublishMessage msg) {
 			final String decodedPayload = new String(msg.getPayload().array(), StandardCharsets.UTF_8);
-			System.out.println("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
+			log.info("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
 		}
 	}
-
-//    @Test
-//    public void testPublishMessages() throws MqttException, InterruptedException {
-//    	
-//    	String login = TEST_LOGIN;
-//    	
-//        String topicName = "command/" + login;
-//        String publisherId = UUID.randomUUID().toString();
-//        MqttClient client = new MqttClient("tcp://localhost:1884", publisherId);
-//
-//        MqttConnectOptions connOpts = new MqttConnectOptions();
-//        connOpts.setCleanSession(true); //no persistent session
-//        connOpts.setKeepAliveInterval(1000);
-//        connOpts.setUserName(login);
-//
-//        connOpts.setPassword(TEST_PASSWORD.toCharArray());
-//
-//        client.connect(connOpts);
-//
-//        MqttTopic topic1 = client.getTopic(topicName);
-//
-//        MqttMessage message = new MqttMessage();
-//        message.setQos(0);
-//        message.setRetained(false);
-//
-//        String data = JacksonUtils.getJson(new Command().setName("test command"));
-//        message.setPayload(data.getBytes());
-//
-//        for (int i = 0; i < 10; i++) {
-//            topic1.publish(message);
-//            Thread.sleep(1000);
-//        }
-//        client.disconnect();
-//    }
-//
-//
-//    @Test
-//    public void connectionTest() throws MqttException, InterruptedException {
-//
-//        String topicName = "command/topic";
-//
-//        String publisherId = UUID.randomUUID().toString();
-//
-//        MqttClient client = new MqttClient("tcp://127.0.0.1:1884", publisherId);
-//
-//        MqttConnectOptions connOpts = new MqttConnectOptions();
-//        connOpts.setCleanSession(true); //no persistent session
-//        connOpts.setKeepAliveInterval(10000);
-//        connOpts.setUserName(TEST_LOGIN);
-//        connOpts.setPassword(TEST_PASSWORD.toCharArray());
-//
-//        client.connect(connOpts);
-//
-//        MqttTopic topic1 = client.getTopic(topicName);
-//
-//        MqttMessage message = new MqttMessage();
-//        message.setQos(1);
-//        message.setRetained(false);
-//        message.setPayload("Hello world from Java".getBytes());
-//
-//        topic1.publish(message);
-//
-//        Thread.sleep(1000);
-//
-//        client.disconnect();
-//
-//        Thread.sleep(1000);
-//
-//        client = new MqttClient("tcp://127.0.0.1:1884", MqttClient.generateClientId());
-//        client.setCallback(new SimpleMqttCallBack());
-//        client.connect(connOpts);
-//        client.subscribe(topicName);
-//
-//        Thread.sleep(1000);
-//        client.disconnect();
-//    }
 
 }
