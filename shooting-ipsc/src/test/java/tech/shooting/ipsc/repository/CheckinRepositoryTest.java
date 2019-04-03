@@ -108,8 +108,7 @@ class CheckinRepositoryTest {
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
 		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
-		
-		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.MORNING);
+		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
 		log.info("Size %s \t of result search by all id %s and create date is %s", findByAll.size(), root.getId(), createdDate);
 		
 	}
