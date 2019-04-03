@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -111,6 +112,47 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		//added division's to list for find
 		Set<Long> divisions = new HashSet<>();
 		addedChild(division, divisions);
-		return null;
+		query.addCriteria(Criteria.where(CheckIn.DIVISION_ID).in(divisions));
+		//switch vy status
+		List<String> forSearch = new ArrayList<>();
+		switch(status) {
+			case HOSP:
+				forSearch.add(TypeOfPresence.HOSP.getState());
+				break;
+			case DELAY:
+				forSearch.add(TypeOfPresence.DELAY.getState());
+				break;
+			case OUTFIT:
+				forSearch.add(TypeOfPresence.OUTFIT.getState());
+				break;
+			case DAY_OFF:
+				forSearch.add(TypeOfPresence.DAY_OFF.getState());
+				break;
+			case MISSION:
+				forSearch.add(TypeOfPresence.MISSION.getState());
+				break;
+			case PRESENT:
+				forSearch.add(TypeOfPresence.PRESENT.getState());
+				break;
+			case INFIRMARY:
+				forSearch.add(TypeOfPresence.INFIRMARY.getState());
+				break;
+			case UNDEFINED:
+				forSearch.add(TypeOfPresence.UNDEFINED.getState());
+				break;
+			case SICK_LEAVE:
+				forSearch.add(TypeOfPresence.SICK_LEAVE.getState());
+				break;
+		}
+		if(forSearch.size() != 0) {
+			query.addCriteria(Criteria.where(CheckIn.STATUS).in(forSearch));
+		}
+		return mongoTemplate.find(query, CheckIn.class);
+	}
+
+	@Override
+	public List<CheckIn> findAllByStatus (TypeOfPresence status) {
+		Query query = new Query(Criteria.where(CheckIn.STATUS).is(status));
+		return mongoTemplate.find(query, CheckIn.class);
 	}
 }

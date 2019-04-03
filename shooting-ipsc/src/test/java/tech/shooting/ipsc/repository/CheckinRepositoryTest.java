@@ -17,6 +17,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
@@ -87,7 +88,7 @@ class CheckinRepositoryTest {
 		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
 		log.info("size of list check in by date %s", allByDate.size());
 		for(CheckIn check : allByDate) {
-			log.info("%s \t division id \t from result set search by date", check.getPerson());
+			log.info("Status is %s\n%s \t division id \t from result set search by date", check.getStatus(), check.getPerson());
 		}
 		log.info("Root id for search %s", root.getId());
 		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
@@ -107,6 +108,10 @@ class CheckinRepositoryTest {
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
 		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
+		List<CheckIn> findByStatus = checkinRepository.findAllByStatus(TypeOfPresence.DELAY);
+		log.info("find by status service %s", findByStatus);
+		List<CheckIn> findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.DELAY, createdDate, TypeOfInterval.MORNING);
+		log.info("find by custom service %s", findByAll);
 	}
 
 	@Test

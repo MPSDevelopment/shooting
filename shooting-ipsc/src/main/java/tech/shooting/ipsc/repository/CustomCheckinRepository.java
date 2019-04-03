@@ -18,4 +18,6 @@ public interface CustomCheckinRepository {
 	List<CheckIn> findAllByDate (OffsetDateTime createdDate);
 
 	List<CheckIn> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
+
+	List<CheckIn> findAllByStatus (TypeOfPresence status);
 }

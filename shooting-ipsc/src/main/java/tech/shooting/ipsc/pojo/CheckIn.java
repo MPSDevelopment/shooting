@@ -21,6 +21,8 @@ import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 public class CheckIn extends BaseDocument {
 	public static final String DIVISION_ID = "divisionId";
 
+	public static final String STATUS = "status";
+
 
 	@DBRef
 	@JsonProperty

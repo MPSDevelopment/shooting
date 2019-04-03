@@ -33,6 +33,13 @@ public enum TypeOfPresence {
 		return result;
 	}
 
+	public static List<String> getListState () {
+		List<String> result = new ArrayList<>();
+		for(TypeOfPresence value : TypeOfPresence.values()) {
+			result.add(value.getState());
+		}
+		return result;
+	}
 	public static Integer getCount () {
 		return TypeOfPresence.values().length;
 	}
