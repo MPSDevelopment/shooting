@@ -1,5 +1,7 @@
 package tech.shooting.ipsc.repository;
 
+import tech.shooting.ipsc.enums.TypeOfInterval;
+import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.CheckIn;
 import tech.shooting.ipsc.pojo.Division;
 
@@ -14,4 +16,6 @@ public interface CustomCheckinRepository {
 	List<CheckIn> findAllByDivision (Long division);
 
 	List<CheckIn> findAllByDate (OffsetDateTime createdDate);
+
+	List<CheckIn> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
 }

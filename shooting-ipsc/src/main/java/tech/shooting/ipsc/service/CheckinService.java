@@ -6,6 +6,8 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.TokenUser;
 import tech.shooting.ipsc.bean.CheckinBean;
+import tech.shooting.ipsc.enums.TypeOfInterval;
+import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.CheckIn;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
@@ -15,6 +17,7 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +62,9 @@ public class CheckinService {
 
 	private Division checkDivision (Long id) throws BadRequestException {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division bean %s", id)));
+	}
+
+	public List<CheckIn> getChecksByDivisionStatusDateInterval (Long divisionId, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
+		return checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(divisionId), status, date, interval);
 	}
 }

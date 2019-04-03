@@ -21,7 +21,7 @@ import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 
-import java.time.OffsetDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,6 +107,27 @@ class CheckinRepositoryTest {
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
 		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
+	}
 
+	@Test
+	void checkDate () {
+		OffsetDateTime date = OffsetDateTime.now();
+		log.info("Offset %s", date.getOffset());
+		ZoneId zoneId = ZoneOffset.systemDefault();
+		log.info("Date is %s", date);
+		date = OffsetDateTime.of(LocalDate.of(2019, 4, 3), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC);
+		log.info("Date is %s", date);
+		LocalDate localDate = date.toLocalDate();
+		log.info("date %s", localDate);
+		LocalTime localTime = date.toLocalTime();
+		log.info("time %s", localTime);
+		LocalTime of = LocalTime.of(0, 0, 0, 0);
+		log.info("Start Time %s", of);
+		LocalTime end = LocalTime.of(12, 0, 0, 0);
+		log.info("End Time %s", end);
+		OffsetDateTime of1 = OffsetDateTime.of(localDate, of, ZoneOffset.of("+03:00"));
+		log.info("Start %s", of1);
+		OffsetDateTime of2 = OffsetDateTime.of(localDate, end, ZoneOffset.UTC);
+		log.info("End %s", of2);
 	}
 }
