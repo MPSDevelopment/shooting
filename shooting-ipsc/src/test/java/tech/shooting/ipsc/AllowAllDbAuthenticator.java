@@ -1,12 +1,12 @@
-package tech.shooting.ipsc.service;
+package tech.shooting.ipsc;
 
 import io.moquette.broker.security.IAuthenticator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DBAuthenticator implements IAuthenticator {
+public class AllowAllDbAuthenticator implements IAuthenticator {
 
-	public DBAuthenticator() {
+	public AllowAllDbAuthenticator() {
 		log.info("DBAuthenticator created");
 	}
 

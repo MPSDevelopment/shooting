@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.service;
+package tech.shooting.ipsc;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
@@ -40,7 +40,9 @@ import java.util.UUID;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
 @ActiveProfiles("simple")
-class MqttServiceTest {
+class MqttTest {
+
+	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
 
 	private static final String TEST_LOGIN = "login";
 
@@ -78,15 +80,15 @@ class MqttServiceTest {
 
 		// subscriber
 
-		var subscriber1 = createSubscriber("tcp://127.0.0.1:1883", topicName1);
-		var subscriber2 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
-		var subscriber3 = createSubscriber("tcp://127.0.0.1:1883", topicName2);
+		var subscriber1 = createSubscriber(MQTT_URL, topicName1);
+		var subscriber2 = createSubscriber(MQTT_URL, topicName2);
+		var subscriber3 = createSubscriber(MQTT_URL, topicName2);
 
-		var subscriberAll = createSubscriber("tcp://127.0.0.1:1883", "command/#");
+		var subscriberAll = createSubscriber(MQTT_URL, "command/#");
 
 		// publisher
 
-		var publisher = createPublisher("tcp://localhost:1883");
+		var publisher = createPublisher(MQTT_URL);
 
 		// publish a message
 
