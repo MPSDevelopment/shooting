@@ -30,7 +30,7 @@ public class ValidationBean implements ValiationExportable {
 	@JsonProperty
 	private Long max;
 
-	@JsonProperty
+	@JsonProperty(value = "requiredTrue")
 	private Boolean required;
 
 }
