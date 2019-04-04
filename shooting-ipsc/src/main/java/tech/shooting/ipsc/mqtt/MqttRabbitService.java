@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.rabbitmq.mqtt;
+package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class MqttRabbitService {
 	private String mqttUrl;
 
 	@Autowired(required = true)
-	private SimpleMqttCallBack simpleMqttCallBack;
+	private JsonMqttCallBack mqttCallBack;
 
 	private MqttClient adminClient = null;
 
@@ -55,7 +55,7 @@ public class MqttRabbitService {
 
 			adminClient = new MqttClient(mqttUrl, MqttClient.generateClientId());
 
-			adminClient.setCallback(simpleMqttCallBack);
+			adminClient.setCallback(mqttCallBack);
 			adminClient.connect(connOpts);
 
 		} catch (MqttException e) {
