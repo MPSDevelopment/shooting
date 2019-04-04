@@ -150,7 +150,7 @@ class MqttTest {
 			try {
 				subscriber.subscribe(topicName);
 			} catch (MqttException e) {
-				e.printStackTrace();
+				log.error("Cannot connect to topic: %s", topicName);
 			}
 		});
 
