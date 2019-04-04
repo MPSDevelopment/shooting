@@ -1,8 +1,8 @@
-package tech.shooting.ipsc.rabbitmq.mqtt;
+package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.ipsc.rabbitmq.event.MqttSimpleEvent;
+import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -15,7 +15,7 @@ import javax.annotation.PreDestroy;
 
 @Slf4j
 @Component
-public class SimpleMqttCallBack implements MqttCallback {
+public class JsonMqttCallBack implements MqttCallback {
 
 
     @PostConstruct

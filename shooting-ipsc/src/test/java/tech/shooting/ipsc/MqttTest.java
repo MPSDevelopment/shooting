@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.ipsc.rabbitmq.event.MqttSimpleEvent;
-import tech.shooting.ipsc.rabbitmq.mqtt.SimpleMqttCallBack;
+import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
+import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SimpleMqttCallBack.class })
+@ContextConfiguration(classes = {JsonMqttCallBack.class })
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
@@ -144,7 +144,7 @@ class MqttTest {
 		connOpts.setPassword(TEST_PASSWORD.toCharArray());
 
 		var subscriber = new MqttClient(url, MqttClient.generateClientId());
-		subscriber.setCallback(new SimpleMqttCallBack());
+		subscriber.setCallback(new JsonMqttCallBack());
 		subscriber.connect(connOpts);
 		Arrays.asList(topicNames).forEach(topicName -> {
 			try {

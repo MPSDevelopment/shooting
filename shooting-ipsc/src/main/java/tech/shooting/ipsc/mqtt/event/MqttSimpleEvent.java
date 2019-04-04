@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.rabbitmq.event;
+package tech.shooting.ipsc.mqtt.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,5 @@ public class MqttSimpleEvent extends Event {
     private String topicName;
 
     private String json;
-
 
 }
