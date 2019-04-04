@@ -41,6 +41,12 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.getEnum(), HttpStatus.OK);
 	}
 
+	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ)
+	@ApiOperation(value = "Get list quiz from subject", notes = "Return list of quiz")
+	public ResponseEntity<List<Quiz>> getQuizFromSubject (@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT) String subject) {
+		return new ResponseEntity<>(quizService.getQuizFromSubject(subject), HttpStatus.OK);
+	}
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ)
 	@ApiOperation(value = "Get all quiz from db", notes = "Return list of exist quiz")
 	public ResponseEntity<List<Quiz>> getAll () {

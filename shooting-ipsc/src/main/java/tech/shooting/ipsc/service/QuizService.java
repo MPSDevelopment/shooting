@@ -76,4 +76,8 @@ public class QuizService {
 		checkQuestion(quiz, questionId);
 		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
+
+	public List<Quiz> getQuizFromSubject (String subject) {
+		return quizRepository.findBySubject(subject);
+	}
 }

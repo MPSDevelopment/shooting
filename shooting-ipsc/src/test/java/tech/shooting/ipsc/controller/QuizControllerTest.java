@@ -46,6 +46,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = QuizRepository.class)
@@ -191,6 +192,33 @@ class QuizControllerTest {
 		                                .getResponse()
 		                                .getContentAsString();
 		assertEquals(quizRepository.findAll().size(), JacksonUtils.fromJson(Quiz[].class, contentAsString).length);
+	}
+
+	@Test
+	void checkFindBySubject () throws Exception {
+		String subject = "Огневая подготовка";
+		//try access to get quiz by subject
+		//used unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject))))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//used user role
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//used judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//used admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		assertNotNull(contentAsString);
+		Quiz[] quizzes = JacksonUtils.fromJson(Quiz[].class, contentAsString);
+		for(int i = 0; i < quizzes.length; i++) {
+			assertEquals(quizzes[i].getSubject().getName(), subject);
+		}
 	}
 
 	@Test

@@ -195,6 +195,7 @@ class CheckinRepositoryTest {
 		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
 		List<Stat> mappedResults = mongoTemplate.aggregate(newAggregation(getMatch(), groupOperation), CheckIn.class, Stat.class).getMappedResults();
 		log.info("stat is %s", mappedResults);
+		log.info("stat is %s", mappedResults);
 	}
 
 	private MatchOperation getMatch () {

@@ -235,4 +235,10 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER_POST_CHECK = "/check";
 
 	public static final String CHECKIN_CONTROLLER_GET_BY_DIVISION = "/check/division/" + REQUEST_DIVISION_ID;
+
+	public static final String PATH_VARIABLE_SUBJECT = "subject";
+
+	public static final String REQUEST_SUBJECT = "{" + PATH_VARIABLE_SUBJECT + "}";
+
+	public static final String QUIZ_CONTROLLER_GET_SUBJECT_QUIZ = "/quiz/subject/" + REQUEST_SUBJECT;
 }
