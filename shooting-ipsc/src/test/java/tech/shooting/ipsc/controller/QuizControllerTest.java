@@ -106,19 +106,6 @@ class QuizControllerTest {
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 		subjectsFromDb = subjectRepository.findAll();
-		subjectsFromDb = subjectsFromDb == null ? subjectRepository.createIfNotExists(List.of(
-			new Subject().setRus("Огневая подготовка").setKz("Fire training"),
-			new Subject().setRus("Физическая подготовка").setKz("PHYSICAL"),
-			new Subject().setRus("Военно-медицинская подготовка").setKz("MILITARY_MEDICIAL"),
-			new Subject().setRus("Тактико-специальная подготовка").setKz("SPECIAL_TACTICAL"),
-			new Subject().setRus("Тактико-служебно боевого применения").setKz("TACTICAL_AND_SERVICE_COMBAT_USE"),
-			new Subject().setRus("Высотная подготовка").setKz("ALTITUDE"),
-			new Subject().setRus("Общевоинские уставы").setKz("GENERAL_MILITARY_REGULATIONS"),
-			new Subject().setRus("Военно-инженерная подготовка").setKz("MILITARY_ENGINEERING"),
-			new Subject().setRus("Радиационная, химическая и биологическая защита").setKz("RADIATION_CHEMICAL_AND_BIOLOGICAL_PROTECTION"),
-			new Subject().setRus("Подготовка по связи").setKz("COMMUNICATION"),
-			new Subject().setRus("Военная топография").setKz("MILITARY_TOPOGRAPHY"),
-			new Subject().setRus("Специальная подготовка по категориям специалистов").setKz("SPECIAL_TRAINING_IN_PROFESSIONAL_CATEGORIES"))) : subjectsFromDb;
 		subject = subjectsFromDb.get(0);
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
