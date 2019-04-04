@@ -32,16 +32,16 @@ public class SimpleMqttCallBack implements MqttCallback {
         log.info("Connection to MQTT broker lost!");
     }
 
-    public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+    public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
         try {
-            String topicName = s;
+        	
             String json = new String(mqttMessage.getPayload());
 
-            log.info(" Topic : %s  Message payload : %s  ", topicName, json);
+            log.info(" Topic : %s  Message payload : %s  ", topic, json);
 
             // Send event for Save current position of Drone in DataBase through DroneService
-            EventBus.publishEvent(new MqttSimpleEvent(topicName, json));
+            EventBus.publishEvent(new MqttSimpleEvent(topic, json));
         } catch (Exception e) {
             log.error("Error while got MQTT Message - %s ", e);
         }

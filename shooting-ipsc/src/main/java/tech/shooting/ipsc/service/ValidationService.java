@@ -81,6 +81,10 @@ public class ValidationService {
 					validationBean.setMax(((javax.validation.constraints.Max) annotation).value());
 				} else if (annotation instanceof javax.validation.constraints.Min) {
 					validationBean.setMin(((javax.validation.constraints.Min) annotation).value());
+				} else if (annotation instanceof javax.validation.constraints.AssertTrue) {
+					validationBean.setRequiredTrue(true);
+				} else if (annotation instanceof javax.validation.constraints.AssertFalse) {
+					validationBean.setRequiredFalse(true);
 				} else if (annotation instanceof javax.validation.constraints.NotBlank) {
 					validationBean.setRequired(true);
 				} else if (annotation instanceof javax.validation.constraints.NotEmpty) {

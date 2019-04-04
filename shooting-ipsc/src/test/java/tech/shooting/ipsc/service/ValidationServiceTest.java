@@ -13,6 +13,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
@@ -41,6 +42,7 @@ public class ValidationServiceTest {
 		assertEquals(2, validationService.getConstraints(ChangePasswordBean.class).size());
 		assertEquals(3, validationService.getConstraints(CompetitionBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserUpdateBean.class).size());
+		assertEquals(3, validationService.getConstraints(CompetitorMark.class).size());
 	}
 
 	@Test
