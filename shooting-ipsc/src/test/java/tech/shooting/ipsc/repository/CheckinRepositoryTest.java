@@ -202,7 +202,6 @@ class CheckinRepositoryTest {
 		for(int i = 0; i < mappedResults.size(); i++) {
 			log.info(" result id %s status %s count is %s", mappedResults.get(i).getPerson().getId(), mappedResults.get(i).getStat(), mappedResults.get(i).getTime());
 		}
-		// String mappedResults = mongoTemplate.aggregate(newAggregation(match(criteria), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getRawResults().toString();
 	}
 
 	private void addDataToDB () {
