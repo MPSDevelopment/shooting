@@ -119,8 +119,6 @@ class QuizControllerTest {
 			new Subject().setRus("Подготовка по связи").setKz("COMMUNICATION"),
 			new Subject().setRus("Военная топография").setKz("MILITARY_TOPOGRAPHY"),
 			new Subject().setRus("Специальная подготовка по категориям специалистов").setKz("SPECIAL_TRAINING_IN_PROFESSIONAL_CATEGORIES"))) : subjectsFromDb;
-
-
 		subject = subjectRepository.findById(1629894156533891072L).get();
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -179,7 +177,6 @@ class QuizControllerTest {
 
 	@Test
 	public void checkGetEnumSubjects () throws Exception {
-
 		//try access to get subjects enum with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to get subjects enum with user role
