@@ -119,7 +119,7 @@ class QuizControllerTest {
 			new Subject().setRus("Подготовка по связи").setKz("COMMUNICATION"),
 			new Subject().setRus("Военная топография").setKz("MILITARY_TOPOGRAPHY"),
 			new Subject().setRus("Специальная подготовка по категориям специалистов").setKz("SPECIAL_TRAINING_IN_PROFESSIONAL_CATEGORIES"))) : subjectsFromDb;
-		subject = subjectRepository.findById(1629894156533891072L).get();
+		subject = subjectsFromDb.get(0);
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
