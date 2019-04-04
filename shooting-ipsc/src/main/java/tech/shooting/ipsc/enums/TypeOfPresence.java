@@ -21,6 +21,9 @@ public enum TypeOfPresence {
 
 	private Integer id;
 
+	TypeOfPresence () {
+	}
+
 	TypeOfPresence (Integer id, String state) {
 		this.state = state;
 		this.id = id;

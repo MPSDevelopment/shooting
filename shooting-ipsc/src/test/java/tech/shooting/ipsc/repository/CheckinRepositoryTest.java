@@ -195,11 +195,42 @@ class CheckinRepositoryTest {
 		query.addCriteria(criteria);
 		List<CheckIn> all = mongoTemplate.find(query, CheckIn.class);
 		log.info("query %S", all.size());
-		GroupOperation groupOperation = group("person").last("person").as("person").count().as("time");
-		ProjectionOperation projectionOperation = project("time").and("person").previousOperation();
+		GroupOperation groupOperation = group("person").last("person").as("person").addToSet("status").as("stat").count().as("time");
+		ProjectionOperation projectionOperation = project("time", "stat").and("person").previousOperation();
+
 		List<AggBean> mappedResults = mongoTemplate.aggregate(newAggregation(match(criteria), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
 		for(int i = 0; i < mappedResults.size(); i++) {
-			log.info(" result %s ", mappedResults.get(i));
+			log.info(" result id %s status %s count is %s", mappedResults.get(i).getPerson().getId(), mappedResults.get(i).getStat(), mappedResults.get(i).getTime());
 		}
+		// String mappedResults = mongoTemplate.aggregate(newAggregation(match(criteria), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getRawResults().toString();
+	}
+
+	private void addDataToDB () {
+		//prepare
+		for(int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+		}
+		List<Person> byDivision = personRepository.findByDivision(root);
+		List<CheckIn> toDb = new ArrayList<>();
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(i % 2 == 0) {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
+			} else {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
+		log.info("Object in db %s ", toDb.size());
+		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(i % 2 == 0) {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(root.getId()));
+			} else {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DAY_OFF).setDivisionId(root.getId()));
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
 	}
 }
