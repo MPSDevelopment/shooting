@@ -48,6 +48,15 @@ public enum TypeOfPresence {
 		return TypeOfPresence.values().length;
 	}
 
+	public static TypeOfPresence getByState (String state) {
+		for(TypeOfPresence value : TypeOfPresence.values()) {
+			if(value.getState().equals(state)) {
+				return value;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public String toString () {
 		return String.valueOf(state);

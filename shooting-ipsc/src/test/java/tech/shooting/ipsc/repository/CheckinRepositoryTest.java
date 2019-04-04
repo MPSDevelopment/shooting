@@ -10,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,7 +28,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -189,19 +185,7 @@ class CheckinRepositoryTest {
 		toDb = checkinRepository.saveAll(toDb);
 		log.info("Object in db %s ", toDb.size());
 		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
-		Criteria criteria = Criteria.where(CheckIn.PERSON).exists(true);
-		//test criteria
-		Query query = new Query();
-		query.addCriteria(criteria);
-		List<CheckIn> all = mongoTemplate.find(query, CheckIn.class);
-		log.info("query %S", all.size());
-		GroupOperation groupOperation = group("person").last("person").as("person").addToSet("status").as("stat").count().as("time");
-		ProjectionOperation projectionOperation = project("time", "stat").and("person").previousOperation();
 
-		List<AggBean> mappedResults = mongoTemplate.aggregate(newAggregation(match(criteria), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
-		for(int i = 0; i < mappedResults.size(); i++) {
-			log.info(" result id %s status %s count is %s", mappedResults.get(i).getPerson().getId(), mappedResults.get(i).getStat(), mappedResults.get(i).getTime());
-		}
 	}
 
 	private void addDataToDB () {
@@ -231,5 +215,20 @@ class CheckinRepositoryTest {
 			}
 		}
 		toDb = checkinRepository.saveAll(toDb);
+	}
+
+	@Test
+	void checkFindAllByDivisionStatusDateInterval () {
+		addDataToDB();
+		List<CheckIn> all = checkinRepository.findAll();
+		log.info("Size is %s", all.size());
+		List<CheckIn> allByStatus = checkinRepository.findAllByStatus(TypeOfPresence.PRESENT);
+		log.info("Size status PRESENT is %s ", allByStatus.size());
+		assertTrue(all.size() != 0);
+		List<AggBean> allByDivisionStatusDateInterval = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.PRESENT, OffsetDateTime.now(), TypeOfInterval.EVENING);
+		log.info("Size is %s", allByDivisionStatusDateInterval.size());
+		for(AggBean aggBean : allByDivisionStatusDateInterval) {
+			log.info("Person %s \n status %s", aggBean.getPerson(), aggBean.getStat());
+		}
 	}
 }

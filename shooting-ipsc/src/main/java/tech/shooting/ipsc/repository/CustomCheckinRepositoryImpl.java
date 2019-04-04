@@ -3,9 +3,13 @@ package tech.shooting.ipsc.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.bean.AggBean;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.CheckIn;
@@ -19,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Slf4j
@@ -69,14 +74,18 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 	}
 
 	@Override
-	public List<CheckIn> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
-		Query query = new Query();
+	public List<AggBean> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
+		GroupOperation groupOperation = group("person").last("person").as("person").addToSet("status").as("stat");
+		ProjectionOperation projectionOperation = project("stat").and("person").previousOperation();
+		return mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
+	}
+
+	private MatchOperation getMatchOperation (OffsetDateTime date, TypeOfInterval interval, Division division, TypeOfPresence status) {
 		LocalDate localDate;
 		LocalTime localTime;
 		ZoneOffset offset;
 		OffsetDateTime searchStart = null;
 		OffsetDateTime searchEnd = null;
-		//setup range time for search
 		switch(interval) {
 			case MORNING:
 				localDate = date.toLocalDate();
@@ -109,76 +118,16 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1);
 				break;
 		}
-		query.addCriteria(Criteria.where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd));
-		//added division's to list for find
 		Set<Long> divisions = new HashSet<>();
 		addedChild(division, divisions);
-		query.addCriteria(where(CheckIn.DIVISION_ID).in(divisions));
-		//switch vy status
-		if(!status.equals(TypeOfPresence.ALL)) {
-			query.addCriteria(where(CheckIn.STATUS).is(status));
+		Criteria priceCriteria;
+		if(status.equals(TypeOfPresence.ALL)) {
+			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions));
 		}
-		//List<CheckIn> mappedResults = mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), getGroupOperation(), getProjectOperation()), CheckIn.class).getMappedResults();
-		//log.info("Result %s \n\n", mappedResults);
-		return mongoTemplate.find(query, CheckIn.class);
+		priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
+		return match(priceCriteria);
 	}
 
-	//
-	// private MatchOperation getMatchOperation (OffsetDateTime date, TypeOfInterval interval, Division division, TypeOfPresence status) {
-	// 	LocalDate localDate;
-	// 	LocalTime localTime;
-	// 	ZoneOffset offset;
-	// 	OffsetDateTime searchStart = null;
-	// 	OffsetDateTime searchEnd = null;
-	// 	switch(interval) {
-	// 		case MORNING:
-	// 			localDate = date.toLocalDate();
-	// 			offset = date.getOffset();
-	// 			searchStart = OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getStart(), offset);
-	// 			searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getEnd(), offset);
-	// 			break;
-	// 		case EVENING:
-	// 			localDate = date.toLocalDate();
-	// 			offset = date.getOffset();
-	// 			searchStart = OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getStart(), offset);
-	// 			searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getEnd(), offset);
-	// 			break;
-	// 		case DAY:
-	// 			localDate = date.toLocalDate();
-	// 			offset = date.getOffset();
-	// 			searchStart = OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset);
-	// 			searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset);
-	// 			break;
-	// 		case WEEK:
-	// 			localDate = date.toLocalDate();
-	// 			offset = date.getOffset();
-	// 			searchStart = OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getStart(), offset);
-	// 			searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getEnd(), offset).plusDays(7);
-	// 			break;
-	// 		case MONTH:
-	// 			localDate = date.toLocalDate();
-	// 			offset = date.getOffset();
-	// 			searchStart = OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset);
-	// 			searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1);
-	// 			break;
-	// 	}
-	// 	Set<Long> divisions = new HashSet<>();
-	// 	addedChild(division, divisions);
-	// 	Criteria priceCriteria;
-	// 	if(!status.equals(TypeOfPresence.ALL)) {
-	// 		priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
-	// 	}
-	// 	priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions));
-	// 	return match(priceCriteria);
-	// }
-	//
-	// private GroupOperation getGroupOperation () {
-	// 	return group("person");
-	// }
-	//
-	// private ProjectionOperation getProjectOperation () {
-	// 	return project("person");
-	// }
 	@Override
 	public List<CheckIn> findAllByStatus (TypeOfPresence status) {
 		Query query = new Query(where(CheckIn.STATUS).is(status));
