@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import tech.shooting.ipsc.pojo.Subject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomSubjectRepositoryImpl implements CustomSubjectRepository {
@@ -13,13 +14,15 @@ public class CustomSubjectRepositoryImpl implements CustomSubjectRepository {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public void createIfNotExists (List<Subject> subjects) {
+	public List<Subject> createIfNotExists (List<Subject> subjects) {
+		List<Subject> res = new ArrayList<>();
 		for(int i = 0; i < subjects.size(); i++) {
 			Query query = Query.query(Criteria.where(Subject.KZ).is(subjects.get(i).getKz()));
 			query.addCriteria(Criteria.where(Subject.RUS).is(subjects.get(i).getRus()));
 			if(mongoTemplate.find(query, Subject.class).size() == 0 || mongoTemplate.find(query, Subject.class) == null) {
-				mongoTemplate.save(subjects.get(i));
+				res.add(mongoTemplate.save(subjects.get(i)));
 			}
 		}
+		return res;
 	}
 }
