@@ -21,4 +21,6 @@ public interface CustomCheckinRepository {
 	List<AggBean> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
 
 	List<CheckIn> findAllByStatus (TypeOfPresence status);
+
+	List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval);
 }

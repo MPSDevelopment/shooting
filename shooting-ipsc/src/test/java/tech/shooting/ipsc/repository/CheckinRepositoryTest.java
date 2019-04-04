@@ -10,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfInterval;
@@ -29,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -50,6 +56,7 @@ class CheckinRepositoryTest {
 
 	@Autowired
 	private CheckinRepository checkinRepository;
+
 
 	private Division root;
 
@@ -185,7 +192,18 @@ class CheckinRepositoryTest {
 		toDb = checkinRepository.saveAll(toDb);
 		log.info("Object in db %s ", toDb.size());
 		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
+		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
+		List<Stat> mappedResults = mongoTemplate.aggregate(newAggregation(getMatch(), groupOperation), CheckIn.class, Stat.class).getMappedResults();
+		log.info("stat is %s", mappedResults);
+	}
 
+	private MatchOperation getMatch () {
+		Criteria criteria;
+		List<OffsetDateTime> starEnd = checkinRepository.timeInterval(OffsetDateTime.now(), TypeOfInterval.EVENING);
+		OffsetDateTime searchStart = starEnd.get(0);
+		OffsetDateTime searchEnd = starEnd.get(1);
+		criteria = Criteria.where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd);
+		return match(criteria);
 	}
 
 	private void addDataToDB () {

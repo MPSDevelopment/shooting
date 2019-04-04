@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,40 +85,9 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		LocalDate localDate;
 		LocalTime localTime;
 		ZoneOffset offset;
-		OffsetDateTime searchStart = null;
-		OffsetDateTime searchEnd = null;
-		switch(interval) {
-			case MORNING:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				searchStart = OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getStart(), offset);
-				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getEnd(), offset);
-				break;
-			case EVENING:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				searchStart = OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getStart(), offset);
-				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getEnd(), offset);
-				break;
-			case DAY:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				searchStart = OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset);
-				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset);
-				break;
-			case WEEK:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				searchStart = OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getStart(), offset);
-				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getEnd(), offset).plusDays(7);
-				break;
-			case MONTH:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				searchStart = OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset);
-				searchEnd = OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1);
-				break;
-		}
+		List<OffsetDateTime> starEnd = timeInterval(date, interval);
+		OffsetDateTime searchStart = starEnd.get(0);
+		OffsetDateTime searchEnd = starEnd.get(1);
 		Set<Long> divisions = new HashSet<>();
 		addedChild(division, divisions);
 		Criteria priceCriteria;
@@ -127,6 +97,46 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
 		}
 		return match(priceCriteria);
+	}
+
+	public List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval) {
+		List<OffsetDateTime> inter = new ArrayList<>();
+		LocalDate localDate;
+		LocalTime localTime;
+		ZoneOffset offset;
+		switch(interval) {
+			case MORNING:
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getEnd(), offset));
+				break;
+			case EVENING:
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getEnd(), offset));
+				break;
+			case DAY:
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
+				break;
+			case WEEK:
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getEnd(), offset).plusDays(7));
+				break;
+			case MONTH:
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1));
+				break;
+		}
+		return inter;
 	}
 
 	@Override
