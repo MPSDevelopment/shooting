@@ -123,8 +123,9 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		Criteria priceCriteria;
 		if(status.equals(TypeOfPresence.ALL)) {
 			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions));
+		} else {
+			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
 		}
-		priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
 		return match(priceCriteria);
 	}
 

@@ -225,7 +225,7 @@ class CheckinRepositoryTest {
 		List<CheckIn> allByStatus = checkinRepository.findAllByStatus(TypeOfPresence.PRESENT);
 		log.info("Size status PRESENT is %s ", allByStatus.size());
 		assertTrue(all.size() != 0);
-		List<AggBean> allByDivisionStatusDateInterval = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.PRESENT, OffsetDateTime.now(), TypeOfInterval.EVENING);
+		List<AggBean> allByDivisionStatusDateInterval = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, OffsetDateTime.now(), TypeOfInterval.EVENING);
 		log.info("Size is %s", allByDivisionStatusDateInterval.size());
 		for(AggBean aggBean : allByDivisionStatusDateInterval) {
 			log.info("Person %s \n status %s", aggBean.getPerson(), aggBean.getStat());
