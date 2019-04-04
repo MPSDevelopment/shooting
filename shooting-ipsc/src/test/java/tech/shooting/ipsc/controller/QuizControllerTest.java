@@ -105,6 +105,21 @@ class QuizControllerTest {
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+		if(subjectRepository.findAll() == null) {
+			subjectRepository.createIfNotExists(List.of(
+				new Subject().setRus("Огневая подготовка").setKz("Fire training"),
+				new Subject().setRus("Физическая подготовка").setKz("PHYSICAL"),
+				new Subject().setRus("Военно-медицинская подготовка").setKz("MILITARY_MEDICIAL"),
+				new Subject().setRus("Тактико-специальная подготовка").setKz("SPECIAL_TACTICAL"),
+				new Subject().setRus("Тактико-служебно боевого применения").setKz("TACTICAL_AND_SERVICE_COMBAT_USE"),
+				new Subject().setRus("Высотная подготовка").setKz("ALTITUDE"),
+				new Subject().setRus("Общевоинские уставы").setKz("GENERAL_MILITARY_REGULATIONS"),
+				new Subject().setRus("Военно-инженерная подготовка").setKz("MILITARY_ENGINEERING"),
+				new Subject().setRus("Радиационная, химическая и биологическая защита").setKz("RADIATION_CHEMICAL_AND_BIOLOGICAL_PROTECTION"),
+				new Subject().setRus("Подготовка по связи").setKz("COMMUNICATION"),
+				new Subject().setRus("Военная топография").setKz("MILITARY_TOPOGRAPHY"),
+				new Subject().setRus("Специальная подготовка по категориям специалистов").setKz("SPECIAL_TRAINING_IN_PROFESSIONAL_CATEGORIES")));
+		}
 		subjectsFromDb = subjectRepository.findAll();
 		subject = subjectRepository.findById(1629894156533891072L).get();
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));

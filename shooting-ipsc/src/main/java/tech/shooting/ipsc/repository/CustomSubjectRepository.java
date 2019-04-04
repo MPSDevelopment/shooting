@@ -5,5 +5,5 @@ import tech.shooting.ipsc.pojo.Subject;
 import java.util.List;
 
 public interface CustomSubjectRepository {
-	void createIfNotExists (List<Subject> subjects);
+	List<Subject> createIfNotExists (List<Subject> subjects);
 }
