@@ -197,6 +197,7 @@ class QuizControllerTest {
 	@Test
 	void checkFindBySubject () throws Exception {
 		String subject = "Огневая подготовка";
+
 		//try access to get quiz by subject
 		//used unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
