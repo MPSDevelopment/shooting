@@ -272,21 +272,22 @@ class QuizControllerTest {
 	public void checkUpdateQuiz () throws Exception {
 		//prepare
 		json = JacksonUtils.getJson(testQuiz.setTime(200L));
-		//try access to update quiz with unauthorized user
+		//try access to update quiz
+		// with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		//try access to update quiz with user role
+		//with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, userToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isForbidden());
-		//try access to update quiz with judge role
+		//with judge role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isForbidden());
-		//try access to update quiz with admin role
+		//with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
