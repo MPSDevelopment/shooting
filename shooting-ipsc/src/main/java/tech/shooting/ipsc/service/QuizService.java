@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuizBean;
-import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.SubjectsName;
+import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.repository.QuizRepository;
+import tech.shooting.ipsc.repository.SubjectRepository;
 
 import java.util.List;
 
@@ -21,14 +21,17 @@ public class QuizService {
 	@Autowired
 	private QuizRepository quizRepository;
 
+	@Autowired
+	private SubjectRepository subjectRepository;
+
 	public Quiz createQuiz (QuizBean quiz) {
 		Quiz quizToDB = new Quiz();
 		BeanUtils.copyProperties(quiz, quizToDB);
 		return quizRepository.save(quizToDB);
 	}
 
-	public List<SubjectsName> getEnum () {
-		return Subject.getList();
+	public List<Subject> getEnum () {
+		return subjectRepository.findAll();
 	}
 
 	public List<Quiz> getAllQuiz () {
@@ -77,7 +80,7 @@ public class QuizService {
 		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
 
-	public List<Quiz> getQuizFromSubject (String subject) {
+	public List<Quiz> getQuizFromSubject (Long subject) {
 		return quizRepository.findBySubject(subject);
 	}
 }

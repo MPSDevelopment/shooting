@@ -30,9 +30,9 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
-import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.QuizRepository;
+import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
@@ -71,6 +71,11 @@ class QuizControllerTest {
 	@Autowired
 	private QuizRepository quizRepository;
 
+	@Autowired
+	private SubjectRepository subjectRepository;
+
+	private tech.shooting.ipsc.pojo.Subject subject;
+
 	private User user;
 
 	private User admin;
@@ -91,9 +96,13 @@ class QuizControllerTest {
 
 	private Question testQuestion;
 
+	private List<Subject> subjectsFromDb;
+
 	@BeforeEach
 	void setUp () {
 		quizRepository.deleteAll();
+		subjectsFromDb = subjectRepository.findAll();
+		subject = subjectRepository.findById(1629894156533891072L).get();
 		String password = RandomStringUtils.randomAscii(14);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -101,10 +110,8 @@ class QuizControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		quizBean =
-			new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(Subject.FIRE).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
-		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... "))
-		                                         .setSubject(Subject.FIRE)
+		quizBean = new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
+		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject)
 		                                         .setGreat(90)
 		                                         .setGood(70)
 		                                         .setSatisfactorily(40)
@@ -157,6 +164,7 @@ class QuizControllerTest {
 
 	@Test
 	public void checkGetEnumSubjects () throws Exception {
+
 		//try access to get subjects enum with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//try access to get subjects enum with user role
@@ -172,7 +180,11 @@ class QuizControllerTest {
 			       .andReturn()
 			       .getResponse()
 			       .getContentAsString();
-		assertEquals(Subject.getList().size(), JacksonUtils.fromJson(SubjectsName[].class, contentAsString).length);
+		Subject[] subjects = JacksonUtils.fromJson(tech.shooting.ipsc.pojo.Subject[].class, contentAsString);
+		assertEquals(subjectsFromDb.size(), subjects.length);
+		for(int i = 0; i < subjects.length; i++) {
+			log.info("Subject is %s", subjects[i]);
+		}
 	}
 
 	@Test
@@ -196,29 +208,27 @@ class QuizControllerTest {
 
 	@Test
 	void checkFindBySubject () throws Exception {
-		String subject = "Огневая подготовка";
-
 		//try access to get quiz by subject
 		//used unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject))))
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, subject.getId().toString())))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		//used user role
 		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, subject.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//used judge role
 		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, subject.getId().toString()))
 		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		//used admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, JacksonUtils.getJson(subject)))
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ.replace(ControllerAPI.REQUEST_SUBJECT, subject.getId().toString()))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertNotNull(contentAsString);
 		Quiz[] quizzes = JacksonUtils.fromJson(Quiz[].class, contentAsString);
 		for(int i = 0; i < quizzes.length; i++) {
-			assertEquals(quizzes[i].getSubject().getName(), subject);
+			assertEquals(quizzes[i].getSubject().getId(), subject.getId());
 		}
 	}
 

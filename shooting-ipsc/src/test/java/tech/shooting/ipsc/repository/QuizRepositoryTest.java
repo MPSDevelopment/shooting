@@ -14,9 +14,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
-import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.QuizName;
+import tech.shooting.ipsc.pojo.Subject;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,20 +36,29 @@ class QuizRepositoryTest {
 
 	private Quiz quiz;
 
+	@Autowired
+	private SubjectRepository subjectRepository;
+
+	private List<Subject> subjects;
+
+	private Subject subject;
+
 	@BeforeEach
 	public void before () {
 		quizRepository.deleteAll();
-		quiz = new Quiz().setSubject(Subject.FIRE).setSatisfactorily(50).setName(new QuizName().setKz("test").setRus("да ну на"));
+		subjects = subjectRepository.findAll();
+		subject = subjects.get(0);
+		quiz = new Quiz().setSubject(subject).setSatisfactorily(50).setName(new QuizName().setKz("test").setRus("да ну на"));
 	}
 
 	@Test
 	public void checkFindBySubject () {
 		quizRepository.save(quiz);
-		quiz = new Quiz().setSubject(Subject.FIRE).setName(new QuizName().setRus("медведь").setKz("Audi"));
+		quiz = new Quiz().setSubject(subjects.get(0)).setName(new QuizName().setRus("медведь").setKz("Audi"));
 		quizRepository.save(quiz);
-		quiz = new Quiz().setSubject(Subject.COMMUNICATION).setName(new QuizName().setKz("test").setRus("балалайка"));
+		quiz = new Quiz().setSubject(subjects.get(1)).setName(new QuizName().setKz("test").setRus("балалайка"));
 		quizRepository.save(quiz);
 		assertEquals(3, quizRepository.count());
-		assertEquals(2, quizRepository.findBySubject(Subject.FIRE).size());
+		assertEquals(2, quizRepository.findBySubject(subjects.get(0)).size());
 	}
 }

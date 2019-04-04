@@ -14,7 +14,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.SubjectsName;
+import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.service.QuizService;
 
 import javax.validation.Valid;
@@ -37,13 +37,13 @@ public class QuizController {
 
 	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)
 	@ApiOperation(value = "Get list of subjects", notes = "Return list of subjects")
-	public ResponseEntity<List<SubjectsName>> getEnumSubjects () {
+	public ResponseEntity<List<Subject>> getEnumSubjects () {
 		return new ResponseEntity<>(quizService.getEnum(), HttpStatus.OK);
 	}
 
 	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ)
 	@ApiOperation(value = "Get list quiz from subject", notes = "Return list of quiz")
-	public ResponseEntity<List<Quiz>> getQuizFromSubject (@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT) String subject) {
+	public ResponseEntity<List<Quiz>> getQuizFromSubject (@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT) Long subject) {
 		return new ResponseEntity<>(quizService.getQuizFromSubject(subject), HttpStatus.OK);
 	}
 

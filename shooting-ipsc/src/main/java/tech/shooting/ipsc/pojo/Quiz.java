@@ -5,9 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Positive;
@@ -21,6 +21,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class Quiz extends BaseDocument {
 	public static final String QUESTIONS = "questionList";
+
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz")
 	private Subject subject;

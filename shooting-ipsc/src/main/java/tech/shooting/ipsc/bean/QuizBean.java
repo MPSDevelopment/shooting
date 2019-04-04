@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.ipsc.enums.Subject;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.QuizName;
+import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
