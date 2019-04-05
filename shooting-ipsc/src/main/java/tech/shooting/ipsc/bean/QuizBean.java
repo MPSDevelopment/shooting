@@ -12,6 +12,7 @@ import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -32,6 +33,7 @@ public class QuizBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz name", required = true)
+	@Valid
 	private QuizName name;
 
 	@JsonProperty
@@ -45,7 +47,7 @@ public class QuizBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "% for satisfactorily mark", required = true)
-	@PositiveOrZero(message = ValidationConstants.SATISFACTIORILY_MARK_MESSAGE)
+	@PositiveOrZero(message = ValidationConstants.SATISFACTORILY_MARK_MESSAGE)
 	private int satisfactorily;
 
 	@JsonProperty

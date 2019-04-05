@@ -55,7 +55,7 @@ public class ValidationConstants {
 
 	public static final String TIME_MESSAGE = "The time must be not null and positive";
 
-	public static final String SATISFACTIORILY_MARK_MESSAGE = "The satisfactorily point must be not null and positive";
+	public static final String SATISFACTORILY_MARK_MESSAGE = "The satisfactorily point must be not null and positive";
 
 	public static final String SUBJECT_MESSAGE = "The subject id  must be not null";
 
@@ -63,7 +63,7 @@ public class ValidationConstants {
 
 	public static final String GOOD_MARK_MESSAGE = "The good point must be not null and positive";
 
-	public static final String QUIZ_KZ_MESSAGE = "The quiz name must be not null and more than 3 characters";
+	public static final String QUIZ_KZ_MESSAGE = "The quiz name in KZ must be not null and more than 3 characters";
 
-	public static final String QUIZ_RUS_MESSAGE = "The quiz name must be not null and more than 3 characters";
+	public static final String QUIZ_RUS_MESSAGE = "The quiz name in RUS must be not null and more than 3 characters";
 }
