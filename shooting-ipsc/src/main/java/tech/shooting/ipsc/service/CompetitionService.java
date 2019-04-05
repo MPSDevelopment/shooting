@@ -298,7 +298,7 @@ public class CompetitionService {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
 		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
-		if(scoreRepository.findByPersonIdAndStageId(scoreResult.getPersonId(), scoreResult.getStageId()) != null) {
+		if(scoreRepository.findByPersonIdAndStageId(competitor.getId(), stageId) != null) {
 			return null;
 		}
 		if(score.getDisqualificationReason() != null) {
