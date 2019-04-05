@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.TokenUser;
-import tech.shooting.ipsc.bean.AggBean;
-import tech.shooting.ipsc.bean.CheckinBean;
-import tech.shooting.ipsc.bean.CombatNoteBean;
-import tech.shooting.ipsc.bean.Stat;
+import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.*;
@@ -18,6 +15,9 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class CheckinService {
@@ -69,8 +69,16 @@ public class CheckinService {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division bean %s", id)));
 	}
 
-	public List<AggBean> getChecksByDivisionStatusDateInterval (Long divisionId, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
-		return checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(divisionId), status, date, interval);
+	public List<SearchResult> getChecksByDivisionStatusDateInterval (Long divisionId, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
+		List<AggBean> result = checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(divisionId), status, date, interval);
+		List<SearchResult> toFront = new ArrayList<>();
+		for(int i = 0; i < result.size(); i++) {
+			Map<String, Long> collect = result.get(i).getStat().stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+			SearchResult searchResult = new SearchResult();
+			searchResult.setPerson(result.get(i).getPerson()).setStatus(collect);
+			toFront.add(searchResult);
+		}
+		return toFront;
 	}
 
 	public CombatNote createCombatNote (Long divisionId, CombatNoteBean note) throws BadRequestException {

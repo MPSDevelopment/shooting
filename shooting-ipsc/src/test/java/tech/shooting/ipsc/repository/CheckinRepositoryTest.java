@@ -15,7 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.SearchResult;
 import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
@@ -23,6 +25,7 @@ import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.service.CheckinService;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -51,6 +54,9 @@ class CheckinRepositoryTest {
 	@Autowired
 	private CheckinRepository checkinRepository;
 
+	@Autowired
+	private CheckinService service;
+
 	private Division root;
 
 	private User officer;
@@ -72,7 +78,7 @@ class CheckinRepositoryTest {
 	}
 
 	@Test
-	void check () {
+	void check () throws BadRequestException {
 		for(int i = 0; i < 10; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
@@ -99,7 +105,8 @@ class CheckinRepositoryTest {
 		log.info("Size of result search by division id %s", allByDivision.size());
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
-		log.info("Size %s \t of result search by all id %s and create date is %s", findByAll.size(), root.getId(), createdDate);
+		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
+		assertEquals(findByAll.size(), fromService.size());
 	}
 
 	@Test

@@ -21,18 +21,21 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CheckinBean;
 import tech.shooting.ipsc.bean.CheckinBeanToFront;
 import tech.shooting.ipsc.bean.CombatNoteBean;
+import tech.shooting.ipsc.bean.SearchResult;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
@@ -79,6 +82,9 @@ class CheckinControllerTest {
 
 	@Autowired
 	private CombatNoteRepository combatNoteRepository;
+
+	@Autowired
+	private CheckinService service;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -308,5 +314,36 @@ class CheckinControllerTest {
 			}
 		}
 		toDb = checkinRepository.saveAll(toDb);
+	}
+
+	@Test
+	void check () throws BadRequestException {
+		addDataToDB();
+		List<Person> byDivision = personRepository.findByDivision(root);
+		log.info("count person from root %s", byDivision.size());
+		List<CheckIn> toDb = new ArrayList<>();
+		for(Person p : byDivision) {
+			toDb.add(new CheckIn().setPerson(p).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
+		log.info("count row check in from root %s", checkIns.size());
+		OffsetDateTime createdDate = checkIns.get(0).getCreatedDate();
+		log.info("Create date is %s", createdDate);
+		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
+		log.info("size of list check in by date %s", allByDate.size());
+		for(CheckIn check : allByDate) {
+			log.info("Status is %s\n%s \t division id \t from result set search by date", check.getStatus(), check.getPerson());
+		}
+		log.info("Root id for search %s", root.getId());
+		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
+		log.info("Size of result search by division id %s", allByDivision.size());
+		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
+		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
+		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
+		assertEquals(findByAll.size(), fromService.size());
+		for(int i = 0; i < fromService.size(); i++) {
+			log.info("RepoMethod stat is %s \t person id  is \t %s", findByAll.get(i).getStat(), findByAll.get(i).getPerson().getId());
+			log.info("Service stat is %s \t person id  is \t %s", fromService.get(i).getStatus(), fromService.get(i).getPerson().getId());
+		}
 	}
 }
