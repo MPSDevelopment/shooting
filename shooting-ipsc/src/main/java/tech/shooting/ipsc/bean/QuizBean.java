@@ -10,7 +10,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.QuizName;
-import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -29,7 +28,7 @@ public class QuizBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz", required = true)
 	@NotNull
-	private Subject subject;
+	private Long subject;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz name", required = true)

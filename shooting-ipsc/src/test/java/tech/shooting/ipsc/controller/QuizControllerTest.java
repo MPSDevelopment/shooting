@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -110,7 +111,8 @@ class QuizControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		quizBean = new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
+		quizBean =
+			new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject.getId()).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
 		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject)
 		                                         .setGreat(90)
 		                                         .setGood(70)
@@ -155,7 +157,7 @@ class QuizControllerTest {
 
 	private void checkQuiz (QuizBean fromFront, Quiz quiz) {
 		assertEquals(fromFront.getName(), quiz.getName());
-		assertEquals(fromFront.getSubject(), quiz.getSubject());
+		assertEquals(fromFront.getSubject(), quiz.getSubject().getId());
 		assertEquals(fromFront.getGreat(), quiz.getGreat());
 		assertEquals(fromFront.getGood(), quiz.getGood());
 		assertEquals(fromFront.getSatisfactorily(), quiz.getSatisfactorily());
@@ -255,7 +257,10 @@ class QuizControllerTest {
 	@Test
 	public void checkUpdateQuiz () throws Exception {
 		//prepare
-		json = JacksonUtils.getJson(testQuiz.setTime(200L));
+		testQuiz.setTime(200L);
+		BeanUtils.copyProperties(testQuiz, quizBean);
+		quizBean.setSubject(testQuiz.getSubject().getId());
+		json = JacksonUtils.getJson(quizBean);
 		//try access to update quiz
 		// with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))

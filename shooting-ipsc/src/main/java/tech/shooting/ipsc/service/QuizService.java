@@ -26,10 +26,15 @@ public class QuizService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public Quiz createQuiz (QuizBean quiz) {
+	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
-		BeanUtils.copyProperties(quiz, quizToDB);
+		BeanUtils.copyProperties(quiz, quizToDB, Quiz.SUBJECT);
+		quizToDB.setSubject(checkSubject(quiz.getSubject()));
 		return quizRepository.save(quizToDB);
+	}
+
+	private Subject checkSubject (Long subject) throws BadRequestException {
+		return subjectRepository.findById(subject).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect subject id %s", subject)));
 	}
 
 	public List<Subject> getEnum () {

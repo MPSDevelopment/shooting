@@ -22,6 +22,8 @@ import java.util.List;
 public class Quiz extends BaseDocument {
 	public static final String QUESTIONS = "questionList";
 
+	public static final String SUBJECT = "subject";
+
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz")

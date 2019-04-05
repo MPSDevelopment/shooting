@@ -242,4 +242,6 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_GET_SUBJECT_QUIZ = "/quiz/subject/" + REQUEST_SUBJECT;
 
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
+
+	public static final String CHECKIN_CONTROLLER_POST_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 }

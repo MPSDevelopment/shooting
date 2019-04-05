@@ -200,7 +200,7 @@ class CheckinRepositoryTest {
 
 	private MatchOperation getMatch () {
 		Criteria criteria;
-		List<OffsetDateTime> starEnd = checkinRepository.timeInterval(OffsetDateTime.now(), TypeOfInterval.EVENING);
+		List<OffsetDateTime> starEnd = checkinRepository.timeInterval(OffsetDateTime.now(), TypeOfInterval.MORNING);
 		OffsetDateTime searchStart = starEnd.get(0);
 		OffsetDateTime searchEnd = starEnd.get(1);
 		criteria = Criteria.where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd);

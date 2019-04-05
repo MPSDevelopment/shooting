@@ -48,4 +48,9 @@ public class CheckinController {
 		TokenUser byToken = tokenUtils.getByToken(token);
 		return new ResponseEntity<>(checkinService.createCheck(byToken, bean), HttpStatus.CREATED);
 	}
+	// @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces =  MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	// @ApiOperation(value =  "Added combat note", notes = "Return note object")
+	// public ResponseEntity<CombatNote> createCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @RequestBody @Valid CombatNoteBean note) {
+	// 	return  new ResponseEntity<>(checkinService.createCombatNote(divisionId, note),HttpStatus.CREATED);
+	// }
 }

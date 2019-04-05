@@ -30,7 +30,7 @@ public class QuizController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added new quiz", notes = "Return created quiz object")
-	public ResponseEntity<Quiz> createQuiz (@RequestBody @Valid QuizBean quiz) {
+	public ResponseEntity<Quiz> createQuiz (@RequestBody @Valid QuizBean quiz) throws BadRequestException {
 		return new ResponseEntity<>(quizService.createQuiz(quiz), HttpStatus.CREATED);
 	}
 
