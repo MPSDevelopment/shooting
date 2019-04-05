@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import tech.shooting.ipsc.enums.TypeOfPresence;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class CheckinBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Person id from db")
-	@NotNull
+	@NotNull(message = ValidationConstants.PERSON_ID)
 	private Long person;
 
 	@JsonProperty

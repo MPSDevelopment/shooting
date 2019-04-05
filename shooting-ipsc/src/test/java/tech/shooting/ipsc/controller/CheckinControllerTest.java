@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
@@ -63,16 +64,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CheckinController.class, ValidationErrorHandler.class, CheckinService.class})
 class CheckinControllerTest {
 	@Autowired
-	private CheckinService checkinService;
-
-	@Autowired
 	private CheckinRepository checkinRepository;
 
 	@Autowired
 	private TokenUtils tokenUtils;
-
-	@Autowired
-	private DatabaseCreator databaseCreator;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -249,6 +244,38 @@ class CheckinControllerTest {
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
 		log.info("Result is \n %s", combatNote.getStatList());
+	}
+
+	@Test
+	void checkGetCombatNote () throws Exception {
+		addDataToDB();
+		List<CheckIn> checkIns = checkinRepository.findAll();
+		log.info("create checks size is %s", checkIns.size());
+		int sizeDelay = checkinRepository.findAllByStatus(TypeOfPresence.DELAY).size();
+		int sizePresent = checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size();
+		int sizeDayOff = checkinRepository.findAllByStatus(TypeOfPresence.DAY_OFF).size();
+		int sizeMission = checkinRepository.findAllByStatus(TypeOfPresence.MISSION).size();
+		log.info("status is : Delay %s, Present %s,Day off %s, Mission %s", sizeDelay, sizePresent, sizeDayOff, sizeMission);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
+		log.info("Result is \n %s", combatNote.getStatList());
+		String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                                                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		CombatNote[] combatNotes = JacksonUtils.fromJson(CombatNote[].class, contentAsString1);
+		checkNote(combatNotes[0], combatNote);
+	}
+
+	private void checkNote (CombatNote first, CombatNote second) {
+		assertEquals(first.getCombat(), second.getCombat());
+		assertEquals(first.getId(), second.getId());
+		assertEquals(first.getDivision(), second.getDivision());
+		assertEquals(first.getStatList(), second.getStatList());
+		assertTrue(first.getDate().toLocalDate().isEqual(second.getDate().toLocalDate()));
 	}
 
 	private void addDataToDB () {

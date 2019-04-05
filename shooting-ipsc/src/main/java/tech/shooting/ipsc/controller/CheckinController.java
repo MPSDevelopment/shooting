@@ -22,6 +22,7 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.CheckinService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Controller
@@ -38,7 +39,7 @@ public class CheckinController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION)
 	@ApiOperation(value = "Get list check", notes = "Return list person's from current division")
-	public ResponseEntity<List<Person>> getCheckList (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<List<Person>> getCheckList (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long id) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getList(id), HttpStatus.OK);
 	}
 
@@ -53,7 +54,13 @@ public class CheckinController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added combat note", notes = "Return note object")
-	public ResponseEntity<CombatNote> createCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @RequestBody @Valid CombatNoteBean note) throws BadRequestException {
+	public ResponseEntity<CombatNote> createCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId, @RequestBody @Valid CombatNoteBean note) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.createCombatNote(divisionId, note), HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE)
+	@ApiOperation(value = "Added combat note", notes = "Return note object")
+	public ResponseEntity<List<CombatNote>> getCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId) throws BadRequestException {
+		return new ResponseEntity<>(checkinService.getCombatNote(divisionId), HttpStatus.OK);
 	}
 }

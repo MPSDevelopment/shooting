@@ -66,4 +66,6 @@ public class ValidationConstants {
 	public static final String QUIZ_KZ_MESSAGE = "The quiz name in KZ must be not null and more than 3 characters";
 
 	public static final String QUIZ_RUS_MESSAGE = "The quiz name in RUS must be not null and more than 3 characters";
+
+	public static final String DATE_MESSAGE = "Date must be not null";
 }

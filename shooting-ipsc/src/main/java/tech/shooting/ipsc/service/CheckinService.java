@@ -96,4 +96,9 @@ public class CheckinService {
 			throw new BadRequestException(new ErrorMessage("Statistics for this division %s by that period start %s and end %s is not exist", division.getId(), interval.getStart(), interval.getEnd()));
 		}
 	}
+
+	public List<CombatNote> getCombatNote (Long divisionId) throws BadRequestException {
+		Division division = checkDivision(divisionId);
+		return combatNoteRepository.findAllByDivision(division);
+	}
 }
