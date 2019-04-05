@@ -3,10 +3,12 @@ package tech.shooting.ipsc.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuizBean;
+import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Subject;
@@ -82,5 +84,9 @@ public class QuizService {
 
 	public List<Quiz> getQuizFromSubject (Long subject) {
 		return quizRepository.findBySubject(subject);
+	}
+
+	public ResponseEntity getQuizByPage (Integer page, Integer size) {
+		return PageAble.getPage(page, size, quizRepository);
 	}
 }
