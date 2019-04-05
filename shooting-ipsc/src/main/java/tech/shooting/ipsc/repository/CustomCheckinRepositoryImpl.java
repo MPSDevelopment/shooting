@@ -69,8 +69,7 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<CheckIn> findAllByDate (OffsetDateTime createdDate) {
-		OffsetDateTime offsetDateTime = createdDate.plusMinutes(5);
-		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(createdDate).lte(offsetDateTime));
+		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).is(createdDate));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 

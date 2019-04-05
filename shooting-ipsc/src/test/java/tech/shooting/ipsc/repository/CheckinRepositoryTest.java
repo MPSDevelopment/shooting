@@ -280,4 +280,24 @@ class CheckinRepositoryTest {
 		assertEquals(checkinRepository.findAllByDivision(root.getId()).size(), 20);
 		assertEquals(checkinRepository.findAll().size(), 21);
 	}
+
+	@Test
+	void checkFindAllByDate () {
+		//prepare
+		addDataToDB();
+		List<CheckIn> all = checkinRepository.findAll();
+		assertEquals(all.size(), 20);
+		OffsetDateTime second = all.get(1).getCreatedDate();
+		assertNotNull(second);
+		int count = 0;
+		for(int i = 0; i < all.size(); i++) {
+			if(all.get(i).getCreatedDate().equals(second)) {
+				count++;
+			}
+		}
+		//check
+		List<CheckIn> allByDate = checkinRepository.findAllByDate(second);
+		assertEquals(allByDate.size(), count);
+		assertNotNull(allByDate.get(0));
+	}
 }
