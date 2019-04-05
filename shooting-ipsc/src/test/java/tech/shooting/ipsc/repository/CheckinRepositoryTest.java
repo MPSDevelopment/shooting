@@ -27,8 +27,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -98,20 +97,6 @@ class CheckinRepositoryTest {
 		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
 		log.info("Size of result search by division id %s", allByDivision.size());
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
-		List<CheckIn> allCurrent = checkinRepository.findAllByDateAndDivision(createdDate, root);
-		log.info("Size %s \t of result search by division id %s and create date is %s", allCurrent.size(), root.getId(), createdDate);
-		Division subroot = divisionRepository.save(new Division().setParent(root).setName("subroot").setActive(true));
-		List<Division> children = root.getChildren();
-		children.add(subroot);
-		root.setChildren(children);
-		divisionRepository.save(root);
-		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
-		person.setDivision(subroot);
-		Person save = personRepository.save(person);
-		checkinRepository.save(new CheckIn().setPerson(save).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(subroot.getId()));
-		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
-		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createdDate, root);
-		log.info("Size %s \t of result search by division id %s and create date is %s", findByRoot.size(), root.getId(), createdDate);
 		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
 		log.info("Size %s \t of result search by all id %s and create date is %s", findByAll.size(), root.getId(), createdDate);
 	}
@@ -222,6 +207,7 @@ class CheckinRepositoryTest {
 
 	@Test
 	void checkFindAllByDateAndDivision () {
+		//prepare
 		addDataToDB();
 		OffsetDateTime now = OffsetDateTime.now();
 		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
@@ -232,7 +218,44 @@ class CheckinRepositoryTest {
 		for(int i = 0; i < checkIns.size(); i++) {
 			assertTrue(checkIns.get(i).getCreatedDate().equals(now));
 		}
+		//check
 		List<CheckIn> allByDateAndDivision = checkinRepository.findAllByDateAndDivision(now, root);
 		assertEquals(checkIns, allByDateAndDivision);
+	}
+
+	@Test
+	void checkFindAllByDateAndRootDivision () {
+		//prepare
+		addDataToDB();
+		OffsetDateTime createDate = OffsetDateTime.now();
+		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
+		for(int i = 0; i < allByDivision.size(); i++) {
+			allByDivision.get(i).setCreatedDate(createDate);
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(allByDivision);
+		for(int i = 0; i < checkIns.size(); i++) {
+			assertTrue(checkIns.get(i).getCreatedDate().equals(createDate));
+		}
+		log.info("size check in report for root division %s", checkIns.size());
+		//create subdivision
+		Division subroot = divisionRepository.save(new Division().setParent(root).setName("subroot").setActive(true));
+		List<Division> children = root.getChildren();
+		children.add(subroot);
+		root.setChildren(children);
+		//added subDivision to root list children
+		divisionRepository.save(root);
+		//create person in subdivision
+		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		person.setDivision(subroot);
+		Person save = personRepository.save(person);
+		//save checkin for subdivision
+		CheckIn save1 = checkinRepository.save(new CheckIn().setPerson(save).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(subroot.getId()));
+		assertNotEquals(save1.getCreatedDate(), createDate);
+		save1.setCreatedDate(createDate);
+		save1 = checkinRepository.save(save1);
+		assertEquals(save1.getCreatedDate(), createDate);
+		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createDate, root);
+		assertEquals(checkIns.size() + 1, findByRoot.size());
+		log.info("Size count fot sub root %s", findByRoot.size());
 	}
 }

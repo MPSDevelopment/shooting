@@ -45,8 +45,7 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 	public List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Division divisionId) {
 		Set<Long> divisions = new HashSet<>();
 		addedChild(divisionId, divisions);
-		OffsetDateTime offsetDateTime = createdDate.plusMinutes(20);
-		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(createdDate).lte(offsetDateTime));
+		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).is(createdDate));
 		log.info("Division id: %s", divisions);
 		query.addCriteria(where(CheckIn.DIVISION_ID).in(divisions));
 		return mongoTemplate.find(query, CheckIn.class);
