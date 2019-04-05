@@ -12,7 +12,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.Stat;
 
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -24,7 +24,7 @@ public class CombatNote extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Filling date")
 	@NotNull
-	private OffsetDateTime date;
+	private LocalDate date;
 
 	@DBRef
 	@JsonProperty

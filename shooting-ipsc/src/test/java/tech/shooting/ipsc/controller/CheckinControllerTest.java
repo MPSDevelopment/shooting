@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
@@ -275,7 +274,7 @@ class CheckinControllerTest {
 		assertEquals(first.getId(), second.getId());
 		assertEquals(first.getDivision(), second.getDivision());
 		assertEquals(first.getStatList(), second.getStatList());
-		assertTrue(first.getDate().toLocalDate().isEqual(second.getDate().toLocalDate()));
+		assertEquals(first.getDate(), second.getDate());
 	}
 
 	private void addDataToDB () {
