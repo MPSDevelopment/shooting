@@ -214,8 +214,25 @@ class CheckinRepositoryTest {
 		person.setDivision(root);
 		Person save = personRepository.save(person);
 		CheckIn saveCheckIn = checkinRepository.save(new CheckIn().setDivisionId(root.getId()).setStatus(TypeOfPresence.PRESENT).setPerson(save).setOfficer(officer));
+		//check
 		List<CheckIn> allByCreatedDateAndOfficer = checkinRepository.findAllByCreatedDateAndOfficer(saveCheckIn.getCreatedDate(), officer);
 		assertEquals(allByCreatedDateAndOfficer.size(), 1);
 		assertEquals(saveCheckIn, allByCreatedDateAndOfficer.get(0));
+	}
+
+	@Test
+	void checkFindAllByDateAndDivision () {
+		addDataToDB();
+		OffsetDateTime now = OffsetDateTime.now();
+		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
+		for(int i = 0; i < allByDivision.size(); i++) {
+			allByDivision.get(i).setCreatedDate(now);
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(allByDivision);
+		for(int i = 0; i < checkIns.size(); i++) {
+			assertTrue(checkIns.get(i).getCreatedDate().equals(now));
+		}
+		List<CheckIn> allByDateAndDivision = checkinRepository.findAllByDateAndDivision(now, root);
+		assertEquals(checkIns, allByDateAndDivision);
 	}
 }
