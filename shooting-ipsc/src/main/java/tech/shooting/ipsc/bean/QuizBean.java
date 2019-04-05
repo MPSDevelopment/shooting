@@ -13,7 +13,6 @@ import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,21 +40,21 @@ public class QuizBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Time for answer", required = true)
-	@Positive(message = ValidationConstants.TIME_MESSAGE)
+	@PositiveOrZero(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
 	@JsonProperty
 	@ApiModelProperty(value = "% for satisfactorily mark", required = true)
-	@PositiveOrZero
+	@PositiveOrZero(message = ValidationConstants.SATISFACTIORILY_MARK_MESSAGE)
 	private int satisfactorily;
 
 	@JsonProperty
 	@ApiModelProperty(value = "% for great mark", required = true)
-	@PositiveOrZero
+	@PositiveOrZero(message = ValidationConstants.GREAT_MARK_MESSAGE)
 	private int great;
 
 	@JsonProperty
 	@ApiModelProperty(value = "% for good mark", required = true)
-	@PositiveOrZero
+	@PositiveOrZero(message = ValidationConstants.GOOD_MARK_MESSAGE)
 	private int good;
 }

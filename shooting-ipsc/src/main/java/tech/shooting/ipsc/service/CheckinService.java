@@ -7,17 +7,14 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.TokenUser;
 import tech.shooting.ipsc.bean.AggBean;
 import tech.shooting.ipsc.bean.CheckinBean;
+import tech.shooting.ipsc.bean.CombatNoteBean;
+import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
-import tech.shooting.ipsc.pojo.CheckIn;
-import tech.shooting.ipsc.pojo.Division;
-import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.repository.CheckinRepository;
-import tech.shooting.ipsc.repository.DivisionRepository;
-import tech.shooting.ipsc.repository.PersonRepository;
-import tech.shooting.ipsc.repository.UserRepository;
+import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.repository.*;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +32,9 @@ public class CheckinService {
 
 	@Autowired
 	private DivisionRepository divisionRepository;
+
+	@Autowired
+	private CombatNoteRepository combatNoteRepository;
 
 	public List<CheckIn> createCheck (TokenUser byToken, List<CheckinBean> beans) throws BadRequestException {
 		List<CheckIn> res = new ArrayList<>();
@@ -57,6 +57,10 @@ public class CheckinService {
 		return personRepository.findById(bean.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect  person Id %s", bean.getPerson())));
 	}
 
+	private Person checkPerson (Long bean) throws BadRequestException {
+		return personRepository.findById(bean).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect  person Id %s", bean)));
+	}
+
 	public List<Person> getList (Long id) throws BadRequestException {
 		return personRepository.findByDivision(checkDivision(id));
 	}
@@ -67,5 +71,29 @@ public class CheckinService {
 
 	public List<AggBean> getChecksByDivisionStatusDateInterval (Long divisionId, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
 		return checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(divisionId), status, date, interval);
+	}
+
+	public CombatNote createCombatNote (Long divisionId, CombatNoteBean note) throws BadRequestException {
+		Division division = checkDivision(divisionId);
+		Person person = checkPerson(note.getCombatId());
+		OffsetDateTime date = note.getDate();
+		LocalTime localTime = date.toLocalTime();
+		TypeOfInterval type;
+		if(localTime.isBefore(TypeOfInterval.MIDDLE) || localTime.equals(TypeOfInterval.MIDDLE)) {
+			type = TypeOfInterval.MORNING;
+		} else {
+			type = TypeOfInterval.EVENING;
+		}
+		checkStatData(division, TypeOfPresence.ALL, note.getDate(), type);
+		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(division, note.getDate(), type);
+		CombatNote result = new CombatNote();
+		result.setStatList(combatNoteByDivisionFromPeriod).setCombat(person).setDate(note.getDate()).setDivision(division);
+		return combatNoteRepository.save(result);
+	}
+
+	void checkStatData (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
+		if(checkinRepository.findAllByDivisionStatusDateInterval(division, status, date, interval).size() == 0) {
+			throw new BadRequestException(new ErrorMessage("Statistics for this division %s by that period start %s and end %s is not exist", division.getId(), interval.getStart(), interval.getEnd()));
+		}
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.CheckIn;
@@ -72,6 +73,22 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		OffsetDateTime offsetDateTime = createdDate.plusMinutes(5);
 		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(createdDate).lte(offsetDateTime));
 		return mongoTemplate.find(query, CheckIn.class);
+	}
+
+	@Override
+	public List<Stat> getCombatNoteByDivisionFromPeriod (Division division, OffsetDateTime dateTime, TypeOfInterval interval) {
+		MatchOperation match = getMatch(dateTime, interval);
+		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
+		return mongoTemplate.aggregate(newAggregation(match, groupOperation), CheckIn.class, Stat.class).getMappedResults();
+	}
+
+	private MatchOperation getMatch (OffsetDateTime date, TypeOfInterval interval) {
+		Criteria criteria;
+		List<OffsetDateTime> starEnd = timeInterval(date, interval);
+		OffsetDateTime searchStart = starEnd.get(0);
+		OffsetDateTime searchEnd = starEnd.get(1);
+		criteria = Criteria.where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd);
+		return match(criteria);
 	}
 
 	@Override

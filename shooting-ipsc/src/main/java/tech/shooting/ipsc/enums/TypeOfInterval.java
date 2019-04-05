@@ -9,6 +9,8 @@ public enum TypeOfInterval {
 	WEEK("WEEK", Constants.START_OF, Constants.END_OF),
 	MONTH("MONTH", Constants.START_OF, Constants.END_OF);
 
+	public static final LocalTime MIDDLE = LocalTime.of(12, 0, 0, 0);
+
 	private String state;
 
 	private LocalTime start;

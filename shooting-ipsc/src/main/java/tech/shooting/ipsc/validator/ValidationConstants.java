@@ -53,5 +53,11 @@ public class ValidationConstants {
 
 	public static final String SCORE_MESSAGE = "Must be not null";
 
-	public static final String TIME_MESSAGE = "Must be not null and positive";
+	public static final String TIME_MESSAGE = "The time must be not null and positive";
+
+	public static final String SATISFACTIORILY_MARK_MESSAGE = "The satisfactorily point must be not null and positive";
+
+	public static final String GREAT_MARK_MESSAGE = "The great point must be not null and positive";
+
+	public static final String GOOD_MARK_MESSAGE = "The good point must be not null and positive";
 }

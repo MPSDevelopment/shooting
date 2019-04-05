@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.repository;
 
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.CheckIn;
@@ -23,4 +24,6 @@ public interface CustomCheckinRepository {
 	List<CheckIn> findAllByStatus (TypeOfPresence status);
 
 	List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval);
+
+	List<Stat> getCombatNoteByDivisionFromPeriod (Division division, OffsetDateTime dateTime, TypeOfInterval interval);
 }

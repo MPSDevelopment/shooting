@@ -26,6 +26,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CheckinBean;
 import tech.shooting.ipsc.bean.CheckinBeanToFront;
+import tech.shooting.ipsc.bean.CombatNoteBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -35,19 +36,18 @@ import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
-import tech.shooting.ipsc.repository.CheckinRepository;
-import tech.shooting.ipsc.repository.DivisionRepository;
-import tech.shooting.ipsc.repository.PersonRepository;
-import tech.shooting.ipsc.repository.UserRepository;
+import tech.shooting.ipsc.repository.*;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.CheckinService;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,6 +84,9 @@ class CheckinControllerTest {
 	private DivisionRepository divisionRepository;
 
 	@Autowired
+	private CombatNoteRepository combatNoteRepository;
+
+	@Autowired
 	private MockMvc mockMvc;
 
 	private Division root;
@@ -106,11 +109,13 @@ class CheckinControllerTest {
 	void setUp () {
 		checkinRepository.deleteAll();
 		divisionRepository.deleteAll();
+		combatNoteRepository.deleteAll();
 		personRepository.deleteAll(personRepository.findByDivision(root));
 		root = divisionRepository.save(new Division().setParent(null).setName("Root").setActive(true));
 		testPerson = testPerson == null ? personRepository.save(new Person().setName("testing")
 		                                                                    .setCodes(List.of(new WeaponIpscCode().setCode("43423423423423").setTypeWeapon(WeaponTypeEnum.HANDGUN)))
-		                                                                    .setQualifierRank(ClassificationBreaks.D)) : testPerson;
+		                                                                    .setQualifierRank(ClassificationBreaks.D)
+		                                                                    .setDivision(root)) : testPerson;
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15))
 		                                                    .setName("Test firstname")
 		                                                    .setPassword("dfhhjsdgfdsfhj")
@@ -200,7 +205,8 @@ class CheckinControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// judge user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).header(Token.TOKEN_HEADER, judgeToken)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
+		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
 		                                      .content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// user user
@@ -229,7 +235,63 @@ class CheckinControllerTest {
 			assertEquals(fromFront.get(i).getStatus(), listFromJson.get(i).getStatus());
 		}
 		assertEquals(checkinRepository.count(), fromFront.size());
+	}
 
+	@Test
+	void checkCreateCombatNote () throws Exception {
+		//try access to create combat note with admin role when check in is not exist
+		mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		addDataToDB();
+		List<CheckIn> checkIns = checkinRepository.findAll();
+		log.info("create checks size is %s", checkIns.size());
+		int sizeDelay = checkinRepository.findAllByStatus(TypeOfPresence.DELAY).size();
+		int sizePresent = checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size();
+		int sizeDayOff = checkinRepository.findAllByStatus(TypeOfPresence.DAY_OFF).size();
+		int sizeMission = checkinRepository.findAllByStatus(TypeOfPresence.MISSION).size();
+		log.info("status is : Delay %s, Present %s,Day off %s, Mission %s", sizeDelay, sizePresent, sizeDayOff, sizeMission);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
+			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
+		log.info("Result is \n %s", combatNote.getStatList());
+	}
 
+	private void addDataToDB () {
+		//prepare
+		for(int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+		}
+		List<Person> byDivision = personRepository.findByDivision(root);
+		List<CheckIn> toDb = new ArrayList<>();
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(!byDivision.get(i).equals(testPerson)) {
+				if(i % 2 == 0) {
+					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
+				} else {
+					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+				}
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
+		log.info("Object in db %s ", toDb.size());
+		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
+		for(int i = 0; i < byDivision.size(); i++) {
+			if(!byDivision.get(i).equals(testPerson)) {
+				if(i % 2 == 0) {
+					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.MISSION).setDivisionId(root.getId()));
+				} else {
+					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.DAY_OFF).setDivisionId(root.getId()));
+				}
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
 	}
 }

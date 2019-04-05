@@ -9,19 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
-import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.AggBean;
-import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfInterval;
@@ -34,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -57,15 +50,11 @@ class CheckinRepositoryTest {
 	@Autowired
 	private CheckinRepository checkinRepository;
 
-
 	private Division root;
 
 	private User officer;
 
 	private Person testPerson;
-
-	@Autowired
-	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
 	void setUp () {
@@ -128,38 +117,17 @@ class CheckinRepositoryTest {
 
 	@Test
 	void checkDate () {
-		for(int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
-			person.setDivision(root);
-			personRepository.save(person);
-			log.info("Person %s has been created", person);
-		}
-		List<Person> byDivision = personRepository.findByDivision(root);
-		log.info("count person from root %s", byDivision.size());
-		List<CheckIn> toDb = new ArrayList<>();
-		for(Person p : byDivision) {
-			toDb.add(new CheckIn().setPerson(p).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
-		}
-		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
+		addDataToDB();
+		List<CheckIn> checkIns = checkinRepository.findAll();
 		log.info("status row check in from root %s", checkIns);
-		log.info("All rows %s", checkinRepository.findAll().size());
-		for(int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
-			person.setDivision(root);
-			personRepository.save(person);
-			log.info("Person %s has been created", person);
+		for(int i = 0; i < checkIns.size(); i++) {
+			log.info("check is id %s\t status is %s\t\t date is %s", checkIns.get(i).getId(), checkIns.get(i).getStatus(), checkIns.get(i).getCreatedDate());
 		}
-		byDivision = personRepository.findByDivision(root);
-		log.info("count person from root %s", byDivision.size());
-		toDb = new ArrayList<>();
-		for(Person p : byDivision) {
-			toDb.add(new CheckIn().setPerson(p).setOfficer(officer).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
-		}
-		checkIns = checkinRepository.saveAll(toDb);
-		log.info("status row check in from root %s", checkIns);
 		log.info("All rows %s", checkinRepository.findAll().size());
 		log.info("Status delay is %s", checkinRepository.findAllByStatus(TypeOfPresence.DELAY).size());
 		log.info("Status present is %s", checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size());
+		log.info("Status day off is %s", checkinRepository.findAllByStatus(TypeOfPresence.DAY_OFF).size());
+		log.info("Status mission is %s", checkinRepository.findAllByStatus(TypeOfPresence.MISSION).size());
 	}
 
 	@Test
@@ -192,19 +160,6 @@ class CheckinRepositoryTest {
 		toDb = checkinRepository.saveAll(toDb);
 		log.info("Object in db %s ", toDb.size());
 		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
-		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
-		List<Stat> mappedResults = mongoTemplate.aggregate(newAggregation(getMatch(), groupOperation), CheckIn.class, Stat.class).getMappedResults();
-		log.info("stat is %s", mappedResults);
-		log.info("stat is %s", mappedResults);
-	}
-
-	private MatchOperation getMatch () {
-		Criteria criteria;
-		List<OffsetDateTime> starEnd = checkinRepository.timeInterval(OffsetDateTime.now(), TypeOfInterval.MORNING);
-		OffsetDateTime searchStart = starEnd.get(0);
-		OffsetDateTime searchEnd = starEnd.get(1);
-		criteria = Criteria.where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd);
-		return match(criteria);
 	}
 
 	private void addDataToDB () {
