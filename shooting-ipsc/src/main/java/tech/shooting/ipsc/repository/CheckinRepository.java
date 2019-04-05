@@ -11,5 +11,4 @@ import java.util.List;
 @Repository
 public interface CheckinRepository extends MongoRepository<CheckIn, Long>, CustomCheckinRepository {
 	List<CheckIn> findAllByCreatedDateAndOfficer (OffsetDateTime createdDate, User officer);
-
 }

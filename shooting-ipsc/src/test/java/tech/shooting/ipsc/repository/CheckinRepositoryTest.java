@@ -27,6 +27,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -204,5 +205,17 @@ class CheckinRepositoryTest {
 		for(AggBean aggBean : allByDivisionStatusDateInterval) {
 			log.info("Person %s \n status %s", aggBean.getPerson(), aggBean.getStat());
 		}
+	}
+
+	@Test
+	void checkFindAllByCreatedDateAndOfficer () {
+		//prepare
+		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		person.setDivision(root);
+		Person save = personRepository.save(person);
+		CheckIn saveCheckIn = checkinRepository.save(new CheckIn().setDivisionId(root.getId()).setStatus(TypeOfPresence.PRESENT).setPerson(save).setOfficer(officer));
+		List<CheckIn> allByCreatedDateAndOfficer = checkinRepository.findAllByCreatedDateAndOfficer(saveCheckIn.getCreatedDate(), officer);
+		assertEquals(allByCreatedDateAndOfficer.size(), 1);
+		assertEquals(saveCheckIn, allByCreatedDateAndOfficer.get(0));
 	}
 }
