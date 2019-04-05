@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class ApplicationContextWrapper {
+	
 	private static ApplicationContext ctx = null;
 
 	@Autowired

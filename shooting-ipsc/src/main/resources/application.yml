@@ -36,13 +36,6 @@ spring:
       #      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5673
-    username: ip34fdsfdasfdsbgsc
-    password: iprewgbqw43283yausdhasvfassc
-    template:
-      reply-timeout: 5000
 server:
   address: 127.0.0.1
   port: 9900
@@ -52,10 +45,10 @@ server:
     min-response-size: 1024
 
 ipsc:
-  rabbitmq:
-    apiUrl: http://localhost:15673
-    mqttUrl: tcp://localhost:1884
-    ipscQueueName: ipsc
+  mqtt:
+    adminLogin: ipsc
+    adminpassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc
     
 ---
 spring:
@@ -75,13 +68,6 @@ spring:
       #      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
-  rabbitmq:
-    host: 40.69.138.82
-    port: 5673
-    username: ip34fdsfdasfdsbgsc
-    password: iprewgbqw43283yausdhasvfassc
-    template:
-      reply-timeout: 5000
 server:
   address: 10.0.6.4
   port: 9901
@@ -91,10 +77,10 @@ server:
     min-response-size: 1024
   connection-timeout: 20000
 ipsc:
-  rabbitmq:
-    apiUrl: http://40.69.138.82:15672
-    mqttUrl: tcp://40.69.138.82:1883
-    ipscQueueName: ipsc
+  mqtt:
+    adminLogin: ipsc
+    adminpassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc
     
 ---
 spring:
@@ -124,3 +110,7 @@ server:
     min-response-size: 1024
   connection-timeout: 20000
 ipsc:
+  mqtt:
+    adminLogin: ipsc
+    adminpassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc

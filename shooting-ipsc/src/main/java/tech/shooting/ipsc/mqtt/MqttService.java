@@ -1,29 +1,21 @@
 package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import tech.shooting.ipsc.config.IpscMqttSettings;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 @Service
 @Slf4j
 public class MqttService {
-
-	public static final String IPSC_TOPIC = "ipsc/";
-
-	@Value("${spring.rabbitmq.username}")
-	private String admLogin;
-
-	@Value("${spring.rabbitmq.password}")
-	private String admPsw;
+	
+	@Autowired 
+	private IpscMqttSettings mqttSettings;
 
 	public MqttMessage createMessage(String payload) {
 		MqttMessage message = new MqttMessage();

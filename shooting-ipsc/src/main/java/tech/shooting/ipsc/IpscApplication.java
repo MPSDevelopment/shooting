@@ -27,7 +27,7 @@ import io.moquette.interception.InterceptHandler;
 @EnableWebMvc
 @EnableMongoRepositories
 @EntityScan(basePackages = { "tech.shooting.ipsc" })
-@ComponentScan(basePackages = { "tech.shooting.ipsc" })
+@ComponentScan(basePackages = { "tech.shooting.commons.spring", "tech.shooting.ipsc" })
 @EnableScheduling
 @Slf4j
 public class IpscApplication {
@@ -44,6 +44,7 @@ public class IpscApplication {
 		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader);
 
 		mqttBroker = new Server();
+		
 		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
 		mqttBroker.startServer(classPathConfig, userHandlers);
 
