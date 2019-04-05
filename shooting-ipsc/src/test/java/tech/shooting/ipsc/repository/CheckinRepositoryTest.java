@@ -258,4 +258,26 @@ class CheckinRepositoryTest {
 		assertEquals(checkIns.size() + 1, findByRoot.size());
 		log.info("Size count fot sub root %s", findByRoot.size());
 	}
+
+	@Test
+	void checkFindAllByDivision () {
+		//prepare
+		addDataToDB();
+		assertEquals(checkinRepository.findAll().size(), 20);
+		Division subroot = divisionRepository.save(new Division().setParent(root).setName("subroot").setActive(true));
+		List<Division> children = root.getChildren();
+		children.add(subroot);
+		root.setChildren(children);
+		//added subDivision to root list children
+		divisionRepository.save(root);
+		//create person in subdivision
+		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		person.setDivision(subroot);
+		Person save = personRepository.save(person);
+		//save checkin for subdivision
+		CheckIn save1 = checkinRepository.save(new CheckIn().setPerson(save).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(subroot.getId()));
+		//check
+		assertEquals(checkinRepository.findAllByDivision(root.getId()).size(), 20);
+		assertEquals(checkinRepository.findAll().size(), 21);
+	}
 }
