@@ -11,4 +11,6 @@ public interface ScoreRepository extends MongoRepository<Score, Long> {
 	List<Score> findAllByPersonId (Long personId);
 
 	List<Score> findAllByStageId (Long stageId);
+
+	Score findByPersonIdAndStageId (Long personId, Long stageId);
 }

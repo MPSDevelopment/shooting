@@ -282,7 +282,10 @@ public class CompetitionService {
 		checkToAddedRow(competition);
 		checkStage(competition, stageId);
 		for(ScoreBean score : scoreBean) {
-			result.add(addedScoreWithoutCheck(competition, stageId, score));
+			Score score1 = addedScoreWithoutCheck(competition, stageId, score);
+			if(score1 != null) {
+				result.add(score1);
+			}
 		}
 		return result;
 	}
@@ -295,6 +298,9 @@ public class CompetitionService {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
 		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
+		if(scoreRepository.findByPersonIdAndStageId(scoreResult.getPersonId(), scoreResult.getStageId()) != null) {
+			return null;
+		}
 		if(score.getDisqualificationReason() != null) {
 			switch(score.getDisqualificationReason()) {
 				case "DISQUALIFICATION":
