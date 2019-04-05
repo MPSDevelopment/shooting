@@ -5,6 +5,8 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
+import tech.shooting.ipsc.mqtt.MqttService;
+import tech.shooting.ipsc.mqtt.PublisherListener;
 import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,22 +25,15 @@ import io.moquette.broker.config.ClasspathResourceLoader;
 import io.moquette.broker.config.IConfig;
 import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
-import io.moquette.interception.AbstractInterceptHandler;
 import io.moquette.interception.InterceptHandler;
-import io.moquette.interception.messages.InterceptPublishMessage;
-import io.netty.buffer.ByteBufUtil;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JsonMqttCallBack.class })
+@ContextConfiguration(classes = {MqttService.class, JsonMqttCallBack.class })
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
@@ -54,6 +50,9 @@ class MqttTest {
 	private int count = 0;
 
 	private static Server mqttBroker;
+	
+	@Autowired
+	private MqttService mqttService;
 
 	@BeforeAll
 	public static void beforeAll() throws IOException {
@@ -83,19 +82,19 @@ class MqttTest {
 
 		// subscriber
 
-		var subscriber1 = createSubscriber(MQTT_URL, topicName1);
-		var subscriber2 = createSubscriber(MQTT_URL, topicName2);
-		var subscriber3 = createSubscriber(MQTT_URL, topicName2);
+		var subscriber1 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName1);
+		var subscriber2 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
+		var subscriber3 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
 
-		var subscriberAll = createSubscriber(MQTT_URL, "command/#");
+		var subscriberAll = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, "command/#");
 
 		// publisher
 
-		var publisher = createPublisher(MQTT_URL);
+		var publisher = mqttService.createPublisher(MQTT_URL, TEST_LOGIN, TEST_PASSWORD);
 
 		// publish a message
 
-		MqttMessage message = createMessage("Crazy message");
+		MqttMessage message = mqttService.createMessage("Crazy message");
 
 		MqttTopic topic1 = publisher.getTopic(topicName1);
 		topic1.publish(message);
@@ -115,65 +114,9 @@ class MqttTest {
 
 	}
 
-	private MqttMessage createMessage(String payload) {
-		MqttMessage message = new MqttMessage();
-		message.setQos(1);
-		message.setRetained(false);
-		message.setPayload(payload.getBytes());
-		return message;
-	}
-
-	private MqttClient createPublisher(String url) throws MqttException {
-		MqttConnectOptions connOpts = new MqttConnectOptions();
-		connOpts.setCleanSession(true); // no persistent session
-		connOpts.setKeepAliveInterval(10000);
-		connOpts.setUserName(TEST_LOGIN);
-		connOpts.setPassword(TEST_PASSWORD.toCharArray());
-
-		String publisherId = UUID.randomUUID().toString();
-		var publisher = new MqttClient(url, publisherId);
-		publisher.connect(connOpts);
-		return publisher;
-	}
-
-	private MqttClient createSubscriber(String url, String... topicNames) throws MqttException {
-		MqttConnectOptions connOpts = new MqttConnectOptions();
-		connOpts.setCleanSession(true); // no persistent session
-		connOpts.setKeepAliveInterval(10000);
-		connOpts.setUserName(TEST_LOGIN);
-		connOpts.setPassword(TEST_PASSWORD.toCharArray());
-
-		var subscriber = new MqttClient(url, MqttClient.generateClientId());
-		subscriber.setCallback(new JsonMqttCallBack());
-		subscriber.connect(connOpts);
-		Arrays.asList(topicNames).forEach(topicName -> {
-			try {
-				subscriber.subscribe(topicName);
-			} catch (MqttException e) {
-				log.error("Cannot connect to topic: %s", topicName);
-			}
-		});
-
-		return subscriber;
-	}
-
 	@Handler
 	public void handle(MqttSimpleEvent event) {
 		count++;
-	}
-
-	static class PublisherListener extends AbstractInterceptHandler {
-
-		@Override
-		public String getID() {
-			return "EmbeddedLauncherPublishListener";
-		}
-
-		@Override
-		public void onPublish(InterceptPublishMessage msg) {
-			final String decodedPayload = new String(ByteBufUtil.getBytes(msg.getPayload()), StandardCharsets.UTF_8);
-			log.info("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
-		}
 	}
 
 }
