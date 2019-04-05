@@ -318,6 +318,7 @@ class CheckinControllerTest {
 
 	@Test
 	void check () throws BadRequestException {
+		//check
 		addDataToDB();
 		List<Person> byDivision = personRepository.findByDivision(root);
 		log.info("count person from root %s", byDivision.size());
