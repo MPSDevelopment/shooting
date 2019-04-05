@@ -33,9 +33,9 @@ logging:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 ipsc:
-  rabbitmq:
-    apiUrl: http://40.69.138.82:15673
-    mqttUrl: tcp://40.69.138.82:1884
+  mqtt:
+    adminLogin: ipsc
+    adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
 
 ---
@@ -81,7 +81,13 @@ spring:
 logging:
   level:
     io.moquette.broker.metrics.MQTTMessageLogger: ERROR
-
+    
+ipsc:
+  mqtt:
+    adminLogin: ipsc
+    adminPassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc
+    
 ---
 spring:
   profiles: development
@@ -113,7 +119,7 @@ server:
 ipsc:
   mqtt:
     adminLogin: ipsc
-    adminpassword: ip2342354dsdsnkjqsc
+    adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
 
 

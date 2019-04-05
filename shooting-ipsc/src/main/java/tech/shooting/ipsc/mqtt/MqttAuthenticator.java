@@ -16,7 +16,7 @@ public class MqttAuthenticator implements IAuthenticator {
 	public MqttAuthenticator() {
 		settings = ApplicationContextWrapper.getBean(IpscMqttSettings.class);
 		tokenUtils = ApplicationContextWrapper.getBean(TokenUtils.class);
-		log.info("DBAuthenticator created, settings are %s", settings);
+		log.info("MqttAuthenticator created, settings are %s", settings);
 	}
 
 	@Override
