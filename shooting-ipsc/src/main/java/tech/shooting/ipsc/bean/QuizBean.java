@@ -12,10 +12,9 @@ import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +32,6 @@ public class QuizBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz name", required = true)
-	@NotBlank(message = ValidationConstants.QUIZ_MESSAGE)
-	@Size(min = 3, message = ValidationConstants.QUIZ_MESSAGE)
 	private QuizName name;
 
 	@JsonProperty
@@ -43,7 +40,7 @@ public class QuizBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Time for answer", required = true)
-	@PositiveOrZero(message = ValidationConstants.TIME_MESSAGE)
+	@Positive(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
 	@JsonProperty

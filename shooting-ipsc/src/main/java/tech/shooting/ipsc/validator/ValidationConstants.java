@@ -63,5 +63,7 @@ public class ValidationConstants {
 
 	public static final String GOOD_MARK_MESSAGE = "The good point must be not null and positive";
 
-	public static final String QUIZ_MESSAGE = "The quiz name must be not null and more than 3 characters";
+	public static final String QUIZ_KZ_MESSAGE = "The quiz name must be not null and more than 3 characters";
+
+	public static final String QUIZ_RUS_MESSAGE = "The quiz name must be not null and more than 3 characters";
 }
