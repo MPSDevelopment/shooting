@@ -1,4 +1,4 @@
-package tech.shooting.ipsc;
+package tech.shooting.ipsc.mqtt;
 
 import io.moquette.broker.subscriptions.Topic;
 import io.moquette.broker.security.IAuthorizatorPolicy;
