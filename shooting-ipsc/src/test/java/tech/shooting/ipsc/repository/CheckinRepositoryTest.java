@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfInterval;
@@ -303,6 +304,7 @@ class CheckinRepositoryTest {
 
 	@Test
 	void checkFindAllByStatus () {
+		//prepare
 		addDataToDB();
 		List<CheckIn> all = checkinRepository.findAll();
 		int count = 0;
@@ -312,6 +314,46 @@ class CheckinRepositoryTest {
 			}
 		}
 		log.info("Count of Present status is %s", count);
+		//check
 		assertEquals(count, checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size());
+	}
+
+	@Test
+	void checkGetCombatNoteByDivisionFromPeriod () {
+		//prepare
+		addDataToDB();
+		List<CheckIn> all = checkinRepository.findAll();
+		int countPresent = 0;
+		int countDelay = 0;
+		int countDayOff = 0;
+		int countMission = 0;
+		for(int i = 0; i < all.size(); i++) {
+			TypeOfPresence status = all.get(i).getStatus();
+			if(status.equals(TypeOfPresence.PRESENT)) {
+				countPresent++;
+			} else if(status.equals(TypeOfPresence.DAY_OFF)) {
+				countDayOff++;
+			} else if(status.equals(TypeOfPresence.MISSION)) {
+				countMission++;
+			} else if(status.equals(TypeOfPresence.DELAY)) {
+				countDelay++;
+			} else {
+				log.info("Status is %s", status);
+			}
+		}
+		log.info("Status delay is %s", countDelay);
+		log.info("Status present is %s", countPresent);
+		log.info("Status day off is %s", countDayOff);
+		log.info("Status mission is %s", countMission);
+		List<Stat> custom = new ArrayList<>();
+		custom.add(new Stat().setStatus(TypeOfPresence.PRESENT).setCount(countPresent));
+		custom.add(new Stat().setStatus(TypeOfPresence.DELAY).setCount(countDelay));
+		custom.add(new Stat().setStatus(TypeOfPresence.DAY_OFF).setCount(countDayOff));
+		custom.add(new Stat().setStatus(TypeOfPresence.MISSION).setCount(countMission));
+		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(root, all.get(0).getCreatedDate(), TypeOfInterval.EVENING);
+		assertEquals(custom.size(), combatNoteByDivisionFromPeriod.size());
+		for(int i = 0; i < combatNoteByDivisionFromPeriod.size(); i++) {
+			assertTrue(custom.contains(combatNoteByDivisionFromPeriod.get(i)));
+		}
 	}
 }
