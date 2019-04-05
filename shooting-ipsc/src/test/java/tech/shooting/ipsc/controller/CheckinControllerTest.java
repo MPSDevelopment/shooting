@@ -49,7 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
@@ -131,13 +131,12 @@ class CheckinControllerTest {
 
 	@Test
 	void getCheckList () throws Exception {
-		//check size of person list if division is new
-		assertTrue(personRepository.findByDivision(root).size() == 0);
+		int init = personRepository.findByDivision(root).size();
 		//create 50 persons
 		createPersons(50, root, false);
 		//check  size
 		int count = personRepository.findByDivision(root).size();
-		assertEquals(25, count);
+		assertEquals(init + 25, count);
 		//try access
 		// unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(
@@ -176,21 +175,11 @@ class CheckinControllerTest {
 
 	@Test
 	void createCheck () throws Exception {
-		//check count check
-		assertEquals(checkinRepository.count(), 0);
-		//check root division
-		assertEquals(divisionRepository.count(), 1);
-		//check person
-		assertEquals(personRepository.findById(testPerson.getId()).get(), testPerson);
-		//check user where person not null
-		assertNotNull(userRepository.findByPerson(testPerson));
-		//check root division person if exist
-		assertTrue(personRepository.findByDivision(root).size() == 0);
-		//added 8 person
+		int init = personRepository.findByDivision(root).size();
 		createPersons(10, root, true);
 		List<Person> byDivision = personRepository.findByDivision(root);
 		int count = byDivision.size();
-		assertEquals(10, count);
+		assertEquals(init + 10, count);
 		List<CheckinBean> fromFront = new ArrayList<>();
 		for(Person p : byDivision) {
 			CheckinBean bean = new CheckinBean();
@@ -198,7 +187,7 @@ class CheckinControllerTest {
 			bean.setStatus(TypeOfPresence.DELAY);
 			fromFront.add(bean);
 		}
-		assertEquals(10, fromFront.size());
+		assertEquals(init + 10, fromFront.size());
 		String json = JacksonUtils.getJson(fromFront);
 		//try access
 		// unauthorized user

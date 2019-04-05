@@ -12,8 +12,10 @@ import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +28,13 @@ import java.util.List;
 public class QuizBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz", required = true)
-	@NotNull
+	@NotNull(message = ValidationConstants.SUBJECT_MESSAGE)
 	private Long subject;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz name", required = true)
-	@NotNull
+	@NotBlank(message = ValidationConstants.QUIZ_MESSAGE)
+	@Size(min = 3, message = ValidationConstants.QUIZ_MESSAGE)
 	private QuizName name;
 
 	@JsonProperty
