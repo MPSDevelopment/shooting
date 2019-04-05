@@ -300,4 +300,18 @@ class CheckinRepositoryTest {
 		assertEquals(allByDate.size(), count);
 		assertNotNull(allByDate.get(0));
 	}
+
+	@Test
+	void checkFindAllByStatus () {
+		addDataToDB();
+		List<CheckIn> all = checkinRepository.findAll();
+		int count = 0;
+		for(int i = 0; i < all.size(); i++) {
+			if(all.get(i).getStatus().equals(TypeOfPresence.PRESENT)) {
+				count++;
+			}
+		}
+		log.info("Count of Present status is %s", count);
+		assertEquals(count, checkinRepository.findAllByStatus(TypeOfPresence.PRESENT).size());
+	}
 }
