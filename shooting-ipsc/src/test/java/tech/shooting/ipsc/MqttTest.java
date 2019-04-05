@@ -4,16 +4,25 @@ import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
+import tech.shooting.commons.spring.ApplicationContextWrapper;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.mqtt.PublisherListener;
 import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
+import tech.shooting.ipsc.security.TokenUtils;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,19 +36,21 @@ import io.moquette.broker.config.IConfig;
 import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
 import io.moquette.interception.InterceptHandler;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class })
+@ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class })
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ActiveProfiles("simple")
+@TestMethodOrder(OrderAnnotation.class)
+@Disabled
 class MqttTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
@@ -48,31 +59,46 @@ class MqttTest {
 
 	private static final String TEST_PASSWORD = "password";
 
+	private static final String TEST_TOPIC = "ipsc";
+
 	private int count = 0;
 
 	private static Server mqttBroker;
-	
+
 	@Autowired
 	private MqttService mqttService;
 
-	@BeforeAll
-	public static void beforeAll() throws IOException {
+	@Autowired
+	private IpscMqttSettings settings;
+
+	@Order(0)
+	public void beforeAll() throws IOException {
+		
+		log.info("Starting broker");
+		
+		settings.setAdminLogin(TEST_LOGIN);
+		settings.setAdminPassword(TEST_PASSWORD);
+		settings.setIpscTopicName(TEST_TOPIC);
+		
+		assertNotNull(settings.getAdminLogin());
+
 		IResourceLoader classpathLoader = new ClasspathResourceLoader();
-		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader);
+		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader, "config/moquette-protected.conf");
 
 		mqttBroker = new Server();
 		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
 		mqttBroker.startServer(classPathConfig, userHandlers);
 
-		log.info("Broker started press [CTRL+C] to stop");
+		log.info("Broker started");
 	}
-	
-	@AfterAll
-	public static void afterAll() {
+
+	@Order(Integer.MAX_VALUE)
+	public void afterAll() {
 		mqttBroker.stopServer();
 	}
 
 	@Test
+	@Order(1)
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
 
 		EventBus.subscribe(this);
