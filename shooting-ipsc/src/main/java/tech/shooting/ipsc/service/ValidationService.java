@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,6 +31,7 @@ public class ValidationService {
 
 	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
+	@Cacheable
 	public Map<String, Map<String, ValidationBean>> getConstraintsForPackage(String... packageNames) {
 		var result = new HashMap<String, Map<String, ValidationBean>>();
 		Reflections reflections = new Reflections(packageNames);
