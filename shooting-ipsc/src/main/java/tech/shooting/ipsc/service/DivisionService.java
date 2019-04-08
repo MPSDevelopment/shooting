@@ -81,8 +81,10 @@ public class DivisionService {
 		// for(Division s : all) {
 		// 	result.add(convertDivisionToFront(s));
 		// }
-		return mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
-
+		long start = System.currentTimeMillis();
+		List<DivisionDropList> id = mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
+		log.info("getAll used %s ms", System.currentTimeMillis() - start);
+		return id;
 	}
 
 	private DivisionBean convertDivisionToFront (Division division) {
@@ -107,7 +109,10 @@ public class DivisionService {
 	}
 
 	public DivisionBean getRoot () {
-		return convertDivisionToFront(divisionRepository.findOneByParent(null));
+		long start = System.currentTimeMillis();
+		DivisionBean divisionBean = convertDivisionToFront(divisionRepository.findOneByParent(null));
+		log.info("getRoot used %s ms", System.currentTimeMillis() - start);
+		return divisionBean;
 	}
 
 	public DivisionBean updateDivision (Long id, String name) {
