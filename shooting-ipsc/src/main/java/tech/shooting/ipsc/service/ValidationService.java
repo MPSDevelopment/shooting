@@ -35,7 +35,7 @@ public class ValidationService {
 		Reflections reflections = new Reflections(packageNames);
 		var classes = reflections.getSubTypesOf(ValiationExportable.class);
 		classes.forEach(clazz -> {
-			log.info("Class is %s", clazz);
+			log.debug("Class is %s", clazz);
 			var constraints = getConstraints(clazz);
 			if (!constraints.isEmpty()) {
 				result.put(clazz.getSimpleName(), constraints);
@@ -46,7 +46,7 @@ public class ValidationService {
 
 	public Map<String, ValidationBean> getConstraints(Class clazz) {
 		BeanDescriptor descriptor = validator.getConstraintsForClass(clazz);
-		log.info("Descriptor is %s", descriptor);
+		log.debug("Descriptor is %s", descriptor);
 		var validationBeans = new HashMap<String, ValidationBean>();
 		descriptor.getConstrainedProperties().forEach(property -> {
 			String propertyName = property.getPropertyName();
@@ -57,7 +57,7 @@ public class ValidationService {
 				var field = clazz.getDeclaredField(propertyName);
 				var annotation = field.getAnnotation(JsonProperty.class);
 				if (StringUtils.isNotBlank(annotation.value())) {
-					log.info("Field name will be changed from %s to %s", propertyName, annotation.value());
+					log.debug("Field name will be changed from %s to %s", propertyName, annotation.value());
 					propertyJsonName = annotation.value();
 				}
 			} catch (NoSuchFieldException | SecurityException e) {
@@ -71,7 +71,7 @@ public class ValidationService {
 			PropertyDescriptor constraints = descriptor.getConstraintsForProperty(propertyName);
 			constraints.getConstraintDescriptors().forEach(constraint -> {
 				Annotation annotation = constraint.getAnnotation();
-				log.info("Constraint is %s %s", annotation.getClass().getSimpleName(), constraint.getAnnotation());
+				log.debug("Constraint is %s %s", annotation.getClass().getSimpleName(), constraint.getAnnotation());
 				// log.info("Annotation is %s", JacksonUtils.getFullJson(constraint.getAnnotation()));
 				if (annotation instanceof javax.validation.constraints.Size) {
 					int min = ((javax.validation.constraints.Size) annotation).min();
