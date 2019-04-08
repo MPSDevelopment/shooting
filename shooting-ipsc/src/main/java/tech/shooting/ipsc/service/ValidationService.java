@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.bean.ValidationBean;
+import tech.shooting.ipsc.config.CachingConfig;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -31,7 +32,7 @@ public class ValidationService {
 
 	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-	@Cacheable
+	@Cacheable(value = CachingConfig.IPSC_CACHE, unless = "#result == null")
 	public Map<String, Map<String, ValidationBean>> getConstraintsForPackage(String... packageNames) {
 		var result = new HashMap<String, Map<String, ValidationBean>>();
 		Reflections reflections = new Reflections(packageNames);
