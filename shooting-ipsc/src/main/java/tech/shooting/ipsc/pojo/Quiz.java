@@ -30,6 +30,10 @@ public class Quiz extends BaseDocument {
 	private Subject subject;
 
 	@JsonProperty
+	@ApiModelProperty(value = "Status")
+	private boolean active;
+
+	@JsonProperty
 	@ApiModelProperty(value = "Quiz name")
 	private QuizName name;
 
