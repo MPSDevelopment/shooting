@@ -17,7 +17,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -44,13 +44,13 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class })
+@EnableConfigurationProperties
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ActiveProfiles("simple")
-@TestMethodOrder(OrderAnnotation.class)
-@Disabled
+//@TestMethodOrder(OrderAnnotation.class)
 class MqttTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
@@ -63,7 +63,7 @@ class MqttTest {
 
 	private int count = 0;
 
-	private static Server mqttBroker;
+	private Server mqttBroker;
 
 	@Autowired
 	private MqttService mqttService;
@@ -71,15 +71,16 @@ class MqttTest {
 	@Autowired
 	private IpscMqttSettings settings;
 
-	@Order(0)
-	public void beforeAll() throws IOException {
-		
+	@BeforeEach
+	public void before() throws IOException {
+
 		log.info("Starting broker");
-		
-		settings.setAdminLogin(TEST_LOGIN);
-		settings.setAdminPassword(TEST_PASSWORD);
+
+		assertNotNull(settings.getAdminLogin());
+		assertNotNull(settings.getAdminPassword());
+
 		settings.setIpscTopicName(TEST_TOPIC);
-		
+
 		assertNotNull(settings.getAdminLogin());
 
 		IResourceLoader classpathLoader = new ClasspathResourceLoader();
@@ -92,13 +93,12 @@ class MqttTest {
 		log.info("Broker started");
 	}
 
-	@Order(Integer.MAX_VALUE)
-	public void afterAll() {
+	@AfterEach
+	public void after() {
 		mqttBroker.stopServer();
 	}
 
 	@Test
-	@Order(1)
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
 
 		EventBus.subscribe(this);
@@ -109,15 +109,23 @@ class MqttTest {
 
 		// subscriber
 
-		var subscriber1 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName1);
-		var subscriber2 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
-		var subscriber3 = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
+		var subscriber1 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName1);
+		var subscriber2 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
+		var subscriber3 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
 
-		var subscriberAll = mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, "command/#");
+		assertThrows(MqttSecurityException.class, () -> {
+			mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
+		});
+
+		var subscriberAll = mqttService.createSubscriber(MQTT_URL, settings.getAdminLogin(), settings.getAdminPassword(), "command/#");
 
 		// publisher
 
-		var publisher = mqttService.createPublisher(MQTT_URL, TEST_LOGIN, TEST_PASSWORD);
+		var publisher = mqttService.createPublisher(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword());
+		
+		assertThrows(MqttException.class, () -> {
+			mqttService.createPublisher(MQTT_URL, TEST_LOGIN, TEST_PASSWORD);
+		});
 
 		// publish a message
 
