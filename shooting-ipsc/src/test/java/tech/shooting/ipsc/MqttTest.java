@@ -104,7 +104,6 @@ class MqttTest {
 		EventBus.subscribe(this);
 
 		String topicName1 = "command/topic1";
-
 		String topicName2 = "command/topic2";
 
 		// subscriber
@@ -122,7 +121,7 @@ class MqttTest {
 		// publisher
 
 		var publisher = mqttService.createPublisher(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword());
-		
+
 		assertThrows(MqttException.class, () -> {
 			mqttService.createPublisher(MQTT_URL, TEST_LOGIN, TEST_PASSWORD);
 		});
@@ -131,11 +130,8 @@ class MqttTest {
 
 		MqttMessage message = mqttService.createMessage("Crazy message");
 
-		MqttTopic topic1 = publisher.getTopic(topicName1);
-		topic1.publish(message);
-
-		MqttTopic topic2 = publisher.getTopic(topicName2);
-		topic2.publish(message);
+		publisher.getTopic(topicName1).publish(message);
+		publisher.getTopic(topicName2).publish(message);
 
 		Thread.sleep(100);
 

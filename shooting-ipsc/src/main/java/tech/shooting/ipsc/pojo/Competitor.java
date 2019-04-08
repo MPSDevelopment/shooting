@@ -26,10 +26,6 @@ public class Competitor extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's rfid code")
 	private String rfidCode;
-	
-	@JsonProperty
-	@ApiModelProperty(value = "Competitor's registration type")
-	private TypeMarkEnum registrationType;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's number in case we do not have a rfid code")
