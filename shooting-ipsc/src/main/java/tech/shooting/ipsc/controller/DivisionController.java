@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.bean.DivisionDropList;
 import tech.shooting.ipsc.bean.UpdateDivisionBean;
 import tech.shooting.ipsc.service.DivisionService;
 
@@ -41,7 +42,7 @@ public class DivisionController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Get all division", notes = "Return list divisions")
-	public ResponseEntity<List<DivisionBean>> getAllDivision () {
+	public ResponseEntity<List<DivisionDropList>> getAllDivision () {
 		return new ResponseEntity<>(divisionService.findAllDivisions(), HttpStatus.OK);
 	}
 

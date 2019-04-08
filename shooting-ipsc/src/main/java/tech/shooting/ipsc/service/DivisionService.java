@@ -2,27 +2,35 @@ package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.bean.DivisionDropList;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @Service
 @Slf4j
 public class DivisionService {
 	private DivisionRepository divisionRepository;
 
-	public DivisionService (DivisionRepository divisionRepository) {
+	private MongoTemplate mongoTemplate;
+
+	public DivisionService (DivisionRepository divisionRepository, MongoTemplate mongoTemplate) {
 		this.divisionRepository = divisionRepository;
+		this.mongoTemplate = mongoTemplate;
 	}
 
 	public DivisionBean createDivision (DivisionBean divisionBean, Long parentId) {
@@ -67,13 +75,14 @@ public class DivisionService {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division %s", id)));
 	}
 
-	public List<DivisionBean> findAllDivisions () {
-		List<Division> all = divisionRepository.findAll();
-		List<DivisionBean> result = new ArrayList<>();
-		for(Division s : all) {
-			result.add(convertDivisionToFront(s));
-		}
-		return result;
+	public List<DivisionDropList> findAllDivisions () {
+		// List<Division> all = divisionRepository.findAll();
+		// List<DivisionBean> result = new ArrayList<>();
+		// for(Division s : all) {
+		// 	result.add(convertDivisionToFront(s));
+		// }
+		return mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
+
 	}
 
 	private DivisionBean convertDivisionToFront (Division division) {

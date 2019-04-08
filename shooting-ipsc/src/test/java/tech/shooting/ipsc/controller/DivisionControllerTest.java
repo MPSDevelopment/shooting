@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -27,6 +30,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.DivisionBean;
+import tech.shooting.ipsc.bean.DivisionDropList;
 import tech.shooting.ipsc.bean.UpdateDivisionBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -49,6 +53,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
@@ -82,6 +87,9 @@ class DivisionControllerTest {
 	private String userToken;
 
 	private DivisionBean divisionBean;
+
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	@BeforeEach
 	public void before () {
@@ -286,5 +294,16 @@ class DivisionControllerTest {
 		divisionService.createDivision(new DivisionBean().setName("fdfdfd").setParent(division.getId()), division.getId());
 		DivisionBean qyqy = divisionService.updateDivision(division.getId(), "qyqy");
 		assertEquals(qyqy.getChildren().size(), 1);
+	}
+
+	@Test
+	void check () {
+		createDivisions(1000);
+		// GroupOperation groupOperation = group("division.id").last("division").as("name");
+		// ProjectionOperation projectionOperation = project("id").and("name").previousOperation();
+		List<DivisionDropList> id = mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
+		for(int i = 0; i < id.size(); i++) {
+			log.info("Id is %s, name is %s", id.get(i).getId(), id.get(i).getName());
+		}
 	}
 }
