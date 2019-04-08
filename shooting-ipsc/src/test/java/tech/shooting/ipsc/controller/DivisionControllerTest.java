@@ -298,9 +298,7 @@ class DivisionControllerTest {
 
 	@Test
 	void check () {
-		createDivisions(1000);
-		// GroupOperation groupOperation = group("division.id").last("division").as("name");
-		// ProjectionOperation projectionOperation = project("id").and("name").previousOperation();
+		createDivisions(100);
 		List<DivisionDropList> id = mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
 		for(int i = 0; i < id.size(); i++) {
 			log.info("Id is %s, name is %s", id.get(i).getId(), id.get(i).getName());
