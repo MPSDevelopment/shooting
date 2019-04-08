@@ -106,5 +106,6 @@ public class QuizController {
 	public ResponseEntity getQuizByPage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
 		return quizService.getQuizByPage(page, size);
 	}
+	//	@PostMapping(value = ControllerAPI.VERSION_1_0+ ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ)
 
 }

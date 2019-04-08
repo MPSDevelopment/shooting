@@ -59,9 +59,8 @@ public class DivisionService {
 		return divisionRepository.findAll().size();
 	}
 
-	public void removeDivision (Long id) throws BadRequestException {
-		Division division = checkDivision(id);
-		divisionRepository.delete(division);
+	public void removeDivision (Long id) {
+		divisionRepository.deleteById(id);
 	}
 
 	public Division checkDivision (Long id) throws BadRequestException {

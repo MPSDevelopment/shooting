@@ -26,7 +26,7 @@ public class Quiz extends BaseDocument {
 
 	@DBRef
 	@JsonProperty
-	@ApiModelProperty(value = "Subject quiz")
+	@ApiModelProperty(value = "Subject quiz", required = true)
 	private Subject subject;
 
 	@JsonProperty
@@ -34,7 +34,7 @@ public class Quiz extends BaseDocument {
 	private boolean active;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Quiz name")
+	@ApiModelProperty(value = "Quiz name", required = true)
 	private QuizName name;
 
 	@JsonProperty
@@ -42,17 +42,17 @@ public class Quiz extends BaseDocument {
 	private List<Question> questionList = new ArrayList<>();
 
 	@JsonProperty
-	@ApiModelProperty(value = "Time for answer")
+	@ApiModelProperty(value = "Time for answer", required = true)
 	@Positive(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
 	@JsonProperty
-	@ApiModelProperty(value = "% for satisfactorily mark")
+	@ApiModelProperty(value = "% for satisfactorily mark", required = true)
 	@PositiveOrZero
 	private int satisfactorily;
 
 	@JsonProperty
-	@ApiModelProperty(value = "% for great mark")
+	@ApiModelProperty(value = "% for great mark", required = true)
 	@PositiveOrZero
 	private int great;
 

@@ -8,7 +8,6 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.enums.TypeMarkEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class Competitor extends BaseDocument {
 	private String rfidCode;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Competitor's number in case we do not have a rfid code")
+	@ApiModelProperty(value = "Competitor's number code")
 	private String number;
 
 	@JsonProperty
