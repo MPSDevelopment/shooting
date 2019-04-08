@@ -15,9 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
-import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.AggBean;
-import tech.shooting.ipsc.bean.SearchResult;
 import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
@@ -25,8 +23,8 @@ import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
-import tech.shooting.ipsc.service.CheckinService;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +52,6 @@ class CheckinRepositoryTest {
 	@Autowired
 	private CheckinRepository checkinRepository;
 
-	@Autowired
-	private CheckinService service;
-
 	private Division root;
 
 	private User officer;
@@ -76,39 +71,6 @@ class CheckinRepositoryTest {
 		                                        .setAddress(new Address().setIndex("08150"))
 		                                        .setPerson(testPerson));
 	}
-
-	@Test
-	void check () throws BadRequestException {
-		for(int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
-			person.setDivision(root);
-			personRepository.save(person);
-			log.info("Person %s has been created", person);
-		}
-		List<Person> byDivision = personRepository.findByDivision(root);
-		log.info("count person from root %s", byDivision.size());
-		List<CheckIn> toDb = new ArrayList<>();
-		for(Person p : byDivision) {
-			toDb.add(new CheckIn().setPerson(p).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
-		}
-		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
-		log.info("count row check in from root %s", checkIns.size());
-		OffsetDateTime createdDate = checkIns.get(0).getCreatedDate();
-		log.info("Create date is %s", createdDate);
-		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
-		log.info("size of list check in by date %s", allByDate.size());
-		for(CheckIn check : allByDate) {
-			log.info("Status is %s\n%s \t division id \t from result set search by date", check.getStatus(), check.getPerson());
-		}
-		log.info("Root id for search %s", root.getId());
-		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
-		log.info("Size of result search by division id %s", allByDivision.size());
-		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
-		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
-		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
-		assertEquals(findByAll.size(), fromService.size());
-	}
-
 	@Test
 	void checkDate () {
 		addDataToDB();
@@ -357,7 +319,14 @@ class CheckinRepositoryTest {
 		custom.add(new Stat().setStatus(TypeOfPresence.DELAY).setCount(countDelay));
 		custom.add(new Stat().setStatus(TypeOfPresence.DAY_OFF).setCount(countDayOff));
 		custom.add(new Stat().setStatus(TypeOfPresence.MISSION).setCount(countMission));
-		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(root, all.get(0).getCreatedDate(), TypeOfInterval.EVENING);
+		TypeOfInterval type;
+		LocalTime localTime = OffsetDateTime.now().toLocalTime();
+		if(localTime.isBefore(TypeOfInterval.MIDDLE) || localTime.equals(TypeOfInterval.MIDDLE)) {
+			type = TypeOfInterval.MORNING;
+		} else {
+			type = TypeOfInterval.EVENING;
+		}
+		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(root, all.get(0).getCreatedDate(), type);
 		assertEquals(custom.size(), combatNoteByDivisionFromPeriod.size());
 		for(int i = 0; i < combatNoteByDivisionFromPeriod.size(); i++) {
 			assertTrue(custom.contains(combatNoteByDivisionFromPeriod.get(i)));
