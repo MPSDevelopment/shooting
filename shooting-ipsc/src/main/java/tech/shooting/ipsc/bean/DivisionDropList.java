@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 public class DivisionDropList {
 	@JsonProperty
 	@ApiModelProperty(value = "Division id", required = true)
-	String id;
+	Long id;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Division name", required = true)
