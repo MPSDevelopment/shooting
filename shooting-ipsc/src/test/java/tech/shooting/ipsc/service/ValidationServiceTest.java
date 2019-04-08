@@ -17,13 +17,14 @@ import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
+import tech.shooting.ipsc.config.CachingConfig;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 //@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class, WebMvcAutoConfiguration.class})
 //@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration")
-@SpringBootTest(classes = { ValidationService.class })
+@SpringBootTest(classes = { ValidationService.class, CachingConfig.class})
 @Slf4j
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
@@ -48,7 +49,11 @@ public class ValidationServiceTest {
 	@Test
 	public void checkConstraintsForPackage() {
 		var result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo");
-		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
+//		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
+		assertTrue(result.size() > 8);
+		
+		result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo");
+//		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
 		assertTrue(result.size() > 8);
 	}
 }
