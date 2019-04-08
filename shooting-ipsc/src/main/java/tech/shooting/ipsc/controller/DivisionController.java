@@ -27,7 +27,7 @@ public class DivisionController {
 	@Autowired
 	private DivisionService divisionService;
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new division", notes = "Return created division")
 	public ResponseEntity<DivisionBean> createDivision (@RequestBody @Valid DivisionBean divisionBean) {
 		return new ResponseEntity<>(divisionService.createDivision(divisionBean, divisionBean.getParent()), HttpStatus.CREATED);
@@ -61,7 +61,7 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.getDivision(id), HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update division", notes = "Return update division object")
 	public ResponseEntity<DivisionBean> updateDivision (@RequestBody @Valid UpdateDivisionBean updateDivisionBean) {
 		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);

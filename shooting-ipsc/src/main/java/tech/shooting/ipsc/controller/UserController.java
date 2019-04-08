@@ -80,7 +80,7 @@ public class UserController {
 		return userService.getUsersByPage(page, size);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
 	public ResponseEntity<List<User>> getJudges () {
 		return new ResponseEntity<>(userService.getListJudges(), HttpStatus.OK);

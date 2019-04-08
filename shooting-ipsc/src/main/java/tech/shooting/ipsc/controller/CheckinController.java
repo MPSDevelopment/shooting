@@ -45,14 +45,14 @@ public class CheckinController {
 
 
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added check", notes = "Return created check")
 	public ResponseEntity<List<CheckIn>> createCheck (@RequestHeader(value = Token.TOKEN_HEADER) String token, @RequestBody @Valid List<CheckinBean> bean) throws BadRequestException {
 		TokenUser byToken = tokenUtils.getByToken(token);
 		return new ResponseEntity<>(checkinService.createCheck(byToken, bean), HttpStatus.CREATED);
 	}
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added combat note", notes = "Return note object")
 	public ResponseEntity<CombatNote> createCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId, @RequestBody @Valid CombatNoteBean note) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.createCombatNote(divisionId, note), HttpStatus.CREATED);

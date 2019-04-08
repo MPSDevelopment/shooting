@@ -28,25 +28,25 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new person", notes = "Create new person")
 	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) {
 		return new ResponseEntity<>(personService.createPerson(personBean), HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by id", notes = "Return person object")
 	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(personService.getPersonByIdIfExist(personId), HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")
 	public ResponseEntity<Person> updatePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
 		return new ResponseEntity<>(personService.updatePerson(personId, personBean), HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
 	public ResponseEntity<Void> deletePerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		personService.removePersonIfExist(personId);

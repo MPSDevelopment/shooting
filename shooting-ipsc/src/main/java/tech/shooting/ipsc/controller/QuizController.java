@@ -28,7 +28,7 @@ public class QuizController {
 	@Autowired
 	private QuizService quizService;
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added new quiz", notes = "Return created quiz object")
 	public ResponseEntity<Quiz> createQuiz (@RequestBody @Valid QuizBean quiz) throws BadRequestException {
 		return new ResponseEntity<>(quizService.createQuiz(quiz), HttpStatus.CREATED);
@@ -58,7 +58,7 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.getQuiz(id), HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update quiz by id", notes = "Return updated  quiz")
 	public ResponseEntity<Quiz> updateQuiz (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @RequestBody @Valid QuizBean quizBean) throws BadRequestException {
 		return new ResponseEntity<>(quizService.updateQuiz(id, quizBean), HttpStatus.OK);
@@ -71,7 +71,7 @@ public class QuizController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added question to quiz", notes = "Return question object")
 	public ResponseEntity<Question> createQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @RequestBody @Valid Question question) throws BadRequestException {
 		return new ResponseEntity<>(quizService.addQuestion(id, question), HttpStatus.CREATED);
@@ -91,7 +91,7 @@ public class QuizController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update question to quiz", notes = "Return question object")
 	public ResponseEntity<Question> updateQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId,
 		@RequestBody @Valid Question question) throws BadRequestException {
