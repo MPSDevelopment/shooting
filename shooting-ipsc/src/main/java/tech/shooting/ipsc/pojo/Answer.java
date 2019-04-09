@@ -5,7 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.commons.annotation.ValiationExportable;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -16,6 +19,8 @@ public class Answer implements ValiationExportable {
 	@JsonProperty
 	@ApiModelProperty(value = "Answer number", required = true)
 	@NotNull
+	@Min(value = 1, message = ValidationConstants.NUMBER_MIN_MESSAGE)
+	@Max(value = 4, message = ValidationConstants.NUMBER_MAX_MESSAGE)
 	private Integer number;
 
 	@JsonProperty

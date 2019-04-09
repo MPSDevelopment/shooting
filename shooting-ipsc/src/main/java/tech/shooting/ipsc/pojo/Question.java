@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -23,7 +24,7 @@ public class Question extends BaseDocument {
 	@ApiModelProperty(value = "Question", required = true)
 	private Ask question;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@ApiModelProperty(value = "Right choice", required = true)
 	@PositiveOrZero
 	private int right;
