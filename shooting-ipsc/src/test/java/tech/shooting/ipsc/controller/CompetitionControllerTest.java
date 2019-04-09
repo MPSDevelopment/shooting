@@ -27,10 +27,7 @@ import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.CompetitionBean;
-import tech.shooting.ipsc.bean.CompetitorMark;
-import tech.shooting.ipsc.bean.DisqualificationBean;
-import tech.shooting.ipsc.bean.ScoreBean;
+import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -168,8 +165,8 @@ public class CompetitionControllerTest {
 		                                      .content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createCompetition() with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
-		                                      .header(Token.TOKEN_HEADER, userToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getFullJson(competitionBean))).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		                                      .header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getFullJson(competitionBean)))
+		       .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try access to createCompetition() with judge
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
@@ -232,8 +229,8 @@ public class CompetitionControllerTest {
 		// try access to updateCompetition with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, userToken))
+		       .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try access to updateCompetition with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders.put(
 			ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
@@ -753,6 +750,54 @@ public class CompetitionControllerTest {
 	}
 
 	@Test
+	public void checkAddedMarkForCompetitorBoth () throws Exception {
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getCompetitors().size());
+		competition.getCompetitors().add(testingCompetitor);
+		competition = competitionRepository.save(competition);
+		assertEquals(1, competition.getCompetitors().size());
+		testingCompetitor = competition.getCompetitors().get(0);
+		assertNotNull(testingCompetitor);
+		CompetitorMarks competitorMark = new CompetitorMarks().setName("aqua").setActive(true).setNumber("1032132548798").setRfid("4343423423423423423");
+		String json = JacksonUtils.getJson(competitorMark);
+		assertNotNull(json);
+		//try access to addedMarkForCompetitor with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                             .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to addedMarkForCompetitor with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                             .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                      .content(json)
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to addedMarkForCompetitor with judge role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                    ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH.replace(ControllerAPI.REQUEST_COMPETITION_ID,
+			                                                                    competition.getId().toString())
+		                                                                                                                                      .replace(
+			                                                                                                                                      ControllerAPI.REQUEST_COMPETITOR_ID,
+			                                                                                                                                      testingCompetitor.getId().toString()))
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(json)
+		                                                               .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
+		testing(competitor, competitorMark, testingCompetitor);
+		//try access to addedMarkForCompetitor with admin role
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                             ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString())
+		                                                                                                                               .replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString()))
+		                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                        .content(json)
+		                                                        .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
+		testing(competitor, competitorMark, testingCompetitor);
+	}
+
+	@Test
 	public void checkGetLevelEnum () throws Exception {
 		//try access to getLevelEnum from unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL))
@@ -776,6 +821,15 @@ public class CompetitionControllerTest {
 		} else {
 			assertEquals(competitorMark.getMark(), competitor.getNumber());
 		}
+		assertEquals(testingCompetitor.getId(), competitor.getId());
+		assertEquals(testingCompetitor.getPerson(), competitor.getPerson());
+	}
+
+	private void testing (Competitor competitor, CompetitorMarks competitorMark, Competitor testingCompetitor) {
+		assertNotNull(competitor);
+		assertEquals(competitorMark.getName(), competitor.getName());
+		assertEquals(competitorMark.getRfid(), competitor.getRfidCode());
+		assertEquals(competitorMark.getNumber(), competitor.getNumber());
 		assertEquals(testingCompetitor.getId(), competitor.getId());
 		assertEquals(testingCompetitor.getPerson(), competitor.getPerson());
 	}
