@@ -14,10 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
-import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.QuizName;
-import tech.shooting.ipsc.pojo.Subject;
+import tech.shooting.ipsc.pojo.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,5 +70,24 @@ class QuizRepositoryTest {
 		quizRepository.save(quiz);
 		assertEquals(3, quizRepository.count());
 		assertEquals(2, quizRepository.findBySubject(subjects.get(0).getId()).size());
+	}
+
+	@Test
+	public void checkPullQuestion () {
+		log.info("Count quiz in DB is %s", quizRepository.findAll().size());
+		List<Question> list = new ArrayList<>();
+		list.add(new Question().setQuestion(new Ask().setKz("fdfdfd").setRus("fdfdsfdsfsd"))
+		                       .setActive(true)
+		                       .setRight(3)
+		                       .setRandom(true)
+		                       .setAnswers(List.of(new Answer().setNumber(1).setKz("fdfdfd").setRus("fdfdfdfdfd"),
+			                       new Answer().setNumber(3).setKz("fdfdfd").setRus("fdfdfdfdfd"),
+			                       new Answer().setNumber(2).setKz("fdfdfd").setRus("fdfdfdfdfd"))));
+		quiz.setQuestionList(list);
+		Quiz save = quizRepository.save(quiz);
+		Question question = save.getQuestionList().get(0);
+		assertEquals(1, quizRepository.count());
+		quizRepository.pullQuestion(quiz.getId(), question.getId());
+		assertEquals(0, quizRepository.findById(save.getId()).get().getQuestionList().size());
 	}
 }
