@@ -8,14 +8,18 @@ import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuizBean;
+import tech.shooting.ipsc.bean.ReportBean;
+import tech.shooting.ipsc.bean.RowBean;
 import tech.shooting.ipsc.controller.PageAble;
-import tech.shooting.ipsc.pojo.Question;
-import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.Subject;
+import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
+import tech.shooting.ipsc.repository.ReportRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,6 +29,12 @@ public class QuizService {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
+
+	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private ReportRepository reportRepository;
 
 	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
@@ -93,5 +103,43 @@ public class QuizService {
 
 	public ResponseEntity getQuizByPage (Integer page, Integer size) {
 		return PageAble.getPage(page, size, quizRepository);
+	}
+
+	public List<Report> createReport (List<ReportBean> listResult) throws BadRequestException {
+		List<Report> reports = new ArrayList<>();
+		for(int i = 0; i < listResult.size(); i++) {
+			reports.add(checkReport(listResult.get(i)));
+		}
+		return reports;
+	}
+
+	private Report checkReport (ReportBean reportBean) throws BadRequestException {
+		//check quiz and person exist
+		Quiz quiz = checkQuiz(reportBean.getQuizId());
+		Person person = checkPerson(reportBean.getPerson());
+		//get list question from quiz where status is active
+		List<Question> collect = quiz.getQuestionList().stream().filter(que -> que.isActive() == true).collect(Collectors.toList());
+		int countQuestion = collect.size();
+		int rightAnswer = 0;
+		List<Row> incorrect = new ArrayList<>();
+		List<Ask> skip = new ArrayList<>();
+		List<RowBean> list = reportBean.getList();
+		for(int i = 0; i < list.size(); i++) {
+			Question question = checkQuestion(quiz, list.get(i).getQuestionId());
+			if(list.get(i).getAnswer() == null) {
+				skip.add(question.getQuestion());
+			} else if(question.getRight() == list.get(i).getAnswer()) {
+				rightAnswer++;
+			} else {
+				Row row = new Row();
+				row.setAsk(question.getQuestion()).setAnswer(question.getAnswers().get(Math.toIntExact(list.get(i).getAnswer())));
+				incorrect.add(row);
+			}
+		}
+		return reportRepository.save(new Report().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark((float) (rightAnswer * 100) / countQuestion));
+	}
+
+	private Person checkPerson (Long person) throws BadRequestException {
+		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", person)));
 	}
 }

@@ -76,11 +76,6 @@ public class DivisionService {
 	}
 
 	public List<DivisionDropList> findAllDivisions () {
-		// List<Division> all = divisionRepository.findAll();
-		// List<DivisionBean> result = new ArrayList<>();
-		// for(Division s : all) {
-		// 	result.add(convertDivisionToFront(s));
-		// }
 		long start = System.currentTimeMillis();
 		List<DivisionDropList> id = mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
 		log.info("getAll used %s ms", System.currentTimeMillis() - start);

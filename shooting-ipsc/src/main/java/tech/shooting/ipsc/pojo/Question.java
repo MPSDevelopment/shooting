@@ -28,4 +28,8 @@ public class Question extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Random write")
 	private boolean random;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Is active")
+	private boolean active;
 }
