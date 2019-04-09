@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.commons.annotation.ValiationExportable;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Accessors(chain = true)
@@ -15,6 +15,7 @@ public class Answer implements ValiationExportable {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Answer number", required = true)
+	@NotNull
 	private Integer number;
 
 	@JsonProperty
