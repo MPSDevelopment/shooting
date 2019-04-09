@@ -61,4 +61,15 @@ class QuizRepositoryTest {
 		assertEquals(3, quizRepository.count());
 		assertEquals(2, quizRepository.findBySubject(subjects.get(0)).size());
 	}
+
+	@Test
+	public void checkFindBySubjectId () {
+		quizRepository.save(quiz);
+		quiz = new Quiz().setSubject(subjects.get(0)).setName(new QuizName().setRus("медведь").setKz("Audi"));
+		quizRepository.save(quiz);
+		quiz = new Quiz().setSubject(subjects.get(1)).setName(new QuizName().setKz("test").setRus("балалайка"));
+		quizRepository.save(quiz);
+		assertEquals(3, quizRepository.count());
+		assertEquals(2, quizRepository.findBySubject(subjects.get(0).getId()).size());
+	}
 }
