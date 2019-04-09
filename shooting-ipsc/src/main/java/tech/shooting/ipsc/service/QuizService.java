@@ -75,6 +75,7 @@ public class QuizService {
 
 	public Question addQuestion (Long id, Question question) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
+		question.setAnswers(setNumber(question.getAnswers()));
 		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
 
@@ -159,5 +160,13 @@ public class QuizService {
 
 	public double calculatePercentage (double obtained, double total) {
 		return (obtained / total) * 100;
+	}
+
+	private List<Answer> setNumber (List<Answer> list) {
+		List<Answer> res = new ArrayList<>();
+		for(int i = 0; i < list.size(); i++) {
+			res.add(list.get(i).setNumber(i + 1));
+		}
+		return res;
 	}
 }
