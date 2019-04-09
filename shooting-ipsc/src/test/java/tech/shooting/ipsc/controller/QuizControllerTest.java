@@ -26,12 +26,15 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.QuizBean;
+import tech.shooting.ipsc.bean.ReportBean;
+import tech.shooting.ipsc.bean.RowBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.UserRepository;
@@ -41,10 +44,7 @@ import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.QuizService;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = QuizRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-	TokenAuthenticationFilter.class, IpscUserDetailsService.class, QuizController.class, ValidationErrorHandler.class, QuizService.class, DatabaseCreator.class})
+	TokenAuthenticationFilter.class, IpscUserDetailsService.class, QuizController.class, ValidationErrorHandler.class, QuizService.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -65,6 +65,9 @@ class QuizControllerTest {
 
 	@Autowired
 	private TokenUtils tokenUtils;
+
+	@Autowired
+	private PersonRepository personRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -441,5 +444,45 @@ class QuizControllerTest {
 		                                                               .content(JacksonUtils.getJson(question))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		checkQuestion(question, JacksonUtils.fromJson(Question.class, contentAsString));
+	}
+
+	@Test
+	void checkCreateReport () throws Exception {
+		//get person who pass test
+		List<Person> all = personRepository.findAll();
+		log.info("Person list size is %s", all.size());
+		Person testPerson = all.get(100);
+		log.info("Get person 100 is %s", testPerson);
+		//get quiz
+		log.info("Test quiz is %s", testQuiz);
+		//get list question from quiz
+		List<Question> questionList = testQuiz.getQuestionList();
+		//get question
+		questionList.add(testQuestion);
+		log.info("List Question is %s", questionList);
+		log.info("size is %s", questionList.size());
+		//save quiz
+		Quiz save = quizRepository.save(testQuiz.setQuestionList(questionList));
+		//get question
+		List<Question> questionList1 = save.getQuestionList();
+		for(int i = 0; i < questionList1.size(); i++) {
+			log.info("Question %s is %s", i, questionList1.get(i));
+		}
+		//create ReportBean
+		ReportBean reportBean = new ReportBean().setPerson(testPerson.getId()).setQuizId(save.getId());
+		List<RowBean> rowBeans = new ArrayList<>();
+		for(int i = 0; i < questionList1.size(); i++) {
+			rowBeans.add(new RowBean().setAnswer((long) i).setQuestionId(questionList1.get(i).getId()));
+		}
+		reportBean.setList(rowBeans);
+		List<ReportBean> reportBeans = new ArrayList<>();
+		reportBeans.add(reportBean);
+		String json = JacksonUtils.getJson(reportBeans);
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ)
+		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
+		                                                               .content(json)
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		System.out.println(contentAsString);
+		QuizReport[] quizReports = JacksonUtils.fromJson(QuizReport[].class, contentAsString);
 	}
 }

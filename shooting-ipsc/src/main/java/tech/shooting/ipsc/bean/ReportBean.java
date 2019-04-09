@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-@Accessors
+@Accessors(chain = true)
 public class ReportBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz id")
