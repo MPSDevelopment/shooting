@@ -17,6 +17,7 @@ import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Score;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -67,5 +68,16 @@ class ScoreRepositoryTest {
 		save = scoreRepository.save(score);
 		assertEquals(2, scoreRepository.count());
 		assertEquals(1, scoreRepository.findAllByStageId(67235467325467235L).size());
+	}
+
+	@Test
+	public void checkFindByPersonIdAndStageId () {
+		assertEquals(0, scoreRepository.count());
+		save = scoreRepository.save(score);
+		assertEquals(1, scoreRepository.count());
+		score = new Score().setPersonId(113187979686798L).setStageId(6723534673325467235L).setScore(40).setTimeOfExercise(5353478263L);
+		save = scoreRepository.save(score);
+		assertEquals(2, scoreRepository.count());
+		assertNotNull(scoreRepository.findByPersonIdAndStageId(113187979686798L, 6723534673325467235L));
 	}
 }
