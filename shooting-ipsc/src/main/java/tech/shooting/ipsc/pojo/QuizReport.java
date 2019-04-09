@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
+import tech.shooting.ipsc.serialization.PersonFromIdDeserializer;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class QuizReport extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person")
 	@JsonSerialize(using = BaseDocumentIdSerializer.class)
+//	@JsonDeserialize(using = PersonFromIdDeserializer.class)
 	private Person person;
 
 	@DBRef

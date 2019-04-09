@@ -1,14 +1,19 @@
 package tech.shooting.ipsc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.SpringHandlerInstantiator;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -21,6 +26,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import tech.shooting.commons.spring.SpringBeanHandlerInstantiator;
 import tech.shooting.commons.utils.JacksonUtils;
 
 import javax.servlet.ServletContext;
@@ -31,6 +37,7 @@ import java.util.List;
 @EnableSwagger2
 @Slf4j
 public class AppConfig extends WebMvcConfigurationSupport {
+	
 	public static final String NOT_INCLUDE_VERSION_REGEXP = "^((?!v[0123456789.]*).)*$";
 
 	public static final String INCLUDE_VERSION_REGEXP = ".*/v[0123456789.]*/.*";
@@ -39,6 +46,11 @@ public class AppConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private IpscSettings settings;
+	
+//	@Bean
+//	public HandlerInstantiator handlerInstantiator(ApplicationContext applicationContext) {
+//	    return new SpringHandlerInstantiator(applicationContext.getAutowireCapableBeanFactory());
+//	}
 
 	@Bean
 	public UiConfiguration uiConfig () {
@@ -89,6 +101,13 @@ public class AppConfig extends WebMvcConfigurationSupport {
 		converter.setObjectMapper(mapper);
 		return converter;
 	}
+	
+//	@Bean
+//	public Jackson2ObjectMapperBuilder objectMapperBuilder(HandlerInstantiator handlerInstantiator) {
+//	    Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+//	    builder.handlerInstantiator(handlerInstantiator);
+//	    return builder;
+//	}
 
 	@Override
 	public void configureMessageConverters (List<HttpMessageConverter<?>> converters) {
