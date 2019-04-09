@@ -26,6 +26,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.QuizBean;
+import tech.shooting.ipsc.bean.QuizReportBean;
 import tech.shooting.ipsc.bean.ReportBean;
 import tech.shooting.ipsc.bean.RowBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
@@ -487,9 +488,9 @@ class QuizControllerTest {
 		                                                               .content(json)
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		System.out.println(contentAsString);
-		QuizReport[] listFromJson = JacksonUtils.fromJson(QuizReport[].class, contentAsString);
+		List<QuizReportBean> listFromJson = JacksonUtils.getListFromJson(QuizReportBean[].class, contentAsString);
 		log.info("List is %s", listFromJson);
-		//log.info("Incorrect size is %s",listFromJson.get(0).getIncorrect().size());
-		//log.info("Skip size is %s",listFromJson.get(0).getSkip().size());
+		log.info("Incorrect size is %s", listFromJson.get(0).getIncorrect().size());
+		log.info("Skip size is %s", listFromJson.get(0).getSkip().size());
 	}
 }

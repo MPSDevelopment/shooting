@@ -126,15 +126,17 @@ public class QuizService {
 		List<RowBean> list = reportBean.getList();
 		for(int i = 0; i < list.size(); i++) {
 			Question question = checkQuestion(quiz, list.get(i).getQuestionId());
-			if(list.get(i).getAnswer() == null) {
-				skip.add(question.getQuestion());
-			} else if(question.getRight() == list.get(i).getAnswer()) {
+			if(question.getRight() == list.get(i).getAnswer()) {
 				rightAnswer++;
 			} else {
 				Row row = new Row();
 				row.setAsk(question.getQuestion()).setAnswer(question.getAnswers().get(Math.toIntExact(list.get(i).getAnswer())));
 				incorrect.add(row);
 			}
+			collect.remove(question);
+		}
+		for(int i = 0; i < collect.size(); i++) {
+			skip.add(collect.get(i).getQuestion());
 		}
 		double mark = calculatePercentage(rightAnswer, countQuestion);
 		int marki = 0;
