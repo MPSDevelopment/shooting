@@ -14,7 +14,7 @@ import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.ReportBean;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.Report;
+import tech.shooting.ipsc.pojo.QuizReport;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.service.QuizService;
 
@@ -111,7 +111,7 @@ public class QuizController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Create row report's", notes = "Return list of reports")
-	public ResponseEntity<List<Report>> createReport (@RequestBody @Valid List<ReportBean> listResult) throws BadRequestException {
+	public ResponseEntity<List<QuizReport>> createReport (@RequestBody @Valid List<ReportBean> listResult) throws BadRequestException {
 		return new ResponseEntity<>(quizService.createReport(listResult), HttpStatus.CREATED);
 	}
 

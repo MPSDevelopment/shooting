@@ -105,15 +105,15 @@ public class QuizService {
 		return PageAble.getPage(page, size, quizRepository);
 	}
 
-	public List<Report> createReport (List<ReportBean> listResult) throws BadRequestException {
-		List<Report> reports = new ArrayList<>();
+	public List<QuizReport> createReport (List<ReportBean> listResult) throws BadRequestException {
+		List<QuizReport> reports = new ArrayList<>();
 		for(int i = 0; i < listResult.size(); i++) {
 			reports.add(checkReport(listResult.get(i)));
 		}
 		return reports;
 	}
 
-	private Report checkReport (ReportBean reportBean) throws BadRequestException {
+	private QuizReport checkReport (ReportBean reportBean) throws BadRequestException {
 		//check quiz and person exist
 		Quiz quiz = checkQuiz(reportBean.getQuizId());
 		Person person = checkPerson(reportBean.getPerson());
@@ -136,7 +136,7 @@ public class QuizService {
 				incorrect.add(row);
 			}
 		}
-		return reportRepository.save(new Report().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark((float) (rightAnswer * 100) / countQuestion));
+		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark((float) (rightAnswer * 100) / countQuestion));
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {

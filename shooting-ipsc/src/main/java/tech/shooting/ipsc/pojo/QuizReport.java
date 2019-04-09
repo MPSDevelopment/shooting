@@ -13,11 +13,11 @@ import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 
 import java.util.List;
 
-@Document("report")
-@TypeAlias("report")
+@Document("quizreport")
+@TypeAlias("quizreport")
 @Data
 @Accessors(chain = true)
-public class Report extends BaseDocument {
+public class QuizReport extends BaseDocument {
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Person")
