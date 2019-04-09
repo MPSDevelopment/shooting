@@ -147,7 +147,8 @@ public class QuizService {
 		} else {
 			marki = 2;
 		}
-		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(marki));
+		QuizReport save = reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(marki));
+		return save;
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {

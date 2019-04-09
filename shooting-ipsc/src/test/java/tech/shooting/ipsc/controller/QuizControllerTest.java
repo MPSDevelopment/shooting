@@ -458,10 +458,10 @@ class QuizControllerTest {
 		//get list question from quiz
 		List<Question> questionList = testQuiz.getQuestionList();
 		//get question
-		questionList.add(testQuestion.setRight(0));
-		questionList.add(testQuestion.setRight(1));
-		questionList.add(testQuestion.setRight(2));
-		questionList.add(testQuestion.setRight(3));
+		questionList.add(testQuestion.setRight(0).setActive(true));
+		questionList.add(testQuestion.setRight(1).setActive(true));
+		questionList.add(testQuestion.setRight(2).setActive(true));
+		questionList.add(testQuestion.setRight(3).setActive(true));
 		log.info("List Question is %s", questionList);
 		log.info("size is %s", questionList.size());
 		//save quiz
@@ -476,7 +476,6 @@ class QuizControllerTest {
 		List<RowBean> rowBeans = new ArrayList<>();
 		rowBeans.add(new RowBean().setAnswer((long) 3).setQuestionId(questionList1.get(0).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 2).setQuestionId(questionList1.get(1).getId()));
-		rowBeans.add(new RowBean().setAnswer((long) 1).setQuestionId(questionList1.get(2).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 0).setQuestionId(questionList1.get(3).getId()));
 
 		reportBean.setList(rowBeans);
@@ -488,7 +487,9 @@ class QuizControllerTest {
 		                                                               .content(json)
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		System.out.println(contentAsString);
-		List<QuizReport> listFromJson = JacksonUtils.getListFromJson(QuizReport[].class, contentAsString);
+		QuizReport[] listFromJson = JacksonUtils.fromJson(QuizReport[].class, contentAsString);
 		log.info("List is %s", listFromJson);
+		//log.info("Incorrect size is %s",listFromJson.get(0).getIncorrect().size());
+		//log.info("Skip size is %s",listFromJson.get(0).getSkip().size());
 	}
 }

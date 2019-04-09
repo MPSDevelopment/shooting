@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -14,6 +16,7 @@ import java.util.List;
 public class Question extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "List of choice", required = true)
+	@Size(min = 4, message = ValidationConstants.ANSWERS_SIZE_MESSAGE)
 	List<Answer> answers;
 
 	@JsonProperty

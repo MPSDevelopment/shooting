@@ -76,4 +76,6 @@ public class ValidationConstants {
 	public static final String ANSWER_MESSAGE = "Answer must be nor null";
 
 	public static final String ANSWER_MESSAGE_POSITIVE_OR_ZERO = "Answer must be 0 or positive value";
+
+	public static final String ANSWERS_SIZE_MESSAGE = "Size of answers list be 4 or greater";
 }
