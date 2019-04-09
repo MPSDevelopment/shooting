@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -23,9 +23,9 @@ public class Question extends BaseDocument {
 	@ApiModelProperty(value = "Question", required = true)
 	private Ask question;
 
-	@JsonProperty
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@ApiModelProperty(value = "Right choice", required = true)
-	@Positive
+	@PositiveOrZero
 	private int right;
 
 	@JsonProperty

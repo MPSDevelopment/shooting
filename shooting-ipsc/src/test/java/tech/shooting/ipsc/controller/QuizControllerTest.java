@@ -341,7 +341,6 @@ class QuizControllerTest {
 
 	private void checkQuestion (Question testQuestion, Question fromJson) {
 		assertEquals(testQuestion.getQuestion(), fromJson.getQuestion());
-		assertEquals(testQuestion.getRight(), fromJson.getRight());
 		assertEquals(testQuestion.getAnswers(), fromJson.getAnswers());
 		assertEquals(testQuestion.isRandom(), fromJson.isRandom());
 	}
