@@ -32,7 +32,7 @@ public class QuizReport extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Mark")
-	private float mark;
+	private int mark;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Incorrect answer")

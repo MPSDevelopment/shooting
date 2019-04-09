@@ -119,8 +119,8 @@ public class QuizService {
 		Person person = checkPerson(reportBean.getPerson());
 		//get list question from quiz where status is active
 		List<Question> collect = quiz.getQuestionList().stream().filter(que -> que.isActive() == true).collect(Collectors.toList());
-		int countQuestion = collect.size();
-		int rightAnswer = 0;
+		double countQuestion = collect.size();
+		double rightAnswer = 0;
 		List<Row> incorrect = new ArrayList<>();
 		List<Ask> skip = new ArrayList<>();
 		List<RowBean> list = reportBean.getList();
@@ -136,10 +136,25 @@ public class QuizService {
 				incorrect.add(row);
 			}
 		}
-		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark((float) (rightAnswer * 100) / countQuestion));
+		double mark = calculatePercentage(rightAnswer, countQuestion);
+		int marki = 0;
+		if(mark >= quiz.getGreat()) {
+			marki = 5;
+		} else if(mark >= quiz.getGood()) {
+			marki = 4;
+		} else if(mark >= quiz.getSatisfactorily()) {
+			marki = 3;
+		} else {
+			marki = 2;
+		}
+		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(marki));
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {
 		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", person)));
+	}
+
+	public double calculatePercentage (double obtained, double total) {
+		return (obtained / total) * 100;
 	}
 }

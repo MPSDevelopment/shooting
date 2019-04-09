@@ -451,14 +451,17 @@ class QuizControllerTest {
 		//get person who pass test
 		List<Person> all = personRepository.findAll();
 		log.info("Person list size is %s", all.size());
-		Person testPerson = all.get(100);
+		Person testPerson = all.get(40);
 		log.info("Get person 100 is %s", testPerson);
 		//get quiz
 		log.info("Test quiz is %s", testQuiz);
 		//get list question from quiz
 		List<Question> questionList = testQuiz.getQuestionList();
 		//get question
-		questionList.add(testQuestion);
+		questionList.add(testQuestion.setRight(0));
+		questionList.add(testQuestion.setRight(1));
+		questionList.add(testQuestion.setRight(2));
+		questionList.add(testQuestion.setRight(3));
 		log.info("List Question is %s", questionList);
 		log.info("size is %s", questionList.size());
 		//save quiz
@@ -471,9 +474,11 @@ class QuizControllerTest {
 		//create ReportBean
 		ReportBean reportBean = new ReportBean().setPerson(testPerson.getId()).setQuizId(save.getId());
 		List<RowBean> rowBeans = new ArrayList<>();
-		for(int i = 0; i < questionList1.size(); i++) {
-			rowBeans.add(new RowBean().setAnswer((long) i).setQuestionId(questionList1.get(i).getId()));
-		}
+		rowBeans.add(new RowBean().setAnswer((long) 3).setQuestionId(questionList1.get(0).getId()));
+		rowBeans.add(new RowBean().setAnswer((long) 2).setQuestionId(questionList1.get(1).getId()));
+		rowBeans.add(new RowBean().setAnswer((long) 1).setQuestionId(questionList1.get(2).getId()));
+		rowBeans.add(new RowBean().setAnswer((long) 0).setQuestionId(questionList1.get(3).getId()));
+
 		reportBean.setList(rowBeans);
 		List<ReportBean> reportBeans = new ArrayList<>();
 		reportBeans.add(reportBean);
@@ -483,6 +488,7 @@ class QuizControllerTest {
 		                                                               .content(json)
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		System.out.println(contentAsString);
-		QuizReport[] quizReports = JacksonUtils.fromJson(QuizReport[].class, contentAsString);
+		List<QuizReport> listFromJson = JacksonUtils.getListFromJson(QuizReport[].class, contentAsString);
+		log.info("List is %s", listFromJson);
 	}
 }
