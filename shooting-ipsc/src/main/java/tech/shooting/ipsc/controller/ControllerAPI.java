@@ -248,4 +248,6 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER_GET_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 
 	public static final String QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ = "/report/create";
+
+	public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge/both";
 }

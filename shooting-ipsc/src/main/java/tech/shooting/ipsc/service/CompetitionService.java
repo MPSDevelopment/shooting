@@ -10,6 +10,7 @@ import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.enums.*;
@@ -239,6 +240,16 @@ public class CompetitionService {
 		} else {
 			competitor.setNumber(competitorMark.getMark());
 		}
+		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
+		return saveAndReturn(competition, competitor, false);
+	}
+
+	public Competitor addedMarkToCompetitor (Long competitionId, Long competitorId, CompetitorMarks competitorMark) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		checkToAddedRow(competition);
+		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
+		competitor.setRfidCode(competitorMark.getRfid());
+		competitor.setNumber(competitorMark.getNumber());
 		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
 		return saveAndReturn(competition, competitor, false);
 	}

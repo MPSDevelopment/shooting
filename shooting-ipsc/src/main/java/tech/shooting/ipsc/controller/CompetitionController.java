@@ -10,10 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.ipsc.bean.CompetitionBean;
-import tech.shooting.ipsc.bean.CompetitorMark;
-import tech.shooting.ipsc.bean.DisqualificationBean;
-import tech.shooting.ipsc.bean.ScoreBean;
+import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.service.CompetitionService;
@@ -173,6 +170,14 @@ public class CompetitionController {
 	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
 	public ResponseEntity<Competitor> addedMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
+	public ResponseEntity<Competitor> addedMarksForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMarks competitorMark) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
 
