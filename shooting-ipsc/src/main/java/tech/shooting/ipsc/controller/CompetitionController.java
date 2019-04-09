@@ -175,7 +175,7 @@ public class CompetitionController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
+	@ApiOperation(value = "Added rfid and number marks", notes = "Updated competitor object")
 	public ResponseEntity<Competitor> addedMarksForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMarks competitorMark) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
