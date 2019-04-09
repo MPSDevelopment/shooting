@@ -90,4 +90,25 @@ class QuizRepositoryTest {
 		quizRepository.pullQuestion(quiz.getId(), question.getId());
 		assertEquals(0, quizRepository.findById(save.getId()).get().getQuestionList().size());
 	}
+
+	@Test
+	public void checkPushQuestionToQuiz () {
+		log.info("Count quiz in DB is %s", quizRepository.findAll().size());
+		List<Question> list = new ArrayList<>();
+		list.add(new Question().setQuestion(new Ask().setKz("fdfdfd").setRus("fdfdsfdsfsd"))
+		                       .setActive(true)
+		                       .setRight(3)
+		                       .setRandom(true)
+		                       .setAnswers(List.of(new Answer().setNumber(1).setKz("fdfdfd").setRus("fdfdfdfdfd"),
+			                       new Answer().setNumber(3).setKz("fdfdfd").setRus("fdfdfdfdfd"),
+			                       new Answer().setNumber(2).setKz("fdfdfd").setRus("fdfdfdfdfd"))));
+		quiz.setQuestionList(list);
+		Quiz save = quizRepository.save(quiz);
+		Question question = save.getQuestionList().get(0);
+		question.setRight(1);
+		assertEquals(1, quizRepository.count());
+		quizRepository.pushQuestionToQuiz(quiz.getId(), question);
+		assertEquals(2, quizRepository.findById(save.getId()).get().getQuestionList().size());
+		assertEquals(1, quizRepository.findById(save.getId()).get().getQuestionList().get(1).getRight());
+	}
 }
