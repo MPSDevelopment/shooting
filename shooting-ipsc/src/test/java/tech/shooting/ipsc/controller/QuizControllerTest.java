@@ -25,10 +25,7 @@ import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.QuizBean;
-import tech.shooting.ipsc.bean.QuizReportBean;
-import tech.shooting.ipsc.bean.ReportBean;
-import tech.shooting.ipsc.bean.RowBean;
+import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -46,6 +43,7 @@ import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.QuizService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -477,7 +475,6 @@ class QuizControllerTest {
 		rowBeans.add(new RowBean().setAnswer((long) 3).setQuestionId(questionList1.get(0).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 2).setQuestionId(questionList1.get(1).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 0).setQuestionId(questionList1.get(3).getId()));
-
 		reportBean.setList(rowBeans);
 		List<ReportBean> reportBeans = new ArrayList<>();
 		reportBeans.add(reportBean);
@@ -491,5 +488,56 @@ class QuizControllerTest {
 		log.info("List is %s", listFromJson);
 		log.info("Incorrect size is %s", listFromJson.get(0).getIncorrect().size());
 		log.info("Skip size is %s", listFromJson.get(0).getSkip().size());
+	}
+
+	@Test
+	void checkGetQuizToCheck () throws Exception {
+		List<Question> questionList = testQuiz.getQuestionList();
+		questionList.add(testQuestion);
+		testQuestion = new Question().setQuestion(new Ask().setRus(" аврраоврылоарвларвлоыарвлыора").setKz("What is you name"))
+		                             .setRandom(false)
+		                             .setActive(true)
+		                             .setAnswers(List.of(new Answer().setRus("бояра").setKz("Tom"),
+			                             new Answer().setRus("водяра").setKz("Mike"),
+			                             new Answer().setRus("даун").setKz("Steven"),
+			                             new Answer().setRus("полный ноль").setKz("Undefined")))
+		                             .setRight(3);
+		questionList.add(testQuestion);
+		Quiz save = quizRepository.save(testQuiz);
+		List<Question> collect = save.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
+		//unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK.replace(ControllerAPI.REQUEST_QUIZ_ID, save.getId().toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK.replace(ControllerAPI.REQUEST_QUIZ_ID, save.getId().toString()))
+		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		//user role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK.replace(ControllerAPI.REQUEST_QUIZ_ID, save.getId().toString()))
+		                                                               .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		List<QuestionBean> listFromJson = JacksonUtils.getListFromJson(QuestionBean[].class, contentAsString);
+		assertEquals(collect.size(), listFromJson.size());
+		for(int i = 0; i < collect.size(); i++) {
+			checkQuestionBean(collect.get(i), listFromJson.get(i));
+		}
+		//admin role
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
+			ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK.replace(ControllerAPI.REQUEST_QUIZ_ID, save.getId().toString()))
+		                                                        .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		listFromJson = JacksonUtils.getListFromJson(QuestionBean[].class, contentAsString);
+		assertEquals(collect.size(), listFromJson.size());
+		for(int i = 0; i < collect.size(); i++) {
+			checkQuestionBean(collect.get(i), listFromJson.get(i));
+		}
+	}
+
+	private void checkQuestionBean (Question testQuestion, QuestionBean fromJson) {
+		assertNotNull(testQuestion.getRight());
+		assertEquals(testQuestion.getId(), fromJson.getId());
+		assertEquals(testQuestion.getQuestion(), fromJson.getQuestion());
+		assertEquals(testQuestion.getAnswers(), fromJson.getAnswers());
+		assertEquals(testQuestion.isRandom(), fromJson.isRandom());
 	}
 }

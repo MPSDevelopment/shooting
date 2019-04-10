@@ -88,7 +88,7 @@ public class QuizService {
 		return quiz.getQuestionList().stream().filter(ask -> ask.getId().equals(questionId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect question id %s", questionId)));
 	}
 
-	public void deleteQuestion (Long id, Long questionId) throws BadRequestException {
+	public void deleteQuestion (Long id, Long questionId) {
 		quizRepository.pullQuestion(id, questionId);
 	}
 
@@ -119,7 +119,7 @@ public class QuizService {
 		Quiz quiz = checkQuiz(reportBean.getQuizId());
 		Person person = checkPerson(reportBean.getPerson());
 		//get list question from quiz where status is active
-		List<Question> collect = quiz.getQuestionList().stream().filter(que -> que.isActive() == true).collect(Collectors.toList());
+		List<Question> collect = quiz.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
 		double countQuestion = collect.size();
 		double rightAnswer = 0;
 		List<Row> incorrect = new ArrayList<>();
@@ -140,18 +140,17 @@ public class QuizService {
 			skip.add(collect.get(i).getQuestion());
 		}
 		double mark = calculatePercentage(rightAnswer, countQuestion);
-		int marki = 0;
+		int grade;
 		if(mark >= quiz.getGreat()) {
-			marki = 5;
+			grade = 5;
 		} else if(mark >= quiz.getGood()) {
-			marki = 4;
+			grade = 4;
 		} else if(mark >= quiz.getSatisfactorily()) {
-			marki = 3;
+			grade = 3;
 		} else {
-			marki = 2;
+			grade = 2;
 		}
-		QuizReport save = reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(marki));
-		return save;
+		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(grade));
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {
@@ -164,7 +163,7 @@ public class QuizService {
 
 	public List<QuestionBean> getQuestionToCheck (Long id) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
-		List<Question> collect = quiz.getQuestionList().stream().filter(qw -> qw.isActive()).collect(Collectors.toList());
+		List<Question> collect = quiz.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
 		return convertToListQuestionsBean(collect);
 	}
 
