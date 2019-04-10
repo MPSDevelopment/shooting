@@ -95,6 +95,7 @@ public class QuizService {
 	public Question updateQuestion (Long id, Long questionId, Question question) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
 		checkQuestion(quiz, questionId);
+		quizRepository.pullQuestion(quiz.getId(), questionId);
 		return quizRepository.pushQuestionToQuiz(quiz.getId(), question);
 	}
 
