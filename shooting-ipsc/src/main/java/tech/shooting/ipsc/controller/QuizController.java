@@ -61,6 +61,7 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.getQuiz(id), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION)
 	@ApiOperation(value = "Get quiz from db by id and return List Question", notes = "Return list question")
 	public ResponseEntity<List<Question>> getQuizByIdAndReturnListQuestion (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
