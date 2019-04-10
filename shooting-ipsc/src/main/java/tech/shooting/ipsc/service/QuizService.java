@@ -157,7 +157,7 @@ public class QuizService {
 		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", person)));
 	}
 
-	public double calculatePercentage (double obtained, double total) {
+	private double calculatePercentage (double obtained, double total) {
 		return (obtained / total) * 100;
 	}
 

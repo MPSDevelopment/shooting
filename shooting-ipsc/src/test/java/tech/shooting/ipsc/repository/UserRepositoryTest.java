@@ -17,8 +17,9 @@ import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.User;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -38,7 +39,7 @@ public class UserRepositoryTest {
 	}
 
 	@Test
-	public void checkFindByFields () {
+	public void checkFindByName () {
 		userRepository.save(new User().setName("Суворов Антон"));
 		assertNotNull(userRepository.findByName("Суворов Антон"));
 	}
@@ -57,5 +58,29 @@ public class UserRepositoryTest {
 		assertEquals(userRepository.findByRoleName(RoleName.ADMIN).size(), 1);
 		assertEquals(userRepository.findByRoleName(RoleName.JUDGE).size(), 25);
 		assertEquals(userRepository.findByRoleName(RoleName.USER).size(), 24);
+	}
+
+	@Test
+	public void checkFindByLogin () {
+		userRepository.save(new User().setName("Суворов Антон").setLogin("qwerty"));
+		assertNotNull(userRepository.findByLogin("qwerty"));
+	}
+
+	@Test
+	public void checkFindByLoginAndActive () {
+		userRepository.save(new User().setName("Суворов Антон").setLogin("qwerty").setActive(true));
+		assertNotNull(userRepository.findByLoginAndActive("qwerty", true));
+		assertNull(userRepository.findByLoginAndActive("qwerty", false));
+	}
+
+	@Test
+	public void checkDeleteByRoleName () {
+		userRepository.save(new User().setName("Суворов Антон").setLogin("qwerty").setActive(true).setRoleName(RoleName.USER));
+		userRepository.save(new User().setName("Суворов Антон").setLogin("qwerty1").setActive(true).setRoleName(RoleName.JUDGE));
+		userRepository.save(new User().setName("Суворов Антон").setLogin("qwerty2").setActive(true).setRoleName(RoleName.ADMIN));
+		userRepository.deleteByRoleName(RoleName.USER);
+		assertEquals(Collections.EMPTY_LIST, userRepository.findByRoleName(RoleName.USER));
+		assertNotNull(userRepository.findByRoleName(RoleName.JUDGE));
+		assertNotNull(userRepository.findByRoleName(RoleName.ADMIN));
 	}
 }
