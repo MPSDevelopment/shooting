@@ -17,7 +17,6 @@ class CustomDivisionRepositoryImpl implements CustomDivisionRepository {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	@Override
 	public List<Division> findByDivisionId (Long id) {
 		// GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("parent").connectFrom("parent").connectTo("children").maxDepth(5).restrict(Criteria.where("name").is
 		// ("child1")).as("children");

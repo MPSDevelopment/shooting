@@ -53,4 +53,11 @@ public class DivisionRepositoryTest {
 	public void checkFindOneByParent () {
 		assertNotNull(divisionRepository.findOneByParent(null));
 	}
+
+	@Test
+	public void checkUpdateDivisionName () {
+		String str = "tttttttttttttttt";
+		divisionRepository.updateDivisionName(root.getId(), str);
+		assertEquals(divisionRepository.findById(root.getId()).get().getName(), str);
+	}
 }
