@@ -14,10 +14,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
@@ -583,4 +585,58 @@ class QuizControllerTest {
 		assertEquals(testQuestion.getAnswers(), fromJson.getAnswers());
 		assertEquals(testQuestion.isRandom(), fromJson.isRandom());
 	}
+
+	@Test
+	public void checkGetQuizByPage () throws Exception {
+		createQuiz(40);
+		// try to access getCompetitionsByPage with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                                                                     .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5))))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getCompetitionsByPage with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE,
+			                                           String.valueOf(5)))
+		                                      .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try to access getCompetitionsByPage with admin user
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                 ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                               .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5))).header(Token.TOKEN_HEADER,
+			adminToken))
+		                             .andExpect(MockMvcResultMatchers.status().isOk())
+		                             .andReturn();
+		List<Quiz> list = JacksonUtils.getListFromJson(Quiz[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(10, list.size());
+		// try to access getCompetitionsByPage with admin user with size 30
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                       ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1))
+		                                                                                                     .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(30))).header(Token.TOKEN_HEADER, adminToken))
+		                   .andExpect(MockMvcResultMatchers.status().isOk())
+		                   .andReturn();
+		list = JacksonUtils.getListFromJson(Quiz[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(20, list.size());
+		// try to access to getCompetitionsByPage header with admin
+		int sizeAllUser = quizRepository.findAll().size();
+		int page = 250;
+		int size = 0;
+		int countInAPage = size <= 10 ? 10 : 20;
+		int countPages = sizeAllUser % countInAPage == 0 ? sizeAllUser / countInAPage : (sizeAllUser / countInAPage) + 1;
+		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                              ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(page))
+		                                                                                                                            .replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(size)))
+		                                                                         .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(countPages));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(page));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(sizeAllUser));
+	}
+
+	private void createQuiz (int count) {
+		for(int i = 0; i < count; i++) {
+			Quiz quiz =
+				new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
+			quizRepository.save(quiz);
+			log.info("Quiz %s has been created", quiz.getName());
+		}
+	}
+
 }
