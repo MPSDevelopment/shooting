@@ -248,8 +248,12 @@ public class CompetitionService {
 		Competition competition = checkCompetition(competitionId);
 		checkToAddedRow(competition);
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
-		competitor.setRfidCode(competitorMark.getRfid());
-		competitor.setNumber(competitorMark.getNumber());
+		if(!competitorMark.getRfid().equals(null)) {
+			competitor.setRfidCode(competitorMark.getRfid());
+		}
+		if(!competitorMark.getNumber().equals(null)) {
+			competitor.setNumber(competitorMark.getNumber());
+		}
 		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
 		return saveAndReturn(competition, competitor, false);
 	}

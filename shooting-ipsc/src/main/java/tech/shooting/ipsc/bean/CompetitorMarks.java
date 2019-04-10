@@ -10,7 +10,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -26,13 +25,11 @@ public class CompetitorMarks {
 	private String name;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Competitor's rfid", required = true)
-	@NotBlank
+	@ApiModelProperty(value = "Competitor's rfid")
 	private String rfid;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Competitor's number", required = true)
-	@NotBlank
+	@ApiModelProperty(value = "Competitor's number")
 	private String number;
 
 	@JsonProperty
