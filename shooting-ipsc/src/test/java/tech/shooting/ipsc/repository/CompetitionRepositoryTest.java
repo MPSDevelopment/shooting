@@ -15,12 +15,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Competition;
+import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Stage;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
 @ContextConfiguration(classes = {IpscMongoConfig.class})
 @EnableAutoConfiguration
 @SpringBootTest
@@ -34,6 +38,9 @@ public class CompetitionRepositoryTest {
 	private Competition competition;
 
 	private Stage stage;
+
+	@Autowired
+	private PersonRepository personRepository;
 
 	@BeforeEach
 	public void before () {
@@ -91,11 +98,32 @@ public class CompetitionRepositoryTest {
 		assertEquals(0, competitionRepository.findById(competition.getId()).get().getStages().size());
 	}
 
+	@Test
+	public void checkPullStageId () {
+		assertEquals(1, competitionRepository.findById(competition.getId()).get().getStages().size());
+		// pull stage and check stage count
+		competitionRepository.pullStageFromCompetition(competition.getId(), stage.getId());
+		assertEquals(0, competitionRepository.findById(competition.getId()).get().getStages().size());
+	}
+
 	private void checkStagesId (Competition competition) {
 		log.info("Competition id %s ", competition.getId());
 		competition.getStages().forEach(item -> {
 			log.info("Stage id %s and name %s", item.getId(), item.getName());
 			assertNotNull(item.getId());
 		});
+	}
+
+	@Test
+	void checkPullCompetitorFromCompetition () {
+		assertEquals(1, competitionRepository.findAll().size());
+		Person pullTest = personRepository.save(new Person().setName("pullTest"));
+		Competitor competitor = new Competitor().setPerson(pullTest).setName("pullTest").setActive(true);
+		List<Competitor> competitors = competition.getCompetitors();
+		competitors.add(competitor);
+		competition = competitionRepository.save(competition.setCompetitors(competitors));
+		competitor = competition.getCompetitors().get(0);
+		competitionRepository.pullCompetitorFromCompetition(competition.getId(), competitor.getId());
+		assertEquals(0, competitionRepository.findById(competition.getId()).get().getCompetitors().size());
 	}
 }
