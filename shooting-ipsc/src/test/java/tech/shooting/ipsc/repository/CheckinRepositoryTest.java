@@ -24,8 +24,10 @@ import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -331,5 +333,32 @@ class CheckinRepositoryTest {
 		for(int i = 0; i < combatNoteByDivisionFromPeriod.size(); i++) {
 			assertTrue(custom.contains(combatNoteByDivisionFromPeriod.get(i)));
 		}
+	}
+
+	@Test
+	void checkTimeInterval () {
+		OffsetDateTime now = OffsetDateTime.now();
+		LocalDate localDate = now.toLocalDate();
+		ZoneOffset offset = now.getOffset();
+		TypeOfInterval type = TypeOfInterval.MORNING;
+		List<OffsetDateTime> actual = checkinRepository.timeInterval(now, type);
+		assertEquals(OffsetDateTime.of(localDate, type.getStart(), offset), actual.get(0));
+		assertEquals(OffsetDateTime.of(localDate, type.getEnd(), offset), actual.get(1));
+		type = TypeOfInterval.EVENING;
+		actual = checkinRepository.timeInterval(now, type);
+		assertEquals(OffsetDateTime.of(localDate, type.getStart(), offset), actual.get(0));
+		assertEquals(OffsetDateTime.of(localDate, type.getEnd(), offset), actual.get(1));
+		type = TypeOfInterval.DAY;
+		actual = checkinRepository.timeInterval(now, type);
+		assertEquals(OffsetDateTime.of(localDate, type.getStart(), offset), actual.get(0));
+		assertEquals(OffsetDateTime.of(localDate, type.getEnd(), offset), actual.get(1));
+		type = TypeOfInterval.WEEK;
+		actual = checkinRepository.timeInterval(now, type);
+		assertEquals(OffsetDateTime.of(localDate, type.getStart(), offset), actual.get(0));
+		assertEquals(OffsetDateTime.of(localDate, type.getEnd(), offset).plusDays(7), actual.get(1));
+		type = TypeOfInterval.MONTH;
+		actual = checkinRepository.timeInterval(now, type);
+		assertEquals(OffsetDateTime.of(localDate, type.getStart(), offset), actual.get(0));
+		assertEquals(OffsetDateTime.of(localDate, type.getEnd(), offset).plusMonths(1), actual.get(1));
 	}
 }

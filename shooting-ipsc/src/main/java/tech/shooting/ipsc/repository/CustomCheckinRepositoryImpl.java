@@ -114,10 +114,10 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		return match(priceCriteria);
 	}
 
+	@Override
 	public List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval) {
 		List<OffsetDateTime> inter = new ArrayList<>();
 		LocalDate localDate;
-		LocalTime localTime;
 		ZoneOffset offset;
 		switch(interval) {
 			case MORNING:
