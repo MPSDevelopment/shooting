@@ -66,6 +66,12 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.getQuiz(id).getQuestionList(), HttpStatus.OK);
 	}
 
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK)
+	@ApiOperation(value = "Get question list to check", notes = "Return list question")
+	public ResponseEntity<List<Question>> getQuizToCheck (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(quizService.getQuestionToCheck(id), HttpStatus.OK);
+	}
+
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update quiz by id", notes = "Return updated  quiz")
 	public ResponseEntity<Quiz> updateQuiz (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @RequestBody @Valid QuizBean quizBean) throws BadRequestException {

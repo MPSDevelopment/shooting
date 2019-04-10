@@ -161,4 +161,8 @@ public class QuizService {
 		return (obtained / total) * 100;
 	}
 
+	public List<Question> getQuestionToCheck (Long id) throws BadRequestException {
+		Quiz quiz = checkQuiz(id);
+		return quiz.getQuestionList().stream().filter(qw -> qw.isActive()).collect(Collectors.toList());
+	}
 }
