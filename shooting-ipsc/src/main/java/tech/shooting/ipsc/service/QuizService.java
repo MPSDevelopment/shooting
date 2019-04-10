@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.ReportBean;
 import tech.shooting.ipsc.bean.RowBean;
@@ -161,8 +162,19 @@ public class QuizService {
 		return (obtained / total) * 100;
 	}
 
-	public List<Question> getQuestionToCheck (Long id) throws BadRequestException {
+	public List<QuestionBean> getQuestionToCheck (Long id) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
-		return quiz.getQuestionList().stream().filter(qw -> qw.isActive()).collect(Collectors.toList());
+		List<Question> collect = quiz.getQuestionList().stream().filter(qw -> qw.isActive()).collect(Collectors.toList());
+		return convertToListQuestionsBean(collect);
+	}
+
+	private List<QuestionBean> convertToListQuestionsBean (List<Question> collect) {
+		List<QuestionBean> res = new ArrayList<>();
+		for(int i = 0; i < collect.size(); i++) {
+			QuestionBean bean = new QuestionBean();
+			BeanUtils.copyProperties(collect.get(i), bean);
+			res.add(bean);
+		}
+		return res;
 	}
 }

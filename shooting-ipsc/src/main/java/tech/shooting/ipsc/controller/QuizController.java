@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.ReportBean;
 import tech.shooting.ipsc.pojo.Question;
@@ -68,7 +69,7 @@ public class QuizController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK)
 	@ApiOperation(value = "Get question list to check", notes = "Return list question")
-	public ResponseEntity<List<Question>> getQuizToCheck (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
+	public ResponseEntity<List<QuestionBean>> getQuizToCheck (@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuestionToCheck(id), HttpStatus.OK);
 	}
 
