@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Accessors(chain = true)
-@ApiModel(value = "Competitor added mark")
+@ApiModel(value = "Competitor added marks")
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class CompetitorMarks {
