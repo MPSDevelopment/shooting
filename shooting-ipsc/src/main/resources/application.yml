@@ -39,6 +39,8 @@ spring:
 server:
   address: 127.0.0.1
   port: 9900
+#  http2:
+#    enabled: true
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
@@ -71,6 +73,8 @@ spring:
 server:
   address: 10.0.6.4
   port: 9901
+#  http2:
+#    enabled: true
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json

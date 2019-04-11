@@ -4,8 +4,8 @@ public class ControllerAPI {
 	public static final String VERSION_1_0 = "/v1.0";
 
 	/*
-	header variable
-		*/
+	 * header variable
+	 */
 	public static final String HEADER_VARIABLE_TOTAL = "total";
 
 	public static final String HEADER_VARIABLE_PAGE = "page";
@@ -13,8 +13,11 @@ public class ControllerAPI {
 	public static final String HEADER_VARIABLE_PAGES = "pages";
 
 	/*
-	path variable
-		*/
+	 * path variable
+	 */
+	
+	public static final String PATH_VARIABLE_ID = "id";
+	
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
@@ -36,10 +39,14 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
 
 	public static final String PATH_VARIABLE_SUBJECT = "subject";
+	
+	
 
 	/*
-	request variable
-		*/
+	 * request variable
+	 */
+	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
+	
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 
 	public static final String REQUEST_SUBJECT = "{" + PATH_VARIABLE_SUBJECT + "}";
@@ -62,10 +69,17 @@ public class ControllerAPI {
 
 	public static final String REQUEST_QUESTION_ID = "{" + PATH_VARIABLE_QUESTION_ID + "}";
 
+	/*
+	 * Image controller
+	 */
+	
+	public static final String IMAGE_CONTROLLER = "/api/images";
+	
+	public static final String IMAGE_CONTROLLER_GET_DATA = "/data/{id}";
 
 	/*
-	auth controller
-		*/
+	 * auth controller
+	 */
 
 	public static final String AUTH_CONTROLLER = "/api/auth";
 
@@ -78,8 +92,8 @@ public class ControllerAPI {
 	public static final String AUTH_CONTROLLER_POST_STATUS = "/status";
 
 	/*
-	user controller
-		*/
+	 * user controller
+	 */
 
 	public static final String USER_CONTROLLER = "/api/users";
 
@@ -102,8 +116,8 @@ public class ControllerAPI {
 	public static final String USER_CONTROLLER_GET_JUDGES = "/all/judge";
 
 	/*
-	person controller
-		*/
+	 * person controller
+	 */
 
 	public static final String PERSON_CONTROLLER = "/api/persons";
 
@@ -122,8 +136,8 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
 
 	/*
-	competition controller
-		*/
+	 * competition controller
+	 */
 	public static final String COMPETITION_CONTROLLER = "/api/competitions";
 
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITION = "/create";
@@ -141,8 +155,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 
 	/*
-	competition stage
-		*/
+	 * competition stage
+	 */
 	public static final String COMPETITION_CONTROLLER_GET_STAGES = "/" + REQUEST_COMPETITION_ID + "/stage/all";
 
 	public static final String COMPETITION_CONTROLLER_POST_STAGES = "/" + REQUEST_COMPETITION_ID + "/stages";
@@ -156,8 +170,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 
 	/*
-	competition competitor
-		*/
+	 * competition competitor
+	 */
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + REQUEST_COMPETITION_ID + "/competitor/all";
 
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
@@ -175,8 +189,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_LIST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitors";
 
 	/*
-	division controller
-		*/
+	 * division controller
+	 */
 	public static final String DIVISION_CONTROLLER = "/api/divisions";
 
 	public static final String DIVISION_CONTROLLER_GET_ALL = "/division/all";
@@ -194,8 +208,8 @@ public class ControllerAPI {
 	public static final String DIVISION_CONTROLLER_GET_DIVISION_ROOT = "/division/root";
 
 	/*
-	enum
-		 */
+	 * enum
+	 */
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
 
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
@@ -218,7 +232,7 @@ public class ControllerAPI {
 
 	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 
-	//quiz section
+	// quiz section
 
 	public static final String QUIZ_CONTROLLER = "/api/quiz";
 
@@ -246,7 +260,7 @@ public class ControllerAPI {
 
 	public static final String QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ = "/report/create";
 
-	//checkin section
+	// checkin section
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";
 
 	public static final String CHECKIN_CONTROLLER_POST_CHECK = "/check";
