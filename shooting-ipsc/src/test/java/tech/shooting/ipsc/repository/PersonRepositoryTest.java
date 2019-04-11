@@ -54,7 +54,12 @@ public class PersonRepositoryTest {
 		String name = "Tigran";
 		OffsetDateTime offsetDateTime = OffsetDateTime.now();
 		List<Division> all = divisionRepository.findAll();
-		Division division = all.get(0);
+		Division division;
+		if(all.size() == 0) {
+			division = divisionRepository.save(new Division().setName("fdfdfdfd").setParent(null));
+		} else {
+			division = all.get(0);
+		}
 		log.info("Set division %s", division);
 		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime).setDivision(division));
 		assertNotNull(personRepository.findByDivision(division));

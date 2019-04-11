@@ -46,7 +46,14 @@ class QuizRepositoryTest {
 	public void before () {
 		quizRepository.deleteAll();
 		subjects = subjectRepository.findAll();
-		subject = subjects.get(0);
+		if(subjects.size() == 0) {
+			subject = subjectRepository.save(new Subject().setRus("fdfdfdfd").setKz("Fdfdfdfdfdf"));
+			subjectRepository.save(new Subject().setRus("fdfdfdfgfgfd").setKz("Fdfdfgfgdfdfdf"));
+
+		} else {
+			subject = subjects.get(0);
+		}
+		subjects = subjectRepository.findAll();
 		quiz = new Quiz().setSubject(subject).setSatisfactorily(50).setName(new QuizName().setKz("test").setRus("да ну на"));
 	}
 
