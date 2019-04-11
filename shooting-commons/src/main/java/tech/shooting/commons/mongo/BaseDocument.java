@@ -16,14 +16,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 
 @Getter
 @Setter
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode()
-public class BaseDocument implements ShootingDocument, ValiationExportable {
+public class BaseDocument implements ShootingDocument {
 
 	public static final String ID_FIELD = "id";
 

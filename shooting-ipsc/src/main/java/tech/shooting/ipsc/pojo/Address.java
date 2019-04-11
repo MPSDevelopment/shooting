@@ -2,11 +2,10 @@ package tech.shooting.ipsc.pojo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 
 @Data
 @Accessors(chain = true)
-public class Address implements ValiationExportable {
+public class Address {
 	public String street;
 
 	public String city;

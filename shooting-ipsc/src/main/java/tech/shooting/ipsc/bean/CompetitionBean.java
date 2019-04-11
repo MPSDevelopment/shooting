@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competitor;
@@ -26,7 +25,7 @@ import java.util.List;
 @ApiModel(value = "Competition create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class CompetitionBean  implements ValiationExportable{
+public class CompetitionBean{
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)

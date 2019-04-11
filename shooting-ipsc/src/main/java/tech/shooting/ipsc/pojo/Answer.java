@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Max;
@@ -14,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Accessors(chain = true)
-public class Answer implements ValiationExportable {
+public class Answer {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Answer number", required = true)

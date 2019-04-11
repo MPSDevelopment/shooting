@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 
 import javax.validation.constraints.AssertTrue;
@@ -22,7 +21,7 @@ import javax.validation.constraints.Size;
 @ApiModel(value = "Competitor added mark")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class CompetitorMark implements ValiationExportable {
+public class CompetitorMark {
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Competitor's name", required = true)
 	@Size(min = 3, message = "Min characters  is 3")

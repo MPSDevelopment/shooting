@@ -4,14 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.bean.ValidationBean;
 import tech.shooting.ipsc.config.CachingConfig;
+import tech.shooting.ipsc.utils.ReflectionUtils;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -35,8 +36,7 @@ public class ValidationService {
 	@Cacheable(value = CachingConfig.IPSC_CACHE, unless = "#result == null")
 	public Map<String, Map<String, ValidationBean>> getConstraintsForPackage(String... packageNames) {
 		var result = new HashMap<String, Map<String, ValidationBean>>();
-		Reflections reflections = new Reflections(packageNames);
-		var classes = reflections.getSubTypesOf(ValiationExportable.class);
+		var classes = ReflectionUtils.getClasses(packageNames);
 		classes.forEach(clazz -> {
 			log.debug("Class is %s", clazz);
 			var constraints = getConstraints(clazz);

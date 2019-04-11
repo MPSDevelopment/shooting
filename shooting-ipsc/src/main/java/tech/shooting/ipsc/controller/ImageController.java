@@ -117,7 +117,11 @@ public class ImageController {
     }
 
     private ResponseEntity<Resource> response(FilePointer filePointer, HttpStatus status, Resource body) {
-        final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli());
+//        final HttpHeaders headers = new HttpHeaders();
+//        headers.set(HttpHeaders.CONTENT_TYPE, filePointer.getMediaType().get().toString());
+        
+        final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli()); 
+        // .headers(headers);
         filePointer.getMediaType().map(this::toMediaType).ifPresent(responseBuilder::contentType);
         
         return responseBuilder.body(body);

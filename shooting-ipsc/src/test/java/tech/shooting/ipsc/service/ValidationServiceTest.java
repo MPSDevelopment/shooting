@@ -48,12 +48,12 @@ public class ValidationServiceTest {
 
 	@Test
 	public void checkConstraintsForPackage() {
-		var result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo");
-//		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
-		assertTrue(result.size() > 8);
+		var result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean");
+		log.info("Constraints size is %s", result.size(), JacksonUtils.getPrettyJson(result));
+		assertTrue(result.size() > 15);
 		
-		result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean", "tech.shooting.ipsc.pojo");
-//		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
-		assertTrue(result.size() > 8);
+		result = validationService.getConstraintsForPackage("tech.shooting.ipsc.pojo");
+		log.info("Constraints size is %s", result.size(), JacksonUtils.getPrettyJson(result));
+		assertTrue(result.size() > 9);
 	}
 }

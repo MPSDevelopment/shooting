@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
@@ -27,7 +26,7 @@ import java.util.List;
 @ApiModel(value = "Person create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class PersonBean  implements ValiationExportable{
+public class PersonBean{
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	@NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)

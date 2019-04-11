@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 @ApiModel(value = "Division update")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class UpdateDivisionBean implements ValiationExportable {
+public class UpdateDivisionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Division id", required = true)
 	@PositiveOrZero

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
@@ -17,7 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
-public class UpdatePerson  implements ValiationExportable{
+public class UpdatePerson {
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@ApiModelProperty(value = "Person's id")
@@ -55,7 +54,7 @@ public class UpdatePerson  implements ValiationExportable{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
-	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
+	@NotNull(message = ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty

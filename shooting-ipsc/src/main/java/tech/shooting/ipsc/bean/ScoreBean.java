@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -16,7 +15,7 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 @ApiModel("Create score")
-public class ScoreBean implements ValiationExportable {
+public class ScoreBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's rfid  or number code", required = true)
 	private TypeMarkEnum type;

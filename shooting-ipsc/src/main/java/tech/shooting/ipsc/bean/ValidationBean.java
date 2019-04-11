@@ -6,18 +6,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.commons.annotation.ValiationExportable;
 
 @Data
 @Accessors(chain = true)
 @ApiModel(value = "validation data")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class ValidationBean implements ValiationExportable {
+public class ValidationBean {
 
 	@JsonProperty
 	private String pattern;
-	
+
 	@JsonProperty
 	private Integer minLength;
 
@@ -32,10 +31,10 @@ public class ValidationBean implements ValiationExportable {
 
 	@JsonProperty
 	private Boolean required;
-	
+
 	@JsonProperty
 	private Boolean requiredTrue;
-	
+
 	@JsonProperty
 	private Boolean requiredFalse;
 
