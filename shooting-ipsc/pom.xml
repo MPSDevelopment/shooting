@@ -107,6 +107,12 @@
 			<version>${reflections.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.18</version>
+		</dependency>
+
 		<!-- Dependency for TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

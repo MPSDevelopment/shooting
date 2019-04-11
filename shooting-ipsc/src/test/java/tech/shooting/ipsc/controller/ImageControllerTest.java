@@ -4,10 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.tika.Tika;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -65,6 +70,12 @@ public class ImageControllerTest {
 	private UserRepository userRepository;
 
 	@Autowired
+	private GridFsTemplate gridFsTemplate;
+
+	@Autowired
+	private ImageService imageService;
+
+	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -78,8 +89,17 @@ public class ImageControllerTest {
 
 	private String adminToken;
 
+	private File file = new File("files/logo.png");
+
+	private MockMultipartFile uploadFile;
+
+	private Tika tika = new Tika();
+
 	@BeforeEach
-	public void before() {
+	public void before() throws FileNotFoundException, IOException {
+
+		uploadFile = new MockMultipartFile("file", file.getName(), tika.detect(file), new FileInputStream(file));
+
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("8523").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -88,8 +108,6 @@ public class ImageControllerTest {
 
 	@Test
 	public void checkPostImage() throws Exception {
-
-		MockMultipartFile uploadFile = new MockMultipartFile("file", new FileInputStream(new File("files/logo.png")));
 
 		// try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.multipart(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0).file(uploadFile)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -112,8 +130,6 @@ public class ImageControllerTest {
 
 		String id = "123";
 
-		MockMultipartFile uploadFile = new MockMultipartFile("file", new FileInputStream(new File("files/logo.png")));
-
 		// try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.multipart(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).file(uploadFile)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
@@ -133,17 +149,20 @@ public class ImageControllerTest {
 	@Test
 	public void checkGetImage() throws Exception {
 
-		String id = "124";
+		String id = RandomStringUtils.randomNumeric(10);
 
 		// try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to getAllDivision with non admin user
+		// try access with non admin user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-		// try access to getAllDivision with admin user
+		// try access with admin user but not existed image
 		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isNotFound());
 
+		imageService.storeFile(uploadFile, id);
+
+		// try access with admin user with existed image
+//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, adminToken).accept(MediaType.IMAGE_JPEG_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
+
 	}
-	
-	
 
 }

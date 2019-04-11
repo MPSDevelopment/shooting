@@ -10,6 +10,7 @@ import tech.shooting.ipsc.pojo.FilePointer;
 import tech.shooting.ipsc.pojo.Image;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -35,6 +36,8 @@ public class ImageService {
 
 	@Autowired
 	private GridFsTemplate gridFsTemplate;
+	
+	private Tika tika = new Tika();
 
 	public Image getImageByFilename(String filename) throws BadRequestException {
 		Optional.ofNullable(filename).orElseThrow(() -> new BadRequestException(new ErrorMessage("Image's filename is null")));
@@ -62,7 +65,7 @@ public class ImageService {
 		try (InputStream inputStream = file.getInputStream()) {
 			gridFsTemplate.delete(Query.query(GridFsCriteria.whereFilename().is(image.getFileName())));
 			String id = gridFsTemplate.store(inputStream, image.getFileName(), file.getContentType(), image).toString();
-			log.info("Saved image - id is %s; name is %s", id, filename);
+			log.info("Saved image - id is %s; name is %s; Content type is %s", id, filename, file.getContentType());
 		}
 		return image;
 	}

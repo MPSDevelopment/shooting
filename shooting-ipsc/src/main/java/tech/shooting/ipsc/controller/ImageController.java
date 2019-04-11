@@ -11,8 +11,10 @@ import tech.shooting.ipsc.pojo.FilePointer;
 import tech.shooting.ipsc.pojo.Image;
 import tech.shooting.ipsc.service.ImageService;
 
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,8 @@ public class ImageController {
 
     @Autowired
     private ImageService imageService;
+    
+    private Tika tika = new Tika();
 
     @PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post New Image", notes = "Post New Image")
@@ -80,6 +84,7 @@ public class ImageController {
 //        log.info("ifModifiedSince: %s;", ifModifiedSince);
         Optional<String> requestEtagOpt = Optional.ofNullable(requestEtag);
         Optional<String> ifModifiedSinceOpt = Optional.ofNullable(ifModifiedSince);
+        
         return imageService.findFile(filename).map(file -> prepareResponse(file, requestEtagOpt, ifModifiedSinceOpt.map(date -> OffsetDateTime.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME)), response)).orElseGet(() -> new ResponseEntity<>(NOT_FOUND));
     }
 
@@ -114,6 +119,7 @@ public class ImageController {
     private ResponseEntity<Resource> response(FilePointer filePointer, HttpStatus status, Resource body) {
         final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli());
         filePointer.getMediaType().map(this::toMediaType).ifPresent(responseBuilder::contentType);
+        
         return responseBuilder.body(body);
     }
 
