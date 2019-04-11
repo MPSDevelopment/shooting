@@ -16,6 +16,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +39,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Api(value = ControllerAPI.IMAGE_CONTROLLER)
 @Controller
 @Slf4j
+@PreAuthorize("hasRole('ADMIN')")
 public class ImageController {
 
     @Autowired
@@ -45,20 +47,20 @@ public class ImageController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post New Image", notes = "Post New Image")
-    public ResponseEntity<UploadFileBean> postNewImage(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<UploadFileBean> postImage(@RequestParam("file") MultipartFile file) throws IOException {
         Image image = imageService.storeFile(file, String.valueOf(IdGenerator.nextId()));
         return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
     }
 
-    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post New Image By Filename", notes = "Post New Image By Filename")
-    public ResponseEntity<UploadFileBean> postNewImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<UploadFileBean> postImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
         log.info("Trying to Post New Image By Filename by id %s", id);
         Image image = imageService.storeFile(file, id);
         return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
     }
 
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
     @ApiOperation(value = "Get Image By Filename", notes = "Get Image By Filename")
     @ResponseBody
     public ResponseEntity<Resource> getImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String filename,
