@@ -31,4 +31,8 @@ public class Answer {
 	@ApiModelProperty(value = "Answer in kz", required = true)
 	@NotBlank
 	private String kz;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Question image path", required = true)
+	private String imagePath;
 }

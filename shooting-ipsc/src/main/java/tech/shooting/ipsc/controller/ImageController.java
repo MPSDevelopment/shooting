@@ -50,14 +50,14 @@ public class ImageController {
     private Tika tika = new Tika();
 
     @PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Post New Image", notes = "Post New Image")
+    @ApiOperation(value = "Post New Image")
     public ResponseEntity<UploadFileBean> postImage(@RequestParam("file") MultipartFile file) throws IOException {
         Image image = imageService.storeFile(file, String.valueOf(IdGenerator.nextId()));
         return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
     }
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Post New Image By Filename", notes = "Post New Image By Filename")
+    @ApiOperation(value = "Post New Image By Filename")
     public ResponseEntity<UploadFileBean> postImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
         log.info("Trying to Post New Image By Filename by id %s", id);
         Image image = imageService.storeFile(file, id);
@@ -65,7 +65,7 @@ public class ImageController {
     }
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
-    @ApiOperation(value = "Get Image By Filename", notes = "Get Image By Filename")
+    @ApiOperation(value = "Get Image By Filename")
     @ResponseBody
     public ResponseEntity<Resource> getImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String filename,
                                              @ApiParam(IF_NONE_MATCH) @RequestHeader(value = IF_NONE_MATCH, required = false) String requestEtag,
@@ -89,7 +89,7 @@ public class ImageController {
     }
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get Image Data By Filename", notes = "Get Image Data By Filename")
+    @ApiOperation(value = "Get Image Data By Filename")
     public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {
         return new ResponseEntity<>(imageService.getImageByFilename(filename), HttpStatus.OK);
     }
