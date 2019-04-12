@@ -1,6 +1,9 @@
 package tech.shooting.ipsc.utils;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import tech.shooting.commons.constraints.IpscConstants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,6 +11,7 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class RegExTest {
 	@Test
 	public void checkSwagger () {
