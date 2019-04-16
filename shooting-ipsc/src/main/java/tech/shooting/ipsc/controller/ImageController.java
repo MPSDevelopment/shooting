@@ -41,7 +41,6 @@ import static org.springframework.http.HttpStatus.OK;
 @Api(value = ControllerAPI.IMAGE_CONTROLLER)
 @Controller
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
 public class ImageController {
 
     @Autowired
@@ -49,6 +48,7 @@ public class ImageController {
     
     private Tika tika = new Tika();
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post New Image")
     public ResponseEntity<UploadFileBean> postImage(@RequestParam("file") MultipartFile file) throws IOException {
@@ -56,6 +56,7 @@ public class ImageController {
         return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post New Image By Filename")
     public ResponseEntity<UploadFileBean> postImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
@@ -64,7 +65,6 @@ public class ImageController {
         return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
     }
 
-    @PreAuthorize("permitAll()")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
     @ApiOperation(value = "Get Image By Filename")
     @ResponseBody
@@ -89,7 +89,6 @@ public class ImageController {
         return imageService.findFile(filename).map(file -> prepareResponse(file, requestEtagOpt, ifModifiedSinceOpt.map(date -> OffsetDateTime.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME)), response)).orElseGet(() -> new ResponseEntity<>(NOT_FOUND));
     }
 
-    @PreAuthorize("permitAll()")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get Image Data By Filename")
     public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {

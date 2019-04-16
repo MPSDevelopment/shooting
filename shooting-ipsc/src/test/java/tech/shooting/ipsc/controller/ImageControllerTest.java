@@ -156,12 +156,12 @@ public class ImageControllerTest {
 //		// try access with non admin user
 //		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin user but not existed image
-		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isNotFound());
+		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id))).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 		imageService.storeFile(uploadFile, id);
 
 		// try access with admin user with existed image
-//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, adminToken).accept(MediaType.IMAGE_JPEG_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotAcceptable());
 
 	}
 	

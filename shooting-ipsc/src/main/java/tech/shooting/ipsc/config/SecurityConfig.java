@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers(AUTH_WHITELIST)
 			.antMatchers(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + "/login**")
 			.antMatchers(ControllerAPI.VALIDATION_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
-			.antMatchers(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers("/favicon.ico")
 			.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .permitAll()
 		    .antMatchers(ControllerAPI.VALIDATION_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 		    .permitAll()
-		    .antMatchers(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+		    .antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 		    .permitAll()
 		    .and()
 		    .authorizeRequests()
