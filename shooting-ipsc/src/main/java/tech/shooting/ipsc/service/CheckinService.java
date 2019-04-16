@@ -109,4 +109,13 @@ public class CheckinService {
 		Division division = checkDivision(divisionId);
 		return combatNoteRepository.findAllByDivision(division);
 	}
+
+	public List<String> getInterval () {
+		List<String> res = new ArrayList<>();
+		TypeOfInterval[] values = TypeOfInterval.values();
+		for (int i = 0; i < values.length; i++) {
+			res.add(values[i].getState());
+		}
+		return res;
+	}
 }

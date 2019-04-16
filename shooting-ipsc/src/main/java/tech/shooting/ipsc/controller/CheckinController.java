@@ -63,4 +63,10 @@ public class CheckinController {
 	public ResponseEntity<List<CombatNote>> getCombatNote (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getCombatNote(divisionId), HttpStatus.OK);
 	}
+
+	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_INTERVAL)
+	@ApiOperation (value = "Get List names of interval's")
+	public ResponseEntity<List<String>> getListInterval () {
+		return new ResponseEntity<>(checkinService.getInterval(), HttpStatus.OK);
+	}
 }
