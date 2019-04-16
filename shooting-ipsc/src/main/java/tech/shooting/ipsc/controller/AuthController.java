@@ -25,10 +25,10 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.HeaderUtils;
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.bean.TokenLogin;
 import tech.shooting.ipsc.bean.UserLogin;
 import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
