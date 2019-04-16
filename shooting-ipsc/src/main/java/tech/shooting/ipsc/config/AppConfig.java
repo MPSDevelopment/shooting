@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.json.SpringHandlerInstantiator;
@@ -110,8 +111,9 @@ public class AppConfig extends WebMvcConfigurationSupport {
 //	}
 
 	@Override
-	public void configureMessageConverters (List<HttpMessageConverter<?>> converters) {
-		converters.add(mappingJackson2HttpMessageConverter());
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(converter());
+		converters.add(new ResourceHttpMessageConverter());
 		super.configureMessageConverters(converters);
 	}
 

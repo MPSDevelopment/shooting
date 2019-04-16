@@ -161,7 +161,7 @@ public class ImageControllerTest {
 		imageService.storeFile(uploadFile, id);
 
 		// try access with admin user with existed image
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotAcceptable());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 	
