@@ -119,9 +119,10 @@ public class CheckinService {
 		return res;
 	}
 
-	public List<SearchResult> getSearch (Long divisionId, String status, String interval, OffsetDateTime date) throws BadRequestException {
-		TypeOfPresence typeOfPresence = TypeOfPresence.valueOf(status);
+	public List<SearchResult> getSearch (Long divisionId, String status, String interval, String date) throws BadRequestException {
+		TypeOfPresence typeOfPresence = TypeOfPresence.getByState(status);
 		TypeOfInterval typeOfInterval = TypeOfInterval.valueOf(interval);
-		return getChecksByDivisionStatusDateInterval(divisionId, typeOfPresence, date, typeOfInterval);
+		OffsetDateTime dates = OffsetDateTime.parse(date);
+		return getChecksByDivisionStatusDateInterval(divisionId, typeOfPresence, dates, typeOfInterval);
 	}
 }

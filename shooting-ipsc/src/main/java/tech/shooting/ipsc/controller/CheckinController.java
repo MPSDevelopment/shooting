@@ -24,7 +24,6 @@ import tech.shooting.ipsc.service.CheckinService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Controller
@@ -73,7 +72,7 @@ public class CheckinController {
 	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT)
 	@ApiOperation (value = "Get List search result")
 	public ResponseEntity<List<SearchResult>> getSearchResult (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @PathVariable (value = ControllerAPI.PATH_VARIABLE_STATUS) String status,
-		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) OffsetDateTime date) throws BadRequestException {
+		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getSearch(divisionId, status, interval, date), HttpStatus.OK);
 	}
 }

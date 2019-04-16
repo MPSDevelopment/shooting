@@ -54,15 +54,15 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
+@ExtendWith (SpringExtension.class)
+@EnableMongoRepositories (basePackageClasses = CheckinRepository.class)
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext
 @Slf4j
-@Tag(IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
+@Tag (IpscConstants.UNIT_TEST_TAG)
+@ContextConfiguration (classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
 	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CheckinController.class, ValidationErrorHandler.class, CheckinService.class})
 class CheckinControllerTest {
 	@Autowired
@@ -161,11 +161,11 @@ class CheckinControllerTest {
 	}
 
 	public void createPersons (int count, Division division, boolean flag) {
-		for(int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
-			if(flag) {
+			if (flag) {
 				person.setDivision(division);
-			} else if(i % 2 == 0) {
+			} else if (i % 2 == 0) {
 				person.setDivision(division);
 			}
 			personRepository.save(person);
@@ -181,7 +181,7 @@ class CheckinControllerTest {
 		int count = byDivision.size();
 		assertEquals(init + 10, count);
 		List<CheckinBean> fromFront = new ArrayList<>();
-		for(Person p : byDivision) {
+		for (Person p : byDivision) {
 			CheckinBean bean = new CheckinBean();
 			bean.setPerson(p.getId());
 			bean.setStatus(TypeOfPresence.DELAY);
@@ -205,7 +205,7 @@ class CheckinControllerTest {
 		                                                               .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		List<CheckinBeanToFront> listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
 		assertEquals(listFromJson.size(), fromFront.size());
-		for(int i = 0; i < fromFront.size(); i++) {
+		for (int i = 0; i < fromFront.size(); i++) {
 			assertEquals(fromFront.get(i).getPerson(), listFromJson.get(i).getPerson());
 			assertEquals(fromFront.get(i).getStatus(), listFromJson.get(i).getStatus());
 		}
@@ -219,7 +219,7 @@ class CheckinControllerTest {
 		                                                        .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
 		assertEquals(listFromJson.size(), fromFront.size());
-		for(int i = 0; i < fromFront.size(); i++) {
+		for (int i = 0; i < fromFront.size(); i++) {
 			assertEquals(fromFront.get(i).getPerson(), listFromJson.get(i).getPerson());
 			assertEquals(fromFront.get(i).getStatus(), listFromJson.get(i).getStatus());
 		}
@@ -285,16 +285,16 @@ class CheckinControllerTest {
 
 	private void addDataToDB () {
 		//prepare
-		for(int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
 			personRepository.save(person);
 		}
 		List<Person> byDivision = personRepository.findByDivision(root);
 		List<CheckIn> toDb = new ArrayList<>();
-		for(int i = 0; i < byDivision.size(); i++) {
-			if(!byDivision.get(i).equals(testPerson)) {
-				if(i % 2 == 0) {
+		for (int i = 0; i < byDivision.size(); i++) {
+			if (!byDivision.get(i).equals(testPerson)) {
+				if (i % 2 == 0) {
 					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
 				} else {
 					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
@@ -304,9 +304,9 @@ class CheckinControllerTest {
 		toDb = checkinRepository.saveAll(toDb);
 		log.info("Object in db %s ", toDb.size());
 		toDb.forEach(item -> log.info("person with id\t %s\t status\t %s", item.getPerson().getId(), item.getStatus()));
-		for(int i = 0; i < byDivision.size(); i++) {
-			if(!byDivision.get(i).equals(testPerson)) {
-				if(i % 2 == 0) {
+		for (int i = 0; i < byDivision.size(); i++) {
+			if (!byDivision.get(i).equals(testPerson)) {
+				if (i % 2 == 0) {
 					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.MISSION).setDivisionId(root.getId()));
 				} else {
 					toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(user).setStatus(TypeOfPresence.DAY_OFF).setDivisionId(root.getId()));
@@ -323,7 +323,7 @@ class CheckinControllerTest {
 		List<Person> byDivision = personRepository.findByDivision(root);
 		log.info("count person from root %s", byDivision.size());
 		List<CheckIn> toDb = new ArrayList<>();
-		for(Person p : byDivision) {
+		for (Person p : byDivision) {
 			toDb.add(new CheckIn().setPerson(p).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
 		}
 		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
@@ -332,7 +332,7 @@ class CheckinControllerTest {
 		log.info("Create date is %s", createdDate);
 		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
 		log.info("size of list check in by date %s", allByDate.size());
-		for(CheckIn check : allByDate) {
+		for (CheckIn check : allByDate) {
 			log.info("Status is %s\n%s \t division id \t from result set search by date", check.getStatus(), check.getPerson());
 		}
 		log.info("Root id for search %s", root.getId());
@@ -342,9 +342,71 @@ class CheckinControllerTest {
 		var findByAll = checkinRepository.findAllByDivisionStatusDateInterval(root, TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
 		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
 		assertEquals(findByAll.size(), fromService.size());
-		for(int i = 0; i < fromService.size(); i++) {
+		for (int i = 0; i < fromService.size(); i++) {
 			log.info("RepoMethod stat is %s \t person id  is \t %s", findByAll.get(i).getStat(), findByAll.get(i).getPerson().getId());
 			log.info("Service stat is %s \t person id  is \t %s", fromService.get(i).getStatus(), fromService.get(i).getPerson().getId());
 		}
+	}
+
+	@Test
+	void checkGetSearchResult () throws Exception {
+		//check
+		addDataToDB();
+		List<Person> byDivision = personRepository.findByDivision(root);
+		log.info("count person from root %s", byDivision.size());
+		List<CheckIn> toDb = new ArrayList<>();
+		for (Person p : byDivision) {
+			toDb.add(new CheckIn().setPerson(p).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
+		log.info("count row check in from root %s", checkIns.size());
+		OffsetDateTime createdDate = checkIns.get(0).getCreatedDate();
+		log.info("Create date is %s", createdDate);
+		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
+		log.info("size of list check in by date %s", allByDate.size());
+		for (CheckIn check : allByDate) {
+			log.info("Status is %s\n%s \t division id \t from result set search by date", check.getStatus(), check.getPerson());
+		}
+		log.info("Root id for search %s", root.getId());
+		List<CheckIn> allByDivision = checkinRepository.findAllByDivision(root.getId());
+		log.info("Size of result search by division id %s", allByDivision.size());
+		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
+		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
+		//unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+		                                                                                             .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+		                                                                                             .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
+		                                                                                             .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())))
+		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                           ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+		                                                                                             .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+		                                                                                             .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
+		                                                                                             .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())).header(Token.TOKEN_HEADER, judgeToken))
+		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+		//user role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                    ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+		                                                                                                                      .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+		                                                                                                                      .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
+		                                                                                                                      .replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+		                                                               .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		List<SearchResult> listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
+		assertEquals(fromService, listFromJson);
+		//admin role
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                             ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+		                                                                                                               .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+		                                                                                                               .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
+		                                                                                                               .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())).header(Token.TOKEN_HEADER,
+			adminToken))
+		                         .andExpect(MockMvcResultMatchers.status().isOk())
+		                         .andReturn()
+		                         .getResponse()
+		                         .getContentAsString();
+		listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
+		assertEquals(fromService, listFromJson);
 	}
 }
