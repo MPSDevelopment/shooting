@@ -43,10 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure (WebSecurity web) {
 		web.ignoring().antMatchers(AUTH_WHITELIST)
-			.antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**", "/api/validation" + ControllerAPI.VERSION_1_0 + "/**")
-			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + "/login**")
+			.antMatchers(ControllerAPI.VALIDATION_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers("/favicon.ico")
-			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 
@@ -59,13 +59,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(tokenAuthenticationFilter, TokenAuthenticationFilter.class);
 		http.antMatcher("/api/**")
 		    .authorizeRequests()
-		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**")
+		    .antMatchers(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + "/login**")
 		    .permitAll()
-		    .antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/logout")
+		    .antMatchers(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + "/logout")
 		    .permitAll()
-		    .antMatchers("/api/validation" + ControllerAPI.VERSION_1_0 + "/**")
+		    .antMatchers(ControllerAPI.VALIDATION_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 		    .permitAll()
-		    .antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+		    .antMatchers(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 		    .permitAll()
 		    .and()
 		    .authorizeRequests()
