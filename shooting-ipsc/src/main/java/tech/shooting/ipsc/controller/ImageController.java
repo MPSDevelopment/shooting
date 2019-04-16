@@ -39,96 +39,65 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RequestMapping(ControllerAPI.IMAGE_CONTROLLER)
 @Api(value = ControllerAPI.IMAGE_CONTROLLER)
-@Controller
+@RestController
 @Slf4j
 public class ImageController {
 
-    @Autowired
-    private ImageService imageService;
-    
-    private Tika tika = new Tika();
+	@Autowired
+	private ImageService imageService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Post New Image")
-    public ResponseEntity<UploadFileBean> postImage(@RequestParam("file") MultipartFile file) throws IOException {
-        Image image = imageService.storeFile(file, String.valueOf(IdGenerator.nextId()));
-        return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
-    }
+	private Tika tika = new Tika();
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Post New Image By Filename")
-    public ResponseEntity<UploadFileBean> postImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
-        log.info("Trying to Post New Image By Filename by id %s", id);
-        Image image = imageService.storeFile(file, id);
-        return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Post New Image")
+	public ResponseEntity<UploadFileBean> postImage(@RequestParam("file") MultipartFile file) throws IOException {
+		Image image = imageService.storeFile(file, String.valueOf(IdGenerator.nextId()));
+		return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
+	}
 
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
-    @ApiOperation(value = "Get Image By Filename")
-    @ResponseBody
-    public ResponseEntity<Resource> getImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String filename,
-                                             @ApiParam(IF_NONE_MATCH) @RequestHeader(value = IF_NONE_MATCH, required = false) String requestEtag,
-                                             @ApiParam(IF_MODIFIED_SINCE) @RequestHeader(value = IF_MODIFIED_SINCE, required = false) String ifModifiedSince) {
-//        Enumeration headerNames = request.getHeaderNames();
-//        while (headerNames.hasMoreElements()) {
-//            String key = (String) headerNames.nextElement();
-//            String value = request.getHeader(key);
-//            log.info("key: %s", key);
-//            log.info("value: %s", value);
-//        }
-        requestEtag = request.getHeader(IF_NONE_MATCH);
-        ifModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
-//        log.info("filename: %s;", filename);
-//        log.info("requestEtag: %s;", requestEtag);
-//        log.info("ifModifiedSince: %s;", ifModifiedSince);
-        Optional<String> requestEtagOpt = Optional.ofNullable(requestEtag);
-        Optional<String> ifModifiedSinceOpt = Optional.ofNullable(ifModifiedSince);
-        
-        return imageService.findFile(filename).map(file -> prepareResponse(file, requestEtagOpt, ifModifiedSinceOpt.map(date -> OffsetDateTime.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME)), response)).orElseGet(() -> new ResponseEntity<>(NOT_FOUND));
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Post New Image By Filename")
+	public ResponseEntity<UploadFileBean> postImageByFileName(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
+		log.info("Trying to Post New Image By Filename by id %s", id);
+		Image image = imageService.storeFile(file, id);
+		return ResponseEntity.ok().body(new UploadFileBean(image.getFileName(), "File %s has been uploaded", image.getFileName()));
+	}
 
-    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get Image Data By Filename")
-    public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {
-        return new ResponseEntity<>(imageService.getImageByFilename(filename), HttpStatus.OK);
-    }
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
+	@ApiOperation(value = "Get Image By Filename")
+	@ResponseBody
+	public ResponseEntity<Resource> getImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String filename) {
+		return imageService.findFile(filename).map(file -> prepareResponse(file, response)).orElseGet(() -> new ResponseEntity<>(NOT_FOUND));
+	}
 
-    private ResponseEntity<Resource> prepareResponse(FilePointer filePointer, Optional<String> requestEtagOpt, Optional<OffsetDateTime> ifModifiedSinceOpt, HttpServletResponse response) {
-        if (requestEtagOpt.isPresent() && filePointer.matchesEtag(requestEtagOpt.get())) {
-            return notModified(response);
-        }
-        if (ifModifiedSinceOpt.isPresent() && filePointer.modifiedAfter(ifModifiedSinceOpt.get().toInstant())) {
-            return notModified(response);
-        }
-        return serveDownload(filePointer);
-    }
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get Image Data By Filename")
+	public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {
+		return new ResponseEntity<>(imageService.getImageByFilename(filename), HttpStatus.OK);
+	}
 
-    private ResponseEntity<Resource> serveDownload(FilePointer filePointer) {
+	private ResponseEntity<Resource> prepareResponse(FilePointer filePointer, HttpServletResponse response) {
+		return serveDownload(filePointer);
+	}
+
+	private ResponseEntity<Resource> serveDownload(FilePointer filePointer) {
 //        log.info("status: 200");
-        return response(filePointer, OK, filePointer.open());
-    }
+		return response(filePointer, OK, filePointer.open());
+	}
 
-    private ResponseEntity<Resource> notModified(HttpServletResponse response) {
-//        log.info("status: 304");
-        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-        return new ResponseEntity<>(NOT_MODIFIED);
-        //return response(filePointer, NOT_MODIFIED, null);
-    }
+	private ResponseEntity<Resource> response(FilePointer filePointer, HttpStatus status, Resource body) {
 
-    private ResponseEntity<Resource> response(FilePointer filePointer, HttpStatus status, Resource body) {
-//        final HttpHeaders headers = new HttpHeaders();
-//        headers.set(HttpHeaders.CONTENT_TYPE, filePointer.getMediaType().get().toString());
-        
-        final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli()); 
-        // .headers(headers);
-        filePointer.getMediaType().map(this::toMediaType).ifPresent(responseBuilder::contentType);
-        
-        return responseBuilder.body(body);
-    }
+		final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli());
+		filePointer.getMediaType().map(this::toMediaType).ifPresent(responseBuilder::contentType);
+		
+		log.info("Content type is %s ", filePointer.getMediaType().get());
+		
+		return responseBuilder.body(body);
+	}
 
-    private MediaType toMediaType(com.google.common.net.MediaType input) {
-        return input.charset().transform(c -> new MediaType(input.type(), input.subtype(), c)).or(new MediaType(input.type(), input.subtype()));
-    }
+	private MediaType toMediaType(com.google.common.net.MediaType input) {
+		return input.charset().transform(c -> new MediaType(input.type(), input.subtype(), c)).or(new MediaType(input.type(), input.subtype()));
+	}
 }
