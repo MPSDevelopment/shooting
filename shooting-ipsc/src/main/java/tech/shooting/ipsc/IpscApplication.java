@@ -27,7 +27,7 @@ import io.moquette.interception.InterceptHandler;
 @EnableWebMvc
 @EnableMongoRepositories
 @EntityScan(basePackages = { "tech.shooting.ipsc" })
-@ComponentScan(basePackages = { "tech.shooting.commons.spring", "tech.shooting.ipsc" })
+@ComponentScan(basePackages = { "tech.shooting.commons.spring", "tech.shooting.commons.utils", "tech.shooting.ipsc" })
 @EnableScheduling
 @Slf4j
 public class IpscApplication {
