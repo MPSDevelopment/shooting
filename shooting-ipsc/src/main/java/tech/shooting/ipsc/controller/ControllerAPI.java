@@ -273,7 +273,22 @@ public class ControllerAPI {
 
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/list";
 
+
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK = "/quiz/" + REQUEST_QUIZ_ID + "/list/check";
 
 	public static final String CHECKIN_CONTROLLER_GET_INTERVAL = "/enum/interval";
+
+	public static final String PATH_VARIABLE_STATUS = "status";
+
+	public static final String REQUEST_STATUS = "{" + PATH_VARIABLE_STATUS + "}";
+
+	public static final String PATH_VARIABLE_INTERVAL = "interval";
+
+	public static final String REQUEST_INTERVAL = "{" + PATH_VARIABLE_INTERVAL + "}";
+
+	public static final String PATH_VARIABLE_DATE = "date";
+
+	public static final String REQUEST_DATE = "{" + PATH_VARIABLE_DATE + "}";
+
+	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT = "/search/" + REQUEST_DIVISION_ID + "/" + REQUEST_STATUS + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
 }
