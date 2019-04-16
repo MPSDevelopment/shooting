@@ -151,10 +151,10 @@ public class ImageControllerTest {
 
 		String id = RandomStringUtils.randomNumeric(10);
 
-		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access with non admin user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+//		// try access with unauthorized user
+//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+//		// try access with non admin user
+//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin user but not existed image
 		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isNotFound());
 
@@ -169,9 +169,9 @@ public class ImageControllerTest {
 	public void checkGetImageData() throws Exception {
 		String id = RandomStringUtils.randomNumeric(10);
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access with non admin user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+//		// try access with non admin user
+//		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin user but not existed image
 		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	
