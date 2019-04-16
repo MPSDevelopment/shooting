@@ -42,8 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure (WebSecurity web) {
-		web.ignoring().antMatchers(AUTH_WHITELIST).antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**", "/api/validation" + ControllerAPI.VERSION_1_0 + "/**")
-			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**").antMatchers("/favicon.ico").antMatchers(HttpMethod.OPTIONS, "/**");
+		web.ignoring().antMatchers(AUTH_WHITELIST)
+			.antMatchers("/api/auth" + ControllerAPI.VERSION_1_0 + "/login**", "/api/validation" + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers("/favicon.ico")
+			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 
 	@Override
