@@ -5,12 +5,12 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.spring.ApplicationContextWrapper;
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.mqtt.PublisherListener;
 import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
-import tech.shooting.ipsc.security.TokenUtils;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterAll;

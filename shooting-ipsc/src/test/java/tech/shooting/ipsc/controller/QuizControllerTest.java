@@ -26,6 +26,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.IpscMongoConfig;
@@ -41,7 +42,6 @@ import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
-import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.QuizService;
 
 import java.util.*;

@@ -3,8 +3,8 @@ package tech.shooting.ipsc.mqtt;
 import io.moquette.broker.security.IAuthenticator;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.spring.ApplicationContextWrapper;
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
-import tech.shooting.ipsc.security.TokenUtils;
 
 @Slf4j
 public class MqttAuthenticator implements IAuthenticator {

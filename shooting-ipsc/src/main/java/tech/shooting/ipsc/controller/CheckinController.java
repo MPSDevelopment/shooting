@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.pojo.TokenUser;
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.bean.CheckinBean;
 import tech.shooting.ipsc.bean.CombatNoteBean;
 import tech.shooting.ipsc.bean.SearchResult;
 import tech.shooting.ipsc.pojo.CheckIn;
 import tech.shooting.ipsc.pojo.CombatNote;
 import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.security.TokenUtils;
 import tech.shooting.ipsc.service.CheckinService;
 
 import javax.validation.Valid;

@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.security;
+package tech.shooting.commons.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -26,46 +26,51 @@ import java.util.Map;
 @Slf4j
 @Component
 public class TokenUtils {
+
 	private static final String ACCESS_TOKEN = "accessToken";
 
 	private static String SECRET_CODE = "q235asdg4aeayffewf";
 
-	private static String ISSUER = "Avision";
+	private String ISSUER = "IPSC";
 
 	private JWTVerifier verifier;
 
 	private Algorithm algorithm;
 
-	public TokenUtils () {
-		algorithm = Algorithm.HMAC256(SECRET_CODE);
+	public TokenUtils() {
+		this(SECRET_CODE);
+	}
+
+	public TokenUtils(String secretCode) {
+		algorithm = Algorithm.HMAC256(secretCode);
 		verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
 	}
 
-	public static String getTokenFromRequestCookies (HttpServletRequest servletRequest) {
-		for(Cookie cookie : servletRequest.getCookies()) {
-			if(cookie.getName().equals(ACCESS_TOKEN)) {
+	public static String getTokenFromRequestCookies(HttpServletRequest servletRequest) {
+		for (Cookie cookie : servletRequest.getCookies()) {
+			if (cookie.getName().equals(ACCESS_TOKEN)) {
 				return cookie.getValue();
 			}
 		}
 		return null;
 	}
 
-	public TokenUser getByToken (String token) {
-		if(token != null && !token.isEmpty()) {
+	public TokenUser getByToken(String token) {
+		if (token != null && !token.isEmpty()) {
 			try {
 				TokenUser user = new TokenUser();
 				user.setLogin(getLoginFromToken(token));
 				user.setId(getIdFromToken(token));
 				user.setRoleName(getRoleFromToken(token));
 				return user;
-			} catch(InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
+			} catch (InvalidClaimException | TokenExpiredException | SignatureVerificationException e) {
 				log.error("Cannot get a user by token %s because %s", token, e.getMessage());
 			}
 		}
 		return null;
 	}
 
-	public String createToken (Long userId, TokenType tokenType, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
+	public String createToken(Long userId, TokenType tokenType, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
 		Map<String, Object> authPayload = new HashMap<String, Object>();
 		authPayload.put(Token.FIELD_ID, userId);
 		authPayload.put(Token.FIELD_LOGIN, userLogin);
@@ -75,29 +80,29 @@ public class TokenUtils {
 		return token;
 	}
 
-	public String getLoginFromToken (String token) {
-		if(StringUtils.isBlank(token)) {
+	public String getLoginFromToken(String token) {
+		if (StringUtils.isBlank(token)) {
 			return null;
 		}
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_LOGIN).asString();
 	}
 
-	public Long getIdFromToken (String token) {
-		if(StringUtils.isBlank(token)) {
+	public Long getIdFromToken(String token) {
+		if (StringUtils.isBlank(token)) {
 			return null;
 		}
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_ID).asLong();
 	}
 
-	public TokenType getTypeFromToken (String token) {
-		if(StringUtils.isBlank(token)) {
+	public TokenType getTypeFromToken(String token) {
+		if (StringUtils.isBlank(token)) {
 			return null;
 		}
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_TYPE).as(TokenType.class);
 	}
 
-	public RoleName getRoleFromToken (String token) {
-		if(StringUtils.isBlank(token)) {
+	public RoleName getRoleFromToken(String token) {
+		if (StringUtils.isBlank(token)) {
 			return null;
 		}
 		return verifier.verify(token).getHeaderClaim(Token.FIELD_ROLE).as(RoleName.class);
@@ -109,8 +114,8 @@ public class TokenUtils {
 	 * @param token
 	 * @return
 	 */
-	public boolean verifyToken (String token) {
-		if(StringUtils.isBlank(token)) {
+	public boolean verifyToken(String token) {
+		if (StringUtils.isBlank(token)) {
 			log.debug("Payload isBlank = %s", token);
 			return false;
 		}
@@ -119,8 +124,11 @@ public class TokenUtils {
 			Date expirationDate = decoded.getClaim(PublicClaims.EXPIRES_AT).asDate();
 			// log.info("Token expiration is %s", expirationDate);
 			return true;
-		} catch(JWTVerificationException e) {
+		} catch (JWTVerificationException e) {
 			log.error("Error Verification = %s", e.getMessage());
+			return false;
+		} catch (NullPointerException e) {
+			log.error("Error during token decode = %s", e.getMessage());
 			return false;
 		}
 	}
