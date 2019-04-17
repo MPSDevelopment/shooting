@@ -3,7 +3,6 @@ package tech.shooting.ipsc.controller;
 import com.mpsdevelopment.plasticine.commons.IdGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.UploadFileBean;
@@ -14,27 +13,17 @@ import tech.shooting.ipsc.service.ImageService;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
-import java.util.Optional;
-
-import static org.springframework.http.HttpHeaders.IF_MODIFIED_SINCE;
-import static org.springframework.http.HttpHeaders.IF_NONE_MATCH;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RequestMapping(ControllerAPI.IMAGE_CONTROLLER)
@@ -72,10 +61,18 @@ public class ImageController {
 		return imageService.findFile(filename).map(file -> prepareResponse(file, response)).orElseGet(() -> new ResponseEntity<>(NOT_FOUND));
 	}
 
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + "/" + ControllerAPI.REQUEST_ID, produces = MediaType.ALL_VALUE)
+	@ApiOperation(value = "Delete Image By Filename")
+	@ResponseBody
+	public ResponseEntity<Resource> deleteImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String filename) {
+		imageService.deleteFile(filename);
+		return new ResponseEntity<>(OK);
+	}
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get Image Data By Filename")
 	public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {
-		return new ResponseEntity<>(imageService.getImageByFilename(filename), HttpStatus.OK);
+		return new ResponseEntity<>(imageService.getImageByFilename(filename), OK);
 	}
 
 	private ResponseEntity<Resource> prepareResponse(FilePointer filePointer, HttpServletResponse response) {
@@ -91,9 +88,9 @@ public class ImageController {
 
 		final ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(status).eTag(filePointer.getEtag()).contentLength(filePointer.getSize()).lastModified(filePointer.getLastModified().toEpochMilli());
 		filePointer.getMediaType().map(this::toMediaType).ifPresent(responseBuilder::contentType);
-		
+
 		log.info("Content type is %s ", filePointer.getMediaType().get());
-		
+
 		return responseBuilder.body(body);
 	}
 

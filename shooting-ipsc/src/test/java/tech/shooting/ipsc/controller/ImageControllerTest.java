@@ -166,6 +166,22 @@ public class ImageControllerTest {
 	}
 	
 	@Test
+	public void checkDeleteImage() throws Exception {
+		String id = RandomStringUtils.randomNumeric(10);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotFound());
+		imageService.storeFile(uploadFile, id);
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to delete without token
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to delete with admin token
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		assertNull(imageService.findFile(id).orElse(null));
+	}
+	
+	@Test
 	public void checkGetImageData() throws Exception {
 		String id = RandomStringUtils.randomNumeric(10);
 		// try access with unauthorized user
@@ -182,5 +198,7 @@ public class ImageControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		
 	}
+	
+	
 
 }
