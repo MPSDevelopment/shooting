@@ -25,12 +25,13 @@ import java.util.List;
 @Slf4j
 @PreAuthorize("hasRole('ADMIN')")
 public class PersonController {
+	
 	@Autowired
 	private PersonService personService;
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new person", notes = "Create new person")
-	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) {
+	public ResponseEntity<Person> createPerson (@RequestBody @Valid PersonBean personBean) throws BadRequestException {
 		return new ResponseEntity<>(personService.createPerson(personBean), HttpStatus.CREATED);
 	}
 
