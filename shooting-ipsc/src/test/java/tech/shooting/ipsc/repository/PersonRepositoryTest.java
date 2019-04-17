@@ -20,7 +20,7 @@ import tech.shooting.ipsc.pojo.Person;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -62,6 +62,10 @@ public class PersonRepositoryTest {
 		}
 		log.info("Set division %s", division);
 		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime).setDivision(division));
-		assertNotNull(personRepository.findByDivision(division));
+		
+		List<Person> findByDivision = personRepository.findByDivision(division);
+		assertNotNull(findByDivision);
+		assertEquals(1, findByDivision.size());
+		
 	}
 }

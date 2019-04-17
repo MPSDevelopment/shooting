@@ -39,10 +39,6 @@ public class Person extends BaseDocument {
 	private Address address;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Person's team")
-	private String team;
-
-	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
 	private String rank;
 
