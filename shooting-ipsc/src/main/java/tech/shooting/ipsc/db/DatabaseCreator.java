@@ -15,10 +15,14 @@ public class DatabaseCreator {
 	public static final String ADMIN_PASSWORD = "test";
 
 	public static final String JUDGE_PASSWORD = "judgeTest";
+	
+	public static final String COMMANDER_PASSWORD = "commanderTest";
 
 	public static final String ADMIN_LOGIN = "admin";
 
 	public static final String JUDGE_LOGIN = "judge";
+	
+	public static final String COMMANDER_LOGIN = "commander";
 
 	@Autowired
 	private DatabaseCreator databaseCreator;
@@ -40,6 +44,7 @@ public class DatabaseCreator {
 	private void createDatabase () {
 		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
 		userDao.createIfNotExists(new User().setLogin(JUDGE_LOGIN).setPassword(JUDGE_PASSWORD).setRoleName(RoleName.JUDGE).setActive(true).setName("Judge"));
+		userDao.createIfNotExists(new User().setLogin(COMMANDER_LOGIN).setPassword(JUDGE_PASSWORD).setRoleName(RoleName.COMMANDER).setActive(true).setName("Commander"));
 		//create subject
 		subjectRepository.createIfNotExists(List.of(
 			new Subject().setRus("Огневая подготовка").setKz("Fire training"),
