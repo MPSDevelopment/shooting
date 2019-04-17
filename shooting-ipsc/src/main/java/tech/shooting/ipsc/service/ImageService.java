@@ -48,8 +48,9 @@ public class ImageService {
 
 	public Optional<FilePointer> findFile(String filename) {
 		GridFsResource resource = gridFsTemplate.getResource(filename);
-		if (resource == null)
+		if (resource == null) {
 			return Optional.empty();
+		}
 		try {
 			// if does it throw IllegalStateException it means that the resource was deleted but still not null
 			resource.getContentType();
@@ -57,6 +58,15 @@ public class ImageService {
 		} catch (IllegalStateException e) {
 			return Optional.empty();
 		}
+	}
+	
+	public void deleteFile(String filename) {
+		GridFsResource resource = gridFsTemplate.getResource(filename);
+		if (resource == null) {
+			return;
+		}
+		gridFsTemplate.delete(new Query(Criteria.where("filename").is(filename)));
+		
 	}
 
 	public Image storeFile(MultipartFile file, String filename) throws IOException {
