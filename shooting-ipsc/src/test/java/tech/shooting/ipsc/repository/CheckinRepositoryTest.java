@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -59,6 +60,9 @@ class CheckinRepositoryTest {
 	private User officer;
 
 	private Person testPerson;
+
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	@BeforeEach
 	void setUp () {
@@ -144,6 +148,25 @@ class CheckinRepositoryTest {
 				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.MISSION).setDivisionId(root.getId()));
 			} else {
 				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DAY_OFF).setDivisionId(root.getId()));
+			}
+		}
+		toDb = checkinRepository.saveAll(toDb);
+	}
+
+	private void addDataToDBSingl () {
+		//prepare
+		for (int i = 0; i < 10; i++) {
+			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			person.setDivision(root);
+			personRepository.save(person);
+		}
+		List<Person> byDivision = personRepository.findByDivision(root);
+		List<CheckIn> toDb = new ArrayList<>();
+		for (int i = 0; i < byDivision.size(); i++) {
+			if (i % 2 == 0) {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.PRESENT).setDivisionId(root.getId()));
+			} else {
+				toDb.add(new CheckIn().setPerson(byDivision.get(i)).setOfficer(officer).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
 			}
 		}
 		toDb = checkinRepository.saveAll(toDb);

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.AggBean;
+import tech.shooting.ipsc.bean.NameStatus;
 import tech.shooting.ipsc.bean.Stat;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
@@ -78,6 +79,13 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		MatchOperation match = getMatch(dateTime, interval);
 		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
 		return mongoTemplate.aggregate(newAggregation(match, groupOperation), CheckIn.class, Stat.class).getMappedResults();
+	}
+
+	@Override
+	public List<NameStatus> findAllByDivisionDateInterval (Division checkDivision, OffsetDateTime date, TypeOfInterval interval) {
+		GroupOperation groupOperation = group("person").last("person").as("person").first("status").as("status").first("createdDate").as("date");
+		ProjectionOperation projectionOperation = project("status", "date").and("person").previousOperation();
+		return mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, checkDivision, TypeOfPresence.ALL), groupOperation, projectionOperation), CheckIn.class, NameStatus.class).getMappedResults();
 	}
 
 	private MatchOperation getMatch (OffsetDateTime date, TypeOfInterval interval) {

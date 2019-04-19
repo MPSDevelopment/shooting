@@ -16,6 +16,7 @@ import tech.shooting.commons.pojo.TokenUser;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.bean.CheckinBean;
 import tech.shooting.ipsc.bean.CombatNoteBean;
+import tech.shooting.ipsc.bean.NameStatus;
 import tech.shooting.ipsc.bean.SearchResult;
 import tech.shooting.ipsc.pojo.CheckIn;
 import tech.shooting.ipsc.pojo.CombatNote;
@@ -74,5 +75,12 @@ public class CheckinController {
 	public ResponseEntity<List<SearchResult>> getSearchResult (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @PathVariable (value = ControllerAPI.PATH_VARIABLE_STATUS) String status,
 		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getSearch(divisionId, status, interval, date), HttpStatus.OK);
+	}
+
+	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES)
+	@ApiOperation (value = "Get Named list search result")
+	public ResponseEntity<List<NameStatus>> getNamedSearchResult (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId,
+		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
+		return new ResponseEntity<>(checkinService.getSearch(divisionId, interval, date), HttpStatus.OK);
 	}
 }

@@ -26,10 +26,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.CheckinBean;
-import tech.shooting.ipsc.bean.CheckinBeanToFront;
-import tech.shooting.ipsc.bean.CombatNoteBean;
-import tech.shooting.ipsc.bean.SearchResult;
+import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -408,5 +405,38 @@ class CheckinControllerTest {
 		                         .getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
+	}
+
+	@Test
+	void checkGetSearchResultByName () throws Exception {
+		//check
+		addDataToDB();
+		List<Person> byDivision = personRepository.findByDivision(root);
+		log.info("count person from root %s", byDivision.size());
+		List<CheckIn> toDb = new ArrayList<>();
+		for (Person p : byDivision) {
+			toDb.add(new CheckIn().setPerson(p).setOfficer(user).setStatus(TypeOfPresence.DELAY).setDivisionId(root.getId()));
+		}
+		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
+		log.info("count row check in from root %s", checkIns.size());
+		OffsetDateTime createdDate = checkIns.get(0).getCreatedDate();
+		log.info("Create date is %s", createdDate);
+		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
+		log.info("Rows is %s", allByDate.size());
+		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
+		for (int i = 0; i < fromService.size(); i++) {
+			log.info("String is %s", fromService.get(i));
+		}
+		//admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
+		                                                                    ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+		                                                                                                                               .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+		                                                                                                                               .replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		log.info("String result is %s", contentAsString);
+		List<NameStatus> listFromJson = JacksonUtils.getListFromJson(NameStatus[].class, contentAsString);
+		for (int i = 0; i < listFromJson.size(); i++) {
+			log.info("Named is %s", listFromJson.get(i));
+		}
 	}
 }
