@@ -68,7 +68,7 @@ public class PersonService {
 
 	public void removePersonIfExist(Long personId) throws BadRequestException {
 		Person person = getPersonByIdIfExist(personId);
-		personRepository.delete(person);
+		personRepository.deleteById(person.getId());
 	}
 
 	public ResponseEntity<List<Person>> getPersonByPage(Integer page, Integer size) {
