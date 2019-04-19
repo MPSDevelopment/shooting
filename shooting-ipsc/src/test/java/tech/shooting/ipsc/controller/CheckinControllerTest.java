@@ -242,7 +242,7 @@ class CheckinControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now()))))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
 		log.info("Result is \n %s", combatNote.getStatList());
@@ -261,7 +261,7 @@ class CheckinControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
 			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
 		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now()))))
 		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
 		log.info("Result is \n %s", combatNote.getStatList());

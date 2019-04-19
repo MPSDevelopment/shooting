@@ -28,8 +28,8 @@ public class CombatNote extends BaseDocument {
 
 	@DBRef
 	@JsonProperty
-	@ApiModelProperty(value = "Responsibility person id")
-	private Person combat;
+	@ApiModelProperty (value = "Responsibility user id")
+	private User combat;
 
 	@DBRef
 	@JsonProperty

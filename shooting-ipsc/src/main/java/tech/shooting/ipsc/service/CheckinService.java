@@ -83,7 +83,7 @@ public class CheckinService {
 
 	public CombatNote createCombatNote(Long divisionId, CombatNoteBean note) throws BadRequestException {
 		Division division = checkDivision(divisionId);
-		Person person = checkPerson(note.getCombatId());
+		User person = checkUser(note.getCombatId());
 		OffsetDateTime date = note.getDate();
 		LocalTime localTime = date.toLocalTime();
 		TypeOfInterval type;
@@ -97,6 +97,10 @@ public class CheckinService {
 		CombatNote result = new CombatNote();
 		result.setStatList(combatNoteByDivisionFromPeriod).setCombat(person).setDate(note.getDate().toLocalDate()).setDivision(division);
 		return combatNoteRepository.save(result);
+	}
+
+	private User checkUser (Long combatId) throws BadRequestException {
+		return userRepository.findById(combatId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect user id %s", combatId)));
 	}
 
 	void checkStatData(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
