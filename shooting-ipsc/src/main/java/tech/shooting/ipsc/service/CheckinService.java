@@ -92,7 +92,7 @@ public class CheckinService {
 		} else {
 			type = TypeOfInterval.EVENING;
 		}
-		checkStatData(division, TypeOfPresence.ALL, note.getDate(), type);
+		//checkStatData(division, TypeOfPresence.ALL, note.getDate(), type);
 		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(division, note.getDate(), type);
 		CombatNote result = new CombatNote();
 		result.setStatList(combatNoteByDivisionFromPeriod).setCombat(person).setDate(note.getDate().toLocalDate()).setDivision(division);

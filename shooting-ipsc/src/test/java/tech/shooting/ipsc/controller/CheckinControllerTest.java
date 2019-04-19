@@ -269,6 +269,7 @@ class CheckinControllerTest {
 			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
 		                                                                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		CombatNote[] combatNotes = JacksonUtils.fromJson(CombatNote[].class, contentAsString1);
+		log.info("Combat Note is %s", combatNotes[0]);
 		checkNote(combatNotes[0], combatNote);
 	}
 
