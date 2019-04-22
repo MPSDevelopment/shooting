@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.bean.DivisionDropList;
 import tech.shooting.ipsc.bean.UpdateDivisionBean;
@@ -61,9 +62,18 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.getDivision(id), HttpStatus.OK);
 	}
 
+//	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	@ApiOperation(value = "Update division", notes = "Return update division object")
+//	public ResponseEntity<DivisionBean> updateDivision (@RequestBody @Valid UpdateDivisionBean updateDivisionBean) {
+//		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);
+//	}
+	
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update division", notes = "Return update division object")
-	public ResponseEntity<DivisionBean> updateDivision (@RequestBody @Valid UpdateDivisionBean updateDivisionBean) {
+	public ResponseEntity<DivisionBean> updateDivision (@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id, @RequestBody @Valid UpdateDivisionBean updateDivisionBean) throws BadRequestException {
+		if (id==null || !id.equals(updateDivisionBean.getId())) {
+			throw new BadRequestException(new ErrorMessage("Incorrect division %s", id));	
+		}
 		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);
 	}
 

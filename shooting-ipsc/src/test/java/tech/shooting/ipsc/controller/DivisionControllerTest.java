@@ -257,7 +257,7 @@ class DivisionControllerTest {
 		division.setName("updateeee");
 		// try access to getDivisionById() with admin user
 		String contentAsString = mockMvc
-				.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8)
 						.content(Objects.requireNonNull(JacksonUtils.getJson(new UpdateDivisionBean().setId(division.getId()).setName(division.getName())))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));

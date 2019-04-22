@@ -224,23 +224,6 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.springframework.boot</groupId> -->
-			<!-- <artifactId>spring-boot-maven-plugin</artifactId> -->
-			<!-- <version>${spring.boot.version}</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <goals> -->
-			<!-- <goal>repackage</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <mainClass> -->
-			<!-- tech.shooting.ipsc.IpscApplication -->
-			<!-- </mainClass> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 		</plugins>
 	</build>
 	<profiles>
@@ -251,31 +234,6 @@
 			</activation>
 			<build>
 				<plugins>
-					<!-- <plugin> -->
-					<!-- <groupId>org.jsonschema2pojo</groupId> -->
-					<!-- <artifactId>jsonschema2pojo-maven-plugin</artifactId> -->
-					<!-- <version>1.0.0</version> -->
-					<!-- <configuration> -->
-					<!-- <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory> -->
-
-					<!-- package name for the models -->
-					<!-- <targetPackage>com.rizvan.json</targetPackage> -->
-
-					<!-- output folder folder for the generated code -->
-					<!-- <outputDirectory>target/generated-sources/jsonpojo</outputDirectory> -->
-					<!-- <annotationStyle>jackson2</annotationStyle> -->
-
-					<!-- this is required for validating json -->
-					<!-- <includeJsr303Annotations>true</includeJsr303Annotations> -->
-					<!-- </configuration> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <goals> -->
-					<!-- <goal>generate</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- </plugin> -->
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>${assembly.plugin.version}</version>
