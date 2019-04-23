@@ -452,11 +452,8 @@ class QuizControllerTest {
 		List<Person> all = personRepository.findAll();
 		log.info("Person list size is %s", all.size());
 		Person testPerson;
-		if(all.size() == 0) {
+
 			testPerson = personRepository.save(new Person().setName("testing"));
-		} else {
-			testPerson = all.get(40);
-		}
 
 		//get quiz
 		log.info("Test quiz is %s", testQuiz);

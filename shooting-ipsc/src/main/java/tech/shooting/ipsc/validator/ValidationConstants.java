@@ -82,4 +82,6 @@ public class ValidationConstants {
 	public static final String NUMBER_MIN_MESSAGE = "Number must be min 1";
 
 	public static final String NUMBER_MAX_MESSAGE = "Number must be max 4";
+	public static final String SPECIALITY_MESSAGE = "The speciality length must be not blank";
+	public static final String SPECIALITY_SIZE_MESSAGE = "The speciality length must be min 5 characters";
 }
