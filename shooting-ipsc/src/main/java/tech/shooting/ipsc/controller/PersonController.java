@@ -80,4 +80,6 @@ public class PersonController {
 	public ResponseEntity<List<TypePresent>> getTypePresent () {
 		return new ResponseEntity<>(personService.getTypePresent(), HttpStatus.OK);
 	}
+
+
 }
