@@ -293,4 +293,6 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT = "/search/" + REQUEST_DIVISION_ID + "/" + REQUEST_STATUS + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
 
 	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES = "/search/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
+
+	public static final String SPECIALITY_CONTROLLER ="/api/speciality";
 }
