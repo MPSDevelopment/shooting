@@ -36,4 +36,10 @@ public class SpecialityService {
         BeanUtils.copyProperties(bean,speciality);
         return specialityRepository.save(speciality);
     }
+
+    public Speciality updateSpeciality(Long specialityId, SpecialityBean bean) throws BadRequestException {
+        Speciality speciality = checkSpeciality(specialityId);
+        BeanUtils.copyProperties(bean,speciality);
+        return specialityRepository.save(speciality);
+    }
 }

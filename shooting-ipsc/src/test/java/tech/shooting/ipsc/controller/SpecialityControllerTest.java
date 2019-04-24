@@ -82,9 +82,12 @@ class SpecialityControllerTest {
 
 	private String userToken;
 
+	private Speciality specialityTest;
+
 	@BeforeEach
 	public void before() {
 		specialityRepository.deleteAll();
+		specialityTest = specialityRepository.save(new Speciality().setSpecialityKz("specialist").setSpecialityRus("даун в 3 поколении"));
 		String password = RandomStringUtils.randomAscii(14);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -174,6 +177,36 @@ class SpecialityControllerTest {
 		checkBeanWithSpeciality(bean,fromDb);
 
 	}
+	@Test
+	void checkPutSpeciality() throws Exception {
+		SpecialityBean specialityBean = new SpecialityBean().setSpecialityKz("SPECIALIST").setSpecialityRus("ДАУН БЕЗ ВАРИАНТОВ");
+		String json = JacksonUtils.getJson(specialityBean);
+		//try access to put speciality with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY.replace(ControllerAPI.REQUEST_SPECIALITY_ID,specialityTest.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		//try access to put speciality with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY.replace(ControllerAPI.REQUEST_SPECIALITY_ID,specialityTest.getId().toString())).header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to put speciality with judge role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY.replace(ControllerAPI.REQUEST_SPECIALITY_ID,specialityTest.getId().toString())).header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+		//try access to put speciality with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY.replace(ControllerAPI.REQUEST_SPECIALITY_ID,specialityTest.getId().toString())).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Speciality fromDb = JacksonUtils.fromJson(Speciality.class, contentAsString);
+		checkBeanWithSpeciality(specialityBean, fromDb);
+		assertEquals(specialityTest.getId(),fromDb.getId());
+	}
+
+	@Test
+	void checkPutSpecialityWithIncorrectId() throws Exception {
+		SpecialityBean specialityBean = new SpecialityBean().setSpecialityKz("SPECIALIST").setSpecialityRus("ДАУН БЕЗ ВАРИАНТОВ");
+		String json = JacksonUtils.getJson(specialityBean);
+
+		//try access to put speciality with admin role
+		 mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY.replace(ControllerAPI.REQUEST_SPECIALITY_ID,String.valueOf(213232323L))).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
 	private void checkBeanWithSpeciality(SpecialityBean bean, Speciality fromDb) {
 		assertEquals(bean.getSpecialityKz(),fromDb.getSpecialityKz());
@@ -183,10 +216,11 @@ class SpecialityControllerTest {
 
 
 	private void addSpecialityToDb(int i) {
+		int count = specialityRepository.findAll().size();
 		for (int j = 0; j < i; j++) {
 			specialityRepository.save(new Speciality().setSpecialityRus("Алкаш в поколении " + i).setSpecialityKz("Medic " + i));
 		}
-		assertEquals(specialityRepository.findAll().size(), i);
+		assertEquals(specialityRepository.findAll().size(), count+i);
 	}
 
 }

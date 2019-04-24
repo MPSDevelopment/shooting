@@ -303,4 +303,5 @@ public class ControllerAPI {
     public static final String RANK_CONTROLLER_GET_ALL = "/all";
     public static final String SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
 	public static final String SPECIALITY_CONTROLLER_POST_SPECIALITY = "/speciality";
+	public static final String SPECIALITY_CONTROLLER_PUT_SPECIALITY = "/speciality/" + REQUEST_SPECIALITY_ID;
 }

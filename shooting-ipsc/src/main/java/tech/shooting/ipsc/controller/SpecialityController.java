@@ -41,7 +41,13 @@ public class SpecialityController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Create speciality or throws BadRequestException if exist")
-	public ResponseEntity<Speciality> postSpeciality(@RequestBody SpecialityBean bean) throws BadRequestException {
+	public ResponseEntity<Speciality> postSpeciality(@RequestBody SpecialityBean bean) {
 		return new ResponseEntity<>(specialityService.createSpeciality(bean), HttpStatus.CREATED);
+	}
+
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_PUT_SPECIALITY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update speciality or throws BadRequestException if not exist")
+	public ResponseEntity<Speciality> putSpeciality(@PathVariable(value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId, @RequestBody SpecialityBean bean) throws BadRequestException {
+		return new ResponseEntity<>(specialityService.updateSpeciality(specialityId, bean), HttpStatus.OK);
 	}
 }
