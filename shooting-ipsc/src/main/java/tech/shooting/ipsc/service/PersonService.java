@@ -17,6 +17,7 @@ import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.TypePresent;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.repository.RankRepository;
 
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class PersonService {
 
 	@Autowired
 	private DivisionRepository divisionRepository;
+	
+	@Autowired
+	private RankRepository rankRepository;
 
 	public List<Person> getAllPerson() {
 		return personRepository.findAll();
@@ -44,9 +48,12 @@ public class PersonService {
 
 	public Person createPerson(PersonBean personBean) throws BadRequestException {
 		Person person = new Person();
-		BeanUtils.copyProperties(personBean, person, Person.DIVISION);
+		BeanUtils.copyProperties(personBean, person, Person.DIVISION, Person.RANK);
 		if (personBean.getDivision() != null) {
 			person.setDivision(divisionRepository.findById(personBean.getDivision().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division id %s", personBean.getDivision().getId()))));
+		}
+		if (personBean.getRank() != null) {
+			person.setRank(rankRepository.findById(personBean.getRank().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect rank id %s", personBean.getRank().getId()))));
 		}
 		createPerson(person);
 		return person;

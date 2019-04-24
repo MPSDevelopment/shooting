@@ -296,4 +296,7 @@ public class ControllerAPI {
 
 	public static final String SPECIALITY_CONTROLLER ="/api/speciality";
     public static final String SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY = "/all";
+    
+	public static final String RANK_CONTROLLER ="/api/rank";
+    public static final String RANK_CONTROLLER_GET_ALL = "/all";
 }

@@ -40,6 +40,7 @@ import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
@@ -68,6 +69,9 @@ public class PersonControllerTest {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RankRepository rankRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -95,6 +99,8 @@ public class PersonControllerTest {
 
 	private WeaponIpscCode rifle;
 
+	private Rank privateRank;
+
 	@BeforeEach
 	public void before () {
 		personRepository.deleteAll();
@@ -112,12 +118,14 @@ public class PersonControllerTest {
 		handgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.HANDGUN).setCode("121212121212121");
 		shotgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121");
 		rifle = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121");
+		
+		privateRank = rankRepository.findByRus(DatabaseCreator.PRIVATE);
 	}
 
 	@Test
 	public void checkCreatePerson () throws Exception {
 		//prepare
-		PersonBean personBean = new PersonBean().setName("qwerty").setRank("noobs").setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
+		PersonBean personBean = new PersonBean().setName("qwerty").setRank(privateRank).setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
 		List<WeaponIpscCode> codes = new ArrayList<>();
 		codes.add(handgun);
 		codes.add(shotgun);

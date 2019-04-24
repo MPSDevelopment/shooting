@@ -21,6 +21,8 @@ public class Person extends BaseDocument {
 	public static final String NAME_AND_BIRTHDAY = "name and birthday";
 
 	public static final String DIVISION = "division";
+	
+	public static final String RANK = "rank";
 
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
@@ -40,7 +42,7 @@ public class Person extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
-	private String rank;
+	private Rank rank;
 
 	@DBRef
 	@JsonProperty
