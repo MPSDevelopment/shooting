@@ -21,6 +21,7 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
+	public static final String PATH_VARIABLE_SPECIALITY_ID = "specialityId";
 
 	public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
 
@@ -48,6 +49,7 @@ public class ControllerAPI {
 	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
 	
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
+	public static final String REQUEST_SPECIALITY_ID = "{" + PATH_VARIABLE_SPECIALITY_ID+ "}";
 
 	public static final String REQUEST_SUBJECT = "{" + PATH_VARIABLE_SUBJECT + "}";
 
@@ -299,4 +301,5 @@ public class ControllerAPI {
     
 	public static final String RANK_CONTROLLER ="/api/rank";
     public static final String RANK_CONTROLLER_GET_ALL = "/all";
+    public static final String SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
 }

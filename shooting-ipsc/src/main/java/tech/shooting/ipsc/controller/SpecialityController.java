@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.pojo.Speciality;
 import tech.shooting.ipsc.service.SpecialityService;
 
@@ -29,5 +31,11 @@ public class SpecialityController {
 	@ApiOperation(value = "Get  list speciality")
 	public ResponseEntity<List<Speciality>> getAllSpeciality() {
 		return new ResponseEntity<>(specialityService.getAll(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID)
+	@ApiOperation(value = "Get speciality by id or throws BadRequestException")
+	public ResponseEntity<Speciality> getSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
+		return new ResponseEntity<>(specialityService.speciality(specialityId), HttpStatus.OK);
 	}
 }
