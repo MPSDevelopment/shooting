@@ -37,6 +37,7 @@ import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
 import tech.shooting.ipsc.security.TokenAuthenticationManager;
+import tech.shooting.ipsc.service.SpecialityService;
 
 import java.util.Date;
 
@@ -44,8 +45,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = SpecialityRepository.class)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-        TokenAuthenticationFilter.class, IpscUserDetailsService.class, ValidationErrorHandler.class})
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
+		TokenAuthenticationFilter.class, IpscUserDetailsService.class, ValidationErrorHandler.class, SpecialityController.class, SpecialityService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -53,57 +54,55 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 class SpecialityControllerTest {
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private SpecialityRepository specialityRepository;
+	@Autowired
+	private SpecialityRepository specialityRepository;
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Autowired
-    private TokenUtils tokenUtils;
+	@Autowired
+	private TokenUtils tokenUtils;
 
-    private User user;
+	private User user;
 
-    private User admin;
+	private User admin;
 
-    private User judge;
+	private User judge;
 
+	private String adminToken;
 
-    private String adminToken;
+	private String judgeToken;
 
-    private String judgeToken;
+	private String userToken;
 
-    private String userToken;
+	@BeforeEach
+	public void before() {
+		specialityRepository.deleteAll();
+		String password = RandomStringUtils.randomAscii(14);
+		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
+		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
+		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 
-    @BeforeEach
-    public void before() {
-        specialityRepository.deleteAll();
-        String password = RandomStringUtils.randomAscii(14);
-        user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
-        admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-        judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+	}
 
-        userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-        adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-        judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-    }
+	@Test
+	void checkGetAllSpeciality() throws Exception {
+		addSpecialityToDb(5);
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
-    @Disabled
-    @Test
-    void checkGetAllSpeciality() throws Exception {
-        addSpecialityToDb(5);
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY).header(Token.TOKEN_HEADER, adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    private void addSpecialityToDb(int i) {
-        for (int j = 0; j < i; j++) {
-            specialityRepository.save(new Speciality().setSpecialityRus("Алкаш в поколении " + i).setSpecialityKz("Medic " + i));
-        }
-        assertEquals(specialityRepository.findAll().size(),i);
-    }
+	private void addSpecialityToDb(int i) {
+		for (int j = 0; j < i; j++) {
+			specialityRepository.save(new Speciality().setSpecialityRus("Алкаш в поколении " + i).setSpecialityKz("Medic " + i));
+		}
+		assertEquals(specialityRepository.findAll().size(), i);
+	}
 
 }

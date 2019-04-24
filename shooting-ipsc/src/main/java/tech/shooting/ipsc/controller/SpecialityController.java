@@ -22,12 +22,12 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class SpecialityController {
 
-    @Autowired
-    private SpecialityService specialityService;
+	@Autowired
+	private SpecialityService specialityService;
 
-   @GetMapping(value = ControllerAPI.VERSION_1_0+ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY)
-    @ApiOperation(value = "Get  list speciality")
-    public ResponseEntity<List<Speciality>> getAllSpeciality ()  {
-        return new ResponseEntity<>(specialityService.getAll(), HttpStatus.OK);
-    }
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY)
+	@ApiOperation(value = "Get  list speciality")
+	public ResponseEntity<List<Speciality>> getAllSpeciality() {
+		return new ResponseEntity<>(specialityService.getAll(), HttpStatus.OK);
+	}
 }

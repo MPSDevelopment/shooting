@@ -17,7 +17,7 @@ public class DatabaseCreator {
 	public static final String JUDGE_PASSWORD = "judgeTest";
 	
 	public static final String COMMANDER_PASSWORD = "commanderTest";
-
+ 
 	public static final String ADMIN_LOGIN = "admin";
 
 	public static final String JUDGE_LOGIN = "judge";
