@@ -1,8 +1,5 @@
 package tech.shooting.ipsc.pojo;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.validator.ValidationConstants;
 
 @Data
 @Document(collection = "rank")
@@ -32,6 +28,8 @@ public class Rank extends BaseDocument {
     @ApiModelProperty(value = "Rank name in kz", required = true)
     private String kz;
     
+    @JsonProperty
+    @ApiModelProperty(value = "Officer or not")
     private boolean officer = false;
     
 }
