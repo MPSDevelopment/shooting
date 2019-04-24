@@ -72,7 +72,7 @@ public class TokenUtils {
 
 	public String createToken(Long userId, TokenType tokenType, String userLogin, RoleName roleName, Date expirationDate, Date notBeforeDate) {
 		Map<String, Object> authPayload = new HashMap<String, Object>();
-		authPayload.put(Token.FIELD_ID, userId);
+		authPayload.put(Token.FIELD_ID, String.valueOf(userId));
 		authPayload.put(Token.FIELD_LOGIN, userLogin);
 		authPayload.put(Token.FIELD_TYPE, tokenType);
 		authPayload.put(Token.FIELD_ROLE, roleName);
@@ -91,7 +91,7 @@ public class TokenUtils {
 		if (StringUtils.isBlank(token)) {
 			return null;
 		}
-		return verifier.verify(token).getHeaderClaim(Token.FIELD_ID).asLong();
+		return Long.valueOf(verifier.verify(token).getHeaderClaim(Token.FIELD_ID).asString());
 	}
 
 	public TokenType getTypeFromToken(String token) {
