@@ -304,4 +304,5 @@ public class ControllerAPI {
     public static final String SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
 	public static final String SPECIALITY_CONTROLLER_POST_SPECIALITY = "/speciality";
 	public static final String SPECIALITY_CONTROLLER_PUT_SPECIALITY = "/speciality/" + REQUEST_SPECIALITY_ID;
+	public static final String SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
 }

@@ -42,4 +42,9 @@ public class SpecialityService {
         BeanUtils.copyProperties(bean,speciality);
         return specialityRepository.save(speciality);
     }
+
+    public void deleteSpeciality(Long specialityId) throws BadRequestException {
+        Speciality speciality = checkSpeciality(specialityId);
+        specialityRepository.delete(speciality);
+    }
 }

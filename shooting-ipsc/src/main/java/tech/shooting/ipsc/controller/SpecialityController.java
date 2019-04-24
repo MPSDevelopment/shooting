@@ -39,6 +39,13 @@ public class SpecialityController {
 		return new ResponseEntity<>(specialityService.speciality(specialityId), HttpStatus.OK);
 	}
 
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID)
+	@ApiOperation(value = "Delete speciality by id or throws BadRequestException if not exist")
+	public ResponseEntity deleteSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
+		specialityService.deleteSpeciality(specialityId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Create speciality or throws BadRequestException if exist")
 	public ResponseEntity<Speciality> postSpeciality(@RequestBody SpecialityBean bean) {

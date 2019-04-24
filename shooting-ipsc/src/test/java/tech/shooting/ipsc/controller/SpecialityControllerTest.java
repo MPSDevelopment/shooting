@@ -43,6 +43,7 @@ import tech.shooting.ipsc.service.SpecialityService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -223,4 +224,33 @@ class SpecialityControllerTest {
 		assertEquals(specialityRepository.findAll().size(), count+i);
 	}
 
+	@Test
+	void checkDeleteSpecialityById() throws Exception {
+		addSpecialityToDb(5);
+		Speciality speciality = specialityRepository.findAll().get(0);
+		//try access to  delete  speciality with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try access to  delete  speciality with user role
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to delete  speciality with judge role
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to delete speciality with admin role
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+
+		assertEquals(Optional.empty(),specialityRepository.findById(speciality.getId()));
+	}
+
+	@Test
+	void checkDeleteSpecialityByIdWithIncorrectId() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,String.valueOf(34253452L))).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
 }
