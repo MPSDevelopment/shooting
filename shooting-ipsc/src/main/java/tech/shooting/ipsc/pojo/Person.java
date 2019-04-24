@@ -40,6 +40,7 @@ public class Person extends BaseDocument {
 	@ApiModelProperty(value = "Person's address", required = true)
 	private Address address;
 
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
 	private Rank rank;
