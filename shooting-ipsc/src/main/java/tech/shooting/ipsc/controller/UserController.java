@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
@@ -31,13 +32,25 @@ public class UserController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
 	public ResponseEntity<User> signupJudge (@RequestBody @Valid UserSignupBean signupUser) {
-		return new ResponseEntity<>(userService.addJudge(signupUser), HttpStatus.CREATED);
+		return new ResponseEntity<>(userService.add(signupUser,RoleName.JUDGE), HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_PUT_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Edit existing Judge", notes = "Update existing Judge")
+	@ApiOperation(value = "Edit existing user", notes = "Update existing user")
 	public ResponseEntity<User> updateJudge (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId, @RequestBody @Valid UserUpdateBean bean) throws BadRequestException {
-		return new ResponseEntity<>(userService.updateJudge(userId, bean), HttpStatus.OK);
+		return new ResponseEntity<>(userService.updateUser(userId, bean), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all users count", notes = "Returns all users count")
+	public ResponseEntity<Long> getCount () {
+		return new ResponseEntity<>(userService.getCount(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
+	public ResponseEntity<List<User>> getJudges () {
+		return new ResponseEntity<>(userService.getListJudges(), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -65,24 +78,18 @@ public class UserController {
 		return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get all users count", notes = "Returns all users count")
-	public ResponseEntity<Long> getCount () {
-		return new ResponseEntity<>(userService.getCount(), HttpStatus.OK);
-	}
-
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USERS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get users by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
-		@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_TOTAL, description = "Total records in database", response = String.class),
-		@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGES, description = "Total pages in database", response = String.class)})})
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_TOTAL, description = "Total records in database", response = String.class),
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGES, description = "Total pages in database", response = String.class)})})
 	public ResponseEntity<List<User>> getUsers (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
 		return userService.getUsersByPage(page, size);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
-	public ResponseEntity<List<User>> getJudges () {
-		return new ResponseEntity<>(userService.getListJudges(), HttpStatus.OK);
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Add new user(RoleName.User)", notes = "Creates new user")
+	public ResponseEntity<User> postUser (@RequestBody @Valid UserSignupBean signupUser) {
+		return new ResponseEntity<>(userService.add(signupUser, RoleName.USER), HttpStatus.CREATED);
 	}
 }

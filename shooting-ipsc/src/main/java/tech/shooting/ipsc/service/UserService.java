@@ -51,30 +51,28 @@ public class UserService {
 		return null;
 	}
 
-	private void signupJudge (User user) {
-		log.info("Signing up judge with login %s", user.getLogin());
+	private User createUser(User user, RoleName role) {
+		log.info("User with login %s", user.getLogin());
 		if(userRepository.findByLogin(user.getLogin()) != null) {
 			throw new ValidationException(User.LOGIN_FIELD, "User with login %s already exists", user.getLogin());
 		}
-		user.setRoleName(RoleName.JUDGE);
+		user.setRoleName(role);
 		user.setActive(true);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
-	public User addJudge (UserSignupBean signupUser) {
+	public User add (UserSignupBean signupUser,RoleName role ) {
 		User user = new User();
 		BeanUtils.copyProperties(signupUser, user);
-		signupJudge(user);
-		return user;
+		return createUser(user, role);
 	}
 
-	public User updateJudge (Long userId, UserUpdateBean bean) throws BadRequestException {
+	public User updateUser(Long userId, UserUpdateBean bean) throws BadRequestException {
 		checkPathIdAndCurrentId(userId, bean.getId());
 		User dbUser = getDbUserIfExist(bean.getId());
 		BeanUtils.copyProperties(bean, dbUser);
-		userRepository.save(dbUser);
-		return dbUser;
+		return userRepository.save(dbUser);
 	}
 
 	public User getDbUserIfExist (long id) throws BadRequestException {

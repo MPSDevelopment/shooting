@@ -55,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-	TokenAuthenticationFilter.class, IpscUserDetailsService.class, UserController.class, UserService.class, UserDao.class, UserLockUtils.class, ValidationErrorHandler.class})
+TokenAuthenticationFilter.class, IpscUserDetailsService.class, UserController.class, UserService.class, UserDao.class, UserLockUtils.class, ValidationErrorHandler.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -376,4 +376,6 @@ public class UserControllerTest {
 		                                .getContentAsString();
 		assertEquals(userRepository.findByRoleName(RoleName.JUDGE).size(), JacksonUtils.getListFromJson(User[].class, contentAsString).size());
 	}
+
+
 }
