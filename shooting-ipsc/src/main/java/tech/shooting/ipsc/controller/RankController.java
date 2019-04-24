@@ -27,7 +27,7 @@ public class RankController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.RANK_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Get  list ranks")
-	public ResponseEntity<List<Rank>> getAllSpeciality() {
+	public ResponseEntity<List<Rank>> getAll() {
 		return new ResponseEntity<>(rankService.getAll(), HttpStatus.OK);
 	}
 }
