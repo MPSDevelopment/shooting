@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,6 +25,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.SpecialityBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -43,6 +45,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = SpecialityRepository.class)
@@ -119,19 +122,19 @@ class SpecialityControllerTest {
 	void checkGetSpecialityById() throws Exception {
 		addSpecialityToDb(5);
 		Speciality speciality = specialityRepository.findAll().get(0);
-		//try access to get all speciality with unauthorized user
+		//try access to  by id  speciality with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-		//try access to get all speciality with user role
+		//try access to  by id  speciality with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		//try access to get all speciality with judge role
+		//try access to  by id  speciality with judge role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		//try access to get all speciality with admin role
+		//try access to get by id speciality with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,speciality.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
@@ -142,10 +145,40 @@ class SpecialityControllerTest {
 	@Test
 
 	void checkGetSpecialityByIdIncorrectData() throws Exception {
-		//try access to get all speciality with admin role
+		//try access to get  by id  speciality with admin role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID,String.valueOf(4256342146521436521L))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
+	}
+	@Test
+	void checkPostSpeciality() throws Exception {
+		SpecialityBean bean = new SpecialityBean().setSpecialityKz("Specialist").setSpecialityRus("Алкаш");
+		String json = JacksonUtils.getJson(bean);
+
+		//try access to create speciality with admin role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		//try access to create speciality with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY).header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to create speciality with judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY).header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		//try access to create speciality with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(json))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		Speciality fromDb = JacksonUtils.fromJson(Speciality.class, contentAsString);
+		checkBeanWithSpeciality(bean,fromDb);
+
+	}
+
+	private void checkBeanWithSpeciality(SpecialityBean bean, Speciality fromDb) {
+		assertEquals(bean.getSpecialityKz(),fromDb.getSpecialityKz());
+		assertEquals(bean.getSpecialityRus(),fromDb.getSpecialityRus());
+		assertNotNull(fromDb.getId());
 	}
 
 

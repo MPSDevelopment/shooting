@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.ipsc.bean.SpecialityBean;
 import tech.shooting.ipsc.pojo.Speciality;
 import tech.shooting.ipsc.service.SpecialityService;
 
@@ -37,5 +37,11 @@ public class SpecialityController {
 	@ApiOperation(value = "Get speciality by id or throws BadRequestException")
 	public ResponseEntity<Speciality> getSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
 		return new ResponseEntity<>(specialityService.speciality(specialityId), HttpStatus.OK);
+	}
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_POST_SPECIALITY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Create speciality or throws BadRequestException if exist")
+	public ResponseEntity<Speciality> postSpeciality(@RequestBody SpecialityBean bean) throws BadRequestException {
+		return new ResponseEntity<>(specialityService.createSpeciality(bean), HttpStatus.CREATED);
 	}
 }
