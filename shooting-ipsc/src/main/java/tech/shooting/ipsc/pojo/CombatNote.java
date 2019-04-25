@@ -21,6 +21,7 @@ import java.util.List;
 @Document(collection = "combatenote")
 @TypeAlias("combatenote")
 public class CombatNote extends BaseDocument {
+	public static final String DIVISION="division";
 	@JsonProperty
 	@ApiModelProperty(value = "Filling date")
 	@NotNull

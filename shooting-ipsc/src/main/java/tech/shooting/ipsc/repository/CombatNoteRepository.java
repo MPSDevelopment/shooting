@@ -6,6 +6,6 @@ import tech.shooting.ipsc.pojo.Division;
 
 import java.util.List;
 
-public interface CombatNoteRepository extends MongoRepository<CombatNote, Long> {
+public interface CombatNoteRepository extends MongoRepository<CombatNote, Long>, CustomCombatNoteRepository{
 	List<CombatNote> findAllByDivision (Division division);
 }

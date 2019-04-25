@@ -24,7 +24,7 @@ public interface CustomCheckinRepository {
 
 	List<CheckIn> findAllByStatus (TypeOfPresence status);
 
-	List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval);
+	List<OffsetDateTime>  timeInterval (OffsetDateTime date, TypeOfInterval interval);
 
 	List<Stat> getCombatNoteByDivisionFromPeriod (Division division, OffsetDateTime dateTime, TypeOfInterval interval);
 

@@ -135,4 +135,10 @@ public class CheckinService {
 		OffsetDateTime dates = OffsetDateTime.parse(date);
 		return checkinRepository.findAllByDivisionDateInterval(checkDivision(divisionId), dates, typeOfInterval);
 	}
+
+	public List<CombatNote> getListCombatNote(Long divisionId, String interval, String date) throws BadRequestException {
+		Division division = checkDivision(divisionId);
+		TypeOfInterval typeOfInterval = TypeOfInterval.valueOf(interval);
+		return combatNoteRepository.findAllByDivisionAndDateAndInterval(division, date,typeOfInterval);
+	}
 }

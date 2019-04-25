@@ -307,4 +307,5 @@ public class ControllerAPI {
 	public static final String SPECIALITY_CONTROLLER_POST_SPECIALITY = "/speciality";
 	public static final String SPECIALITY_CONTROLLER_PUT_SPECIALITY = "/speciality/" + REQUEST_SPECIALITY_ID;
 	public static final String SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
+    public static final String CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL = "/combatenote/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
 }

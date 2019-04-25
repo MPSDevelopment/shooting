@@ -28,59 +28,66 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Controller
-@RequestMapping (ControllerAPI.CHECKIN_CONTROLLER)
-@Api (ControllerAPI.CHECKIN_CONTROLLER)
+@RequestMapping(ControllerAPI.CHECKIN_CONTROLLER)
+@Api(ControllerAPI.CHECKIN_CONTROLLER)
 @Slf4j
-@PreAuthorize ("hasRole('ADMIN') or hasRole('USER')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 public class CheckinController {
-	@Autowired
-	private CheckinService checkinService;
+    @Autowired
+    private CheckinService checkinService;
 
-	@Autowired
-	private TokenUtils tokenUtils;
+    @Autowired
+    private TokenUtils tokenUtils;
 
-	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION)
-	@ApiOperation (value = "Get list check", notes = "Return list person's from current division")
-	public ResponseEntity<List<Person>> getCheckList (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long id) throws BadRequestException {
-		return new ResponseEntity<>(checkinService.getList(id), HttpStatus.OK);
-	}
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION)
+    @ApiOperation(value = "Get list check", notes = "Return list person's from current division")
+    public ResponseEntity<List<Person>> getCheckList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long id) throws BadRequestException {
+        return new ResponseEntity<>(checkinService.getList(id), HttpStatus.OK);
+    }
 
-	@PostMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation (value = "Added check", notes = "Return created check")
-	public ResponseEntity<List<CheckIn>> createCheck (@RequestHeader (value = Token.TOKEN_HEADER) String token, @RequestBody @Valid List<CheckinBean> bean) throws BadRequestException {
-		TokenUser byToken = tokenUtils.getByToken(token);
-		return new ResponseEntity<>(checkinService.createCheck(byToken, bean), HttpStatus.CREATED);
-	}
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Added check", notes = "Return created check")
+    public ResponseEntity<List<CheckIn>> createCheck(@RequestHeader(value = Token.TOKEN_HEADER) String token, @RequestBody @Valid List<CheckinBean> bean) throws BadRequestException {
+        TokenUser byToken = tokenUtils.getByToken(token);
+        return new ResponseEntity<>(checkinService.createCheck(byToken, bean), HttpStatus.CREATED);
+    }
 
-	@PostMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation (value = "Added combat note", notes = "Return note object")
-	public ResponseEntity<CombatNote> createCombatNote (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId, @RequestBody @Valid CombatNoteBean note) throws BadRequestException {
-		return new ResponseEntity<>(checkinService.createCombatNote(divisionId, note), HttpStatus.CREATED);
-	}
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Added combat note", notes = "Return note object")
+    public ResponseEntity<CombatNote> createCombatNote(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId, @RequestBody @Valid CombatNoteBean note) throws BadRequestException {
+        return new ResponseEntity<>(checkinService.createCombatNote(divisionId, note), HttpStatus.CREATED);
+    }
 
-	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE)
-	@ApiOperation (value = "Added combat note", notes = "Return note object")
-	public ResponseEntity<List<CombatNote>> getCombatNote (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId) throws BadRequestException {
-		return new ResponseEntity<>(checkinService.getCombatNote(divisionId), HttpStatus.OK);
-	}
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE)
+    @ApiOperation(value = "Added combat note", notes = "Return note object")
+    public ResponseEntity<List<CombatNote>> getCombatNote(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId) throws BadRequestException {
+        return new ResponseEntity<>(checkinService.getCombatNote(divisionId), HttpStatus.OK);
+    }
 
-	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_INTERVAL)
-	@ApiOperation (value = "Get List names of interval's")
-	public ResponseEntity<List<String>> getListInterval () {
-		return new ResponseEntity<>(checkinService.getInterval(), HttpStatus.OK);
-	}
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_INTERVAL)
+    @ApiOperation(value = "Get List names of interval's")
+    public ResponseEntity<List<String>> getListInterval() {
+        return new ResponseEntity<>(checkinService.getInterval(), HttpStatus.OK);
+    }
 
-	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT)
-	@ApiOperation (value = "Get List search result")
-	public ResponseEntity<List<SearchResult>> getSearchResult (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @PathVariable (value = ControllerAPI.PATH_VARIABLE_STATUS) String status,
-		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
-		return new ResponseEntity<>(checkinService.getSearch(divisionId, status, interval, date), HttpStatus.OK);
-	}
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT)
+    @ApiOperation(value = "Get List search result")
+    public ResponseEntity<List<SearchResult>> getSearchResult(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STATUS) String status,
+                                                              @PathVariable(value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable(value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
+        return new ResponseEntity<>(checkinService.getSearch(divisionId, status, interval, date), HttpStatus.OK);
+    }
 
-	@GetMapping (value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES)
-	@ApiOperation (value = "Get Named list search result")
-	public ResponseEntity<List<NameStatus>> getNamedSearchResult (@PathVariable (value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId,
-		@PathVariable (value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable (value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
-		return new ResponseEntity<>(checkinService.getSearch(divisionId, interval, date), HttpStatus.OK);
-	}
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES)
+    @ApiOperation(value = "Get Named list search result")
+    public ResponseEntity<List<NameStatus>> getNamedSearchResult(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId,
+                                                                 @PathVariable(value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable(value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
+        return new ResponseEntity<>(checkinService.getSearch(divisionId, interval, date), HttpStatus.OK);
+    }
+
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL)
+    @ApiOperation(value = "Get List <CombatNote> by division by date by interval")
+    public ResponseEntity<List<CombatNote>> getListCombatNoteByDivisionByDateById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId,
+                                                                                  @PathVariable(value = ControllerAPI.PATH_VARIABLE_INTERVAL) String interval, @PathVariable(value = ControllerAPI.PATH_VARIABLE_DATE) String date) throws BadRequestException {
+        return  new ResponseEntity<>(checkinService.getListCombatNote(divisionId,interval,date),HttpStatus.OK);
+    }
 }
