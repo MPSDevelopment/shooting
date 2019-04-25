@@ -108,32 +108,32 @@ public class UserControllerTest {
 	@Test
 	public void checkCreateJudge () throws Exception {
 		// try to create empty user with admin user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER).header(Token.TOKEN_HEADER, adminToken))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE).header(Token.TOKEN_HEADER, adminToken))
 		       .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		//prepare
 		long count = userRepository.count();
 		userJson = JacksonUtils.getJson(userSignupBean);
 		// try to create user with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER).contentType(MediaType.APPLICATION_JSON).content(userJson))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE).contentType(MediaType.APPLICATION_JSON).content(userJson))
 		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to create user with  user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE)
 		                                      .header(Token.TOKEN_HEADER, userToken)
 		                                      .contentType(MediaType.APPLICATION_JSON)
 		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to create user with judge user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE)
 		                                      .header(Token.TOKEN_HEADER, judgeToken)
 		                                      .contentType(MediaType.APPLICATION_JSON)
 		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to create user with admin user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE)
 		                                      .header(Token.TOKEN_HEADER, adminToken)
 		                                      .contentType(MediaType.APPLICATION_JSON)
 		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isCreated());
 		assertEquals(count + 1, userRepository.count());
 		// try to create the same user with admin token
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE)
 		                                      .header(Token.TOKEN_HEADER, adminToken)
 		                                      .contentType(MediaType.APPLICATION_JSON)
 		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isBadRequest());

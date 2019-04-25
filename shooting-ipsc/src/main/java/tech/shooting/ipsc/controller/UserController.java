@@ -29,7 +29,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new judge", notes = "Creates new Judge")
 	public ResponseEntity<User> signupJudge (@RequestBody @Valid UserSignupBean signupUser) {
 		return new ResponseEntity<>(userService.add(signupUser,RoleName.JUDGE), HttpStatus.CREATED);

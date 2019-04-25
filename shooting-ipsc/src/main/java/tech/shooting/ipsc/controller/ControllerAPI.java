@@ -113,7 +113,9 @@ public class ControllerAPI {
 
 	public static final String USER_CONTROLLER_GET_COUNT = "/count";
 
-	public static final String USER_CONTROLLER_POST_USER = "/create";
+	public static final String USER_CONTROLLER_POST_JUDGE = "/create";
+	
+	public static final String USER_CONTROLLER_POST_USER = "/createUser";
 
 	public static final String USER_CONTROLLER_GET_JUDGES = "/all/judge";
 
