@@ -40,14 +40,18 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
 
 	public static final String PATH_VARIABLE_SUBJECT = "subject";
-	
+	public static final String PATH_VARIABLE_WEAPON_ID = "weaponId";
+	public static final String PATH_VARIABLE_WEAPON_TYPE_ID = "weaponTypeId";
+
 	
 
 	/*
 	 * request variable
 	 */
 	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
-	
+	public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
+	public static final String REQUEST_WEAPON_TYPE_ID = "{" + PATH_VARIABLE_WEAPON_TYPE_ID + "}";
+
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 	public static final String REQUEST_SPECIALITY_ID = "{" + PATH_VARIABLE_SPECIALITY_ID+ "}";
 
@@ -308,4 +312,9 @@ public class ControllerAPI {
 	public static final String SPECIALITY_CONTROLLER_PUT_SPECIALITY = "/speciality/" + REQUEST_SPECIALITY_ID;
 	public static final String SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID = "/speciality/"+REQUEST_SPECIALITY_ID;
     public static final String CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL = "/combatenote/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
+	public static final String WEAPON_TYPE_CONTROLLER = "/api/weapon/type";
+	public static final String WEAPON_TYPE_CONTROLLER_GET_ALL = "/all";
+	public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
+	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/weapon/type/create";
+	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/weapon/type/delete/" + REQUEST_WEAPON_TYPE_ID;
 }

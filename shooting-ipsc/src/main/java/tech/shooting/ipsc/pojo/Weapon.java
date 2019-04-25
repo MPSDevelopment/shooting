@@ -35,8 +35,9 @@ public class Weapon extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Type of weapon", required = true)
+    @DBRef
     //AK-47, AK-74,AKC-74,AKM,ПКМ, РПГ, АГС, ПМ,АПС,АПБ И ПРОЧЕЕ НАДО ВЗЯТЬ СПИСОК ИЛИ ДЕЛАТЬ Записью в базе
-    private String weaponType;
+    private WeaponType weaponType;
 
     @JsonProperty
     @ApiModelProperty(value = "Fired count by weapon")

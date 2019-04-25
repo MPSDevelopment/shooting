@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Weapon;
 
+import java.util.List;
+
 @Repository
 public interface WeaponRepository extends MongoRepository<Weapon,Long> {
     Weapon findBySerialNumber(String serial);
-    Weapon findAllByDivision(Division division);
+    List<Weapon> findAllByDivision(Division division);
 }
