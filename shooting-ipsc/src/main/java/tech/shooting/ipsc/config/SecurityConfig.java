@@ -2,6 +2,7 @@ package tech.shooting.ipsc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,10 +17,14 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.controller.ControllerAPI;
+import tech.shooting.ipsc.security.IpscUserDetailsService;
 import tech.shooting.ipsc.security.RestAccessDeniedHandler;
 import tech.shooting.ipsc.security.RestAuthenticationEntryPoint;
 import tech.shooting.ipsc.security.TokenAuthenticationFilter;
+import tech.shooting.ipsc.security.TokenAuthenticationManager;
 
 import java.util.Arrays;
 
@@ -27,6 +32,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	private static final String[] AUTH_WHITELIST = {
 		// -- swagger ui
 		"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error"
@@ -39,6 +45,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private TokenAuthenticationFilter tokenAuthenticationFilter;
+	
+	@Bean
+	@ConditionalOnMissingBean
+	public TokenUtils tokenUtils() {
+		return new TokenUtils();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean
+	public IpscUserDetailsService ipscUserDetailsService() {
+		return new IpscUserDetailsService();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean
+	public TokenAuthenticationManager tokenAuthenticationManager() {
+		return new TokenAuthenticationManager();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean
+	public TokenAuthenticationFilter tokenAuthenticationFilter() {
+		return new TokenAuthenticationFilter();
+	}
 
 	@Override
 	public void configure (WebSecurity web) {

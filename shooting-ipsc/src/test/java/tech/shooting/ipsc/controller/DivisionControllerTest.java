@@ -57,8 +57,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-		TokenAuthenticationFilter.class, IpscUserDetailsService.class, DivisionController.class, ValidationErrorHandler.class, DivisionService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, DivisionController.class, DivisionService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -256,9 +255,9 @@ class DivisionControllerTest {
 		assertEquals(1, divisionService.getCount());
 		division.setName("updateeee");
 		// try access to getDivisionById() with admin user
-		String contentAsString = mockMvc
-				.perform(MockMvcRequestBuilders.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8)
-						.content(Objects.requireNonNull(JacksonUtils.getJson(new UpdateDivisionBean().setId(division.getId()).setName(division.getName())))).header(Token.TOKEN_HEADER, adminToken))
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.put(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_PUT_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(new UpdateDivisionBean().setId(division.getId()).setName(division.getName())))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
 	}

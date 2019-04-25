@@ -51,16 +51,15 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith (SpringExtension.class)
-@EnableMongoRepositories (basePackageClasses = CheckinRepository.class)
+@ExtendWith(SpringExtension.class)
+@EnableMongoRepositories(basePackageClasses = CheckinRepository.class)
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext
 @Slf4j
-@Tag (IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration (classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-	TokenAuthenticationFilter.class, IpscUserDetailsService.class, CheckinController.class, ValidationErrorHandler.class, CheckinService.class})
+@Tag(IpscConstants.UNIT_TEST_TAG)
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CheckinController.class, CheckinService.class })
 class CheckinControllerTest {
 	@Autowired
 	private CheckinRepository checkinRepository;
@@ -103,22 +102,19 @@ class CheckinControllerTest {
 	private Person testPerson;
 
 	@BeforeEach
-	void setUp () {
+	void setUp() {
 		checkinRepository.deleteAll();
 		divisionRepository.deleteAll();
 		combatNoteRepository.deleteAll();
 		personRepository.deleteAll(personRepository.findByDivision(root));
 		root = divisionRepository.save(new Division().setParent(null).setName("Root").setActive(true));
-		testPerson = testPerson == null ? personRepository.save(new Person().setName("testing")
-		                                                                    .setCodes(List.of(new WeaponIpscCode().setCode("43423423423423").setTypeWeapon(WeaponTypeEnum.HANDGUN)))
-		                                                                    .setQualifierRank(ClassificationBreaks.D)
-		                                                                    .setDivision(root)) : testPerson;
-		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15))
-		                                                    .setName("Test firstname")
-		                                                    .setPassword("dfhhjsdgfdsfhj")
-		                                                    .setRoleName(RoleName.USER)
-		                                                    .setAddress(new Address().setIndex("08150"))
-		                                                    .setPerson(testPerson)) : user;
+		testPerson = testPerson == null
+				? personRepository.save(new Person().setName("testing").setCodes(List.of(new WeaponIpscCode().setCode("43423423423423").setTypeWeapon(WeaponTypeEnum.HANDGUN))).setQualifierRank(ClassificationBreaks.D).setDivision(root))
+				: testPerson;
+		user = user == null
+				? userRepository.save(
+						new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150")).setPerson(testPerson))
+				: user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 		userToken = tokenUtils.createToken(user.getId(), Token.TokenType.USER, user.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
@@ -127,37 +123,36 @@ class CheckinControllerTest {
 	}
 
 	@Test
-	void getCheckList () throws Exception {
+	void getCheckList() throws Exception {
 		int init = personRepository.findByDivision(root).size();
-		//create 50 persons
+		// create 50 persons
 		createPersons(50, root, false);
-		//check  size
+		// check size
 		int count = personRepository.findByDivision(root).size();
 		assertEquals(init + 25, count);
-		//try access
+		// try access
 		// unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// judge user
-		mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                      .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-		//admin user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// admin user
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		CheckIn[] checkIns = JacksonUtils.fromJson(CheckIn[].class, contentAsString);
 		assertEquals(count, checkIns.length);
-		//user
-		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                                        .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		// user
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		checkIns = JacksonUtils.fromJson(CheckIn[].class, contentAsString);
 		assertEquals(count, checkIns.length);
 	}
 
-	public void createPersons (int count, Division division, boolean flag) {
+	public void createPersons(int count, Division division, boolean flag) {
 		for (int i = 0; i < count; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			if (flag) {
@@ -171,7 +166,7 @@ class CheckinControllerTest {
 	}
 
 	@Test
-	void createCheck () throws Exception {
+	void createCheck() throws Exception {
 		int init = personRepository.findByDivision(root).size();
 		createPersons(10, root, true);
 		List<Person> byDivision = personRepository.findByDivision(root);
@@ -186,20 +181,16 @@ class CheckinControllerTest {
 		}
 		assertEquals(init + 10, fromFront.size());
 		String json = JacksonUtils.getJson(fromFront);
-		//try access
+		// try access
 		// unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// judge user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
-		                                      .header(Token.TOKEN_HEADER, judgeToken)
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).header(Token.TOKEN_HEADER, judgeToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// user user
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
-		                                                               .header(Token.TOKEN_HEADER, userToken)
-		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).header(Token.TOKEN_HEADER, userToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		List<CheckinBeanToFront> listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
 		assertEquals(listFromJson.size(), fromFront.size());
 		for (int i = 0; i < fromFront.size(); i++) {
@@ -210,10 +201,8 @@ class CheckinControllerTest {
 		checkinRepository.deleteAll();
 		assertEquals(checkinRepository.count(), 0);
 		// admin user
-		contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK)
-		                                                        .header(Token.TOKEN_HEADER, adminToken)
-		                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                        .content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK).header(Token.TOKEN_HEADER, adminToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(CheckinBeanToFront[].class, contentAsString);
 		assertEquals(listFromJson.size(), fromFront.size());
 		for (int i = 0; i < fromFront.size(); i++) {
@@ -224,13 +213,11 @@ class CheckinControllerTest {
 	}
 
 	@Test
-	void checkCreateCombatNote () throws Exception {
-		//try access to create combat note with admin role when check in is not exist
-		mockMvc.perform(MockMvcRequestBuilders.post(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                      .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
-		                                      .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	void checkCreateCombatNote() throws Exception {
+		// try access to create combat note with admin role when check in is not exist
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getPerson().getId()).setDate(OffsetDateTime.now()))))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		addDataToDB();
 		List<CheckIn> checkIns = checkinRepository.findAll();
 		log.info("create checks size is %s", checkIns.size());
@@ -239,17 +226,16 @@ class CheckinControllerTest {
 		int sizeDayOff = checkinRepository.findAllByStatus(TypeOfPresence.DAY_OFF).size();
 		int sizeMission = checkinRepository.findAllByStatus(TypeOfPresence.MISSION).size();
 		log.info("status is : Delay %s, Present %s,Day off %s, Mission %s", sizeDelay, sizePresent, sizeDayOff, sizeMission);
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now()))))
-		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now())))).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
 		log.info("Result is \n %s", combatNote.getStatList());
 	}
 
 	@Test
-	void checkGetCombatNote () throws Exception {
+	void checkGetCombatNote() throws Exception {
 		addDataToDB();
 		List<CheckIn> checkIns = checkinRepository.findAll();
 		log.info("create checks size is %s", checkIns.size());
@@ -258,22 +244,22 @@ class CheckinControllerTest {
 		int sizeDayOff = checkinRepository.findAllByStatus(TypeOfPresence.DAY_OFF).size();
 		int sizeMission = checkinRepository.findAllByStatus(TypeOfPresence.MISSION).size();
 		log.info("status is : Delay %s, Present %s,Day off %s, Mission %s", sizeDelay, sizePresent, sizeDayOff, sizeMission);
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                                               .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                                               .content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now()))))
-		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(new CombatNoteBean().setCombatId(user.getId()).setDate(OffsetDateTime.now())))).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		CombatNote combatNote = JacksonUtils.fromJson(CombatNote.class, contentAsString);
 		log.info("Result is \n %s", combatNote.getStatList());
-		String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(
-			ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
-		                                                                .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString1 = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		CombatNote[] combatNotes = JacksonUtils.fromJson(CombatNote[].class, contentAsString1);
 		log.info("Combat Note is %s", combatNotes[0]);
 		checkNote(combatNotes[0], combatNote);
 	}
 
-	private void checkNote (CombatNote first, CombatNote second) {
+	private void checkNote(CombatNote first, CombatNote second) {
 		assertEquals(first.getCombat(), second.getCombat());
 		assertEquals(first.getId(), second.getId());
 		assertEquals(first.getDivision(), second.getDivision());
@@ -281,8 +267,8 @@ class CheckinControllerTest {
 		assertEquals(first.getDate(), second.getDate());
 	}
 
-	private void addDataToDB () {
-		//prepare
+	private void addDataToDB() {
+		// prepare
 		for (int i = 0; i < 10; i++) {
 			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
@@ -315,8 +301,8 @@ class CheckinControllerTest {
 	}
 
 	@Test
-	void check () throws BadRequestException {
-		//check
+	void check() throws BadRequestException {
+		// check
 		addDataToDB();
 		List<Person> byDivision = personRepository.findByDivision(root);
 		log.info("count person from root %s", byDivision.size());
@@ -347,8 +333,8 @@ class CheckinControllerTest {
 	}
 
 	@Test
-	void checkGetSearchResult () throws Exception {
-		//check
+	void checkGetSearchResult() throws Exception {
+		// check
 		addDataToDB();
 		List<Person> byDivision = personRepository.findByDivision(root);
 		log.info("count person from root %s", byDivision.size());
@@ -370,47 +356,38 @@ class CheckinControllerTest {
 		log.info("Size of result search by division id %s", allByDivision.size());
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(root.getId(), TypeOfPresence.ALL, createdDate, TypeOfInterval.EVENING);
-		//unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
-		                                                                                             .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
-		                                                                                             .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
-		                                                                                             .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		//judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                           ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
-		                                                                                             .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
-		                                                                                             .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
-		                                                                                             .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())).header(Token.TOKEN_HEADER, judgeToken))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
-		//user role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                                    ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
-		                                                                                                                      .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
-		                                                                                                                      .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
-		                                                                                                                      .replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
-		                                                               .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		// unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+				.replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState()).replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState()).replace(ControllerAPI.REQUEST_DATE, createdDate.toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0
+				+ ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()).replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+						.replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState()).replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// user role
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()).replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+								.replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState()).replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+						.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<SearchResult> listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
-		//admin role
-		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                             ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
-		                                                                                                               .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
-		                                                                                                               .replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState())
-		                                                                                                               .replace(ControllerAPI.REQUEST_DATE, createdDate.toString())).header(Token.TOKEN_HEADER,
-			adminToken))
-		                         .andExpect(MockMvcResultMatchers.status().isOk())
-		                         .andReturn()
-		                         .getResponse()
-		                         .getContentAsString();
+		// admin role
+		contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString()).replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
+								.replace(ControllerAPI.REQUEST_STATUS, TypeOfPresence.ALL.getState()).replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
 	}
 
 	@Test
-	void checkGetSearchResultByName () throws Exception {
-		//check
+	void checkGetSearchResultByName() throws Exception {
+		// check
 		addDataToDB();
 		List<Person> byDivision = personRepository.findByDivision(root);
 		log.info("count person from root %s", byDivision.size());
@@ -428,12 +405,15 @@ class CheckinControllerTest {
 		for (int i = 0; i < fromService.size(); i++) {
 			log.info("String is %s", fromService.get(i));
 		}
-		//admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 +
-		                                                                    ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
-		                                                                                                                               .replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState())
-		                                                                                                                               .replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
-		                                                               .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		// admin role
+		String contentAsString = mockMvc
+				.perform(
+						MockMvcRequestBuilders
+								.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0
+										+ ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES.replace(ControllerAPI.REQUEST_DIVISION_ID, root.getId().toString())
+												.replace(ControllerAPI.REQUEST_INTERVAL, TypeOfInterval.EVENING.getState()).replace(ControllerAPI.REQUEST_DATE, createdDate.toString()))
+								.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		log.info("String result is %s", contentAsString);
 		List<NameStatus> listFromJson = JacksonUtils.getListFromJson(NameStatus[].class, contentAsString);
 		for (int i = 0; i < listFromJson.size(); i++) {

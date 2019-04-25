@@ -44,8 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = UserRepository.class)
-@ContextConfiguration(classes = {DatabaseCreator.class, UserDao.class, IpscMongoConfig.class, TokenUtils.class, IpscUserDetailsService.class, TokenAuthenticationManager.class, TokenAuthenticationFilter.class,
-	SecurityConfig.class, AuthController.class, UserService.class, UserLockUtils.class})
+@ContextConfiguration(classes = { DatabaseCreator.class, UserDao.class, IpscMongoConfig.class, SecurityConfig.class, AuthController.class, UserService.class, UserLockUtils.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -87,7 +86,7 @@ public class AuthControllerTest {
 	private UserDao userDao;
 
 	@BeforeEach
-	public void before () {
+	public void before() {
 		userRepository.deleteByRoleName(RoleName.USER);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15).toLowerCase()).setPassword("123456").setActive(true);
 		userJson = JacksonUtils.getFullJson(user);
@@ -100,52 +99,46 @@ public class AuthControllerTest {
 	}
 
 	@Test
-	public void checkPostStatus () throws Exception {
+	public void checkPostStatus() throws Exception {
 		// try to access status with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access status with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, tokenUser))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access status with judge user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, tokenUser))
-		       .andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try to access status with admin user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_STATUS).header(Token.TOKEN_HEADER, tokenAdmin))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
-	public void checkPostLogin () throws Exception {
+	public void checkPostLogin() throws Exception {
 		// try to login with an empty user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		// try to login with not a registered user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(Objects.requireNonNull(JacksonUtils.getJson(new User().setActive(true).setLogin(RandomStringUtils.randomAlphanumeric(15).toLowerCase()).setPassword("hfjdghfjd")))))
-		       .andExpect(MockMvcResultMatchers.status().isBadRequest());
-		//try to login with a registered user
-		token = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                              .contentType(MediaType.APPLICATION_JSON_UTF8)
-		                                              .content(userJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN).contentType(MediaType.APPLICATION_JSON)
+				.content(Objects.requireNonNull(JacksonUtils.getJson(new User().setActive(true).setLogin(RandomStringUtils.randomAlphanumeric(15).toLowerCase()).setPassword("hfjdghfjd")))))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+		// try to login with a registered user
+		token = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN).contentType(MediaType.APPLICATION_JSON_UTF8).content(userJson))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
 		assertNotNull(token);
-		//try to login to the system from other server, check cors
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN)
-		                                      .header("Origin", "http://www.someurl.com")
-		                                      .contentType(MediaType.APPLICATION_JSON)
-		                                      .content(userJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
-		//try to login to the system from other server, check cors
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
+		// try to login to the system from other server, check cors
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN).header("Origin", "http://www.someurl.com").contentType(MediaType.APPLICATION_JSON)
+				.content(userJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
+		// try to login to the system from other server, check cors
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-
 	@Test
-	public void checkPostLogOut () throws Exception {
+	public void checkPostLogOut() throws Exception {
 		// try to logout with a bad header
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token + "test"))
-		       .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to logout with a user header
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenUser))
-		       .andExpect(MockMvcResultMatchers.status().isOk());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }

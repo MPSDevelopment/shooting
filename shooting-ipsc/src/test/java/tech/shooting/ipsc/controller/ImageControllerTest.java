@@ -62,8 +62,7 @@ import tech.shooting.ipsc.service.ImageService;
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, AppConfig.class, TokenUtils.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, TokenAuthenticationManager.class,
-		TokenAuthenticationFilter.class, IpscUserDetailsService.class, ImageService.class, ImageController.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, AppConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, ImageService.class, ImageController.class })
 public class ImageControllerTest {
 
 	@Autowired
@@ -164,11 +163,11 @@ public class ImageControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
-	
+
 	@Test
 	public void checkDeleteImage() throws Exception {
 		String id = RandomStringUtils.randomNumeric(10);
-		
+
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotFound());
 		imageService.storeFile(uploadFile, id);
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isOk());
@@ -177,10 +176,10 @@ public class ImageControllerTest {
 		// try to delete with admin token
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/" + id)).andExpect(MockMvcResultMatchers.status().isNotFound());
-		
+
 		assertNull(imageService.findFile(id).orElse(null));
 	}
-	
+
 	@Test
 	public void checkGetImageData() throws Exception {
 		String id = RandomStringUtils.randomNumeric(10);
@@ -189,16 +188,15 @@ public class ImageControllerTest {
 //		// try access with non admin user
 //		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin user but not existed image
-		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
-	
+		mockMvc.perform(MockMvcRequestBuilders.get((ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id))).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		imageService.storeFile(uploadFile, id);
 
 		// try access with admin user with existed image
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
-		
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA.replace(ControllerAPI.REQUEST_ID, id)).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+
 	}
-	
-	
 
 }
