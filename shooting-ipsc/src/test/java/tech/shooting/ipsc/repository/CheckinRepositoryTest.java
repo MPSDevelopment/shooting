@@ -345,13 +345,13 @@ class CheckinRepositoryTest {
 		custom.add(new Stat().setStatus(TypeOfPresence.DAY_OFF).setCount(countDayOff));
 		custom.add(new Stat().setStatus(TypeOfPresence.MISSION).setCount(countMission));
 		TypeOfInterval type;
-		LocalTime localTime = OffsetDateTime.now().toLocalTime();
+		LocalTime localTime = all.get(0).getCreatedDate().toLocalTime();
 		if(localTime.isBefore(TypeOfInterval.MIDDLE) || localTime.equals(TypeOfInterval.MIDDLE)) {
 			type = TypeOfInterval.MORNING;
 		} else {
 			type = TypeOfInterval.EVENING;
 		}
-		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(root, all.get(0).getCreatedDate(), type);
+		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(root, all.get(0).getCreatedDate().minusMinutes(1), type);
 		assertEquals(custom.size(), combatNoteByDivisionFromPeriod.size());
 		for(int i = 0; i < combatNoteByDivisionFromPeriod.size(); i++) {
 			assertTrue(custom.contains(combatNoteByDivisionFromPeriod.get(i)));
