@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.WeaponTypeBean;
 import tech.shooting.ipsc.pojo.WeaponType;
-import tech.shooting.ipsc.service.WeaponService;
+import tech.shooting.ipsc.service.WeaponTypeService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,8 +23,9 @@ import java.util.List;
 @Slf4j
 @PreAuthorize("hasRole('ADMIN')")
 public class WeaponTypeController {
+
     @Autowired
-    private WeaponService weaponService;
+    private WeaponTypeService weaponService;
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL)
     @ApiOperation(value = "Return list of type weapon's", notes = "List<WeaponType> or Optional.empty()")
