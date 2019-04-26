@@ -59,7 +59,9 @@ public class ValidationService {
 			try {
 				var field = clazz.getDeclaredField(propertyName);
 				var annotation = field.getAnnotation(JsonProperty.class);
-				if (annotation != null && StringUtils.isNotBlank(annotation.value())) {
+				if (annotation == null) {
+					log.warn("Field '%s' of %s without annotation JsonProperty", propertyName, clazz.getCanonicalName());
+				} else if (StringUtils.isNotBlank(annotation.value())) {
 					log.debug("Field name will be changed from %s to %s", propertyName, annotation.value());
 					propertyJsonName = annotation.value();
 				}
