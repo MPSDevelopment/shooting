@@ -93,4 +93,12 @@ public class WeaponService {
            throw  new BadRequestException(new ErrorMessage("You try set incorrect data fired count "+firedCount+" must be more than previous count "));
         }
     }
+
+    public List<Weapon> getAllByDivision(Long divisionId) throws BadRequestException {
+        return weaponRepository.findAllByDivision(checkDivision(divisionId));
+    }
+
+    public List<Weapon> getAllByPerson(Long personId) throws BadRequestException {
+            return weaponRepository.findAllByOwner(checkPerson(personId));
+    }
 }

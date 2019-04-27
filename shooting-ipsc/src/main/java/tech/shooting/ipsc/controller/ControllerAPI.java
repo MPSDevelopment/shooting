@@ -327,4 +327,6 @@ public class ControllerAPI {
 	public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_OWNER ="/"+REQUEST_WEAPON_ID+"/"+REQUEST_PERSON_ID ;
 	public static final String WEAPON_CONTROLLER_POST_WEAPON_REMOVE_OWNER ="/"+REQUEST_WEAPON_ID+"/remove" ;
 	public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT = "/"+REQUEST_WEAPON_ID+"/add/firedcount/"+REQUEST_FIRED_COUNT ;
+	public static final String WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID ="/all/" + REQUEST_DIVISION_ID;
+	public static final String WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID ="/all/" + REQUEST_PERSON_ID;
 }

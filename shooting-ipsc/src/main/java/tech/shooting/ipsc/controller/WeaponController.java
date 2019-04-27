@@ -39,6 +39,18 @@ public class WeaponController {
         return new ResponseEntity<>(weaponService.getWeaponById(weaponId), HttpStatus.OK);
     }
 
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID)
+    @ApiOperation(value = "Return all weapon by division")
+    public ResponseEntity<List<Weapon>> getWeaponByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.getAllByDivision(divisionId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID)
+    @ApiOperation(value = "Return all weapon's  where owner person with id")
+    public ResponseEntity<List<Weapon>> getWeaponByPerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.getAllByPerson(personId), HttpStatus.OK);
+    }
+
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON)
     @ApiOperation(value = "Return created weapon if exist update", notes = "Return created weapon if exist update")
     public ResponseEntity<Weapon> postWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
