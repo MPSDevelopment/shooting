@@ -314,7 +314,12 @@ public class ControllerAPI {
     public static final String CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL = "/combatenote/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
 	public static final String WEAPON_TYPE_CONTROLLER = "/api/weapon/type";
 	public static final String WEAPON_TYPE_CONTROLLER_GET_ALL = "/get/all";
-	public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
-	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapon";
-	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapon" + REQUEST_WEAPON_TYPE_ID;
+		public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
+	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapontype";
+	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_WEAPON_TYPE_ID;
+	public static final String WEAPON_CONTROLLER = "/api/weapon";
+	public static final String WEAPON_CONTROLLER_GET_ALL = "/all";
+	public static final String WEAPON_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_ID;
+	public static final String WEAPON_CONTROLLER_POST_TYPE = "/create/weapon";
+	public static final String WEAPON_CONTROLLER_DELETE_WEAPON_BY_ID = "/delete/weapon/" + REQUEST_WEAPON_ID;;
 }
