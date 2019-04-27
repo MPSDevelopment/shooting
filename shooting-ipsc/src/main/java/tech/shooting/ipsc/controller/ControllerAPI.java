@@ -17,7 +17,8 @@ public class ControllerAPI {
 	 */
 	
 	public static final String PATH_VARIABLE_ID = "id";
-	
+	public static final String PATH_VARIABLE_FIRED_COUNT = "fireCount";
+
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
@@ -49,6 +50,7 @@ public class ControllerAPI {
 	 * request variable
 	 */
 	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
+	public static final String REQUEST_FIRED_COUNT = "{" + PATH_VARIABLE_FIRED_COUNT + "}";
 	public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
 	public static final String REQUEST_WEAPON_TYPE_ID = "{" + PATH_VARIABLE_WEAPON_TYPE_ID + "}";
 
@@ -320,6 +322,9 @@ public class ControllerAPI {
 	public static final String WEAPON_CONTROLLER = "/api/weapon";
 	public static final String WEAPON_CONTROLLER_GET_ALL = "/all";
 	public static final String WEAPON_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_ID;
-	public static final String WEAPON_CONTROLLER_POST_TYPE = "/create/weapon";
+	public static final String WEAPON_CONTROLLER_POST_WEAPON = "/create/weapon";
 	public static final String WEAPON_CONTROLLER_DELETE_WEAPON_BY_ID = "/delete/weapon/" + REQUEST_WEAPON_ID;;
+	public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_OWNER ="/"+REQUEST_WEAPON_ID+"/"+REQUEST_PERSON_ID ;
+	public static final String WEAPON_CONTROLLER_POST_WEAPON_REMOVE_OWNER ="/"+REQUEST_WEAPON_ID+"/remove" ;
+	public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT = "/"+REQUEST_WEAPON_ID+"/add/firedcount/"+REQUEST_FIRED_COUNT ;
 }

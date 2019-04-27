@@ -35,11 +35,11 @@ public class WeaponController {
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_BY_ID)
     @ApiOperation(value = "Return weapon by id", notes = "Weapon or BadRequestException")
-    public ResponseEntity<Weapon> getWeaponById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID)Long weaponId) throws BadRequestException {
+    public ResponseEntity<Weapon> getWeaponById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId) throws BadRequestException {
         return new ResponseEntity<>(weaponService.getWeaponById(weaponId), HttpStatus.OK);
     }
 
-    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_TYPE)
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON)
     @ApiOperation(value = "Return created weapon if exist update", notes = "Return created weapon if exist update")
     public ResponseEntity<Weapon> postWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
         return new ResponseEntity<>(weaponService.postWeapon(bean), HttpStatus.OK);
@@ -47,8 +47,26 @@ public class WeaponController {
 
     @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_DELETE_WEAPON_BY_ID)
     @ApiOperation(value = "Delete type return status Ok")
-    public ResponseEntity deleteWeapon(@PathVariable (value = ControllerAPI.PATH_VARIABLE_WEAPON_ID)long weaponId) throws BadRequestException{
+    public ResponseEntity deleteWeapon(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) long weaponId) throws BadRequestException {
         weaponService.deleteWeapon(weaponId);
         return new ResponseEntity((HttpStatus.OK));
+    }
+
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_ADD_OWNER)
+    @ApiOperation(value = "Return updated weapon row", notes = "Return updated Weapon object")
+    public ResponseEntity<Weapon> postWeaponAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.addOwnerToWeapon(weaponId, personId), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_REMOVE_OWNER)
+    @ApiOperation(value = "Return updated weapon row, with owner null", notes = "Return updated Weapon object")
+    public ResponseEntity<Weapon> postWeaponAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.addOwnerToWeapon(weaponId, null), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT)
+    @ApiOperation(value = "Return updated weapon row, with owner null", notes = "Return updated Weapon object")
+    public ResponseEntity<Weapon> postWeaponAddShootings(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_FIRED_COUNT)Integer firedCount) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.addNumberOfShootingForWeapon(weaponId, firedCount), HttpStatus.OK);
     }
 }

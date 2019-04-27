@@ -71,4 +71,26 @@ public class WeaponService {
     public void deleteWeapon(long weaponId) {
         weaponRepository.deleteById(weaponId);
     }
+
+    public Weapon addOwnerToWeapon(Long weaponId, Long personId) throws BadRequestException {
+        Weapon weapon = checkWeapon(weaponId);
+        if (personId == null) {
+            weapon.setOwner(null);
+        } else {
+            weapon.setOwner(checkPerson(personId));
+        }
+        return weapon;
+    }
+
+    public Weapon addNumberOfShootingForWeapon(Long weaponId, Integer firedCount) throws BadRequestException {
+        Weapon weapon = checkWeapon(weaponId);
+        checkNumberShootings(weapon.getCount(),firedCount);
+        return weaponRepository.save(weapon.setCount(firedCount));
+    }
+
+    private void checkNumberShootings(Integer count, Integer firedCount) throws BadRequestException {
+        if (count > firedCount){
+           throw  new BadRequestException(new ErrorMessage("You try set incorrect data fired count "+firedCount+" must be more than previous count "));
+        }
+    }
 }
