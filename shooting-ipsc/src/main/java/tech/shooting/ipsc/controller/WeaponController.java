@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class WeaponController {
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL)
     @ApiOperation(value = "Return list of weapon's", notes = "List<Weapon> or Optional.empty()")
-    public ResponseEntity<List<Weapon>> getAllTypeOfWeapon() {
+    public ResponseEntity<List<Weapon>> getAllWeapon() {
         return new ResponseEntity<>(weaponService.getAll(), HttpStatus.OK);
     }
 
@@ -38,20 +39,22 @@ public class WeaponController {
     public ResponseEntity<Weapon> getWeaponById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId) throws BadRequestException {
         return new ResponseEntity<>(weaponService.getWeaponById(weaponId), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID)
     @ApiOperation(value = "Return all weapon by division")
     public ResponseEntity<List<Weapon>> getWeaponByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) throws BadRequestException {
         return new ResponseEntity<>(weaponService.getAllByDivision(divisionId), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID)
     @ApiOperation(value = "Return all weapon's  where owner person with id")
     public ResponseEntity<List<Weapon>> getWeaponByPerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+        System.out.printf("");
         return new ResponseEntity<>(weaponService.getAllByPerson(personId), HttpStatus.OK);
     }
 
-    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Return created weapon if exist update", notes = "Return created weapon if exist update")
     public ResponseEntity<Weapon> postWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
         return new ResponseEntity<>(weaponService.postWeapon(bean), HttpStatus.OK);
@@ -72,7 +75,7 @@ public class WeaponController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_REMOVE_OWNER)
     @ApiOperation(value = "Return updated weapon row, with owner null", notes = "Return updated Weapon object")
-    public ResponseEntity<Weapon> postWeaponAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId) throws BadRequestException {
+    public ResponseEntity<Weapon> postWeaponRemoveOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId) throws BadRequestException {
         return new ResponseEntity<>(weaponService.addOwnerToWeapon(weaponId, null), HttpStatus.OK);
     }
 
