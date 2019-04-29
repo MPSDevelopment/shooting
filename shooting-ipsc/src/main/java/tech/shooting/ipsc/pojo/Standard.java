@@ -25,7 +25,7 @@ public class Standard  extends BaseDocument {
 
     @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Sunject standard", required = true)
+    @ApiModelProperty(value = "Subject standard", required = true)
     private Subject subject;
 
     @JsonProperty

@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Positive;
@@ -12,7 +15,9 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class Categories {
+@Document(collection = "category")
+@TypeAlias("category")
+public class Categories extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Name category by rus", required = true)
