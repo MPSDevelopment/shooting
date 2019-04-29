@@ -8,9 +8,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.validator.ValidationConstants;
-
-import javax.validation.constraints.Positive;
 
 @Data
 @Accessors(chain = true)
@@ -27,8 +24,4 @@ public class Categories extends BaseDocument {
     @ApiModelProperty(value = "Name category by kz", required = true)
     private String nameCategoryKz;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Standard execute time for this category", required = true)
-    @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Long time;
 }

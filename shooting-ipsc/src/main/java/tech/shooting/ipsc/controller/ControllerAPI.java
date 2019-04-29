@@ -18,6 +18,7 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_FIRED_COUNT = "fireCount";
     public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
     public static final String PATH_VARIABLE_STAGE_ID = "stageId";
+    public static final String PATH_VARIABLE_STANDARD_ID = "standardId";
     public static final String PATH_VARIABLE_SPECIALITY_ID = "specialityId";
     public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
     public static final String PATH_VARIABLE_PAGE_NUMBER = "pageNumber";
@@ -25,6 +26,8 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_PERSON_ID = "personId";
     public static final String PATH_VARIABLE_USER_ID = "userId";
     public static final String PATH_VARIABLE_DIVISION_ID = "divisionId";
+    public static final String PATH_VARIABLE_CATEGORY_ID = "categoryId";
+    public static final String PATH_VARIABLE_UNIT_ID = "unitId";
     public static final String PATH_VARIABLE_STATUS = "status";
     public static final String PATH_VARIABLE_QUIZ_ID = "quizId";
     public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
@@ -46,6 +49,9 @@ public class ControllerAPI {
     public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
     public static final String REQUEST_WEAPON_TYPE_ID = "{" + PATH_VARIABLE_WEAPON_TYPE_ID + "}";
     public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
+    public static final String REQUEST_CATEGORY_ID = "{" + PATH_VARIABLE_CATEGORY_ID + "}";
+    public static final String REQUEST_STANDARD_ID = "{" + PATH_VARIABLE_STANDARD_ID + "}";
+    public static final String REQUEST_UNIT_ID = "{" + PATH_VARIABLE_UNIT_ID + "}";
     public static final String REQUEST_SPECIALITY_ID = "{" + PATH_VARIABLE_SPECIALITY_ID + "}";
     public static final String REQUEST_SUBJECT = "{" + PATH_VARIABLE_SUBJECT + "}";
     public static final String REQUEST_COMPETITION_ID = "{" + PATH_VARIABLE_COMPETITION_ID + "}";
@@ -225,4 +231,12 @@ public class ControllerAPI {
     public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT = "/" + REQUEST_WEAPON_ID + "/add/firedcount/" + REQUEST_FIRED_COUNT;
     public static final String WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/bydivision/" + REQUEST_DIVISION_ID;
     public static final String WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/byperson/" + REQUEST_PERSON_ID;
+
+
+    public static final String STANDARD_CONTROLLER = "/api/standard";
+    public static final String STANDARD_CONTROLLER_GET_ALL = "/get/all";
+    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT = "/get/standards/"+REQUEST_SUBJECT;
+    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_ID = "/get/standards/"+REQUEST_STANDARD_ID;
+    public static final String STANDARD_CONTROLLER_GET_CATEGORIES = "/get/categories";
+    public static final String STANDARD_CONTROLLER_GET_UNITS = "/get/units";
 }

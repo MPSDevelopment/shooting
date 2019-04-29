@@ -38,14 +38,14 @@ public class Standard  extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "List categories", required = true)
-    private List<Categories> categoriesList;
+    private List<CategoriesAndTime> categoriesList;
 
     @JsonProperty
-    @ApiModelProperty(value = "List fails", required = true)
+    @ApiModelProperty(value = "List fails")
     private List<Fails> failsList;
 
     @JsonProperty
-    @ApiModelProperty(value = "List conditions", required = true)
+    @ApiModelProperty(value = "List conditions")
     private List<Conditions> conditionsList;
 
 
