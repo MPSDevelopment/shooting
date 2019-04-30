@@ -5,18 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.pojo.Categories;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.Units;
 import tech.shooting.ipsc.service.StandardService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -36,7 +37,7 @@ public class StandardController {
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT)
     @ApiOperation(value = "Get list standards by subject")
-    public ResponseEntity<List<Standard>> getStandardsBySubject(@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT) Long subjectId) throws BadRequestException {
+    public ResponseEntity<List<Standard>> getStandardsBySubject(@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT_ID) Long subjectId) throws BadRequestException {
         return new ResponseEntity<>(standardService.getStandardsBySubject(subjectId), HttpStatus.OK);
     }
 
@@ -56,6 +57,25 @@ public class StandardController {
     @ApiOperation(value = "Get list units")
     public ResponseEntity<List<Units>> getUnits(){
         return new ResponseEntity<>(standardService.getUnits(),HttpStatus.OK);
+    }
+
+    @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("Get created standard")
+    public ResponseEntity<Standard> postStandard(@RequestBody @Valid StandardBean bean) throws BadRequestException{
+        return new ResponseEntity<>(standardService.postStandard(bean),HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("Get updated standard")
+    public ResponseEntity<Standard> putStandard(@PathVariable (value = ControllerAPI.PATH_VARIABLE_STANDARD_ID)Long standardId,@RequestBody @Valid StandardBean bean) throws BadRequestException{
+        return new ResponseEntity<>(standardService.putStandard(standardId,bean),HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID)
+    @ApiOperation(value = "Get status ok if all ok")
+    public ResponseEntity deleteStandardById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) {
+        standardService.deleteStandardById(standardId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

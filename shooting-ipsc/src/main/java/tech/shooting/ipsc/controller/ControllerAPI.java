@@ -32,7 +32,7 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_STATUS = "status";
     public static final String PATH_VARIABLE_QUIZ_ID = "quizId";
     public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
-    public static final String PATH_VARIABLE_SUBJECT = "subject";
+    public static final String PATH_VARIABLE_SUBJECT_ID = "subjectId";
     public static final String PATH_VARIABLE_WEAPON_ID = "weaponId";
     public static final String PATH_VARIABLE_WEAPON_TYPE_ID = "weaponTypeId";
     public static final String PATH_VARIABLE_INTERVAL = "interval";
@@ -55,7 +55,7 @@ public class ControllerAPI {
     public static final String REQUEST_COMMON_CONDITION_ID = "{" + PATH_VARIABLE_COMMON_CONDITION_ID + "}";
     public static final String REQUEST_UNIT_ID = "{" + PATH_VARIABLE_UNIT_ID + "}";
     public static final String REQUEST_SPECIALITY_ID = "{" + PATH_VARIABLE_SPECIALITY_ID + "}";
-    public static final String REQUEST_SUBJECT = "{" + PATH_VARIABLE_SUBJECT + "}";
+    public static final String REQUEST_SUBJECT_ID = "{" + PATH_VARIABLE_SUBJECT_ID + "}";
     public static final String REQUEST_COMPETITION_ID = "{" + PATH_VARIABLE_COMPETITION_ID + "}";
     public static final String REQUEST_STAGE_ID = "{" + PATH_VARIABLE_STAGE_ID + "}";
     public static final String REQUEST_COMPETITOR_ID = "{" + PATH_VARIABLE_COMPETITOR_ID + "}";
@@ -186,7 +186,7 @@ public class ControllerAPI {
     public static final String QUIZ_CONTROLLER_GET_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
     public static final String QUIZ_CONTROLLER_DELETE_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
     public static final String QUIZ_CONTROLLER_PUT_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/question/" + REQUEST_QUESTION_ID;
-    public static final String QUIZ_CONTROLLER_GET_SUBJECT_QUIZ = "/quiz/subject/" + REQUEST_SUBJECT;
+    public static final String QUIZ_CONTROLLER_GET_SUBJECT_QUIZ = "/quiz/subject/" + REQUEST_SUBJECT_ID;
     public static final String QUIZ_CONTROLLER_GET_QUIZ_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
     public static final String QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ = "/report/create";
     public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/list";
@@ -237,10 +237,11 @@ public class ControllerAPI {
 
     public static final String STANDARD_CONTROLLER = "/api/standard";
     public static final String STANDARD_CONTROLLER_GET_ALL = "/get/all";
-    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT = "/get/standards/"+REQUEST_SUBJECT;
-    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_ID = "/get/standards/"+REQUEST_STANDARD_ID;
+    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT = "/get/standards/"+ REQUEST_SUBJECT_ID;
+    public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_ID = "/get/standard/"+REQUEST_STANDARD_ID;
     public static final String STANDARD_CONTROLLER_GET_CATEGORIES = "/get/categories";
     public static final String STANDARD_CONTROLLER_GET_UNITS = "/get/units";
+    public static final String STANDARD_CONTROLLER_POST_STANDARD = "/post/standard";
 
 
     public static final String COMMON_CONDITION_CONTROLLER = "/api/common/condition";
@@ -249,4 +250,6 @@ public class ControllerAPI {
     public static final String COMMON_CONDITION_CONTROLLER_GET_BY_ID = "/get/common/condition/"+REQUEST_COMMON_CONDITION_ID;
     public static final String COMMON_CONDITION_CONTROLLER_POST_CONDITION = "/post/common/condition";
     public static final String COMMON_CONDITION_CONTROLLER_PUT_CONDITION = "/put/common/condition/"+REQUEST_COMMON_CONDITION_ID;
+    public static final String STANDARD_CONTROLLER_PUT_STANDARD =   "/put/standard/"+REQUEST_STANDARD_ID ;
+    public static final String STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID =  "/delete/standard/"+REQUEST_STANDARD_ID ;;
 }

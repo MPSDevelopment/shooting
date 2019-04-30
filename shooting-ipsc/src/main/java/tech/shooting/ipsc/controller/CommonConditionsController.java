@@ -49,7 +49,7 @@ public class CommonConditionsController {
     }
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_POST_CONDITION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get common condition")
+    @ApiOperation(value = "Post common condition")
     public ResponseEntity<CommonConditions> postCommonCondition(@RequestBody @Valid CommonConditionsBean bean) throws BadRequestException {
         return new ResponseEntity<>(conditionsService.postCommonCondition(bean),HttpStatus.CREATED);
     }

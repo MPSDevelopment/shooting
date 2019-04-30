@@ -1,23 +1,18 @@
-package tech.shooting.ipsc.pojo;
+package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.pojo.Fails;
+import tech.shooting.ipsc.pojo.Info;
 
 import java.util.List;
 
 @Data
 @Accessors(chain = true)
-@Document(collection = "standard")
-@TypeAlias("standard")
-@ToString(callSuper = true)
-public class Standard  extends BaseDocument {
+public class StandardBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Info from standard", required = true)
@@ -25,8 +20,8 @@ public class Standard  extends BaseDocument {
 
     @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Subject standard", required = true)
-    private Subject subject;
+    @ApiModelProperty(value = "Subject id", required = true)
+    private Long subject;
 
     @JsonProperty
     @ApiModelProperty(value = "Is active", required = true)
@@ -38,7 +33,7 @@ public class Standard  extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "List categories", required = true)
-    private List<CategoriesAndTime> categoriesList;
+    private List<CategoriesBean> categoriesList;
 
     @JsonProperty
     @ApiModelProperty(value = "List fails")
@@ -46,6 +41,5 @@ public class Standard  extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "List conditions")
-    private List<Conditions> conditionsList;
-
+    private List<ConditionsBean> conditionsList;
 }

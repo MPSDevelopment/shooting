@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.pojo;
+package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,13 +6,10 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-
 @Data
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class Conditions {
-public static final String UNIT = "units";
-
+public class ConditionsBean {
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
     private String conditionsRus;
@@ -27,6 +24,6 @@ public static final String UNIT = "units";
 
     @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Standard units", required = true)
-    private Units units;
+    @ApiModelProperty(value = "Units id", required = true)
+    private Long units;
 }

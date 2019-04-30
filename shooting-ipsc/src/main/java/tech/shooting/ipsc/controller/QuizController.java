@@ -45,7 +45,7 @@ public class QuizController {
 
 	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ)
 	@ApiOperation(value = "Get list quiz from subject", notes = "Return list of quiz")
-	public ResponseEntity<List<Quiz>> getQuizFromSubject (@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT) Long subject) {
+	public ResponseEntity<List<Quiz>> getQuizFromSubject (@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT_ID) Long subject) {
 		return new ResponseEntity<>(quizService.getQuizFromSubject(subject), HttpStatus.OK);
 	}
 
