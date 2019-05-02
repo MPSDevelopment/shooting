@@ -42,9 +42,6 @@ import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.PersonService;
 
 import java.util.ArrayList;
@@ -247,7 +244,7 @@ public class PersonControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access getAll() with authorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getAll() with judge user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -352,7 +349,7 @@ public class PersonControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());

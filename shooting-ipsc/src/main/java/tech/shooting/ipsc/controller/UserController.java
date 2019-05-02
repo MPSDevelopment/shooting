@@ -65,7 +65,7 @@ public class UserController {
 		userService.deleteUser(userId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get User", notes = "Returns user object")
 	public ResponseEntity<User> getUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId) throws BadRequestException {

@@ -54,6 +54,7 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
 	public ResponseEntity<List<Person>> getUsers () {
@@ -75,6 +76,7 @@ public class PersonController {
 		return new ResponseEntity<>(personService.getCount(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM)
 	@ApiOperation(value = "Get all form's of present type", notes = "Return list TypePresent object")
 	public ResponseEntity<List<TypePresent>> getTypePresent () {

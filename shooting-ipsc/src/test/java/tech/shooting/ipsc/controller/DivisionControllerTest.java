@@ -43,9 +43,6 @@ import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.DivisionService;
 
 import java.util.Date;
@@ -155,9 +152,9 @@ class DivisionControllerTest {
 		assertEquals(20, divisionService.getCount());
 		// try access to getAllDivision with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to getAllDivision with non admin user
+		// try access to getAllDivision with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access to getAllDivision with admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();

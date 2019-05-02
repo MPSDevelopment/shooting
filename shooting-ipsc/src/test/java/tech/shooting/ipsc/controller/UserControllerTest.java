@@ -41,9 +41,6 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.UserService;
 import tech.shooting.ipsc.utils.UserLockUtils;
 
@@ -188,8 +185,8 @@ public class UserControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace(ControllerAPI.REQUEST_USER_ID, String.valueOf(455645646))))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access get user method authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace(ControllerAPI.REQUEST_USER_ID, String.valueOf(455645646)))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace(ControllerAPI.REQUEST_USER_ID, String.valueOf(testUser.getId())))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access get user method judge user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER.replace(ControllerAPI.REQUEST_USER_ID, String.valueOf(455645646)))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());

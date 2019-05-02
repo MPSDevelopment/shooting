@@ -41,6 +41,7 @@ public class DivisionController {
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Get all division", notes = "Return list divisions")
 	public ResponseEntity<List<DivisionDropList>> getAllDivision () {
