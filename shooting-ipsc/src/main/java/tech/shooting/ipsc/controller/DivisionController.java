@@ -77,6 +77,8 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);
 	}
 
+
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_ROOT)
 	@ApiOperation(value = "Return root division", notes = "Return root division object")
 	public ResponseEntity<DivisionBean> getRoot () {
