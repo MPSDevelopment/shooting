@@ -254,5 +254,6 @@ public class ControllerAPI {
 
 
     public static final String CATEGORY_CONTROLLER = "/api/category";
-    public static final String CATEGORY_CONTROLLER_GET_ALL_CATEGORIES ="/get/categories";
+    public static final String CATEGORY_CONTROLLER_GET_ALL_CATEGORIES ="/get/all/categories";
+    public static final String CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID = "/get/category/" + REQUEST_CATEGORY_ID;
 }

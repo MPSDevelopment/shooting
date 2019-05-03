@@ -29,10 +29,10 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
-import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.pojo.Address;
+import tech.shooting.ipsc.pojo.Categories;
+import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.CategoriesRepository;
-import tech.shooting.ipsc.repository.SubjectRepository;
-import tech.shooting.ipsc.repository.UnitsRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CategoryService;
 
@@ -54,13 +54,7 @@ class CategoryControllerTest {
     private UserRepository userRepository;
 
     @Autowired
-    private UnitsRepository unitsRepository;
-
-    @Autowired
     private CategoriesRepository categoriesRepository;
-
-    @Autowired
-    private SubjectRepository subjectRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -80,25 +74,14 @@ class CategoryControllerTest {
 
     private String userToken;
 
-    private Units testUnit;
-
     private Categories testCategory;
-
-    private Subject testSubject;
-
-    private Standard testStandard;
 
 
     @BeforeEach
     public void before() {
         categoriesRepository.deleteAll();
-
-        testUnit = testUnit == null ? unitsRepository.save(new Units().setUnits("testUnits")) : testUnit;
         testCategory = testCategory == null ? categoriesRepository.save(new Categories().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training")) : testCategory;
-        testSubject = testSubject == null ? subjectRepository.save(new Subject().setRus("LitrBooool").setKz("Physical training")) : testSubject;
-        testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false).setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz("Возраст. Спортсмен может получить определенный разряд только при условии достижения им определенного возраста: с 10 лет — 1-3 юношеские разряды и взрослые разряды, с 14 лет — КМС, с 15 лет — МС, а с 16 лет — МСМК."));
-
-        String password = RandomStringUtils.randomAscii(14);
+               String password = RandomStringUtils.randomAscii(14);
         user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
         admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
         judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
@@ -127,6 +110,24 @@ class CategoryControllerTest {
         String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_ALL_CATEGORIES).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
         List<Categories> listFromJson = JacksonUtils.getListFromJson(Categories[].class, contentAsString);
         assertEquals(testCategory, listFromJson.get(0));
+    }
+
+    @Test
+    void checkGetCategoryById() throws Exception {
+        assertEquals(1,categoriesRepository.findAll().size());
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        //try access with user role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+        //try access with judge role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        Categories categories = JacksonUtils.fromJson(Categories.class, contentAsString);
+        assertEquals(testCategory, categories);
     }
 
 }
