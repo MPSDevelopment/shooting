@@ -158,4 +158,62 @@ class CategoryControllerTest {
 
     }
 
+    @Test
+    void checkPutCategory() throws Exception {
+        assertEquals(1, categoriesRepository.findAll().size());
+        Categories category = new Categories().setNameCategoryRus("птн пнх").setNameCategoryKz("Pytin is an enemy");
+        Categories save = categoriesRepository.save(category);
+        category.setNameCategoryRus("птн пнх 10 ").setNameCategoryKz("Pytin is an enemy all the word");
+        String json = JacksonUtils.getJson(category);
+
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_PUT_CATEGORY.replace(ControllerAPI.REQUEST_CATEGORY_ID,save.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        //try access with user role
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_PUT_CATEGORY.replace(ControllerAPI.REQUEST_CATEGORY_ID,save.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with judge role
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_PUT_CATEGORY.replace(ControllerAPI.REQUEST_CATEGORY_ID,save.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_PUT_CATEGORY.replace(ControllerAPI.REQUEST_CATEGORY_ID, save.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        Categories categories = JacksonUtils.fromJson(Categories.class, contentAsString);
+        assertEquals(category.getNameCategoryKz(),categories.getNameCategoryKz());
+        assertEquals(category.getNameCategoryRus(),categories.getNameCategoryRus());
+        assertEquals(category.getId(),categories.getId());
+    }
+
+    @Test
+    void checkDeleteCategory() throws Exception{
+        assertEquals(1, categoriesRepository.findAll().size());
+
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID
+                .replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //try access with  user role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID
+                .replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER,userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with  judge role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID
+                .replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER,judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with  admin role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID
+                .replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER,adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+        assertEquals(0,categoriesRepository.findAll().size());
+
+    }
+
 }

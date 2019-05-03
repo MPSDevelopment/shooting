@@ -47,4 +47,19 @@ public class CategoryController {
         return  new ResponseEntity<>(categoryService.postCategory(categories),HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_PUT_CATEGORY , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get updated category")
+    public  ResponseEntity<Categories> putCategory(@PathVariable(value = ControllerAPI.PATH_VARIABLE_CATEGORY_ID) Long categoryId,@RequestBody @Valid Categories categories) throws BadRequestException {
+        return  new ResponseEntity<>(categoryService.putCategory(categoryId,categories),HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID)
+    @ApiOperation(value = "Return status if all ok")
+    public ResponseEntity deleteCategoryById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_CATEGORY_ID)Long categoryId) throws BadRequestException {
+        categoryService.deleteCategory(categoryId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

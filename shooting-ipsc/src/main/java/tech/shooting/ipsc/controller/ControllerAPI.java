@@ -257,4 +257,6 @@ public class ControllerAPI {
     public static final String CATEGORY_CONTROLLER_GET_ALL_CATEGORIES ="/get/all/categories";
     public static final String CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID = "/get/category/" + REQUEST_CATEGORY_ID;
     public static final String CATEGORY_CONTROLLER_POST_CATEGORY = "/post/category";
+    public static final String CATEGORY_CONTROLLER_PUT_CATEGORY = "/put/category/" + REQUEST_CATEGORY_ID;
+    public static final String CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID ="/delete/category/" + REQUEST_CATEGORY_ID;
 }

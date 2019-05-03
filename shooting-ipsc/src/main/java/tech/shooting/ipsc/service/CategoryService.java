@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class CategoryService {
+
     @Autowired
     private CategoriesRepository categoriesRepository;
 
@@ -28,5 +29,16 @@ public class CategoryService {
 
     public Categories postCategory(Categories categories) {
         return categoriesRepository.save(categories);
+    }
+
+    public Categories putCategory(Long categoryId, Categories categories) throws BadRequestException {
+        Categories categoriesFromDb = checkCategory(categoryId);
+        categoriesFromDb.setNameCategoryKz(categories.getNameCategoryKz());
+        categoriesFromDb.setNameCategoryRus(categories.getNameCategoryRus());
+        return categoriesRepository.save(categoriesFromDb);
+    }
+
+    public void deleteCategory(Long categoryId) throws BadRequestException {
+      categoriesRepository.delete(checkCategory(categoryId));
     }
 }
