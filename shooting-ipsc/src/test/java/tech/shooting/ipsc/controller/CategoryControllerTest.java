@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -40,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CategoriesRepository.class)
 @ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CategoryController.class, CategoryService.class})
@@ -81,7 +83,7 @@ class CategoryControllerTest {
     public void before() {
         categoriesRepository.deleteAll();
         testCategory = testCategory == null ? categoriesRepository.save(new Categories().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training")) : testCategory;
-               String password = RandomStringUtils.randomAscii(14);
+        String password = RandomStringUtils.randomAscii(14);
         user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
         admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
         judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
@@ -92,11 +94,9 @@ class CategoryControllerTest {
     }
 
 
-
-
     @Test
     void checkGetCategories() throws Exception {
-        assertEquals(1,categoriesRepository.findAll().size());
+        assertEquals(1, categoriesRepository.findAll().size());
         //try access with unauthorized user
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_ALL_CATEGORIES)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
@@ -114,20 +114,48 @@ class CategoryControllerTest {
 
     @Test
     void checkGetCategoryById() throws Exception {
-        assertEquals(1,categoriesRepository.findAll().size());
+        assertEquals(1, categoriesRepository.findAll().size());
         //try access with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID, testCategory.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
         //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID, testCategory.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID, testCategory.getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
         //try access with admin role
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID,testCategory.getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID.replace(ControllerAPI.REQUEST_CATEGORY_ID, testCategory.getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
         Categories categories = JacksonUtils.fromJson(Categories.class, contentAsString);
         assertEquals(testCategory, categories);
+    }
+
+    @Test
+    void checkPostCategory() throws Exception {
+        assertEquals(1, categoriesRepository.findAll().size());
+        Categories category = new Categories().setNameCategoryRus("птн пнх").setNameCategoryKz("Pytin is an enemy");
+        String json = JacksonUtils.getJson(category);
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_POST_CATEGORY)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //try access with judge role
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_POST_CATEGORY)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with user role
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_POST_CATEGORY)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with admin role
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CATEGORY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CATEGORY_CONTROLLER_POST_CATEGORY)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json).header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+
     }
 
 }

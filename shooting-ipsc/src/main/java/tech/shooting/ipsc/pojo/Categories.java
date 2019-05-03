@@ -9,6 +9,8 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @Accessors(chain = true)
 @ToString(callSuper = true)
@@ -18,10 +20,12 @@ public class Categories extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Name category by rus", required = true)
+    @NotBlank
     private String nameCategoryRus;
 
     @JsonProperty
     @ApiModelProperty(value = "Name category by kz", required = true)
+    @NotBlank
     private String nameCategoryKz;
 
 }

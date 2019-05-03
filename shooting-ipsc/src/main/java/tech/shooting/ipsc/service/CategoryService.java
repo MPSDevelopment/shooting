@@ -25,4 +25,8 @@ public class CategoryService {
     private Categories checkCategory(Long categoryId)  throws BadRequestException {
         return categoriesRepository.findById(categoryId).orElseThrow(()-> new BadRequestException(new ErrorMessage("Incorrect id category %s",categoryId)));
     }
+
+    public Categories postCategory(Categories categories) {
+        return categoriesRepository.save(categories);
+    }
 }
