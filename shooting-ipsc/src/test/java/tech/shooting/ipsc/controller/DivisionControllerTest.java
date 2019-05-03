@@ -141,7 +141,7 @@ class DivisionControllerTest {
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to remove division admin user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(0, divisionService.getCount());
 	}
 

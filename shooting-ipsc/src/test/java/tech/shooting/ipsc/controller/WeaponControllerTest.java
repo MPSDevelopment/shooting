@@ -128,7 +128,7 @@ class WeaponControllerTest {
         //try access with user role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 +
                 ControllerAPI.WEAPON_CONTROLLER_GET_ALL)
-                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
         //try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 +
                 ControllerAPI.WEAPON_CONTROLLER_GET_ALL)
@@ -156,7 +156,7 @@ class WeaponControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 +
                 ControllerAPI.WEAPON_CONTROLLER_GET_BY_ID
                         .replace(ControllerAPI.REQUEST_WEAPON_ID, weapon.getId().toString()))
-                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+                .header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
         //try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 +
                 ControllerAPI.WEAPON_CONTROLLER_GET_BY_ID

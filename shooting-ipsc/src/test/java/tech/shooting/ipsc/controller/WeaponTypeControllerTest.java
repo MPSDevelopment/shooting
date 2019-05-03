@@ -107,7 +107,7 @@ class WeaponTypeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER,userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
         //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER,judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER,judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with admin role
         String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
@@ -136,7 +136,7 @@ class WeaponTypeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_WEAPON_TYPE_ID,type.getId().toString())).header(Token.TOKEN_HEADER,userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
         //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_WEAPON_TYPE_ID,type.getId().toString())).header(Token.TOKEN_HEADER,judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_WEAPON_TYPE_ID,type.getId().toString())).header(Token.TOKEN_HEADER,judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with admin role
         String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_WEAPON_TYPE_ID,type.getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();

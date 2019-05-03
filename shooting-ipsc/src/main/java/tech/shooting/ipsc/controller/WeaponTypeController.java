@@ -27,12 +27,14 @@ public class WeaponTypeController {
     @Autowired
     private WeaponTypeService weaponService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL)
     @ApiOperation(value = "Return list of type weapon's", notes = "List<WeaponType> or Optional.empty()")
     public ResponseEntity<List<WeaponType>> getAllTypeOfWeapon() {
         return new ResponseEntity<>(weaponService.getAllType(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID)
     @ApiOperation(value = "Return weapon type by id", notes = "WeaponType or BadRequestException")
     public ResponseEntity<WeaponType> getTypeOfWeaponById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_TYPE_ID)Long weaponId) throws BadRequestException {
