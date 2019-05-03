@@ -36,9 +36,6 @@ import tech.shooting.ipsc.pojo.Speciality;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.SpecialityRepository;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.SpecialityService;
 
 import java.util.Date;
@@ -105,8 +102,8 @@ class SpecialityControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access to get all speciality with user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY).header(Token.TOKEN_HEADER, judgeToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		// try access to get all speciality with judge role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY).header(Token.TOKEN_HEADER, judgeToken))
@@ -132,7 +129,7 @@ class SpecialityControllerTest {
 		// try access to by id speciality with user role
 		mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.SPECIALITY_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID.replace(ControllerAPI.REQUEST_SPECIALITY_ID, speciality.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		// try access to by id speciality with judge role
 		mockMvc.perform(MockMvcRequestBuilders

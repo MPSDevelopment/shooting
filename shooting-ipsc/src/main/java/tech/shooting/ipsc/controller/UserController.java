@@ -66,7 +66,9 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(
+			value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get User", notes = "Returns user object")
 	public ResponseEntity<User> getUser (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId) throws BadRequestException {
 		return new ResponseEntity<>(userService.getDbUserIfExist(userId), HttpStatus.OK);
@@ -87,7 +89,9 @@ public class UserController {
 		return userService.getUsersByPage(page, size);
 	}
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(
+			value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_USER,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Add new user(RoleName.User)", notes = "Creates new user")
 	public ResponseEntity<User> postUser (@RequestBody @Valid UserSignupBean signupUser) {
 		return new ResponseEntity<>(userService.add(signupUser, RoleName.USER), HttpStatus.CREATED);

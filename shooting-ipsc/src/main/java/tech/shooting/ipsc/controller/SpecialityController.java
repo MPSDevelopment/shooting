@@ -27,12 +27,14 @@ public class SpecialityController {
 	@Autowired
 	private SpecialityService specialityService;
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY)
 	@ApiOperation(value = "Get  list speciality")
 	public ResponseEntity<List<Speciality>> getAllSpeciality() {
 		return new ResponseEntity<>(specialityService.getAll(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID)
 	@ApiOperation(value = "Get speciality by id or throws BadRequestException")
 	public ResponseEntity<Speciality> getSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
