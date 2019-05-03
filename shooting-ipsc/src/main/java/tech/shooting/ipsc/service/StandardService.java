@@ -52,10 +52,6 @@ public class StandardService {
         return standardRepository.findById(standardId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect standard id %s ", standardId)));
     }
 
-    public List<Categories> getCategories() {
-        return categoriesRepository.findAll();
-    }
-
     public List<Units> getUnits() {
         return unitsRepository.findAll();
     }

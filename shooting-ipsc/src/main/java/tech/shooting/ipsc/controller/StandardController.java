@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.StandardBean;
-import tech.shooting.ipsc.pojo.Categories;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.Units;
 import tech.shooting.ipsc.service.StandardService;
@@ -47,11 +46,6 @@ public class StandardController {
         return new ResponseEntity<>(standardService.getStandardById(standardId), HttpStatus.OK);
     }
 
-    @GetMapping(value = ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_GET_CATEGORIES)
-    @ApiOperation(value = "Get list categories")
-    public ResponseEntity<List<Categories>> getCategories(){
-        return new ResponseEntity<>(standardService.getCategories(),HttpStatus.OK);
-    }
 
     @GetMapping(value = ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_GET_UNITS)
     @ApiOperation(value = "Get list units")
