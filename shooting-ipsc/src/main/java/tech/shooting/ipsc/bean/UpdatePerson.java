@@ -7,6 +7,7 @@ import lombok.Data;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.WeaponIpscCode;
 import tech.shooting.ipsc.validator.ValidationConstants;
@@ -44,6 +45,10 @@ public class UpdatePerson {
 	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Person's type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person's division")
+	private Division division;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's active ")

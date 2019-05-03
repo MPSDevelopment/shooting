@@ -68,7 +68,14 @@ public class PersonService {
 			throw new BadRequestException(new ErrorMessage("Path personId %s does not match bean personId %s", personId, personBean.getId()));
 		}
 		Person dbPerson = getPersonByIdIfExist(personId);
-		BeanUtils.copyProperties(personBean, dbPerson);
+		BeanUtils.copyProperties(personBean, dbPerson, Person.DIVISION, Person.RANK);
+		if (personBean.getDivision() != null) {
+			dbPerson.setDivision(divisionRepository.findById(personBean.getDivision().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division id %s", personBean.getDivision().getId()))));
+		}
+		if (personBean.getRank() != null) {
+			dbPerson.setRank(rankRepository.findById(personBean.getRank().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect rank id %s", personBean.getRank().getId()))));
+		}
+		
 		dbPerson = personRepository.save(dbPerson);
 		return dbPerson;
 	}
