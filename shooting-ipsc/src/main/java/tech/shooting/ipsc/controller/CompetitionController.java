@@ -16,6 +16,7 @@ import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.service.CompetitionService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Controller
@@ -214,5 +215,13 @@ public class CompetitionController {
 	@ApiOperation(value = "Get Disqualification's type list", notes = "Return list of Disqualification's type")
 	public ResponseEntity<List<DisqualificationBean>> getEnumDisqualification () {
 		return new ResponseEntity<>(DisqualificationEnum.getList(), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyAuthority('ADMIN','JUDGE','USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE)
+	@ApiOperation(value = "Get score list by stage")
+	public ResponseEntity<List<Score>> getScoreListByStage (@PathVariable(value = ControllerAPI.REQUEST_COMPETITION_ID)@NotNull Long competitionId,
+															@PathVariable(value = ControllerAPI.REQUEST_STAGE_ID)@NotNull Long stageId) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.getScoreList(competitionId,stageId), HttpStatus.OK);
 	}
 }

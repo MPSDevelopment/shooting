@@ -144,7 +144,6 @@ class SpecialityControllerTest {
 		Speciality fromDB = JacksonUtils.fromJson(Speciality.class, contentAsString);
 		assertEquals(speciality, fromDB);
 	}
-
 	@Test
 
 	void checkGetSpecialityByIdIncorrectData() throws Exception {

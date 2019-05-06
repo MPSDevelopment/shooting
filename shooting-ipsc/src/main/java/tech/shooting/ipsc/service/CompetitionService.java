@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.service;
 
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -345,5 +344,9 @@ public class CompetitionService {
 
 	public List<String> getListTypeMark() {
 		return TypeMarkEnum.getList();
+	}
+
+	public List<Score> getScoreList(Long competitionId, Long stageId) throws BadRequestException {
+		return scoreRepository.findAllByStage(checkStage(checkCompetition(competitionId),stageId));
 	}
 }
