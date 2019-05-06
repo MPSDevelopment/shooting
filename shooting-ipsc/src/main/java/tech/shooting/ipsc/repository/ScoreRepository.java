@@ -3,7 +3,6 @@ package tech.shooting.ipsc.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import tech.shooting.ipsc.pojo.Score;
-import tech.shooting.ipsc.pojo.Stage;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ public interface ScoreRepository extends MongoRepository<Score, Long> {
 	List<Score> findAllByPersonId (Long personId);
 
 	List<Score> findAllByStageId (Long stageId);
-	List<Score> findAllByStage (Stage stage);
 
 	Score findByPersonIdAndStageId (Long personId, Long stageId);
 }

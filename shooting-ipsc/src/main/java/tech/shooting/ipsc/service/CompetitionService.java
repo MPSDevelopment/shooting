@@ -347,6 +347,8 @@ public class CompetitionService {
 	}
 
 	public List<Score> getScoreList(Long competitionId, Long stageId) throws BadRequestException {
-		return scoreRepository.findAllByStage(checkStage(checkCompetition(competitionId),stageId));
+		checkStage(checkCompetition(competitionId),stageId);
+		//my fault score save stageId not DBref, because don't save to DB
+		return scoreRepository.findAllByStageId(stageId);
 	}
 }
