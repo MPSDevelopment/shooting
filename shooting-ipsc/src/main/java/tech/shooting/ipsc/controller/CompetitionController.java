@@ -217,11 +217,11 @@ public class CompetitionController {
 		return new ResponseEntity<>(DisqualificationEnum.getList(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN','JUDGE','USER')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE)
 	@ApiOperation(value = "Get score list by stage")
-	public ResponseEntity<List<Score>> getScoreListByStage (@PathVariable(value = ControllerAPI.REQUEST_COMPETITION_ID)@NotNull Long competitionId,
-															@PathVariable(value = ControllerAPI.REQUEST_STAGE_ID)@NotNull Long stageId) throws BadRequestException {
+	public ResponseEntity<List<Score>> getScoreListByStage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID)@NotNull Long competitionId,
+															@PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID)@NotNull Long stageId) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.getScoreList(competitionId,stageId), HttpStatus.OK);
 	}
 }

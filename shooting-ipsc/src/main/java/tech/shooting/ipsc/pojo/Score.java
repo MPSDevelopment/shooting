@@ -17,6 +17,7 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 public class Score extends BaseDocument {
+
 	@JsonProperty
 	@ApiModelProperty(value = "Stage id", required = true)
 	@NotNull(message = ValidationConstants.STAGE_ID)
