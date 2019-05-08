@@ -28,14 +28,14 @@ public class UnitsController {
     @Autowired
     private UnitsService unitsService;
 
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.UNITS_CONTROLLER_GET_ALL_UNITS)
     @ApiOperation(value = "Get list units")
     public ResponseEntity<List<Units>> getUnits() {
         return new ResponseEntity<>(unitsService.getUnits(), HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.UNITS_CONTROLLER_GET_UNIT)
     @ApiOperation(value = "Get  unit by id")
     public ResponseEntity<Units> getUnit(@PathVariable(value = ControllerAPI.PATH_VARIABLE_UNIT_ID) @NotNull Long unitId) throws BadRequestException {
