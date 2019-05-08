@@ -87,4 +87,5 @@ public class ValidationConstants {
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
 	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number for Ak is 7 characters min";
 	public static final String WEAPON_NAME_MESSAGE = "Weapon name must be not blank";
+	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
 }

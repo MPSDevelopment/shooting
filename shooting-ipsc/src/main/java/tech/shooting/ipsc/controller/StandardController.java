@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.pojo.Standard;
-import tech.shooting.ipsc.pojo.Units;
 import tech.shooting.ipsc.service.StandardService;
 
 import javax.validation.Valid;
@@ -44,13 +43,6 @@ public class StandardController {
     @ApiOperation(value = "Get standard by id")
     public ResponseEntity<Standard> getStandardById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
         return new ResponseEntity<>(standardService.getStandardById(standardId), HttpStatus.OK);
-    }
-
-
-    @GetMapping(value = ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_GET_UNITS)
-    @ApiOperation(value = "Get list units")
-    public ResponseEntity<List<Units>> getUnits(){
-        return new ResponseEntity<>(standardService.getUnits(),HttpStatus.OK);
     }
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

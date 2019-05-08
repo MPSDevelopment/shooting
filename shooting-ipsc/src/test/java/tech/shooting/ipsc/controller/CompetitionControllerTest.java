@@ -841,7 +841,7 @@ public class CompetitionControllerTest {
         assertEquals(scores.length, res.size());
 
         Score score = scores[0];
-        log.info("Scroll list %s", score);
+        log.info("Score list %s", List.of(scores));
 
         String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE
                 .replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_STAGE_ID, score.getStageId().toString())).header(Token.TOKEN_HEADER, adminToken))
@@ -849,6 +849,7 @@ public class CompetitionControllerTest {
 
         List<Score> listFromJson = JacksonUtils.getListFromJson(Score[].class, contentAsString);
         Score score1 = listFromJson.get(0);
+        log.info("Score %s",listFromJson);
         assertEquals(score,score1);
 
     }

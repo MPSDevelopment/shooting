@@ -240,7 +240,6 @@ public class ControllerAPI {
     public static final String STANDARD_CONTROLLER_GET_ALL = "/get/all";
     public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT = "/get/standards/"+ REQUEST_SUBJECT_ID;
     public static final String STANDARD_CONTROLLER_GET_STANDARD_BY_ID = "/get/standard/"+REQUEST_STANDARD_ID;
-    public static final String STANDARD_CONTROLLER_GET_UNITS = "/get/units";
     public static final String STANDARD_CONTROLLER_POST_STANDARD = "/post/standard";
     public static final String STANDARD_CONTROLLER_PUT_STANDARD =   "/put/standard/"+REQUEST_STANDARD_ID ;
     public static final String STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID =  "/delete/standard/"+REQUEST_STANDARD_ID ;;
@@ -260,4 +259,11 @@ public class ControllerAPI {
     public static final String CATEGORY_CONTROLLER_POST_CATEGORY = "/post/category";
     public static final String CATEGORY_CONTROLLER_PUT_CATEGORY = "/put/category/" + REQUEST_CATEGORY_ID;
     public static final String CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID ="/delete/category/" + REQUEST_CATEGORY_ID;
+
+
+    public static final String UNITS_CONTROLLER = "/api/units";
+    public static final String UNITS_CONTROLLER_GET_ALL_UNITS = "/get/units";
+    public static final String UNITS_CONTROLLER_GET_UNIT ="/get/unit/"+REQUEST_UNIT_ID ;
+    public static final String UNITS_CONTROLLER_DELETE_UNIT = "/delete/unit/"+REQUEST_UNIT_ID ;
+    public static final String UNITS_CONTROLLER_POST_UNIT = "/post/unit";
 }
