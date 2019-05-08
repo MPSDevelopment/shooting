@@ -34,7 +34,6 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Units;
 import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.repository.StandardRepository;
 import tech.shooting.ipsc.repository.UnitsRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.UnitsService;
@@ -57,9 +56,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class UnitsControllerTest {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private StandardRepository standardRepository;
 
     @Autowired
     private UnitsRepository unitsRepository;
@@ -86,8 +82,7 @@ class UnitsControllerTest {
 
     @BeforeEach
     public void before() {
-        standardRepository.deleteAll();
-
+        unitsRepository.deleteAll();
         testUnit = testUnit == null ? unitsRepository.save(new Units().setUnits("testUnits")) : testUnit;
 
         String password = RandomStringUtils.randomAscii(14);

@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
@@ -50,8 +49,9 @@ public class Competition extends BaseDocument {
 	private WeaponTypeEnum typeWeapon;
 
 	@JsonProperty
+	@DBRef
 	@ApiModelProperty(value = "Competition rank", notes = "Level Competition")
-	private String rank;
+	private Rank rank;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")

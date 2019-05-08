@@ -16,10 +16,7 @@ import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.PageAble;
 import tech.shooting.ipsc.enums.*;
 import tech.shooting.ipsc.pojo.*;
-import tech.shooting.ipsc.repository.CompetitionRepository;
-import tech.shooting.ipsc.repository.PersonRepository;
-import tech.shooting.ipsc.repository.ScoreRepository;
-import tech.shooting.ipsc.repository.UserRepository;
+import tech.shooting.ipsc.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +36,9 @@ public class CompetitionService {
 	@Autowired
 	private ScoreRepository scoreRepository;
 
+	@Autowired
+	private RankRepository rankRepository;
+
 	private Competition useBeanUtilsWithOutJudges(CompetitionBean competitionBean, Competition competition) throws BadRequestException {
 		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
 		if (competitionBean.getRangeMaster() != null) {
@@ -49,6 +49,9 @@ public class CompetitionService {
 		}
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
+		}
+		if(competitionBean.getRank() != null){
+			competition.setRank(competitionBean.getRank());
 		}
 		return competition;
 	}

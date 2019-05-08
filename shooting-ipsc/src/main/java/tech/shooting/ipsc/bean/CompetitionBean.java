@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -47,7 +48,8 @@ public class CompetitionBean{
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition rank", notes = "Level Competition")
-	private String rank;
+	@NotNull
+	private Rank rank;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")
