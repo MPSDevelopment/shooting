@@ -22,6 +22,7 @@ public class User extends BaseDocument {
 	public static final String LOGIN_FIELD = "login";
 
 	public static final String PASSWORD_FIELD = "password";
+	public static final String PASSWORD_ROLE_NAME = "roleName";
 
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "User's name", required = true)

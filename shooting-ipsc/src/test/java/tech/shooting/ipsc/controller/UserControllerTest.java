@@ -261,7 +261,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void checkGetAllUsersByPage() throws Exception {
+	public void checkGetAllUsersWithRoleNameUserByPage() throws Exception {
 		createUsers(40);
 		// try to access getAllUsersByPage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0
@@ -300,9 +300,9 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void checkGetAllUsersByPagePart2() throws Exception {
+	public void checkGetAllUsersWithRoleNameUserByPagePart2() throws Exception {
 		// try to access to header
-		int sizeAllUser = userRepository.findAll().size();
+		int sizeAllUser = userRepository.findByRoleName(RoleName.USER).size();
 		int page = 250;
 		int size = 0;
 		int countInAPage = size <= 10 ? 10 : 20;
