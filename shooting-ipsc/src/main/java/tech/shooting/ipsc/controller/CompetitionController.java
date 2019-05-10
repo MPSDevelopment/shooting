@@ -224,4 +224,11 @@ public class CompetitionController {
 															@PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID)@NotNull Long stageId) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.getScoreList(competitionId,stageId), HttpStatus.OK);
 	}
+
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_ALL_COMPETITION)
+	@ApiOperation(value = "Remove all competition", notes = "Return status ok")
+	public ResponseEntity<Void> deleteAllCompetition () throws BadRequestException {
+		competitionService.deleteAll();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

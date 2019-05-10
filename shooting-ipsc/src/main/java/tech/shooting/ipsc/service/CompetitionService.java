@@ -354,4 +354,8 @@ public class CompetitionService {
 		//my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findAllByStageId(stageId);
 	}
+
+	public void deleteAll() {
+			competitionRepository.deleteAll();
+	}
 }

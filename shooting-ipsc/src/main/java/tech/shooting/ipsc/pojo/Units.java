@@ -16,7 +16,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 @ToString(callSuper = true)
 public class Units extends BaseDocument {
 
-    @JsonProperty
+    @JsonProperty(value = "name")
     @ApiModelProperty(value = "Units name")
     private String units;
 }
