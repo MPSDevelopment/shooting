@@ -53,6 +53,12 @@ public class UserController {
 		return new ResponseEntity<>(userService.getListJudges(), HttpStatus.OK);
 	}
 
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_USER_ROLE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get list users", notes = "Return list of user object")
+	public ResponseEntity<List<User>> getAllUserWithUserRole () {
+		return new ResponseEntity<>(userService.getListUsers(), HttpStatus.OK);
+	}
+
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_CHANGE_PASSWORD, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update user password", notes = "Update user password")
 	public ResponseEntity<User> updatePassword (@PathVariable(value = ControllerAPI.PATH_VARIABLE_USER_ID) Long userId, @RequestBody @Valid ChangePasswordBean bean) throws BadRequestException {

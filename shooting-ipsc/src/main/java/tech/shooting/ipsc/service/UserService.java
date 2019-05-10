@@ -115,4 +115,8 @@ public class UserService {
 	public List<User> getListJudges () {
 		return userRepository.findByRoleName(RoleName.JUDGE);
 	}
+
+	public List<User> getListUsers () {
+		return userRepository.findByRoleName(RoleName.USER);
+	}
 }

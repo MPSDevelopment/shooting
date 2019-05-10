@@ -266,4 +266,5 @@ public class ControllerAPI {
     public static final String UNITS_CONTROLLER_GET_UNIT ="/get/unit/"+REQUEST_UNIT_ID ;
     public static final String UNITS_CONTROLLER_DELETE_UNIT = "/delete/unit/"+REQUEST_UNIT_ID ;
     public static final String UNITS_CONTROLLER_POST_UNIT = "/post/unit";
+    public static final String USER_CONTROLLER_GET_USER_ROLE ="/all/user";
 }
