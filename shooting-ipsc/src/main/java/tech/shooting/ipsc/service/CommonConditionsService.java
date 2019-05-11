@@ -47,7 +47,7 @@ public class CommonConditionsService {
     }
 
     private Units checkUnits(Long units) throws BadRequestException {
-        return unitsRepository.findById(units).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect units id %s", units)));
+        return unitsRepository.findById(units).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect name id %s", units)));
     }
 
     public CommonConditions putCommonCondition(Long commonConditionId, CommonConditionsBean bean) throws BadRequestException {

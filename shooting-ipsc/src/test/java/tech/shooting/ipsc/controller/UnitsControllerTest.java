@@ -140,7 +140,7 @@ class UnitsControllerTest {
 
     @Test
     void checkPostUnit() throws Exception {
-        UnitBean bean = new UnitBean().setUnits("squard");
+        UnitBean bean = new UnitBean().setName("squard");
         String json = JacksonUtils.getJson(bean);
         //try access with unauthorized user
         mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.UNITS_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.UNITS_CONTROLLER_POST_UNIT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -151,7 +151,7 @@ class UnitsControllerTest {
         //try access with admin role
         String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.UNITS_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.UNITS_CONTROLLER_POST_UNIT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
         Units units = JacksonUtils.fromJson(Units.class, contentAsString);
-        assertEquals(bean.getUnits(), units.getUnits());
+        assertEquals(bean.getName(), units.getUnits());
         assertNotNull(units.getId());
     }
 

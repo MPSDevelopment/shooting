@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class Conditions {
-public static final String UNIT = "units";
+public static final String UNIT = "name";
 
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
@@ -27,6 +27,6 @@ public static final String UNIT = "units";
 
     @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Standard units", required = true)
+    @ApiModelProperty(value = "Standard name", required = true)
     private Units units;
 }

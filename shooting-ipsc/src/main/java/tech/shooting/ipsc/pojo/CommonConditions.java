@@ -16,7 +16,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 @TypeAlias("standard")
 @ToString(callSuper = true)
 public class CommonConditions  extends BaseDocument {
-    public static final String COMMON_CONDITION_UNITS = "units";
+    public static final String COMMON_CONDITION_UNITS = "name";
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
     private String conditionsRus;
@@ -31,7 +31,7 @@ public class CommonConditions  extends BaseDocument {
 
     @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Standard units", required = true)
+    @ApiModelProperty(value = "Standard name", required = true)
     private Units units;
 
     @JsonProperty

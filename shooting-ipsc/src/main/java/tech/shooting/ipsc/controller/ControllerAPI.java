@@ -261,8 +261,8 @@ public class ControllerAPI {
     public static final String CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID ="/delete/category/" + REQUEST_CATEGORY_ID;
 
 
-    public static final String UNITS_CONTROLLER = "/api/units";
-    public static final String UNITS_CONTROLLER_GET_ALL_UNITS = "/get/units";
+    public static final String UNITS_CONTROLLER = "/api/name";
+    public static final String UNITS_CONTROLLER_GET_ALL_UNITS = "/get/name";
     public static final String UNITS_CONTROLLER_GET_UNIT ="/get/unit/"+REQUEST_UNIT_ID ;
     public static final String UNITS_CONTROLLER_DELETE_UNIT = "/delete/unit/"+REQUEST_UNIT_ID ;
     public static final String UNITS_CONTROLLER_POST_UNIT = "/post/unit";

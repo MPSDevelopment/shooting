@@ -11,8 +11,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 @Data
 @Accessors(chain = true)
-@Document(collection = "units")
-@TypeAlias("units")
+@Document(collection = "name")
+@TypeAlias("name")
 @ToString(callSuper = true)
 public class Units extends BaseDocument {
 

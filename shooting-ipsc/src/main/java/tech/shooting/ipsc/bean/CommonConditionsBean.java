@@ -21,7 +21,7 @@ public class CommonConditionsBean {
     private Double coefficient;
 
     @JsonProperty
-    @ApiModelProperty(value = "Standard units", required = true)
+    @ApiModelProperty(value = "Unit id", required = true)
     private Long units;
 
     @JsonProperty

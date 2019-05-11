@@ -32,6 +32,6 @@ public class UnitsService {
     }
 
     public Units postUnit(UnitBean bean) {
-        return unitsRepository.save(new Units().setUnits(bean.getUnits()));
+        return unitsRepository.save(new Units().setUnits(bean.getName()));
     }
 }

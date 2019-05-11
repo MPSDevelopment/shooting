@@ -30,7 +30,7 @@ public class UnitsController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.UNITS_CONTROLLER_GET_ALL_UNITS)
-    @ApiOperation(value = "Get list units")
+    @ApiOperation(value = "Get list name")
     public ResponseEntity<List<Units>> getUnits() {
         return new ResponseEntity<>(unitsService.getUnits(), HttpStatus.OK);
     }
