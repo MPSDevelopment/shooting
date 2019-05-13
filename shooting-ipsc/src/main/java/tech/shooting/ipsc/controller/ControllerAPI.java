@@ -37,12 +37,14 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_WEAPON_TYPE_ID = "weaponTypeId";
     public static final String PATH_VARIABLE_INTERVAL = "interval";
     public static final String PATH_VARIABLE_DATE = "date";
+    public static final String PATH_VARIABLE_COURSE_ID = "courseId";
 
 
     /*
      * request variable
      */
     public static final String REQUEST_STATUS = "{" + PATH_VARIABLE_STATUS + "}";
+    public static final String REQUEST_COURSE_ID = "{" + PATH_VARIABLE_COURSE_ID + "}";
     public static final String REQUEST_INTERVAL = "{" + PATH_VARIABLE_INTERVAL + "}";
     public static final String REQUEST_DATE = "{" + PATH_VARIABLE_DATE + "}";
     public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
@@ -268,4 +270,12 @@ public class ControllerAPI {
     public static final String UNITS_CONTROLLER_POST_UNIT = "/post/unit";
     public static final String USER_CONTROLLER_GET_USER_ROLE ="/all/user";
     public static final String COMPETITION_CONTROLLER_DELETE_ALL_COMPETITION = "/competition/delete/all";
+
+
+
+    public static final String COURSE_CONTROLLER = "/api/course";
+    public static final String COURSE_CONTROLLER_GET_ALL_COURSES = "/api/course/get/all";
+    public static final String COURSE_CONTROLLER_GET_COURSE_BY_ID = "/api/course/get/"+REQUEST_COURSE_ID;
+    public static final String COURSE_CONTROLLER_DELETE_COURSE_BY_ID = "/api/course/delete/"+REQUEST_COURSE_ID;
+    public static final String COURSE_CONTROLLER_POST_COURSE = "/api/course/post";
 }
