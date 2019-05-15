@@ -42,7 +42,7 @@ public class CompetitionBean{
 	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
-	@JsonProperty("name")
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 

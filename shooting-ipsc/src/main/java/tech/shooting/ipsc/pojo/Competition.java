@@ -44,7 +44,7 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
 	private ClassificationBreaks qualifierRank;
 
-	@JsonProperty("name")
+	@JsonProperty("weaponType")
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
