@@ -42,7 +42,7 @@ public class WeaponTypeController {
     }
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE)
-    @ApiOperation(value = "Return created weapon type or updated", notes = "Return created weaponType or Updated")
+    @ApiOperation(value = "Return created weapon type or updated", notes = "Return created name or Updated")
     public ResponseEntity<WeaponType> postTypeOfWeapon(@RequestBody @Valid WeaponTypeBean bean) {
         return new ResponseEntity<>(weaponService.postWeaponType(bean), HttpStatus.OK);
     }

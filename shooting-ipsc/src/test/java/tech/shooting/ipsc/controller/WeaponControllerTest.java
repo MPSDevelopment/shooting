@@ -100,7 +100,7 @@ class WeaponControllerTest {
     @BeforeEach
     void setUp() {
         weaponRepository.deleteAll();
-        testWeapon = new Weapon().setCount(0).setDivision(testDivision).setOwner(testPerson).setWeaponType(testWeaponType).setSerialNumber("1234567");
+        testWeapon = new Weapon().setCount(0).setDivision(testDivision).setOwner(testPerson).setName(testWeaponType).setSerialNumber("1234567");
         testPerson = testPerson == null ? personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
         testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
         testWeaponType = testWeaponType == null ? weaponTypeRepository.save(new WeaponType().setName("Test-AK")) : testWeaponType;
@@ -204,7 +204,7 @@ class WeaponControllerTest {
 
     private void createWeaponRows(int k) {
         for (int i = 0; i < k; i++) {
-            weaponRepository.save(new Weapon().setCount(i).setDivision(testDivision).setOwner(testPerson).setWeaponType(testWeaponType).setSerialNumber("1234567" + i));
+            weaponRepository.save(new Weapon().setCount(i).setDivision(testDivision).setOwner(testPerson).setName(testWeaponType).setSerialNumber("1234567" + i));
         }
     }
 
@@ -265,7 +265,7 @@ class WeaponControllerTest {
         assertEquals(testWeaponBean.getDivision(), weapon.getDivision().getId());
         assertEquals(testWeaponBean.getOwner(), weapon.getOwner().getId());
         assertEquals(testWeaponBean.getSerialNumber(), weapon.getSerialNumber());
-        assertEquals(testWeaponBean.getWeaponType(), weapon.getWeaponType().getId());
+        assertEquals(testWeaponBean.getWeaponType(), weapon.getName().getId());
     }
 
     @Test

@@ -49,9 +49,9 @@ public class WeaponService {
         Weapon bySerialNumber = weaponRepository.findBySerialNumber(bean.getSerialNumber());
         WeaponType weaponType = checkWeaponType(bean.getWeaponType());
         if (bySerialNumber == null){
-            bySerialNumber = new Weapon().setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponType(weaponType);
+            bySerialNumber = new Weapon().setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setName(weaponType);
         }else{
-           bySerialNumber.setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponType(weaponType);
+           bySerialNumber.setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setName(weaponType);
         }
         return weaponRepository.save(bySerialNumber);
     }

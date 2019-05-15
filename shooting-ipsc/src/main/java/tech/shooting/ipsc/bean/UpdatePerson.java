@@ -42,7 +42,7 @@ public class UpdatePerson {
 	@ApiModelProperty(value = "Person's team")
 	private String team;
 
-	@JsonProperty("weaponType")
+	@JsonProperty("name")
 	@ApiModelProperty(value = "Person's type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 	

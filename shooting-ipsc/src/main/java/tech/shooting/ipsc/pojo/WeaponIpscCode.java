@@ -13,7 +13,7 @@ public class WeaponIpscCode {
 	@ApiModelProperty(value = "IPSC code")
 	private String code;
 
-	@JsonProperty("weaponType")
+	@JsonProperty("name")
 	@ApiModelProperty(value = "Type of a weapon")
 	private WeaponTypeEnum typeWeapon;
 }
