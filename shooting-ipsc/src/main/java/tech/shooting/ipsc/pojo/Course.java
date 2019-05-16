@@ -23,6 +23,10 @@ public class Course extends BaseDocument {
     private Person person;
 
     @JsonProperty
+    @ApiModelProperty(value = "Division id")
+    private Long division;
+
+    @JsonProperty
     @ApiModelProperty(value = "Course name", required = true)
     private String name;
 

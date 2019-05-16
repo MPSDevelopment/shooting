@@ -54,7 +54,13 @@ public class CourseController {
 
     @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE)
     @ApiOperation(value = "Return updated course")
-    public ResponseEntity<Course> putCourse(@PathVariable(value = ControllerAPI.REQUEST_COURSE_ID) Long courseId, @RequestBody @Valid CourseBean bean) throws BadRequestException {
+    public ResponseEntity<Course> putCourse(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COURSE_ID) Long courseId, @RequestBody @Valid CourseBean bean) throws BadRequestException {
         return new ResponseEntity<>(courseService.putCourse(courseId, bean), HttpStatus.OK);
+    }
+
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION)
+    @ApiOperation(value = "Return course list")
+    public ResponseEntity<List<Course>> getCourseByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) {
+        return new ResponseEntity<>(courseService.getCourseByDivision(divisionId), HttpStatus.OK);
     }
 }

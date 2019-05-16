@@ -17,6 +17,7 @@ import java.util.List;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
+
     @Autowired
     private PersonRepository personRepository;
 
@@ -41,6 +42,7 @@ public class CourseService {
         Course course = new Course();
         BeanUtils.copyProperties(bean,course,Course.COURSE_PERSON);
         course.setPerson(person);
+        course.setDivision(person.getDivision().getId());
         return courseRepository.save(course);
     }
 
@@ -58,5 +60,10 @@ public class CourseService {
         BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
         course.setPerson(person);
         return courseRepository.save(course);
+    }
+
+    public List<Course> getCourseByDivision(Long divisionId) {
+        List<Course> allByDivision = courseRepository.findAllByDivision(divisionId);
+        return allByDivision;
     }
 }

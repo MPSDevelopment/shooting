@@ -279,4 +279,5 @@ public class ControllerAPI {
     public static final String COURSE_CONTROLLER_DELETE_COURSE_BY_ID = "/delete/course/" + REQUEST_COURSE_ID;
     public static final String COURSE_CONTROLLER_POST_COURSE = "/post/course/";
     public static final String COURSE_CONTROLLER_PUT_COURSE = "/put/course/" + REQUEST_COURSE_ID;
+    public static final String COURSE_CONTROLLER_GET_COURSE_BY_DIVISION = "/get/by/" + REQUEST_DIVISION_ID + "/course";
 }
