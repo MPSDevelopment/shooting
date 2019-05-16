@@ -86,9 +86,12 @@ class CommonConditionsControllerTest {
 
     private Person testPerson;
 
+    private CommonConditions testCommonConditions;
+
     @BeforeEach
     void setUp() {
         commonConditionsRepository.deleteAll();
+        testCommonConditions = new CommonConditions().setUnits(units).setConditionsRus("fdsfdsfd").setConditionsKz("fsdfsdfds").setMinValue(10.0).setMaxValue(20.0);
         units = units == null ? unitsRepository.save(new Units().setUnits("dfsfdfdsfdf")) : units;
 
         user = user == null
@@ -142,5 +145,33 @@ class CommonConditionsControllerTest {
         assertEquals(2, listFromJson.size());
     }
 
+    @Test
+    void checkGetCommonConditionById() throws Exception {
+        assertEquals(0, commonConditionsRepository.findAll().size());
+        CommonConditions condition = commonConditionsRepository.save(testCommonConditions);
+
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString())))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        //try access with  user role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with  judge role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        CommonConditions conditions = JacksonUtils.fromJson(CommonConditions.class, contentAsString);
+
+        assertEquals(condition, conditions);
+        assertEquals(1, commonConditionsRepository.findAll().size());
+    }
 
 }
