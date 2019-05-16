@@ -174,4 +174,32 @@ class CommonConditionsControllerTest {
         assertEquals(1, commonConditionsRepository.findAll().size());
     }
 
+    @Test
+    void checkDeleteCommonConditionById() throws Exception {
+        assertEquals(0, commonConditionsRepository.findAll().size());
+        CommonConditions condition = commonConditionsRepository.save(testCommonConditions);
+        assertEquals(1, commonConditionsRepository.findAll().size());
+
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString())))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        //try access with  user role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with  judge role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        //try access with admin role
+        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        assertEquals(0, commonConditionsRepository.findAll().size());
+    }
+
 }
