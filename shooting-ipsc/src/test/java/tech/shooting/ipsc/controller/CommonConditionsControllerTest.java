@@ -31,10 +31,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
-import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.Units;
-import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CommonConditionsRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UnitsRepository;
@@ -42,6 +39,7 @@ import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CommonConditionsService;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -105,19 +103,44 @@ class CommonConditionsControllerTest {
     }
 
     @Test
-    void checkPostCommonCondition ()  throws Exception {
+    void checkPostCommonCondition() throws Exception {
         CommonConditionsBean bean = new CommonConditionsBean().setCoefficient(20.0)
-            .setConditionsKz("fdsfdsfsfsd")
+                .setConditionsKz("fdsfdsfsfsd")
                 .setConditionsRus("fdsdfsfds")
                 .setMinValue(1.0)
                 .setMaxValue(20.0)
                 .setUnits(units.getId());
         String json = JacksonUtils.getJson(bean);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0+ControllerAPI.COMMON_CONDITION_CONTROLLER_POST_CONDITION)
-        .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_POST_CONDITION)
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
 
         assertEquals(1, commonConditionsRepository.findAll().size());
     }
+
+    @Test
+    void checkGetAllCommonConditions() throws Exception {
+        assertEquals(0, commonConditionsRepository.findAll().size());
+        commonConditionsRepository.save(new CommonConditions().setUnits(units).setConditionsRus("fdsfdsfd").setConditionsKz("fsdfsdfds").setMinValue(10.0).setMaxValue(20.0));
+        commonConditionsRepository.save(new CommonConditions().setUnits(units).setConditionsRus("fdsfdsfd").setConditionsKz("fsdfsdfds").setMinValue(10.0).setMaxValue(20.0));
+        //try access with unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //try access with  user role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with  judge role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //try access with admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        List<CommonConditions> listFromJson = JacksonUtils.getListFromJson(CommonConditions[].class, contentAsString);
+        assertEquals(2, listFromJson.size());
+    }
+
 
 }
