@@ -274,8 +274,9 @@ public class ControllerAPI {
 
 
     public static final String COURSE_CONTROLLER = "/api/course";
-    public static final String COURSE_CONTROLLER_GET_ALL_COURSES = "/api/course/get/all";
-    public static final String COURSE_CONTROLLER_GET_COURSE_BY_ID = "/api/course/get/"+REQUEST_COURSE_ID;
-    public static final String COURSE_CONTROLLER_DELETE_COURSE_BY_ID = "/api/course/delete/"+REQUEST_COURSE_ID;
-    public static final String COURSE_CONTROLLER_POST_COURSE = "/api/course/post";
+    public static final String COURSE_CONTROLLER_GET_ALL_COURSES = "/get/all/course";
+    public static final String COURSE_CONTROLLER_GET_COURSE_BY_ID = "/get/course/" + REQUEST_COURSE_ID;
+    public static final String COURSE_CONTROLLER_DELETE_COURSE_BY_ID = "/delete/course/" + REQUEST_COURSE_ID;
+    public static final String COURSE_CONTROLLER_POST_COURSE = "/post/course/";
+    public static final String COURSE_CONTROLLER_PUT_COURSE = "/put/course/" + REQUEST_COURSE_ID;
 }

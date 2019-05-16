@@ -51,4 +51,10 @@ public class CourseController {
     public ResponseEntity<Course> postCourse(@RequestBody @Valid CourseBean bean) throws BadRequestException {
         return new ResponseEntity<>(courseService.postCourse(bean), HttpStatus.CREATED);
     }
+
+    @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE)
+    @ApiOperation(value = "Return updated course")
+    public ResponseEntity<Course> putCourse(@PathVariable(value = ControllerAPI.REQUEST_COURSE_ID) Long courseId, @RequestBody @Valid CourseBean bean) throws BadRequestException {
+        return new ResponseEntity<>(courseService.putCourse(courseId, bean), HttpStatus.OK);
+    }
 }

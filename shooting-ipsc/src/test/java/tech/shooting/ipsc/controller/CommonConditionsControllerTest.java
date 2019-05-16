@@ -33,7 +33,6 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CommonConditionsRepository;
-import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.UnitsRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CommonConditionsService;
@@ -63,10 +62,6 @@ class CommonConditionsControllerTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
 
     @Autowired
     private MockMvc mockMvc;

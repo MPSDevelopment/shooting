@@ -47,4 +47,16 @@ public class CourseService {
     private Person checkPerson(Long person) throws BadRequestException {
         return personRepository.findById(person).orElseThrow(()-> new BadRequestException(new ErrorMessage("Incorrect person id %s",person)));
     }
+
+    public Course putCourse(Long courseId, CourseBean bean) throws BadRequestException {
+        Course course = checkCourse(courseId);
+        Person person = checkPerson(bean.getPerson());
+        if (!course.getPerson().equals(person)) {
+            new BadRequestException(new ErrorMessage("Person in the course must be same %s and %s", course.getPerson().getId(), person.getId()));
+        }
+
+        BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
+        course.setPerson(person);
+        return courseRepository.save(course);
+    }
 }
