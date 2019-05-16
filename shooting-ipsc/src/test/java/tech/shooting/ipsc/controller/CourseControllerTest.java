@@ -113,6 +113,11 @@ class CourseControllerTest {
     }
 
     @Test
+    void checkPostCourse() throws Exception {
+        createCourse();
+    }
+
+    @Test
     void checkGetCourseByDivision() throws Exception {
         Pair pair = createCourse();
         Course course = (Course) pair.getSecond();
@@ -191,5 +196,29 @@ class CourseControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
         Course courseFromDB = JacksonUtils.fromJson(Course.class, contentAsString);
         assertEquals(course.getId(), courseFromDB.getId());
+    }
+
+    @Test
+    void checkGetAllCourses() throws Exception {
+        Pair<CourseBean, Course> course1 = createCourse();
+        assertEquals(1, courseRepository.findAll().size());
+        //unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_ALL_COURSES)
+        )
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //user role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_ALL_COURSES)
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        //judge role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_ALL_COURSES)
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_ALL_COURSES)
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        List<Course> course = JacksonUtils.getListFromJson(Course[].class, contentAsString);
+        assertEquals(course1.getSecond().getId(), course.get(0).getId());
     }
 }
