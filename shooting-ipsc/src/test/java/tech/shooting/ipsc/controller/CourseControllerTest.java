@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -113,16 +114,9 @@ class CourseControllerTest {
 
     @Test
     void checkGetCourseByDivision() throws Exception {
-        assertEquals(0, courseRepository.findAll().size());
-
-        CourseBean bean = new CourseBean().setPerson(testing.getId()).setName("bla bla").setImagePath("fdgdsfdsfsdfsd").setAddress("fsdfds").setDate(OffsetDateTime.now());
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_POST_COURSE)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(JacksonUtils.getJson(bean)).header(Token.TOKEN_HEADER, adminToken))
-                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-        Course course = JacksonUtils.fromJson(Course.class, contentAsString);
-
-        assertEquals(1, courseRepository.findAll().size());
+        Pair pair = createCourse();
+        Course course = (Course) pair.getSecond();
+        CourseBean bean = (CourseBean) pair.getFirst();
         //unauthorized user
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION
                 .replace(ControllerAPI.REQUEST_DIVISION_ID, course.getDivision().toString()))
@@ -136,7 +130,7 @@ class CourseControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION
                 .replace(ControllerAPI.REQUEST_DIVISION_ID, course.getDivision().toString()))
                 .header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-
+        //admin role
         String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION
                 .replace(ControllerAPI.REQUEST_DIVISION_ID, course.getDivision().toString()))
                 .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
@@ -144,8 +138,7 @@ class CourseControllerTest {
         assertEquals(course.getId(), listFromJson.get(0).getId());
     }
 
-    @Test
-    void checkGetCourseByPerson() throws Exception {
+    private Pair<CourseBean, Course> createCourse() throws Exception {
         assertEquals(0, courseRepository.findAll().size());
 
         CourseBean bean = new CourseBean().setPerson(testing.getId()).setName("bla bla").setImagePath("fdgdsfdsfsdfsd").setAddress("fsdfds").setDate(OffsetDateTime.now());
@@ -156,11 +149,47 @@ class CourseControllerTest {
         Course course = JacksonUtils.fromJson(Course.class, contentAsString);
 
         assertEquals(1, courseRepository.findAll().size());
+        return Pair.of(bean, course);
+    }
+    @Test
+    void checkGetCourseByPerson() throws Exception {
+        Pair pair = createCourse();
+        Course course = (Course) pair.getSecond();
+        CourseBean bean = (CourseBean) pair.getFirst();
 
         String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_PERSON
                 .replace(ControllerAPI.REQUEST_PERSON_ID, testing.getId().toString()))
                 .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
         List<Course> listFromJson = JacksonUtils.getListFromJson(Course[].class, contentAsString1);
         assertEquals(course.getId(), listFromJson.get(0).getId());
+    }
+
+    @Test
+    void checkGetCourseById() throws Exception {
+        Pair pair = createCourse();
+        Course course = (Course) pair.getSecond();
+
+        assertEquals(1, courseRepository.findAll().size());
+        //unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_ID
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getId().toString())))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //judge role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_ID
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getId().toString()))
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //user role
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_ID
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getId().toString()))
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        //admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_ID
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getId().toString()))
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        Course courseFromDB = JacksonUtils.fromJson(Course.class, contentAsString);
+        assertEquals(course.getId(), courseFromDB.getId());
     }
 }
