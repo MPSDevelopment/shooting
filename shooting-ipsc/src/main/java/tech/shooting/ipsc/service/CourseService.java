@@ -66,4 +66,8 @@ public class CourseService {
         List<Course> allByDivision = courseRepository.findAllByDivision(divisionId);
         return allByDivision;
     }
+
+    public List<Course> getCoursesByPerson(Long personId) throws BadRequestException {
+        return courseRepository.findAllByPerson(checkPerson(personId));
+    }
 }

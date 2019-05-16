@@ -59,8 +59,14 @@ public class CourseController {
     }
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION)
-    @ApiOperation(value = "Return course list")
+    @ApiOperation(value = "Return course list by division")
     public ResponseEntity<List<Course>> getCourseByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) {
         return new ResponseEntity<>(courseService.getCourseByDivision(divisionId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_PERSON)
+    @ApiOperation(value = "Return list courses by person")
+    public ResponseEntity<List<Course>> getCourseByPerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+        return new ResponseEntity<>(courseService.getCoursesByPerson(personId), HttpStatus.OK);
     }
 }
