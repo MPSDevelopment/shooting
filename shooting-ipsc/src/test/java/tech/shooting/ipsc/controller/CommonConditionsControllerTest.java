@@ -202,4 +202,44 @@ class CommonConditionsControllerTest {
         assertEquals(0, commonConditionsRepository.findAll().size());
     }
 
+    @Test
+    void checkPutCommonCondition() throws Exception {
+        assertEquals(0, commonConditionsRepository.findAll().size());
+        CommonConditions condition = commonConditionsRepository.save(testCommonConditions);
+        assertEquals(1, commonConditionsRepository.findAll().size());
+
+        CommonConditionsBean bean = new CommonConditionsBean().setCoefficient(20.0)
+                .setConditionsKz("fdsfdsfsfsd")
+                .setConditionsRus("fdsdfsfds")
+                .setMinValue(1.0)
+                .setMaxValue(20.0)
+                .setUnits(units.getId());
+        String json = JacksonUtils.getJson(bean);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
+                .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
+                .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
+                .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
+                .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        CommonConditions conditions = JacksonUtils.fromJson(CommonConditions.class, contentAsString);
+        assertEquals(bean.getCoefficient(), conditions.getCoefficient());
+        assertEquals(bean.getMaxValue(), conditions.getMaxValue());
+        assertEquals(bean.getMinValue(), conditions.getMinValue());
+        assertEquals(bean.getConditionsKz(), conditions.getConditionsKz());
+        assertEquals(bean.getConditionsRus(), conditions.getConditionsRus());
+
+
+        assertEquals(1, commonConditionsRepository.findAll().size());
+    }
+
 }
