@@ -119,9 +119,9 @@ class CourseControllerTest {
 
     @Test
     void checkGetCourseByDivision() throws Exception {
-        Pair pair = createCourse();
-        Course course = (Course) pair.getSecond();
-        CourseBean bean = (CourseBean) pair.getFirst();
+        Pair<CourseBean, Course> pair = createCourse();
+        Course course = pair.getSecond();
+        CourseBean bean = pair.getFirst();
         //unauthorized user
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION
                 .replace(ControllerAPI.REQUEST_DIVISION_ID, course.getDivision().toString()))
@@ -156,11 +156,12 @@ class CourseControllerTest {
         assertEquals(1, courseRepository.findAll().size());
         return Pair.of(bean, course);
     }
+
     @Test
     void checkGetCourseByPerson() throws Exception {
-        Pair pair = createCourse();
-        Course course = (Course) pair.getSecond();
-        CourseBean bean = (CourseBean) pair.getFirst();
+        Pair<CourseBean, Course> pair = createCourse();
+        Course course = pair.getSecond();
+        CourseBean bean = pair.getFirst();
 
         String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_PERSON
                 .replace(ControllerAPI.REQUEST_PERSON_ID, testing.getId().toString()))
@@ -171,8 +172,8 @@ class CourseControllerTest {
 
     @Test
     void checkGetCourseById() throws Exception {
-        Pair pair = createCourse();
-        Course course = (Course) pair.getSecond();
+        Pair<CourseBean, Course> pair = createCourse();
+        Course course = pair.getSecond();
 
         assertEquals(1, courseRepository.findAll().size());
         //unauthorized user
@@ -220,5 +221,38 @@ class CourseControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
         List<Course> course = JacksonUtils.getListFromJson(Course[].class, contentAsString);
         assertEquals(course1.getSecond().getId(), course.get(0).getId());
+    }
+
+    @Test
+    void checkPutCourse() throws Exception {
+        Pair<CourseBean, Course> course = createCourse();
+        CourseBean first = course.getFirst().setName("fsdfdsfdsfds");
+        String json = JacksonUtils.getJson(first);
+        //unauthorized user
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getSecond().getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        //user role
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getSecond().getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .header(Token.TOKEN_HEADER, userToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        //judge role
+        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getSecond().getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .header(Token.TOKEN_HEADER, judgeToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+        //admin role
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_PUT_COURSE
+                .replace(ControllerAPI.REQUEST_COURSE_ID, course.getSecond().getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .header(Token.TOKEN_HEADER, adminToken))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+        Course course1 = JacksonUtils.fromJson(Course.class, contentAsString);
+        assertEquals(first.getName(), course1.getName());
+        assertEquals(course.getSecond().getId(), course1.getId());
     }
 }
