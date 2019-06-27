@@ -37,6 +37,7 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.createQuiz(quiz), HttpStatus.CREATED);
 	}
 
+        @PreAuthorize("hasRole('ADMIN')or hasRole('USER')")
 	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)
 	@ApiOperation(value = "Get list of subjects", notes = "Return list of subjects")
 	public ResponseEntity<List<Subject>> getEnumSubjects () {
