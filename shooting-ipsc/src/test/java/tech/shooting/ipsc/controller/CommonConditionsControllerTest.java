@@ -127,7 +127,7 @@ class CommonConditionsControllerTest {
         //try access with  user role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
                 .header(Token.TOKEN_HEADER, userToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         //try access with  judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
                 .header(Token.TOKEN_HEADER, judgeToken))
@@ -152,7 +152,7 @@ class CommonConditionsControllerTest {
         //try access with  user role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
                 .header(Token.TOKEN_HEADER, userToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with  judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
@@ -182,13 +182,15 @@ class CommonConditionsControllerTest {
         //try access with  user role
         mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
                 .header(Token.TOKEN_HEADER, userToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with  judge role
         mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
                 .header(Token.TOKEN_HEADER, judgeToken))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
 
+     condition = commonConditionsRepository.save(testCommonConditions);
+        assertEquals(1, commonConditionsRepository.findAll().size());
         //try access with admin role
         mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
                 .header(Token.TOKEN_HEADER, adminToken))
@@ -217,7 +219,7 @@ class CommonConditionsControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
                 .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMON_CONDITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION
                 .replace(ControllerAPI.REQUEST_COMMON_CONDITION_ID, condition.getId().toString()))

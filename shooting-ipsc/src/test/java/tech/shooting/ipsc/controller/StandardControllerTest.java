@@ -124,7 +124,7 @@ class StandardControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
         // try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         // try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -148,7 +148,7 @@ class StandardControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
         //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -172,7 +172,7 @@ class StandardControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
         //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -196,7 +196,8 @@ class StandardControllerTest {
         //try with unauthorized user role
         mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
         //try with user role
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+        count++;
         //try with judge role
         mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
         //try with admin role
@@ -241,7 +242,7 @@ class StandardControllerTest {
                 .replace(ControllerAPI.REQUEST_STANDARD_ID,standard.getId().toString()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json).header(Token.TOKEN_HEADER,userToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         //try with judge role
         mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
@@ -295,7 +296,7 @@ class StandardControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
                 .replace(ControllerAPI.REQUEST_STANDARD_ID,save.getId().toString()))
                 .header(Token.TOKEN_HEADER,userToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         //try access with judge role
         mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
