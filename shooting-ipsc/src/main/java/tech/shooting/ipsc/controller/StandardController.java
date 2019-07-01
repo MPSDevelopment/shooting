@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(value = ControllerAPI.STANDARD_CONTROLLER)
 @Api(value = ControllerAPI.STANDARD_CONTROLLER)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 public class StandardController {
     @Autowired
     private StandardService standardService;

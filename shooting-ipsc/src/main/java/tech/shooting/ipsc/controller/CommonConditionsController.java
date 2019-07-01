@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping(value = ControllerAPI.COMMON_CONDITION_CONTROLLER)
 @Api(value = ControllerAPI.COMMON_CONDITION_CONTROLLER)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 public class CommonConditionsController {
 
     @Autowired
