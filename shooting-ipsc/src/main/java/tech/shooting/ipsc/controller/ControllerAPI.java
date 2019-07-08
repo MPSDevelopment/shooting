@@ -25,6 +25,7 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_PAGE_NUMBER = "pageNumber";
     public static final String PATH_VARIABLE_PAGE_SIZE = "pageSize";
     public static final String PATH_VARIABLE_PERSON_ID = "personId";
+    public static final String PATH_VARIABLE_PERSON_NAME = "personName";
     public static final String PATH_VARIABLE_USER_ID = "userId";
     public static final String PATH_VARIABLE_DIVISION_ID = "divisionId";
     public static final String PATH_VARIABLE_CATEGORY_ID = "categoryId";
@@ -64,6 +65,7 @@ public class ControllerAPI {
     public static final String REQUEST_PAGE_NUMBER = "{" + PATH_VARIABLE_PAGE_NUMBER + "}";
     public static final String REQUEST_PAGE_SIZE = "{" + PATH_VARIABLE_PAGE_SIZE + "}";
     public static final String REQUEST_PERSON_ID = "{" + PATH_VARIABLE_PERSON_ID + "}";
+    public static final String REQUEST_PERSON_NAME = "{" + PATH_VARIABLE_PERSON_NAME + "}";
     public static final String REQUEST_USER_ID = "{" + PATH_VARIABLE_USER_ID + "}";
     public static final String REQUEST_QUIZ_ID = "{" + PATH_VARIABLE_QUIZ_ID + "}";
     public static final String REQUEST_QUESTION_ID = "{" + PATH_VARIABLE_QUESTION_ID + "}";
@@ -236,6 +238,8 @@ public class ControllerAPI {
     public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT = "/" + REQUEST_WEAPON_ID + "/add/firedcount/" + REQUEST_FIRED_COUNT;
     public static final String WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
     public static final String WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
+    public static final String WEAPON_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID =
+        "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
 
 
     public static final String STANDARD_CONTROLLER = "/api/standard";
