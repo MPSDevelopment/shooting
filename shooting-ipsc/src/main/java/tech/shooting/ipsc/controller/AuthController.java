@@ -76,6 +76,9 @@ public class AuthController {
 		}
 		user.setLogin(user.getLogin().trim().toLowerCase());
 		user.setPassword(user.getPassword().trim());
+		
+		log.info("User login for %s start", user.getLogin());
+		
 		User databaseUser =
 			Optional.ofNullable(userService.checkUserInDB(user.getLogin(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "User with login %s does not exist", user.getLogin()));
 		if(BooleanUtils.isNotTrue(databaseUser.isActive())) {
@@ -86,6 +89,9 @@ public class AuthController {
 		token = tokenUtils.createToken(databaseUser.getId(), Token.TokenType.USER, user.getLogin(), usersRole, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		log.info("User %s has been logged in with role = %s", user.getLogin(), usersRole);
 		HeaderUtils.setAuthToken(response, token);
+		
+		log.info("User login for %s finish", user.getLogin());
+		
 		return new ResponseEntity<>(new TokenLogin(token), HttpStatus.OK);
 	}
 
