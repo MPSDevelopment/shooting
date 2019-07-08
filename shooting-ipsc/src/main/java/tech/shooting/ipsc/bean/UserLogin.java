@@ -27,6 +27,6 @@ public class UserLogin {
 	@ApiModelProperty(value = "User's password", required = true)
 	@NotBlank(message = ValidationConstants.USER_PASSWORD_REQUIRED_MESSAGE)
 	@Size(min = 4, message = ValidationConstants.USER_PASSWORD_MESSAGE)
-	@ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
+//	@ValidPassword(message = ValidationConstants.LOGIN_INCORRECT)
 	private String password;
 }

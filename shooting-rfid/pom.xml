@@ -25,37 +25,25 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>shooting-commons</artifactId>
-			<version>${project.version}</version>
+			<groupId>com.handheld</groupId>
+			<artifactId>UHF</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/UHF.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
+			<groupId>cn.pda</groupId>
+			<artifactId>serialport</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/SerialPort.jar</systemPath>
 		</dependency>
+
 	</dependencies>
 
 	<build>
-		<finalName>ipsc</finalName>
-		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory></directory>
-				<targetPath>${project.build.directory}</targetPath>
-				<includes>
-					<include>*.sh</include>
-					<include>*.bat</include>
-					<include>*.service</include>
-					<include>Dockerfile</include>
-				</includes>
-			</resource>
-		</resources>
+		<finalName>RfidReader1</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -64,58 +52,6 @@
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire.plugin.version}</version>
-				<configuration>
-					<properties>
-						<includeTags>auto</includeTags>
-						<groups>auto</groups>
-					</properties>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${dependency.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>copy-lib</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<includeScope>runtime</includeScope>
-							<outputDirectory>${project.build.directory}/${lib.property}/</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<useBaseVersion>false</useBaseVersion>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>${jar.plugin.version}</version>
-				<configuration>
-					<outputDirectory>${project.build.directory}</outputDirectory>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathLayoutType>custom</classpathLayoutType>
-							<customClasspathLayout>
-								${lib.property}/${artifact.artifactId}${artifact.dashClassifier?}.${artifact.extension}
-							</customClasspathLayout>
-							<mainClass>tech.shooting.ipsc.IpscApplication</mainClass>
-						</manifest>
-					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -129,26 +65,21 @@
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>${assembly.plugin.version}</version>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${compiler.plugin.version}</version>
 						<configuration>
-							<descriptors>
-								<descriptor>zip.xml</descriptor>
-							</descriptors>
-							<archiverConfig>
-								<compress>true</compress>
-							</archiverConfig>
-							<recompressZippedFiles>true</recompressZippedFiles>
+							<source>${jdk.version}</source>
+							<target>${jdk.version}</target>
 						</configuration>
-						<executions>
-							<execution>
-								<id>make-assembly</id>
-								<phase>install</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-							</execution>
-						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>${jar.plugin.version}</version>
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</plugin>
 				</plugins>
 			</build>

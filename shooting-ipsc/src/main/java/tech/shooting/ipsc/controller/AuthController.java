@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,9 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User status")
@@ -76,8 +80,18 @@ public class AuthController {
 		}
 		user.setLogin(user.getLogin().trim().toLowerCase());
 		user.setPassword(user.getPassword().trim());
+		
+		log.info("User login for %s start", user.getLogin());
+		
 		User databaseUser =
 			Optional.ofNullable(userService.checkUserInDB(user.getLogin(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "User with login %s does not exist", user.getLogin()));
+		
+		if(passwordEncoder.matches(user.getPassword(), databaseUser.getPassword())) {
+			log.info("Password is correct");
+		} else {
+			throw new BadRequestException(new ErrorMessage("Wrong password"));
+		}
+		
 		if(BooleanUtils.isNotTrue(databaseUser.isActive())) {
 			log.info("  USER DIDN'T CONFIRM REGISTRATION");
 			throw new BadRequestException(new ErrorMessage("User didn't confirm registration"));
@@ -86,6 +100,9 @@ public class AuthController {
 		token = tokenUtils.createToken(databaseUser.getId(), Token.TokenType.USER, user.getLogin(), usersRole, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		log.info("User %s has been logged in with role = %s", user.getLogin(), usersRole);
 		HeaderUtils.setAuthToken(response, token);
+		
+		log.info("User login for %s finish", user.getLogin());
+		
 		return new ResponseEntity<>(new TokenLogin(token), HttpStatus.OK);
 	}
 
