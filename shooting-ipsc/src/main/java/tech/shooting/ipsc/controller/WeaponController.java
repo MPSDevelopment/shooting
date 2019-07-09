@@ -1,7 +1,13 @@
 package tech.shooting.ipsc.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,14 +15,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.WeaponBean;
 import tech.shooting.ipsc.pojo.Weapon;
 import tech.shooting.ipsc.service.WeaponService;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.WEAPON_CONTROLLER)
@@ -57,6 +65,14 @@ public class WeaponController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID)
+    @ApiOperation(value = "Return all weapon's  where owner find by  person name and division id")
+    public ResponseEntity<List<Weapon>> getWeaponByPersonNameAndDivisionID(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_NAME) @NotEmpty String personName,
+                                                                           @PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NonNull long divisionId) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.getAllByPersonWeapon(personName, divisionId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Return created weapon if exist update", notes = "Return created weapon if exist update")
     public ResponseEntity<Weapon> postWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
@@ -72,7 +88,8 @@ public class WeaponController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_ADD_OWNER)
     @ApiOperation(value = "Return updated weapon row", notes = "Return updated Weapon object")
-    public ResponseEntity<Weapon> postWeaponAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+    public ResponseEntity<Weapon> postWeaponAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value =
+        ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
         return new ResponseEntity<>(weaponService.addOwnerToWeapon(weaponId, personId), HttpStatus.OK);
     }
 
@@ -84,7 +101,8 @@ public class WeaponController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON_ADD_FIRED_COUNT)
     @ApiOperation(value = "Return updated weapon row, with owner null", notes = "Return updated Weapon object")
-    public ResponseEntity<Weapon> postWeaponAddShootings(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_FIRED_COUNT) Integer firedCount) throws BadRequestException {
+    public ResponseEntity<Weapon> postWeaponAddShootings(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_ID) Long weaponId, @PathVariable(value =
+        ControllerAPI.PATH_VARIABLE_FIRED_COUNT) Integer firedCount) throws BadRequestException {
         return new ResponseEntity<>(weaponService.addNumberOfShootingForWeapon(weaponId, firedCount), HttpStatus.OK);
     }
 }

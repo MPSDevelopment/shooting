@@ -1,5 +1,8 @@
 package tech.shooting.ipsc.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
@@ -13,8 +16,6 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.WeaponRepository;
 import tech.shooting.ipsc.repository.WeaponTypeRepository;
-
-import java.util.List;
 
 
 @Service
@@ -100,5 +101,9 @@ public class WeaponService {
 
     public List<Weapon> getAllByPerson(Long personId) throws BadRequestException {
             return weaponRepository.findAllByOwner(checkPerson(personId));
+    }
+
+    public List<Weapon> getAllByPersonWeapon(String personName, long divisionId) throws BadRequestException {
+        return getAllByDivision(divisionId).stream().filter(weapon -> weapon.getOwner().getName().equalsIgnoreCase(personName)).collect(Collectors.toList());
     }
 }
