@@ -85,7 +85,9 @@ ipsc:
     adminLogin: ipsc
     adminpassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-    
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG    
 ---
 spring:
   profiles: docker

@@ -37,6 +37,9 @@ public class UserService {
 		String password = userPassword.trim();
 		User databaseUser = userRepository.findByLogin(login);
 		if(databaseUser != null) {
+			
+			log.error("User with login %s has been found", userLogin);
+			
 			boolean ok = passwordEncoder.matches(password, databaseUser.getPassword());
 			if(ok) {
 				log.info("  PASSWORD  OK. user active %s", databaseUser.isActive());
