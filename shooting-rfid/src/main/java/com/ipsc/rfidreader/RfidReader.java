@@ -1,4 +1,4 @@
-package com.ipsc.rfidreader1;
+package com.ipsc.rfidreader;
 
 import com.handheld.UHF.UhfManager;
 
@@ -17,13 +17,15 @@ public class RfidReader {
 
 	private int membank;
 	private int addr = 0;
+	private int length = 1;
 
 	private byte[] accessPassword = { 0, 0, 0, 0 };
 
-	private int length = 1;
-
 	private ArrayList<String> listepc = new ArrayList<String>();
 	private ArrayList<EPC> listEPC = new ArrayList<EPC>();
+
+	private boolean runFlag = true;
+	private boolean startFlag = false;
 
 //	public String show() {
 //		String rfidMark = "";
@@ -40,33 +42,48 @@ public class RfidReader {
 //
 //		return "Here must be mark -> " + rfidMark;
 //	}
+	
+	public String start() {
+		startFlag = true;
+		return "Started";
+	}
+	
+	public String stop() {
+		startFlag = false;
+		return "Stopped";
+	}
 
 	public String show() {
 
 		String result = initialize();
 
-		membank = UhfManager.EPC;
+		membank = UhfManager.RESERVE;
 
 		if (accessPassword.length != 4) {
-			return result + "\n Wrong password";
+//			return result + "\n Wrong password";
+			return "Wrong password";
 		}
 		// read data
 		byte[] data = manager.readFrom6C(membank, addr, length, accessPassword);
 		if (data != null && data.length > 1) {
 			String dataStr = Tools.Bytes2HexString(data, data.length);
-			result += "\n Here must be mark -> " + dataStr;
+			return dataStr;
+			// result += "\n Here must be mark -> " + dataStr;
 		} else {
-			result += "\n Wrong mark for hardware -> " + (manager.getFirmware() == null || manager.getFirmware().length == 0 ? "Hardware not detected" : new String(manager.getFirmware()));
+			return "Wrong mark, List EPC size is " + listepc.size();
+			// result += "\n Wrong mark for hardware -> " + (manager.getFirmware() == null || manager.getFirmware().length == 0 ? "Hardware not detected" : Tools.Bytes2HexString(manager.getFirmware(), manager.getFirmware().length));
 		}
 
-		List<byte[]> epcList = manager.inventoryRealTime(); // inventory real time
-
-		for (byte[] epc : epcList) {
-			String epcStr = Tools.Bytes2HexString(epc, epc.length);
-			result += "\n Code is " + epcStr;
-		}
-
-		return result;
+//		List<byte[]> epcList = manager.inventoryRealTime(); // inventory real time
+//
+//		for (byte[] epc : epcList) {
+//			String epcStr = Tools.Bytes2HexString(epc, epc.length);
+//			result += "\n Code is " + epcStr;
+//		}
+//		
+//		result += "\n List EPC size is  " + listepc.size();
+//
+//		return result;
 	}
 
 	public void create() {
@@ -104,7 +121,7 @@ public class RfidReader {
 //		default:
 //			break;
 //		}
-		
+
 		UhfManager.Port = 13;
 
 		manager = UhfManager.getInstance();
@@ -120,22 +137,21 @@ public class RfidReader {
 
 //		manager.setOutputPower(power);
 //		manager.setWorkArea(area);
-		
-		
+
 		byte[] version_bs = manager.getFirmware();
 
 		result = "Manager has been initiated.";
-		result += "\n Port is " +  UhfManager.Port +  "Power is "+ UhfManager.Power;
+		result += "\n Port is " + UhfManager.Port + "Power is " + UhfManager.Power;
 		result += "\n Frequency is " + manager.getFrequency();
 		result += "\n Rate is " + UhfManager.BaudRate;
 
 //		manager.stopInventoryMulti();
-		
+
 		if (version_bs != null) {
 			result += "\n Firmware " + new String(version_bs);
 		}
-		
-		//start inventory thread
+
+		// start inventory thread
 		Thread thread = new InventoryThread();
 		thread.start();
 
@@ -161,8 +177,8 @@ public class RfidReader {
 		@Override
 		public void run() {
 			super.run();
-//			while (runFlag) {
-//				if (startFlag) {
+			while (runFlag) {
+				if (startFlag) {
 					// manager.stopInventoryMulti()
 					epcList = manager.inventoryRealTime(); // inventory real time
 					if (epcList != null && !epcList.isEmpty()) {
@@ -179,8 +195,8 @@ public class RfidReader {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-//				}
-//			}
+				}
+			}
 		}
 	}
 

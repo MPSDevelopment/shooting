@@ -1,4 +1,4 @@
-package com.ipsc.rfidreader1;
+package com.ipsc.rfidreader;
 
 public class EPC {
 	private int id;
