@@ -55,7 +55,7 @@ public class AuthController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User status")
-	public ResponseEntity<String> statusGet (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
+	public ResponseEntity<String> statusGet(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
 		// Long id = tokenUtils.getIdFromToken(token);
 		// log.info("id fro status = %s ", id);
 		return new ResponseEntity<>(token, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class AuthController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_GET_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User status")
-	public ResponseEntity<String> statusPost (@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
+	public ResponseEntity<String> statusPost(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) throws RequestException {
 		// Long id = tokenUtils.getIdFromToken(token);
 		// log.info("id fro status = %s ", id);
 		return new ResponseEntity<>(token, HttpStatus.OK);
@@ -72,44 +72,44 @@ public class AuthController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Login")
-	public ResponseEntity<TokenLogin> login (HttpServletResponse response, @RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
-		@RequestBody @Valid UserLogin user) throws RequestException {
+	public ResponseEntity<TokenLogin> login(HttpServletResponse response, @RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestBody @Valid UserLogin user) throws RequestException {
 		log.info("Start Login User with login = %s", user.getLogin());
-		if(StringUtils.isNotBlank(token) && tokenUtils.verifyToken(token)) {
+		if (StringUtils.isNotBlank(token) && tokenUtils.verifyToken(token)) {
 			throw new NotModifiedException(new ErrorMessage("User has been already logged in"));
 		}
 		user.setLogin(user.getLogin().trim().toLowerCase());
 		user.setPassword(user.getPassword().trim());
-		
+
 		log.info("User login for %s start", user.getLogin());
-		
-		User databaseUser =
-			Optional.ofNullable(userService.checkUserInDB(user.getLogin(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "User with login %s does not exist", user.getLogin()));
-		
-		if(passwordEncoder.matches(user.getPassword(), databaseUser.getPassword())) {
-			log.info("Password is correct");
-		} else {
-			throw new BadRequestException(new ErrorMessage("Wrong password"));
-		}
-		
-		if(BooleanUtils.isNotTrue(databaseUser.isActive())) {
+
+		User databaseUser = Optional.ofNullable(userService.checkUserInDB(user.getLogin(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "Wrong password for an user with login %s", user.getLogin()));
+
+//		if(passwordEncoder.matches(user.getPassword(), databaseUser.getPassword())) {
+//			log.info("Password is correct");
+//		} else {
+//			throw new BadRequestException(new ErrorMessage("Wrong password"));
+//		}
+
+		if (BooleanUtils.isNotTrue(databaseUser.isActive())) {
 			log.info("  USER DIDN'T CONFIRM REGISTRATION");
 			throw new BadRequestException(new ErrorMessage("User didn't confirm registration"));
+		} else {
+			log.info("User with login %s is active", user.getLogin());
 		}
 		RoleName usersRole = databaseUser.getRoleName();
 		token = tokenUtils.createToken(databaseUser.getId(), Token.TokenType.USER, user.getLogin(), usersRole, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		log.info("User %s has been logged in with role = %s", user.getLogin(), usersRole);
 		HeaderUtils.setAuthToken(response, token);
-		
+
 		log.info("User login for %s finish", user.getLogin());
-		
+
 		return new ResponseEntity<>(new TokenLogin(token), HttpStatus.OK);
 	}
 
-	//	@PreAuthorize(IpscConstants.PERMIT_ALL)
+	// @PreAuthorize(IpscConstants.PERMIT_ALL)
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "User Logout")
-	public ResponseEntity<SuccessfulMessage> logout (HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> logout(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
 		Authentication auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(() -> new BadRequestException(new ErrorMessage("User was not logged in")));
 		new SecurityContextLogoutHandler().logout(request, response, auth);
 		log.info("User %s has been logged out", auth.getName());
