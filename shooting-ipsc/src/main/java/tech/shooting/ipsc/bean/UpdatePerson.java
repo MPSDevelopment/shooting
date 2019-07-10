@@ -48,7 +48,7 @@ public class UpdatePerson {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
-	private Division division;
+	private Long division;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's active ")
@@ -56,7 +56,7 @@ public class UpdatePerson {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
-	private Rank rank;
+	private Long rank;
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
