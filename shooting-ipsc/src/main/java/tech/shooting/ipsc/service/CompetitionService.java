@@ -284,7 +284,7 @@ public class CompetitionService {
 		}
 	}
 
-	private Competitor checkCompetitorByRfidCode(Competition competition, String mark) throws BadRequestException {
+	public Competitor checkCompetitorByRfidCode(Competition competition, String mark) throws BadRequestException {
 		return competition.getCompetitors().stream().filter(member -> mark.equals(member.getRfidCode())).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor rfid $s", mark)));
 	}
 

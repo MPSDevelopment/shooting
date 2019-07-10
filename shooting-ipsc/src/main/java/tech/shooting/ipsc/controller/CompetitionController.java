@@ -181,7 +181,14 @@ public class CompetitionController {
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMarks competitorMark) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
-
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get competitor by mark")
+	public ResponseEntity<Competitor> getCompetitorByCode(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId, @RequestBody String competitorMark) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.checkCompetitorByRfidCode(competitionService.checkCompetition(competitionId), competitorMark), HttpStatus.OK);
+	}
+	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL)
 	@ApiOperation(value = "Return level description for competitors", notes = "Return list LevelBean object")
 	public ResponseEntity<List<LevelBean>> getLevelEnum () {
