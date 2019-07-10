@@ -160,6 +160,7 @@
 					<include>*.service</include>
 					<include>Dockerfile</include>
 					<include>docker-compose.yml</include>
+					<include>ipsc</include>
 				</includes>
 			</resource>
 		</resources>

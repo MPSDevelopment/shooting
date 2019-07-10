@@ -15,6 +15,8 @@ COPY ipsc.jar /usr/share/servers/ipsc/ipsc.jar
 
 EXPOSE 9901
 
+EXPOSE 1883
+
 # ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/share/servers/ipsc/ipsc.jar"]
 
 # RUN chmod 755 /usr/share/servers/ipsc/service.sh
