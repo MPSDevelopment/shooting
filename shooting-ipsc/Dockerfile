@@ -4,14 +4,14 @@ FROM openjdk:11-jre
 #RUN mkdir /usr/share/servers/ipsc
 
 # Add libs
-ADD target/lib           /usr/share/servers/ipsc/lib
+ADD lib /usr/share/servers/ipsc/lib
 
 # Add shell script
-ADD target/service-docker.sh           /usr/share/servers/ipsc/service.sh
+ADD service-docker.sh /usr/share/servers/ipsc/service.sh
 
 # Add the service itself
 # ARG JAR_FILE
-COPY target/ipsc.jar /usr/share/servers/ipsc/ipsc.jar
+COPY ipsc.jar /usr/share/servers/ipsc/ipsc.jar
 
 EXPOSE 9901
 
@@ -24,4 +24,5 @@ EXPOSE 9901
 
 WORKDIR /usr/share/servers/ipsc
 
-CMD ["java", "-Dspring.profiles.active=docker", "-jar", "ipsc.jar"]
+# CMD ["java", "-Dspring.profiles.active=docker", "-jar", "ipsc.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "ipsc.jar"]

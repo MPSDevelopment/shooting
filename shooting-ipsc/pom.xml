@@ -97,7 +97,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
-			<version>1.18</version>
+			<version>${tika.version}</version>
 		</dependency>
 
 		<!-- Dependency for TEST -->
@@ -159,6 +159,7 @@
 					<include>*.bat</include>
 					<include>*.service</include>
 					<include>Dockerfile</include>
+					<include>docker-compose.yml</include>
 				</includes>
 			</resource>
 		</resources>
@@ -277,15 +278,26 @@
 							</execution>
 						</executions>
 						<configuration>
-							<repository>docker.mpsdevelopment.com</repository>
+							<!-- <repository>shooting.azurecr.io</repository> -->
+							<contextDirectory>target</contextDirectory>
 							<tag>${docker.image.version}-latest</tag>
-							<dockerfile>target/Dockerfile</dockerfile>
-							<repository>docker.mpsdevelopment.com/shooting/${docker.image.name}</repository>
+							<dockerfile>target\Dockerfile</dockerfile>
+							<repository>shooting.azurecr.io/ipsc</repository>
 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+							<verbose>true</verbose>
+							<forceCreation>true</forceCreation>
 							<buildArgs>
 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 							</buildArgs>
 						</configuration>
+						<dependencies>
+							<!-- To make this work on JDK 9+ -->
+							<dependency>
+								<groupId>javax.activation</groupId>
+								<artifactId>javax.activation-api</artifactId>
+								<version>1.2.0</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>

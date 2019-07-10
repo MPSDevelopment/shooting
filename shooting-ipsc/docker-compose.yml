@@ -1,0 +1,11 @@
+version: '2'
+services:
+  ipsc: 
+    container_name: ipsc
+    image: shooting.azurecr.io/ipsc:0.1-latest
+#    volumes:
+#      - ./data/logs:/usr/share/servers/ipsc/logs
+    expose:
+      - 9901
+    ports:
+      - 9901:9901
