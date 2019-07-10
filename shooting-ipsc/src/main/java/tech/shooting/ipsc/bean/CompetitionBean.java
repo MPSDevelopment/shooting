@@ -38,7 +38,7 @@ public class CompetitionBean{
 	@ApiModelProperty(value = "Competition date", required = true)
 	private OffsetDateTime competitionDate;
 
-	@JsonProperty("rank")
+	@JsonProperty("level")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
 	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;

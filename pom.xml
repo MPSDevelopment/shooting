@@ -198,18 +198,18 @@
 	</dependencies>
 	<!-- </dependencyManagement> -->
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>mpsdevelopment-snapshots</name>
-			<url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url>
-		</snapshotRepository>
-		<repository>
-			<id>central</id>
-			<name>libs-release</name>
-			<url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url>
-		</repository>
-	</distributionManagement>
+<!-- 	<distributionManagement> -->
+<!-- 		<snapshotRepository> -->
+<!-- 			<id>snapshots</id> -->
+<!-- 			<name>mpsdevelopment-snapshots</name> -->
+<!-- 			<url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url> -->
+<!-- 		</snapshotRepository> -->
+<!-- 		<repository> -->
+<!-- 			<id>central</id> -->
+<!-- 			<name>libs-release</name> -->
+<!-- 			<url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url> -->
+<!-- 		</repository> -->
+<!-- 	</distributionManagement> -->
 
 
 

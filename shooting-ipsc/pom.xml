@@ -227,6 +227,41 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>${dockerfile.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <repository>shooting.azurecr.io</repository> -->
+					<contextDirectory>target</contextDirectory>
+					<tag>${docker.image.version}-latest</tag>
+					<dockerfile>target\Dockerfile</dockerfile>
+					<repository>shooting.azurecr.io/ipsc</repository>
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+					<verbose>true</verbose>
+					<forceCreation>true</forceCreation>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+				<dependencies>
+					<!-- To make this work on JDK 9+ -->
+					<dependency>
+						<groupId>javax.activation</groupId>
+						<artifactId>javax.activation-api</artifactId>
+						<version>1.2.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -262,47 +297,47 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>docker</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId>
-						<version>${dockerfile.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>default</id>
-								<goals>
-									<goal>build</goal>
-									<goal>push</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<!-- <repository>shooting.azurecr.io</repository> -->
-							<contextDirectory>target</contextDirectory>
-							<tag>${docker.image.version}-latest</tag>
-							<dockerfile>target\Dockerfile</dockerfile>
-							<repository>shooting.azurecr.io/ipsc</repository>
-							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-							<verbose>true</verbose>
-							<forceCreation>true</forceCreation>
-							<buildArgs>
-								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-							</buildArgs>
-						</configuration>
-						<dependencies>
-							<!-- To make this work on JDK 9+ -->
-							<dependency>
-								<groupId>javax.activation</groupId>
-								<artifactId>javax.activation-api</artifactId>
-								<version>1.2.0</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+<!-- 		<profile> -->
+<!-- 			<id>docker</id> -->
+<!-- 			<build> -->
+<!-- 				<plugins> -->
+<!-- 					<plugin> -->
+<!-- 						<groupId>com.spotify</groupId> -->
+<!-- 						<artifactId>dockerfile-maven-plugin</artifactId> -->
+<!-- 						<version>${dockerfile.plugin.version}</version> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<id>default</id> -->
+<!-- 								<goals> -->
+<!-- 									<goal>build</goal> -->
+<!-- 									<goal>push</goal> -->
+<!-- 								</goals> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 						<configuration> -->
+<!-- 							<repository>shooting.azurecr.io</repository> -->
+<!-- 							<contextDirectory>target</contextDirectory> -->
+<!-- 							<tag>${docker.image.version}-latest</tag> -->
+<!-- 							<dockerfile>target\Dockerfile</dockerfile> -->
+<!-- 							<repository>shooting.azurecr.io/ipsc</repository> -->
+<!-- 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
+<!-- 							<verbose>true</verbose> -->
+<!-- 							<forceCreation>true</forceCreation> -->
+<!-- 							<buildArgs> -->
+<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
+<!-- 							</buildArgs> -->
+<!-- 						</configuration> -->
+<!-- 						<dependencies> -->
+<!-- 							To make this work on JDK 9+ -->
+<!-- 							<dependency> -->
+<!-- 								<groupId>javax.activation</groupId> -->
+<!-- 								<artifactId>javax.activation-api</artifactId> -->
+<!-- 								<version>1.2.0</version> -->
+<!-- 							</dependency> -->
+<!-- 						</dependencies> -->
+<!-- 					</plugin> -->
+<!-- 				</plugins> -->
+<!-- 			</build> -->
+<!-- 		</profile> -->
 	</profiles>
 </project>
