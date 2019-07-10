@@ -228,9 +228,11 @@ public class ControllerAPI {
 
     // weapon type section
     public static final String WEAPON_TYPE_CONTROLLER = "/api/weapon/type";
+    public static final String WORKSPACE_CONTROLLER = "/api/workspace";
     public static final String WEAPON_TYPE_CONTROLLER_GET_ALL = "/get/all";
     public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
     public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapontype";
+    public static final String WORKSPACE_CONTROLLER_POST_WORKSPACE = "/create/workspace";
     public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_WEAPON_TYPE_ID;
 
     // weapon section
