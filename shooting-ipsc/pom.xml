@@ -161,6 +161,7 @@
 					<include>Dockerfile</include>
 					<include>docker-compose.yml</include>
 					<include>ipsc</include>
+					<include>ipsc*.zip</include>
 				</includes>
 			</resource>
 		</resources>

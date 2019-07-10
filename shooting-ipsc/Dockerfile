@@ -1,5 +1,11 @@
 FROM openjdk:11-jre
 
+RUN apt update && apt --yes --force-yes install wget unzip
+
+ADD ipsc-frontend-bin.zip /usr/share/servers/
+
+RUN unzip -o /usr/share/servers/ipsc-frontend-bin.zip -d /usr/share/servers/ipsc-frontend
+
 #RUN mkdir /usr/share/servers
 #RUN mkdir /usr/share/servers/ipsc
 

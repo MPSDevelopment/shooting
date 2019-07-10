@@ -26,7 +26,9 @@ services:
     ports:
       - 9901:9901
     depends_on: 
-      - ipsc-mongodb      
+      - ipsc-mongodb    
+    volumes:
+      - static-content:/usr/share/servers/ipsc-frontend        
   ipsc-nginx:
     container_name: ipsc-nginx
     image: nginx:1.13
@@ -35,7 +37,11 @@ services:
       - 80:80
       - 443:443
     volumes:
-       - ./ipsc:/etc/nginx/conf.d/default.conf
-       - ./data/logs/nginx:/var/log/nginx
+      - ./ipsc:/etc/nginx/conf.d/default.conf
+      - ./data/logs/nginx:/var/log/nginx
+      - static-content:/usr/share/servers/ipsc-frontend  
     depends_on: 
       - ipsc
+      
+volumes: 
+  static-content: 
