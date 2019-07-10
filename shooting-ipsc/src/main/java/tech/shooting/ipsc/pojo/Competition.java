@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 
 import java.time.OffsetDateTime;
@@ -48,10 +49,9 @@ public class Competition extends BaseDocument {
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
-	@JsonProperty
-	@DBRef
-	@ApiModelProperty(value = "Competition rank", notes = "Level Competition")
-	private Rank rank;
+	@JsonProperty("class")
+	@ApiModelProperty(value = "Competition class", notes = "Class of Competition")
+	private CompetitionClassEnum clazz;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")

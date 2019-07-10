@@ -37,7 +37,7 @@ public class ValidationServiceTest {
 		assertEquals(3, validationService.getConstraints(UserSignupBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserLogin.class).size());
 		assertEquals(2, validationService.getConstraints(ChangePasswordBean.class).size());
-		assertEquals(4, validationService.getConstraints(CompetitionBean.class).size());
+		assertEquals(3, validationService.getConstraints(CompetitionBean.class).size());
 		assertEquals(2, validationService.getConstraints(UserUpdateBean.class).size());
 		assertEquals(3, validationService.getConstraints(CompetitorMark.class).size());
 	}

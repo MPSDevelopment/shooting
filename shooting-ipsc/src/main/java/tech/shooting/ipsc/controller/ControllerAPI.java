@@ -154,7 +154,7 @@ public class ControllerAPI {
     public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + REQUEST_COMPETITION_ID + "/competitor/all";
     public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
     public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
-    public static final String COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_MARK;
+    public static final String COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK = "/" + REQUEST_COMPETITION_ID + "/mark/" + REQUEST_COMPETITOR_MARK;
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge";
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge/both";
@@ -182,6 +182,7 @@ public class ControllerAPI {
     public static final String PERSON_CONTROLLER_GET_PRESENT_ENUM = "/enum/present";
     public static final String PERSON_CONTROLLER_GET_TYPE_MARK_ENUM = "/enum/mark";
     public static final String PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM = "/enum/disqualification";
+    public static final String PERSON_CONTROLLER_GET_TYPE_CLASS_ENUM = "/enum/class";
     public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 
     // quiz section

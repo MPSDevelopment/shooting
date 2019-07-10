@@ -7,7 +7,7 @@ package tech.shooting.ipsc.enums;
  * LEVEL IV Match (example: Continental Championship)
  * LEVEL V Match (example: World Shoot)
  */
-public enum TournamentLevelEnum {
+public enum CompetitionClassEnum {
 	LEVEL_1("Level 1"),
 	LEVEL_2("Level 2"),
 	LEVEL_3("Level 3"),
@@ -16,7 +16,7 @@ public enum TournamentLevelEnum {
 
 	private String value;
 
-	TournamentLevelEnum (String value) {
+	CompetitionClassEnum (String value) {
 		this.value = value;
 	}
 
@@ -28,3 +28,5 @@ public enum TournamentLevelEnum {
 	public String getValue () {
 		return value;
 	}}
+
+

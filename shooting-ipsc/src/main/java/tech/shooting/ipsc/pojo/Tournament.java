@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.TournamentCategoryEnum;
-import tech.shooting.ipsc.enums.TournamentLevelEnum;
+import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.TournamentTypeEnum;
 
 import java.time.OffsetDateTime;
@@ -44,7 +44,7 @@ public class Tournament extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's level", required = true)
-	private TournamentLevelEnum level;
+	private CompetitionClassEnum level;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Tournament's category", required = true)

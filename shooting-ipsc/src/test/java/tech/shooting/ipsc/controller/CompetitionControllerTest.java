@@ -110,8 +110,8 @@ public class CompetitionControllerTest {
         competitionRepository.deleteAll();
         String password = RandomStringUtils.randomAscii(14);
         rank = rank == null ? rankRepository.save(new Rank().setRus("бла бла бла").setKz("major").setOfficer(true)): rank;
-        competition = new Competition().setName("Alladin").setLocation("Cave!").setQualifierRank(ClassificationBreaks.D).setRank(rank);
-        testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition").setQualifierRank(ClassificationBreaks.D).setRank(rank));
+        competition = new Competition().setName("Alladin").setLocation("Cave!").setQualifierRank(ClassificationBreaks.D).setClazz(CompetitionClassEnum.LEVEL_1);
+        testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition").setQualifierRank(ClassificationBreaks.D).setClazz(CompetitionClassEnum.LEVEL_1));
         testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
         testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
         testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
@@ -150,8 +150,8 @@ public class CompetitionControllerTest {
         if (competition.getStatsOfficer() != null) {
             competitionBean.setStatsOfficer(competition.getStatsOfficer().getId());
         }
-        if (competition.getRank() != null){
-            competitionBean.setRank(competition.getRank());
+        if (competition.getClazz() != null){
+            competitionBean.setClazz(competition.getClazz());
         }
         return competitionBean;
     }
@@ -596,7 +596,7 @@ public class CompetitionControllerTest {
         userRepository.saveAll(List.of(new User().setName("asdfg").setLogin("asdghjkklll").setPassword("tsgaudjscc").setRoleName(RoleName.JUDGE),
                 new User().setName("asdjhjhfg").setLogin("asdgjhjhhjkklll").setPassword("tsgagfgudjscc").setRoleName(RoleName.JUDGE)));
         List<User> byRoleName = userRepository.findByRoleName(RoleName.JUDGE);
-        competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj").setQualifierRank(ClassificationBreaks.D).setRank(rank);
+        competition = new Competition().setName("tryyy").setLocation("kjcxghjcgxhj").setQualifierRank(ClassificationBreaks.D).setClazz(CompetitionClassEnum.LEVEL_1);
         competition.setMatchDirector(byRoleName.get(0)).setRangeMaster(byRoleName.get(1));
         String fullJson = JacksonUtils.getJson(setupCompetitionBean(competition));
         String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION).header(Token.TOKEN_HEADER, adminToken)

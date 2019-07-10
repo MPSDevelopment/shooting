@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Rank;
@@ -37,7 +38,7 @@ public class CompetitionBean{
 	@ApiModelProperty(value = "Competition date", required = true)
 	private OffsetDateTime competitionDate;
 
-	@JsonProperty("level")
+	@JsonProperty("rank")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
 	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
@@ -46,10 +47,9 @@ public class CompetitionBean{
 	@ApiModelProperty(value = "Competition type weapon", required = true)
 	private WeaponTypeEnum typeWeapon;
 
-	@JsonProperty
-	@ApiModelProperty(value = "Competition rank", notes = "Level Competition")
-	@NotNull
-	private Rank rank;
+	@JsonProperty("class")
+	@ApiModelProperty(value = "Competition class", notes = "Class of Competition")
+	private CompetitionClassEnum clazz;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")

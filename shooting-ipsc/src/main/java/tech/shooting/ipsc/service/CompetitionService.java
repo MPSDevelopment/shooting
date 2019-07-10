@@ -64,8 +64,8 @@ public class CompetitionService {
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
-		if(competitionBean.getRank() != null){
-			competition.setRank(competitionBean.getRank());
+		if(competitionBean.getClazz() != null){
+			competition.setClazz(competitionBean.getClazz());
 		}
 		return competition;
 	}

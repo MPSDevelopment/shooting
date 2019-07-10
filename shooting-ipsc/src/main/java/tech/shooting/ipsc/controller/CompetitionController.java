@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.DisqualificationBean;
 import tech.shooting.ipsc.bean.ScoreBean;
+import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
@@ -243,6 +245,13 @@ public class CompetitionController {
 	@ApiOperation(value = "Get Disqualification's type list", notes = "Return list of Disqualification's type")
 	public ResponseEntity<List<DisqualificationBean>> getEnumDisqualification () {
 		return new ResponseEntity<>(DisqualificationEnum.getList(), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_CLASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "List of competition levels")
+	public ResponseEntity<CompetitionClassEnum[]> getEnumLevel () {
+		return new ResponseEntity<>(CompetitionClassEnum.values(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
