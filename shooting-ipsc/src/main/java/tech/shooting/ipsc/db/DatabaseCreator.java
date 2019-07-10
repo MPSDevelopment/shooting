@@ -1,5 +1,9 @@
 package tech.shooting.ipsc.db;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.shooting.commons.enums.RoleName;
@@ -9,9 +13,6 @@ import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
-
 @Component
 public class DatabaseCreator {
 	
@@ -19,14 +20,16 @@ public class DatabaseCreator {
 
 	public static final String ADMIN_PASSWORD = "test";
 
+	public static final String GUEST_PASSWORD = "";
+
 	public static final String JUDGE_PASSWORD = "judgeTest";
- 
+
+	public static final String GUEST_LOGIN = "";
+
 	public static final String ADMIN_LOGIN = "admin";
 
 	public static final String JUDGE_LOGIN = "judge";
-	
-	
-	
+
 
 	@Autowired
 	private DatabaseCreator databaseCreator;
@@ -51,6 +54,7 @@ public class DatabaseCreator {
 	private void createDatabase () {
 		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
 		userDao.createIfNotExists(new User().setLogin(JUDGE_LOGIN).setPassword(JUDGE_PASSWORD).setRoleName(RoleName.JUDGE).setActive(true).setName("Judge"));
+		userDao.createIfNotExists(new User().setLogin(GUEST_LOGIN).setPassword(GUEST_PASSWORD).setRoleName(RoleName.GUEST).setActive(true).setName("Guest"));
 		//create subject
 		subjectRepository.createIfNotExists(List.of(
 			new Subject().setRus("Огневая подготовка").setKz("Fire training"),
