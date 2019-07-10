@@ -4,6 +4,8 @@ import com.handheld.UHF.UhfManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.pda.serialport.SerialPort;
 import cn.pda.serialport.Tools;
 
 public class RfidReader {
@@ -63,6 +65,9 @@ public class RfidReader {
 //			return result + "\n Wrong password";
 			return "Wrong password";
 		}
+		
+		List<byte[]> epcList = manager.inventoryRealTime();
+		
 		// read data
 		byte[] data = manager.readFrom6C(membank, addr, length, accessPassword);
 		if (data != null && data.length > 1) {
@@ -70,7 +75,7 @@ public class RfidReader {
 			return dataStr;
 			// result += "\n Here must be mark -> " + dataStr;
 		} else {
-			return "Wrong mark, List EPC size is " + listepc.size();
+			return "Wrong mark, List EPC size is " + epcList.size();
 			// result += "\n Wrong mark for hardware -> " + (manager.getFirmware() == null || manager.getFirmware().length == 0 ? "Hardware not detected" : Tools.Bytes2HexString(manager.getFirmware(), manager.getFirmware().length));
 		}
 
@@ -121,6 +126,8 @@ public class RfidReader {
 //		default:
 //			break;
 //		}
+		
+		
 
 		UhfManager.Port = 13;
 
@@ -137,7 +144,7 @@ public class RfidReader {
 
 		manager.setOutputPower(power);
 		// very high
-		manager.setSensitivity(3);
+		manager.setSensitivity(0);
 //		manager.setWorkArea(area);
 
 		byte[] version_bs = manager.getFirmware();
@@ -154,8 +161,8 @@ public class RfidReader {
 		}
 
 		// start inventory thread
-		Thread thread = new InventoryThread();
-		thread.start();
+//		Thread thread = new InventoryThread();
+//		thread.start();
 
 		return result;
 	}
@@ -192,7 +199,7 @@ public class RfidReader {
 					}
 					epcList = null;
 					try {
-						Thread.sleep(40);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

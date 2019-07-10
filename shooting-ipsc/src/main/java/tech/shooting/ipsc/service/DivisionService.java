@@ -67,8 +67,15 @@ public class DivisionService {
 		return divisionRepository.findAll().size();
 	}
 
-	public void removeDivision (Long id) {
+	public Division removeDivision (Long id) throws BadRequestException {
+		var division = checkDivision(id);
+		Division parent = division.getParent();
+		if (parent!=null) {
+			parent.getChildren().remove(division);
+			divisionRepository.save(parent);
+		}
 		divisionRepository.deleteById(id);
+		return division;
 	}
 
 	public Division checkDivision (Long id) throws BadRequestException {
