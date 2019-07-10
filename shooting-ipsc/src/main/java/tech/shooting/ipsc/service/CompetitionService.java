@@ -1,5 +1,8 @@
 package tech.shooting.ipsc.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -14,12 +17,23 @@ import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.PageAble;
-import tech.shooting.ipsc.enums.*;
-import tech.shooting.ipsc.pojo.*;
-import tech.shooting.ipsc.repository.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
+import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.DisqualificationEnum;
+import tech.shooting.ipsc.enums.TypeMarkEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.pojo.Competition;
+import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.LevelBean;
+import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.Score;
+import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.pojo.TypeWeapon;
+import tech.shooting.ipsc.repository.CompetitionRepository;
+import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.repository.RankRepository;
+import tech.shooting.ipsc.repository.ScoreRepository;
+import tech.shooting.ipsc.repository.UserRepository;
 
 @Service
 @Slf4j
@@ -177,6 +191,10 @@ public class CompetitionService {
 		return checkCompetitor(checkCompetition(id).getCompetitors(), competitorId);
 	}
 
+	public Competitor getCompetitor(Long id, String mark) throws BadRequestException {
+		return checkCompetitor(checkCompetition(id).getCompetitors(), mark);
+	}
+
 	public Competitor updateCompetitor(Long id, Long competitorId, Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		checkToAddedRow(competition);
@@ -201,7 +219,15 @@ public class CompetitionService {
 	}
 
 	private Competitor checkCompetitor(List<Competitor> competitors, Long competitorId) throws BadRequestException {
-		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
+		return competitors.stream()
+						  .filter(competitor -> competitor.getId().equals(competitorId))
+						  .findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
+	}
+
+	private Competitor checkCompetitor(List<Competitor> competitors, String mark) throws BadRequestException {
+		return competitors.stream()
+						  .filter(competitor -> competitor.getRfidCode().equals(mark))
+						  .findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", mark)));
 	}
 
 	private Competitor saveAndReturn(Competition competition, Competitor competitorToDB, boolean flag) throws BadRequestException {

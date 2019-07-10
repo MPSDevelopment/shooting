@@ -1,6 +1,15 @@
 package tech.shooting.ipsc.controller;
 
-import io.swagger.annotations.*;
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,16 +17,27 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.ipsc.bean.*;
+import tech.shooting.ipsc.bean.CompetitionBean;
+import tech.shooting.ipsc.bean.CompetitorMark;
+import tech.shooting.ipsc.bean.CompetitorMarks;
+import tech.shooting.ipsc.bean.DisqualificationBean;
+import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
-import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.pojo.Competition;
+import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.LevelBean;
+import tech.shooting.ipsc.pojo.Score;
+import tech.shooting.ipsc.pojo.Stage;
+import tech.shooting.ipsc.pojo.TypeWeapon;
 import tech.shooting.ipsc.service.CompetitionService;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.COMPETITION_CONTROLLER)
@@ -148,11 +168,19 @@ public class CompetitionController {
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get competitor.", notes = "Return competitor")
+    @ApiOperation(value = "Get competitor by id", notes = "Return competitor")
 	public ResponseEntity<Competitor> getCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.getCompetitor(id, competitorId), HttpStatus.OK);
 	}
+
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK, produces =
+        MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get competitor by rfid mark", notes = "Return competitor")
+    public ResponseEntity<Competitor> getCompetitor(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id,
+                                                    @PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_MARK) String mark) throws BadRequestException {
+        return new ResponseEntity<>(competitionService.getCompetitor(id, mark), HttpStatus.OK);
+    }
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get weapon type lis", notes = "Return list of weapon type")
