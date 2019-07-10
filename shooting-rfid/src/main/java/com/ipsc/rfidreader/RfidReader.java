@@ -135,7 +135,9 @@ public class RfidReader {
 			e.printStackTrace();
 		}
 
-//		manager.setOutputPower(power);
+		manager.setOutputPower(power);
+		// very high
+		manager.setSensitivity(3);
 //		manager.setWorkArea(area);
 
 		byte[] version_bs = manager.getFirmware();
