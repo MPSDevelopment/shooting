@@ -30,7 +30,7 @@ public class CompetitionBean{
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)
-	@Size(min = 5, max = 50, message = ValidationConstants.COMPETITION_NAME_MESSAGE)
+//	@Size(min = 3, max = 50, message = ValidationConstants.COMPETITION_NAME_MESSAGE)
 	private String name;
 
 	@JsonProperty("eventDate")
@@ -54,7 +54,7 @@ public class CompetitionBean{
 	@JsonProperty
 	@ApiModelProperty(value = "Competition location", notes = "Competition location")
 	@NotNull(message = ValidationConstants.COMPETITION_LOCATION_MESSAGE)
-	@Size(min = 5, max = 50, message = ValidationConstants.COMPETITION_LOCATION_MESSAGE)
+//	@Size(min = 3, max = 50, message = ValidationConstants.COMPETITION_LOCATION_MESSAGE)
 	private String location;
 
 	@JsonProperty
