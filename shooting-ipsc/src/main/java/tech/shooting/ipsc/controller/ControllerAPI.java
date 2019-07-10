@@ -22,6 +22,7 @@ public class ControllerAPI {
     public static final String PATH_VARIABLE_COMMON_CONDITION_ID = "commonConditionId";
     public static final String PATH_VARIABLE_SPECIALITY_ID = "specialityId";
     public static final String PATH_VARIABLE_COMPETITOR_ID = "competitorId";
+    public static final String PATH_VARIABLE_COMPETITOR_MARK = "competitorMark";
     public static final String PATH_VARIABLE_PAGE_NUMBER = "pageNumber";
     public static final String PATH_VARIABLE_PAGE_SIZE = "pageSize";
     public static final String PATH_VARIABLE_PERSON_ID = "personId";
@@ -62,6 +63,7 @@ public class ControllerAPI {
     public static final String REQUEST_COMPETITION_ID = "{" + PATH_VARIABLE_COMPETITION_ID + "}";
     public static final String REQUEST_STAGE_ID = "{" + PATH_VARIABLE_STAGE_ID + "}";
     public static final String REQUEST_COMPETITOR_ID = "{" + PATH_VARIABLE_COMPETITOR_ID + "}";
+    public static final String REQUEST_COMPETITOR_MARK = "{" + PATH_VARIABLE_COMPETITOR_MARK + "}";
     public static final String REQUEST_PAGE_NUMBER = "{" + PATH_VARIABLE_PAGE_NUMBER + "}";
     public static final String REQUEST_PAGE_SIZE = "{" + PATH_VARIABLE_PAGE_SIZE + "}";
     public static final String REQUEST_PERSON_ID = "{" + PATH_VARIABLE_PERSON_ID + "}";
@@ -150,6 +152,7 @@ public class ControllerAPI {
     public static final String COMPETITION_CONTROLLER_GET_COMPETITORS = "/" + REQUEST_COMPETITION_ID + "/competitor/all";
     public static final String COMPETITION_CONTROLLER_POST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor";
     public static final String COMPETITION_CONTROLLER_GET_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
+    public static final String COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_MARK;
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge";
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge/both";
