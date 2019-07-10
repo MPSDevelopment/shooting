@@ -29,11 +29,17 @@ public class ValidationConstants {
 	
 	public static final String LEVEL_MESSAGE = "Level required";
 
-	public static final String COMPETITION_NAME_MESSAGE = "Name min 5, max 50 character";
+//	public static final String COMPETITION_NAME_MESSAGE = "Name min 3, max 50 character";
+	
+	public static final String COMPETITION_NAME_MESSAGE = "Name required";
 
-	public static final String COMPETITION_LOCATION_MESSAGE = "Location min 5, max 50 character";
+//	public static final String COMPETITION_LOCATION_MESSAGE = "Location min 5, max 50 character";
+	
+	public static final String COMPETITION_LOCATION_MESSAGE = "Location required";
 
-	public static final String STAGE_NAME_MESSAGE = " Stage name min 5 , max 50 character";
+//	public static final String STAGE_NAME_MESSAGE = " Stage name min 5 , max 50 character";
+	
+	public static final String STAGE_NAME_MESSAGE = " Stage name required";
 
 	public static final String STAGE_TARGETS_COUNT_MESSAGE = "Count of targets must be min 1";
 

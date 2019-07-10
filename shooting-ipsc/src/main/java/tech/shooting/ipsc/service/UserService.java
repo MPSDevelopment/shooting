@@ -23,8 +23,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserService {
-	@Autowired
-	private UserLockUtils userLockUtils;
+//	@Autowired
+//	private UserLockUtils userLockUtils;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -37,14 +37,17 @@ public class UserService {
 		String password = userPassword.trim();
 		User databaseUser = userRepository.findByLogin(login);
 		if(databaseUser != null) {
+			
+			log.error("User with login %s has been found", userLogin);
+			
 			boolean ok = passwordEncoder.matches(password, databaseUser.getPassword());
 			if(ok) {
 				log.info("  PASSWORD  OK. user active %s", databaseUser.isActive());
-				userLockUtils.successfulLogin(login);
+//				userLockUtils.successfulLogin(login);
 				return databaseUser;
 			} else {
 				log.error("  PASSWORD  does not match");
-				userLockUtils.unsuccessfulLogin(login);
+//				userLockUtils.unsuccessfulLogin(login);
 			}
 		}
 		log.info("  PASSWORD  FAIL");

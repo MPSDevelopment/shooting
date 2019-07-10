@@ -43,7 +43,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>RfidReader1</finalName>
+		<finalName>RfidReader</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
