@@ -1,5 +1,21 @@
 version: '2'
 services:
+  ipsc-mongodb: 
+    image: mongo:latest
+    restart: always
+    container_name: ipsc-mongodb
+    mem_limit: 2G
+    environment:
+      MONGO_INITDB_ROOT_USERNAME : ipsc
+      MONGO_INITDB_ROOT_PASSWORD : ipasdfb14235346jsbcfdhasbf3q234sc
+      MONGO_INITDB_DATABASE : shooting
+    volumes:
+      - ./data/logs:/data/log
+    ports:
+      - 27018:27017
+      
+    command: mongod --logpath=/data/log/mongo.log --smallfiles  --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
+    
   ipsc: 
     container_name: ipsc
     image: shooting.azurecr.io/ipsc:0.1-latest
@@ -9,3 +25,5 @@ services:
       - 9901
     ports:
       - 9901:9901
+    depends_on: 
+      - ipsc-mongodb      
