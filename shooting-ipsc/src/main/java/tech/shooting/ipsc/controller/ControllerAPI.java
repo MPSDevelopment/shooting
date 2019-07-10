@@ -160,7 +160,6 @@ public class ControllerAPI {
     public static final String COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK_BOTH = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID + "/judge/both";
     public static final String COMPETITION_CONTROLLER_DELETE_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitor/" + REQUEST_COMPETITOR_ID;
     public static final String COMPETITION_CONTROLLER_POST_LIST_COMPETITOR = "/" + REQUEST_COMPETITION_ID + "/competitors";
-    public static final String COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK = "/" + REQUEST_COMPETITION_ID + "/" + REQUEST_MARK;
 
     /*
      * division controller
