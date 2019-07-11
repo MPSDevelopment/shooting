@@ -10,7 +10,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD : ipasdfb14235346jsbcfdhasbf3q234sc
       MONGO_INITDB_DATABASE : shooting
     volumes:
-      - ./data/mongo/db:/data/db
+#      - ./data/mongo/db:/data/db
       - ./data/logs/mongo:/data/log
     ports:
       - 27018:27017

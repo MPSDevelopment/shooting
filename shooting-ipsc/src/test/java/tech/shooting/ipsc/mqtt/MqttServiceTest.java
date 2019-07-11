@@ -1,4 +1,4 @@
-package tech.shooting.ipsc;
+package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
@@ -54,7 +54,7 @@ import java.util.List;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ActiveProfiles("simple")
 //@TestMethodOrder(OrderAnnotation.class)
-class MqttTest {
+class MqttServiceTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
 

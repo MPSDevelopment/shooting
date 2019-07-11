@@ -20,12 +20,12 @@ public class Speciality extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Speciality name in rus", required = true)
     @NotBlank(message = ValidationConstants.SPECIALITY_MESSAGE)
-    @Size(min = 5, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
+    @Size(min = 3, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
     private String specialityRus;
 
     @JsonProperty
     @ApiModelProperty(value = "Speciality name in kz", required = true)
     @NotBlank(message = ValidationConstants.SPECIALITY_MESSAGE)
-    @Size(min = 5, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
+    @Size(min = 3, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
     private String specialityKz;
 }
