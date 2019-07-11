@@ -121,7 +121,7 @@ public class PersonControllerTest {
 	@Test
 	public void checkCreatePerson() throws Exception {
 		// prepare
-		PersonBean personBean = new PersonBean().setName("qwerty").setRank(privateRank).setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
+		PersonBean personBean = new PersonBean().setName("qwerty").setRank(privateRank.getId()).setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
 		List<WeaponIpscCode> codes = new ArrayList<>();
 		codes.add(handgun);
 		codes.add(shotgun);
@@ -160,7 +160,7 @@ public class PersonControllerTest {
 		assertEquals(personBean.getCodes().get(0).getCode(), person.getCodes().get(0).getCode());
 		assertEquals(personBean.getCodes().get(0).getTypeWeapon(), person.getCodes().get(0).getTypeWeapon());
 		assertEquals(personBean.getName(), person.getName());
-		assertEquals(personBean.getRank(), person.getRank());
+		assertEquals(personBean.getRank(), person.getRank().getId());
 		assertEquals(personBean.getQualifierRank(), person.getQualifierRank());
 	}
 

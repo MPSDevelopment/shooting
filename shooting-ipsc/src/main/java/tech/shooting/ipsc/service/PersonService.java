@@ -50,10 +50,10 @@ public class PersonService {
 		Person person = new Person();
 		BeanUtils.copyProperties(personBean, person, Person.DIVISION, Person.RANK);
 		if (personBean.getDivision() != null) {
-			person.setDivision(divisionRepository.findById(personBean.getDivision().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division id %s", personBean.getDivision().getId()))));
+			person.setDivision(divisionRepository.findById(personBean.getDivision()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division id %s", personBean.getDivision()))));
 		}
 		if (personBean.getRank() != null) {
-			person.setRank(rankRepository.findById(personBean.getRank().getId()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect rank id %s", personBean.getRank().getId()))));
+			person.setRank(rankRepository.findById(personBean.getRank()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect rank id %s", personBean.getRank()))));
 		}
 		createPerson(person);
 		return person;
