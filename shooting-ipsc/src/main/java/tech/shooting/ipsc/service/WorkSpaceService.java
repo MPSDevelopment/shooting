@@ -2,6 +2,7 @@ package tech.shooting.ipsc.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.WorkSpace;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
@@ -19,7 +20,14 @@ public class WorkSpaceService {
     @Autowired
     private QuizRepository quizRepository;
 
+    @Autowired
+    private MqttService mqttService;
+
     public void createWorkSpace(String remoteIp) {
         workSpaceRepository.save(new WorkSpace().setIp(remoteIp));
+    }
+
+    public void createTopicForAdmin() {
+        //mqttService.createPublisher() //needed explain parameters
     }
 }

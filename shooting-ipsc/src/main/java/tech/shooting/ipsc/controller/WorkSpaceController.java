@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.ipsc.service.WorkSpaceService;
@@ -30,6 +31,14 @@ public class WorkSpaceController {
         log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
         String remoteIp = request.getHeader("X-Forwarded-For");
         workSpaceService.createWorkSpace(remoteIp);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_GET_TOPIC)
+    @ApiOperation(value = "Create topic for workspace publisher")
+    public ResponseEntity getPublisherTopic() {
+        workSpaceService.createTopicForAdmin();
         return new ResponseEntity(HttpStatus.OK);
     }
 }
