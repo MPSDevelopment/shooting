@@ -1,6 +1,8 @@
 package tech.shooting.ipsc.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import io.swagger.annotations.Api;
@@ -13,7 +15,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tech.shooting.ipsc.bean.WorkSpaceBean;
 import tech.shooting.ipsc.service.WorkSpaceService;
 
 @Controller
@@ -39,6 +44,14 @@ public class WorkSpaceController {
     @ApiOperation(value = "Create topic for workspace publisher")
     public ResponseEntity getPublisherTopic() {
         workSpaceService.createTopicForAdmin();
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")
+    @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_GET_TOPIC)
+    @ApiOperation(value = "Start test to workspace")
+    public ResponseEntity getPublisherTopic(@RequestBody List<WorkSpaceBean> beans) {
+        workSpaceService.updateWorkSpaceDataAndStartTest(beans);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

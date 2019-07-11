@@ -294,5 +294,6 @@ public class ControllerAPI {
     public static final String COURSE_CONTROLLER_PUT_COURSE = "/put/course/" + REQUEST_COURSE_ID;
     public static final String COURSE_CONTROLLER_GET_COURSE_BY_DIVISION = "/get/by/division/" + REQUEST_DIVISION_ID + "/course";
     public static final String COURSE_CONTROLLER_GET_COURSE_BY_PERSON = "/get/by/person/" + REQUEST_PERSON_ID + "/course";
-    public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "get/topic";
+    public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
+    public static final String WORKSPACE_CONTROLLER_PUT_WOKRSPACE = "/add/peson/quiz";
 }
