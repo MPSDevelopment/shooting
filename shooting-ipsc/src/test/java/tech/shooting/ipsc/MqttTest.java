@@ -30,6 +30,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import io.moquette.broker.ClientDescriptor;
 import io.moquette.broker.Server;
 import io.moquette.broker.config.ClasspathResourceLoader;
 import io.moquette.broker.config.IConfig;
@@ -39,6 +41,7 @@ import io.moquette.interception.InterceptHandler;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -93,11 +96,11 @@ class MqttTest {
 
 	@Test
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
-		
+
 		log.info("Started test");
 
 		EventBus.subscribe(this);
-		
+
 		assertNotNull(settings.getGuestLogin());
 
 		String topicName1 = "command/topic1";
@@ -130,6 +133,13 @@ class MqttTest {
 		publisher.getTopic(topicName1).publish(message);
 		publisher.getTopic(topicName2).publish(message);
 
+		var subscribers = mqttService.getSubscribers();
+		subscribers.forEach(item -> {
+			log.info("Item = %s", item);
+		});
+
+		assertEquals(5, subscribers.size());
+
 		Thread.sleep(100);
 
 		publisher.disconnect();
@@ -139,7 +149,9 @@ class MqttTest {
 		subscriberAll.disconnect();
 
 		assertEquals(5, count);
-
+		
+		subscribers = mqttService.getSubscribers();
+		assertEquals(0, subscribers.size());
 	}
 
 	@Handler

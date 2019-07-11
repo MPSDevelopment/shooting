@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.moquette.broker.ClientDescriptor;
 import io.moquette.broker.Server;
 import io.moquette.broker.config.ClasspathResourceLoader;
 import io.moquette.broker.config.IConfig;
@@ -17,6 +18,7 @@ import io.moquette.interception.InterceptHandler;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -77,8 +79,7 @@ public class MqttService {
 		connOpts.setUserName(userName);
 		connOpts.setPassword(password.toCharArray());
 
-		String publisherId = UUID.randomUUID().toString();
-		var publisher = new MqttClient(url, publisherId);
+		var publisher = new MqttClient(url, MqttClient.generateClientId());
 		publisher.connect(connOpts);
 		return publisher;
 	}
@@ -102,6 +103,10 @@ public class MqttService {
 		});
 
 		return subscriber;
+	}
+
+	public Collection<ClientDescriptor> getSubscribers() {
+		return mqttBroker.listConnectedClients();
 	}
 
 }
