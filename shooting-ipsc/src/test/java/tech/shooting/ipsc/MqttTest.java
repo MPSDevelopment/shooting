@@ -63,8 +63,6 @@ class MqttTest {
 
 	private int count = 0;
 
-	private Server mqttBroker;
-
 	@Autowired
 	private MqttService mqttService;
 
@@ -83,25 +81,24 @@ class MqttTest {
 
 		assertNotNull(settings.getAdminLogin());
 
-		IResourceLoader classpathLoader = new ClasspathResourceLoader();
-		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader, "config/moquette-protected.conf");
-
-		mqttBroker = new Server();
-		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
-		mqttBroker.startServer(classPathConfig, userHandlers);
+		mqttService.startBroker("config/moquette-protected.conf");
 
 		log.info("Broker started");
 	}
 
 	@AfterEach
 	public void after() {
-		mqttBroker.stopServer();
+		mqttService.stopBroker();
 	}
 
 	@Test
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
+		
+		log.info("Started test");
 
 		EventBus.subscribe(this);
+		
+		assertNotNull(settings.getGuestLogin());
 
 		String topicName1 = "command/topic1";
 		String topicName2 = "command/topic2";
