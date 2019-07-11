@@ -1,5 +1,7 @@
 package tech.shooting.ipsc.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
@@ -7,8 +9,6 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WeaponTypeBean;
 import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.repository.WeaponTypeRepository;
-
-import java.util.List;
 
 @Service
 public class WeaponTypeService  {
@@ -45,6 +45,10 @@ public class WeaponTypeService  {
 
     public void deleteWeaponType(long weaponTypeId) throws BadRequestException {
         weaponType.delete(checkWeaponType(weaponTypeId));
+    }
+
+    public WeaponType updateWeaponType(long weaponTypeId, WeaponTypeBean bean) throws BadRequestException {
+        return weaponType.save(checkWeaponType(weaponTypeId).setName(bean.getName()));
     }
 }
 

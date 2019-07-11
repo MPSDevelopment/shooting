@@ -1,5 +1,9 @@
 package tech.shooting.ipsc.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -8,14 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.WeaponTypeBean;
 import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.service.WeaponTypeService;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(ControllerAPI.WEAPON_TYPE_CONTROLLER)
@@ -42,9 +49,16 @@ public class WeaponTypeController {
     }
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE)
-    @ApiOperation(value = "Return created weapon type or updated", notes = "Return created name or Updated")
+    @ApiOperation(value = "Return created weapon type", notes = "Return created name ")
     public ResponseEntity<WeaponType> postTypeOfWeapon(@RequestBody @Valid WeaponTypeBean bean) {
         return new ResponseEntity<>(weaponService.postWeaponType(bean), HttpStatus.OK);
+    }
+
+    @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_PUT_TYPE)
+    @ApiOperation(value = "Return created weapon updated", notes = "Return created name  Updated")
+    public ResponseEntity<WeaponType> postTypeOfWeapon(@PathVariable(value = ControllerAPI.PATH_VARIABLE_WEAPON_TYPE_ID) long weaponTypeId,
+                                                       @RequestBody @Valid WeaponTypeBean bean) throws BadRequestException {
+        return new ResponseEntity<>(weaponService.updateWeaponType(weaponTypeId, bean), HttpStatus.OK);
     }
 
     @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID)
