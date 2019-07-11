@@ -21,6 +21,7 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class ValidationErrorHandler {
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Map<String, String> processValidationError (MethodArgumentNotValidException ex, HttpServletRequest request) {

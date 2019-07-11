@@ -1,5 +1,8 @@
 package tech.shooting.commons.pojo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,16 +15,18 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class ErrorMessage {
 
-    @JsonProperty
-    private String message;
+    private static final String MESSAGE_KEY = "message";
+    
+	@JsonProperty
+    private Map<String, String> error = new HashMap<>();
     
 	public ErrorMessage(String message, Object... objects) {
-		this.message = String.format(message, objects);
+		this.error.put(MESSAGE_KEY,  String.format(message, objects));
 	}
 	
 	@Override
 	public String toString() {
-		return message;
+		return error.get(MESSAGE_KEY);
 	}
 
 }

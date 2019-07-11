@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import tech.shooting.commons.constraints.IpscConstants;
+import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.commons.utils.JacksonUtils;
 
 import java.io.File;
@@ -111,5 +113,19 @@ public class JacksonUtilsTest {
 		List<List<List<Double>>> list =
 			Collections.singletonList(Arrays.asList(Arrays.asList(-103.0, 47.5), Arrays.asList(-103.0, 48.0), Arrays.asList(-102.5, 48.0), Arrays.asList(-102.5, 47.5), Arrays.asList(-103.0, 47.5)));
 		log.info("Json list is %s", JacksonUtils.getJson(list));
+	}
+	
+	@Test
+	public void checkErrorMessage() {
+		var json = JacksonUtils.getJson(new ErrorMessage("Some issue %s", "Here"));
+		log.info("Map is %s", json);
+		assertEquals("{\"error\":{\"message\":\"Some issue Here\"}}", json);
+	}
+	
+	@Test
+	public void checkSuccessMessage() {
+		var json = JacksonUtils.getJson(new SuccessfulMessage("Some success %s", "Here"));
+		log.info("Map is %s", json);
+		assertEquals("{\"success\":{\"message\":\"Some success Here\"}}", json);
 	}
 }

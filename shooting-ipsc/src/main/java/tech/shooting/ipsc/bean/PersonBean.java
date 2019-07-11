@@ -56,11 +56,11 @@ public class PersonBean{
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rank")
-	private Rank rank;
+	private Long rank;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
-	private Division division;
+	private Long division;
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
