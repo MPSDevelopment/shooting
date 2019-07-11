@@ -34,32 +34,32 @@ public class ValidationErrorHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public Map<String, String> processValidationException (ValidationException ex, HttpServletRequest request) {
+	public ErrorMessage processValidationException (ValidationException ex, HttpServletRequest request) {
 		log.error("Validation exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(ex.getField(), ex.getMessage());
-		return validationErrors;
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(UnexpectedTypeException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ValidationException processUnexpectedType (UnexpectedTypeException ex, HttpServletRequest request) {
+	public ErrorMessage processUnexpectedType (UnexpectedTypeException ex, HttpServletRequest request) {
 		log.error("Validation Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ValidationException("", ex.getMessage());
+		return new ErrorMessage("message", ex.getMessage());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ValidationException processUnexpectedType (IllegalArgumentException ex, HttpServletRequest request) {
+	public ErrorMessage processUnexpectedType (IllegalArgumentException ex, HttpServletRequest request) {
 		log.error("IllegalArgument Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ValidationException("", ex.getMessage());
+		return new ErrorMessage("message", ex.getMessage());
 	}
 
 	@ExceptionHandler(InvalidFormatException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ValidationException processInvalidFormatException (InvalidFormatException ex, HttpServletRequest request) {
+	public ErrorMessage processInvalidFormatException (InvalidFormatException ex, HttpServletRequest request) {
 		log.error("Invalid Format Exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ValidationException("", ex.getMessage());
+		return new ErrorMessage("message", ex.getMessage());
 	}
 
 	@ExceptionHandler(BadRequestException.class)

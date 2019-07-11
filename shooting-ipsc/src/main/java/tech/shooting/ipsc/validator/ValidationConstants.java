@@ -89,10 +89,10 @@ public class ValidationConstants {
 
 	public static final String NUMBER_MAX_MESSAGE = "Number must be max 4";
 	public static final String SPECIALITY_MESSAGE = "The speciality length must be not blank";
-	public static final String SPECIALITY_SIZE_MESSAGE = "The speciality length must be min 5 characters";
+	public static final String SPECIALITY_SIZE_MESSAGE = "The speciality length must be min 3 characters";
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
 	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number for Ak is 7 characters min";
 	public static final String WEAPON_NAME_MESSAGE = "Weapon name must be not blank";
 	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
-	public static final String COURSE_NAME_MESSAGE = "Course name must be min 5 characters";
+	public static final String COURSE_NAME_MESSAGE = "Course name must be min 3 characters";
 }

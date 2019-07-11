@@ -1,4 +1,4 @@
-package tech.shooting.ipsc;
+package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
@@ -30,6 +30,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import io.moquette.broker.ClientDescriptor;
 import io.moquette.broker.Server;
 import io.moquette.broker.config.ClasspathResourceLoader;
 import io.moquette.broker.config.IConfig;
@@ -39,6 +41,7 @@ import io.moquette.interception.InterceptHandler;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +54,7 @@ import java.util.List;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ActiveProfiles("simple")
 //@TestMethodOrder(OrderAnnotation.class)
-class MqttTest {
+class MqttServiceTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
 
@@ -62,8 +65,6 @@ class MqttTest {
 	private static final String TEST_TOPIC = "ipsc";
 
 	private int count = 0;
-
-	private Server mqttBroker;
 
 	@Autowired
 	private MqttService mqttService;
@@ -83,25 +84,24 @@ class MqttTest {
 
 		assertNotNull(settings.getAdminLogin());
 
-		IResourceLoader classpathLoader = new ClasspathResourceLoader();
-		final IConfig classPathConfig = new ResourceLoaderConfig(classpathLoader, "config/moquette-protected.conf");
-
-		mqttBroker = new Server();
-		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
-		mqttBroker.startServer(classPathConfig, userHandlers);
+		mqttService.startBroker("config/moquette-protected.conf");
 
 		log.info("Broker started");
 	}
 
 	@AfterEach
 	public void after() {
-		mqttBroker.stopServer();
+		mqttService.stopBroker();
 	}
 
 	@Test
 	public void testPublishSubscribe() throws MqttException, InterruptedException {
 
+		log.info("Started test");
+
 		EventBus.subscribe(this);
+
+		assertNotNull(settings.getGuestLogin());
 
 		String topicName1 = "command/topic1";
 		String topicName2 = "command/topic2";
@@ -133,6 +133,13 @@ class MqttTest {
 		publisher.getTopic(topicName1).publish(message);
 		publisher.getTopic(topicName2).publish(message);
 
+		var subscribers = mqttService.getSubscribers();
+		subscribers.forEach(item -> {
+			log.info("Item = %s", item);
+		});
+
+		assertEquals(5, subscribers.size());
+
 		Thread.sleep(100);
 
 		publisher.disconnect();
@@ -142,7 +149,9 @@ class MqttTest {
 		subscriberAll.disconnect();
 
 		assertEquals(5, count);
-
+		
+		subscribers = mqttService.getSubscribers();
+		assertEquals(0, subscribers.size());
 	}
 
 	@Handler

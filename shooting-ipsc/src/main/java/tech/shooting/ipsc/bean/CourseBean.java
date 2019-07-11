@@ -21,7 +21,7 @@ public class CourseBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Course name", required = true)
-    @Size(min = 5, message = ValidationConstants.COURSE_NAME_MESSAGE)
+    @Size(min = 3, message = ValidationConstants.COURSE_NAME_MESSAGE)
     private String name;
 
     @JsonProperty

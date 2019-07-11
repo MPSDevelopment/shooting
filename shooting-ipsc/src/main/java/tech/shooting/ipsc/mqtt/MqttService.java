@@ -3,19 +3,65 @@ package tech.shooting.ipsc.mqtt;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.moquette.broker.ClientDescriptor;
+import io.moquette.broker.Server;
+import io.moquette.broker.config.ClasspathResourceLoader;
+import io.moquette.broker.config.IConfig;
+import io.moquette.broker.config.IResourceLoader;
+import io.moquette.broker.config.ResourceLoaderConfig;
+import io.moquette.interception.InterceptHandler;
+
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.UUID;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
 public class MqttService {
-	
-	@Autowired 
+
+	@Autowired
 	private IpscMqttSettings mqttSettings;
+
+	private static Server mqttBroker;
+
+	public void startBroker(String settingsFile) {
+
+		if (mqttBroker != null) {
+			return;
+		}
+
+		IResourceLoader classpathLoader = new ClasspathResourceLoader();
+		final IConfig classPathConfig = StringUtils.isNotBlank(settingsFile) ? new ResourceLoaderConfig(classpathLoader, settingsFile) : new ResourceLoaderConfig(classpathLoader);
+
+		mqttBroker = new Server();
+
+		log.debug("authenticator_class = %s", classPathConfig.getProperty("authenticator_class"));
+		log.debug("authorizator_class = %s", classPathConfig.getProperty("authorizator_class"));
+
+		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
+		
+		try {
+			mqttBroker.startServer(classPathConfig, userHandlers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void stopBroker() {
+		if (mqttBroker == null) {
+			return;
+		}
+
+		mqttBroker.stopServer();
+		log.info("Moquette Server stopped");
+	}
 
 	public MqttMessage createMessage(String payload) {
 		MqttMessage message = new MqttMessage();
@@ -32,8 +78,7 @@ public class MqttService {
 		connOpts.setUserName(userName);
 		connOpts.setPassword(password.toCharArray());
 
-		String publisherId = UUID.randomUUID().toString();
-		var publisher = new MqttClient(url, publisherId);
+		var publisher = new MqttClient(url, MqttClient.generateClientId());
 		publisher.connect(connOpts);
 		return publisher;
 	}
@@ -57,6 +102,10 @@ public class MqttService {
 		});
 
 		return subscriber;
+	}
+
+	public Collection<ClientDescriptor> getSubscribers() {
+		return mqttBroker.listConnectedClients();
 	}
 
 }

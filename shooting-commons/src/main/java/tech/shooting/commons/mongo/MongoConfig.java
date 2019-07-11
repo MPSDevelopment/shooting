@@ -30,74 +30,77 @@ import java.util.List;
 @Slf4j
 public class MongoConfig {
 
-    @Autowired
-    private MongoDbFactory mongoFactory;
+	@Autowired
+	private MongoDbFactory mongoFactory;
 
-    @Autowired
-    private MongoMappingContext mongoMappingContext;
+	@Autowired
+	private MongoMappingContext mongoMappingContext;
 
+	@Bean
+	public MongoClientOptions mongoOptions() {
+		return MongoClientOptions.builder().socketTimeout(30000).connectTimeout(30000).connectionsPerHost(200).build();
+	}
 
-    @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
-        MongoTemplate mongoTemplate = new MongoTemplate(mongoFactory, mongoConverter());
-        return mongoTemplate;
-    }
+	@Bean
+	public MongoTemplate mongoTemplate() throws Exception {
+		MongoTemplate mongoTemplate = new MongoTemplate(mongoFactory, mongoConverter());
+		return mongoTemplate;
+	}
 
-    @Bean
-    public MappingMongoConverter mongoConverter() throws Exception {
-        DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoFactory);
-        MappingMongoConverter mongoConverter = new MappingMongoConverter(dbRefResolver, mongoMappingContext) {
+	@Bean
+	public MappingMongoConverter mongoConverter() throws Exception {
+		DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoFactory);
+		MappingMongoConverter mongoConverter = new MappingMongoConverter(dbRefResolver, mongoMappingContext) {
 
-            @Override
-            protected DBRef createDBRef(Object target, MongoPersistentProperty property) {
-                // we should set id before save
-                if (target instanceof BaseDocument) {
-                    if (((BaseDocument) target).getId() == null) {
-                        ((BaseDocument) target).setId(IdGenerator.nextId());
-                    }
-                }
-                return super.createDBRef(target, property);
-            }
+			@Override
+			protected DBRef createDBRef(Object target, MongoPersistentProperty property) {
+				// we should set id before save
+				if (target instanceof BaseDocument) {
+					if (((BaseDocument) target).getId() == null) {
+						((BaseDocument) target).setId(IdGenerator.nextId());
+					}
+				}
+				return super.createDBRef(target, property);
+			}
 
-            protected void writeInternal(@Nullable Object obj, Bson bson, @Nullable TypeInformation<?> typeHint) {
-                // we should set id before save
-                log.debug("Write internal for %s", obj);
-                if (obj instanceof BaseDocument) {
-                    if (((BaseDocument) obj).getId() == null) {
-                        ((BaseDocument) obj).setId(IdGenerator.nextId());
-                    }
-                    if (((BaseDocument) obj).getCreatedDate() == null) {
-                        ((BaseDocument) obj).setCreatedDate(OffsetDateTime.now(ZoneOffset.UTC));
-                    }
-                    ((BaseDocument) obj).setUpdatedDate(OffsetDateTime.now(ZoneOffset.UTC));
-                }
-                super.writeInternal(obj, bson, typeHint);
-            }
+			protected void writeInternal(@Nullable Object obj, Bson bson, @Nullable TypeInformation<?> typeHint) {
+				// we should set id before save
+				log.debug("Write internal for %s", obj);
+				if (obj instanceof BaseDocument) {
+					if (((BaseDocument) obj).getId() == null) {
+						((BaseDocument) obj).setId(IdGenerator.nextId());
+					}
+					if (((BaseDocument) obj).getCreatedDate() == null) {
+						((BaseDocument) obj).setCreatedDate(OffsetDateTime.now(ZoneOffset.UTC));
+					}
+					((BaseDocument) obj).setUpdatedDate(OffsetDateTime.now(ZoneOffset.UTC));
+				}
+				super.writeInternal(obj, bson, typeHint);
+			}
 
-        };
+		};
 
+		mongoConverter.setCustomConversions(new CustomConversions(customConversions()));
 
-        mongoConverter.setCustomConversions(new CustomConversions(customConversions()));
+		return mongoConverter;
+	}
 
-        return mongoConverter;
-    }
+	protected List<Converter<?, ?>> customConversions() {
+		List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
+		converterList.add(new DateToOffsetDateTimeConverter());
+		converterList.add(new OffsetDateTimeToDateConverter());
+		return converterList;
+	}
 
-    protected List<Converter<?, ?>> customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
-        converterList.add(new DateToOffsetDateTimeConverter());
-        converterList.add(new OffsetDateTimeToDateConverter());
-        return converterList;
-    }
+	;
 
-    ;
+	@Bean
+	public SaveWithIdMongoEventListener saveWithIdMongoEventListener() {
+		return new SaveWithIdMongoEventListener();
+	}
 
-    @Bean
-    public SaveWithIdMongoEventListener saveWithIdMongoEventListener() {
-        return new SaveWithIdMongoEventListener();
-    }
-
-    @Bean
-    public CascadeSaveMongoEventListener cascadeSaveMongoEventListener() {
-        return new CascadeSaveMongoEventListener();
-    }
+	@Bean
+	public CascadeSaveMongoEventListener cascadeSaveMongoEventListener() {
+		return new CascadeSaveMongoEventListener();
+	}
 }
