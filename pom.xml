@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tech.shooting</groupId>
 	<artifactId>parent</artifactId>
@@ -20,6 +18,17 @@
 				<module>shooting-ipsc</module>
 			</modules>
 		</profile>
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>shooting-commons</module>
+				<module>shooting-ipsc</module>
+			</modules>
+		</profile>
+		
 	</profiles>
 
 	<properties>
@@ -27,7 +36,7 @@
 		<docker.image.name>ipsc</docker.image.name>
 		<docker.image.version>0.1</docker.image.version>
 		<jdk.version>11</jdk.version>
-		
+
 		<lib.property>lib</lib.property>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -78,7 +87,7 @@
 		<jwt.version>3.4.0</jwt.version>
 		<reflections.version>0.9.11</reflections.version>
 		<tika.version>1.18</tika.version>
-		
+
 		<jaxb.version>2.3.1</jaxb.version>
 		<snakeyaml.version>1.23</snakeyaml.version>
 
@@ -198,18 +207,18 @@
 	</dependencies>
 	<!-- </dependencyManagement> -->
 
-<!-- 	<distributionManagement> -->
-<!-- 		<snapshotRepository> -->
-<!-- 			<id>snapshots</id> -->
-<!-- 			<name>mpsdevelopment-snapshots</name> -->
-<!-- 			<url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url> -->
-<!-- 		</snapshotRepository> -->
-<!-- 		<repository> -->
-<!-- 			<id>central</id> -->
-<!-- 			<name>libs-release</name> -->
-<!-- 			<url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url> -->
-<!-- 		</repository> -->
-<!-- 	</distributionManagement> -->
+	<!-- <distributionManagement> -->
+	<!-- <snapshotRepository> -->
+	<!-- <id>snapshots</id> -->
+	<!-- <name>mpsdevelopment-snapshots</name> -->
+	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url> -->
+	<!-- </snapshotRepository> -->
+	<!-- <repository> -->
+	<!-- <id>central</id> -->
+	<!-- <name>libs-release</name> -->
+	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url> -->
+	<!-- </repository> -->
+	<!-- </distributionManagement> -->
 
 
 
