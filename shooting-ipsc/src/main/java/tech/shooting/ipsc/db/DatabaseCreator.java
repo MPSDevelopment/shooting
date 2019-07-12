@@ -32,7 +32,6 @@ public class DatabaseCreator {
 
 	public static final String JUDGE_LOGIN = "judge";
 
-
 	@Autowired
 	private DatabaseCreator databaseCreator;
 
@@ -81,7 +80,7 @@ public class DatabaseCreator {
 				new Rank().setRus("Ефрейтор").setKz("Ефрейтор"),
 				new Rank().setRus("Младший сержант").setKz("Младший сержант"),
 				new Rank().setRus("Сержант").setKz("Сержант"),
-				new Rank().setRus("старший сержант").setKz("Старший сержант"),
+				new Rank().setRus("Cтарший сержант").setKz("Старший сержант"),
 				new Rank().setRus("Старшина").setKz("Старшина"),
 				new Rank().setRus("Прапорщик").setKz("Прапорщик"),
 				new Rank().setRus("Старший прапорщик").setKz("Старший прапорщик"),
