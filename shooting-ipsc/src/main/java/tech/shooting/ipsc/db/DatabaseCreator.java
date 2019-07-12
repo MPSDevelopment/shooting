@@ -7,9 +7,11 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
@@ -42,6 +44,9 @@ public class DatabaseCreator {
 	
 	@Autowired
 	private RankRepository rankRepository;
+	
+	@Autowired
+	private DivisionRepository divisionRepository;
 
 	public DatabaseCreator () {
 	}
@@ -87,5 +92,8 @@ public class DatabaseCreator {
 				new Rank().setRus("Майор").setKz("Майор").setOfficer(true),
 				new Rank().setRus("Подполковник").setKz("Подполковник").setOfficer(true),
 				new Rank().setRus("Полковник").setKz("Полковник").setOfficer(true)));
+		
+		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
+		
 	}
 }

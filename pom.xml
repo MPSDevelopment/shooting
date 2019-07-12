@@ -28,13 +28,13 @@
 				<module>shooting-ipsc</module>
 			</modules>
 		</profile>
-		
+
 	</profiles>
 
 	<properties>
 
 		<docker.image.name>ipsc</docker.image.name>
-		<docker.image.version>0.1</docker.image.version>
+		<docker.image.version>0.2</docker.image.version>
 		<jdk.version>11</jdk.version>
 
 		<lib.property>lib</lib.property>
@@ -207,18 +207,18 @@
 	</dependencies>
 	<!-- </dependencyManagement> -->
 
-	<!-- <distributionManagement> -->
-	<!-- <snapshotRepository> -->
-	<!-- <id>snapshots</id> -->
-	<!-- <name>mpsdevelopment-snapshots</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url> -->
-	<!-- </snapshotRepository> -->
-	<!-- <repository> -->
-	<!-- <id>central</id> -->
-	<!-- <name>libs-release</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url> -->
-	<!-- </repository> -->
-	<!-- </distributionManagement> -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>mpsdevelopment-snapshots</name>
+			<url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+		<repository>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url>
+		</repository>
+	</distributionManagement>
 
 
 
