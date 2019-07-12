@@ -2,6 +2,8 @@ package tech.shooting.commons.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -104,6 +106,15 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
+	public void checkOffsetDate() throws IOException {
+		User user = new User().setName("Thor").setSurname("Viking").setCount(5000).setOffsetDate(OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 123456789, ZoneOffset.UTC));
+		String json = JacksonUtils.getJson(user);
+		log.info("Json date is %s", json);
+		assertTrue(json.contains("2018-01-01T00:00:00.123Z"));
+
+	}
+
+	@Test
 	public void checkList() throws IOException {
 		List<User> list = new ArrayList<>();
 		list.add(new User().setName("Thor").setSurname("Viking").setCount(5000).setSalary(Long.MAX_VALUE));
@@ -126,8 +137,8 @@ public class JacksonUtilsTest {
 		Map<String, User> map = JacksonUtils.getMapFromJson(User.class, json);
 		log.info("Map is %s", map);
 	}
-	
-	@Test 
+
+	@Test
 	public void checkComplexList() {
 		List<List<List<Double>>> list = Collections.singletonList(Arrays.asList(Arrays.asList(-103.0, 47.5), Arrays.asList(-103.0, 48.0), Arrays.asList(-102.5, 48.0), Arrays.asList(-102.5, 47.5), Arrays.asList(-103.0, 47.5)));
 		log.info("Json list is %s", JacksonUtils.getJson(list));

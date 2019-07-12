@@ -1,5 +1,6 @@
 package tech.shooting.commons.utils;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,4 +34,7 @@ public class User {
 	
 	@JsonProperty("date")
 	private Date date;
+	
+	@JsonProperty("dateTime")
+	private OffsetDateTime offsetDate;
 }

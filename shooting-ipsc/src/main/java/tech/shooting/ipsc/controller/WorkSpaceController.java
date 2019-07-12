@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.WorkSpaceBean;
 import tech.shooting.ipsc.service.WorkSpaceService;
 
@@ -50,7 +52,7 @@ public class WorkSpaceController {
     @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")
     @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_GET_TOPIC)
     @ApiOperation(value = "Start test to workspace")
-    public ResponseEntity getPublisherTopic(@RequestBody List<WorkSpaceBean> beans) {
+    public ResponseEntity getPublisherTopic(@RequestBody List<WorkSpaceBean> beans) throws BadRequestException {
         workSpaceService.updateWorkSpaceDataAndStartTest(beans);
         return new ResponseEntity(HttpStatus.OK);
     }

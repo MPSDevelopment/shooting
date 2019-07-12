@@ -13,6 +13,7 @@ import tech.shooting.ipsc.bean.Stat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -21,15 +22,17 @@ import java.util.List;
 @Document(collection = "combatenote")
 @TypeAlias("combatenote")
 public class CombatNote extends BaseDocument {
-	public static final String DIVISION="division";
+
+	public static final String DIVISION = "division";
+
 	@JsonProperty
 	@ApiModelProperty(value = "Filling date")
 	@NotNull
-	private LocalDate date;
+	private OffsetDateTime date;
 
 	@DBRef
 	@JsonProperty
-	@ApiModelProperty (value = "Responsibility user id")
+	@ApiModelProperty(value = "Responsibility user id")
 	private User combat;
 
 	@DBRef

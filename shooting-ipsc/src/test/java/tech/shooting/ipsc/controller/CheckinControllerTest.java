@@ -391,12 +391,13 @@ class CheckinControllerTest {
         LocalTime time = LocalTime.of(15,00);
         ZoneOffset offset = OffsetDateTime.now().getOffset();
         OffsetDateTime of1 = OffsetDateTime.of(of, time, offset);
+        
         log.info("Date is %s",of);
         CombatNote combatNote;
         for (int i = 0; i < 5; i++) {
             List<Stat> statList = new ArrayList<>();
             statList.add(new Stat().setStatus(TypeOfPresence.DAY_OFF).setCount(1));
-            combatNote = new CombatNote().setCombat(user).setDate(of).setDivision(root).setStatList(statList);
+            combatNote = new CombatNote().setCombat(user).setDate(of1).setDivision(root).setStatList(statList);
             combatNoteRepository.save(combatNote);
         }
         // admin role

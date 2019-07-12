@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.ValidationException;
+import tech.shooting.commons.mongo.converter.OffsetDateDeserializer;
+import tech.shooting.commons.mongo.converter.OffsetDateSerializer;
 
 import org.apache.commons.io.FileUtils;
 
@@ -24,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +51,8 @@ public class JacksonUtils {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
 		DateFormat dateFormat = new SimpleDateFormat(DATETIME_FORMAT_STRING);
+		objectMapper.getDeserializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
+		objectMapper.getSerializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
 		objectMapper.setDateFormat(dateFormat);
 
 		objectMapper.configure(Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
@@ -68,9 +73,12 @@ public class JacksonUtils {
 		SimpleModule module = new SimpleModule();
 		module.addSerializer(long.class, new ToStringSerializer());
 		module.addSerializer(Long.class, new ToStringSerializer());
-		// module.addSerializer(OffsetDateTime.class, new ToStringSerializer());
+		
+		module.addSerializer(OffsetDateTime.class, new OffsetDateSerializer());
+		module.addDeserializer(OffsetDateTime.class, new OffsetDateDeserializer());
+		
 		objectMapper.registerModule(module);
-		objectMapper.registerModule(new JavaTimeModule());
+//		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		return objectMapper;
 	}
