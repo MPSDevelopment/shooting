@@ -51,8 +51,8 @@ public class JacksonUtils {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
 		DateFormat dateFormat = new SimpleDateFormat(DATETIME_FORMAT_STRING);
-		objectMapper.getDeserializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
-		objectMapper.getSerializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
+//		objectMapper.getDeserializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
+//		objectMapper.getSerializationConfig().with(new SimpleDateFormat(DATETIME_FORMAT_STRING));
 		objectMapper.setDateFormat(dateFormat);
 
 		objectMapper.configure(Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
@@ -74,11 +74,11 @@ public class JacksonUtils {
 		module.addSerializer(long.class, new ToStringSerializer());
 		module.addSerializer(Long.class, new ToStringSerializer());
 		
-		module.addSerializer(OffsetDateTime.class, new OffsetDateSerializer());
-		module.addDeserializer(OffsetDateTime.class, new OffsetDateDeserializer());
+//		module.addSerializer(OffsetDateTime.class, new OffsetDateSerializer());
+//		module.addDeserializer(OffsetDateTime.class, new OffsetDateDeserializer());
 		
 		objectMapper.registerModule(module);
-//		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		return objectMapper;
 	}
