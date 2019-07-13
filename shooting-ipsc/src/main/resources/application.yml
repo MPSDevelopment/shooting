@@ -51,7 +51,7 @@ ipsc:
     adminLogin: ipsc
     adminpassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-    
+
 ---
 spring:
   profiles: development

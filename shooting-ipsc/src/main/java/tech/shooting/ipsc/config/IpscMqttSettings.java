@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 public class IpscMqttSettings {
 	
 	private String guestLogin = "guest";
-	
-	private String guestPassword = "guesty";
+
+	private String guestPassword = "guest";
 	
 	private String adminLogin;
 	
