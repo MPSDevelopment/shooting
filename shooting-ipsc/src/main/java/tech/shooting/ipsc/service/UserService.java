@@ -13,7 +13,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.ChangePasswordBean;
 import tech.shooting.ipsc.bean.UserSignupBean;
 import tech.shooting.ipsc.bean.UserUpdateBean;
-import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.utils.UserLockUtils;
@@ -112,7 +112,7 @@ public class UserService {
 	}
 
 	public ResponseEntity<List<User>> getUsersByPage (Integer page, Integer size) {
-		return PageAble.getPage(page, size, userRepository);
+		return Pageable.getPage(page, size, userRepository);
 	}
 
 	public List<User> getListJudges () {

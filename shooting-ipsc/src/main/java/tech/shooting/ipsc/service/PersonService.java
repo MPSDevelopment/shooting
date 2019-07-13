@@ -10,7 +10,7 @@ import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
-import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.pojo.Person;
@@ -86,7 +86,7 @@ public class PersonService {
 	}
 
 	public ResponseEntity<List<Person>> getPersonByPage(Integer page, Integer size) {
-		return PageAble.getPage(page, size, personRepository);
+		return Pageable.getPage(page, size, personRepository);
 	}
 
 	public Long getCount() {

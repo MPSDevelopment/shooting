@@ -12,7 +12,7 @@ import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.bean.DivisionDropList;
-import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
@@ -103,7 +103,7 @@ public class DivisionService {
 	}
 
 	public ResponseEntity getDivisionByPage (int page, int size) {
-		return PageAble.getPage(page, size, divisionRepository);
+		return Pageable.getPage(page, size, divisionRepository);
 	}
 
 	public DivisionBean getDivision (Long id) throws BadRequestException {
