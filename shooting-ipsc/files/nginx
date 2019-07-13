@@ -7,6 +7,9 @@ server {
 
 	add_header 'Access-Control-Allow-Origin' '*';
 
+	error_log  /usr/share/servers/shooting/nginx/error.log;
+        access_log /usr/share/servers/shooting/nginx/access.log;
+
 	location ~ /(api|doc|swagger|webjars) {
     	proxy_pass https://10.0.6.4:9901;
 		proxy_set_header X-Real-IP $remote_addr; 
@@ -17,6 +20,7 @@ server {
 		try_files $uri$args $uri$args/ /index.html;
 	}
 }
+
 
 server { 
 	listen 80; 
