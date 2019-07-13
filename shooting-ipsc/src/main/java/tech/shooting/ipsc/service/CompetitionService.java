@@ -85,7 +85,8 @@ public class CompetitionService {
 	public Competition updateCompetition(Long id, CompetitionBean competition) throws BadRequestException {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
 		checkToAddedRow(existCompetition);
-		BeanUtils.copyProperties(competition, existCompetition);
+		// Do not change competitors and stages 
+		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD, Competition.STAGES_FIELD);
 		return competitionRepository.save(existCompetition);
 	}
 

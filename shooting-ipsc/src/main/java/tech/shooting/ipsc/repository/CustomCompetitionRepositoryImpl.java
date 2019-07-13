@@ -58,7 +58,7 @@ class CustomCompetitionRepositoryImpl implements CustomCompetitionRepository {
 	public void pullCompetitorFromCompetition (Long competitionId, Long competitorId) {
 		mongoTemplate.updateFirst(
 			Query.query(Criteria.where(Competition.ID_FIELD).is(competitionId)),
-			new Update().pull(Competition.COMPETITOR_FIELD, Query.query(Criteria.where(Competition.ID_FIELD).is(competitorId))),
+			new Update().pull(Competition.COMPETITORS_FIELD, Query.query(Criteria.where(Competition.ID_FIELD).is(competitorId))),
 			Competition.class);
 	}
 }

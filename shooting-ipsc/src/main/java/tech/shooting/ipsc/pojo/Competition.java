@@ -25,7 +25,7 @@ public class Competition extends BaseDocument {
 
 	public static final String STAGES_FIELD = "stages";
 
-	public static final String COMPETITOR_FIELD = "competitors";
+	public static final String COMPETITORS_FIELD = "competitors";
 
 	public static final String MATCH_DIRECTOR_FIELD = "matchDirector";
 
