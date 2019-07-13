@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
-@ContextConfiguration(classes = {IpscMongoConfig.class})
+@ContextConfiguration(classes = { IpscMongoConfig.class })
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
@@ -36,7 +36,7 @@ public class DivisionRepositoryTest {
 	private Division root;
 
 	@BeforeEach
-	public void before () {
+	public void before() {
 		divisionRepository.deleteAll();
 		int count = divisionRepository.findAll().size();
 		log.info("Create root division");
@@ -45,17 +45,28 @@ public class DivisionRepositoryTest {
 	}
 
 	@Test
-	public void checkFindByNameAndParentId () {
+	public void checkFindByNameAndParentId() {
 		assertNotNull(divisionRepository.findByNameAndParent(ROOT_NAME, null));
 	}
 
 	@Test
-	public void checkFindOneByParent () {
+	public void checkCreateIfNotExist() {
+		int count = divisionRepository.findAll().size();
+		Division division = new Division().setName(ROOT_NAME);
+		divisionRepository.createIfNotExists(division);
+		assertEquals(count, divisionRepository.findAll().size());
+		division = new Division().setName("New");
+		divisionRepository.createIfNotExists(division);
+		assertEquals(count + 1, divisionRepository.findAll().size());
+	}
+
+	@Test
+	public void checkFindOneByParent() {
 		assertNotNull(divisionRepository.findOneByParent(null));
 	}
 
 	@Test
-	public void checkUpdateDivisionName () {
+	public void checkUpdateDivisionName() {
 		String str = "tttttttttttttttt";
 		divisionRepository.updateDivisionName(root.getId(), str);
 		assertEquals(divisionRepository.findById(root.getId()).get().getName(), str);

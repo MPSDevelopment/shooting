@@ -38,11 +38,13 @@ public class MongoConfig {
 
 	@Bean
 	public MongoClientOptions mongoOptions() {
-		return MongoClientOptions.builder().socketTimeout(30000).connectTimeout(30000).connectionsPerHost(200).build();
+		log.info("Creating mongo options");
+		return MongoClientOptions.builder().socketTimeout(60 * 000).connectTimeout(30000).connectionsPerHost(200).build();
 	}
 
 	@Bean
 	public MongoTemplate mongoTemplate() throws Exception {
+		log.info("Creating mongo template");
 		MongoTemplate mongoTemplate = new MongoTemplate(mongoFactory, mongoConverter());
 		return mongoTemplate;
 	}

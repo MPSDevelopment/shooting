@@ -7,9 +7,11 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
@@ -30,7 +32,6 @@ public class DatabaseCreator {
 
 	public static final String JUDGE_LOGIN = "judge";
 
-
 	@Autowired
 	private DatabaseCreator databaseCreator;
 
@@ -42,6 +43,9 @@ public class DatabaseCreator {
 	
 	@Autowired
 	private RankRepository rankRepository;
+	
+	@Autowired
+	private DivisionRepository divisionRepository;
 
 	public DatabaseCreator () {
 	}
@@ -76,7 +80,7 @@ public class DatabaseCreator {
 				new Rank().setRus("Ефрейтор").setKz("Ефрейтор"),
 				new Rank().setRus("Младший сержант").setKz("Младший сержант"),
 				new Rank().setRus("Сержант").setKz("Сержант"),
-				new Rank().setRus("старший сержант").setKz("Старший сержант"),
+				new Rank().setRus("Cтарший сержант").setKz("Старший сержант"),
 				new Rank().setRus("Старшина").setKz("Старшина"),
 				new Rank().setRus("Прапорщик").setKz("Прапорщик"),
 				new Rank().setRus("Старший прапорщик").setKz("Старший прапорщик"),
@@ -87,5 +91,8 @@ public class DatabaseCreator {
 				new Rank().setRus("Майор").setKz("Майор").setOfficer(true),
 				new Rank().setRus("Подполковник").setKz("Подполковник").setOfficer(true),
 				new Rank().setRus("Полковник").setKz("Полковник").setOfficer(true)));
+		
+		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
+		
 	}
 }

@@ -11,7 +11,7 @@ import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.ReportBean;
 import tech.shooting.ipsc.bean.RowBean;
-import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
@@ -104,7 +104,7 @@ public class QuizService {
 	}
 
 	public ResponseEntity getQuizByPage (Integer page, Integer size) {
-		return PageAble.getPage(page, size, quizRepository);
+		return Pageable.getPage(page, size, quizRepository);
 	}
 
 	public List<QuizReport> createReport (List<ReportBean> listResult) throws BadRequestException {

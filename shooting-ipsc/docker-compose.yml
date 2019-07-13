@@ -10,7 +10,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD : ipasdfb14235346jsbcfdhasbf3q234sc
       MONGO_INITDB_DATABASE : shooting
     volumes:
-#      - ./data/mongo/db:/data/db
+      - ./data/mongo/db:/data/db
       - ./data/logs/mongo:/data/log
     ports:
       - 27018:27017
@@ -19,17 +19,16 @@ services:
     
   ipsc: 
     container_name: ipsc
-    image: shooting.azurecr.io/ipsc:0.1-latest
+    image: shooting.azurecr.io/ipsc:0.2-latest
     volumes:
       - ./data/logs/ipsc:/usr/share/servers/ipsc/logs
+      - static-content:/usr/share/servers/ipsc-frontend  
     expose:
       - 9901
     ports:
       - 9901:9901
     depends_on: 
-      - ipsc-mongodb    
-    volumes:
-      - static-content:/usr/share/servers/ipsc-frontend        
+      - ipsc-mongodb     
   ipsc-nginx:
     container_name: ipsc-nginx
     image: nginx:1.13

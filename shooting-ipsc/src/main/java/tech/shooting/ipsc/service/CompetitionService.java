@@ -16,7 +16,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.ScoreBean;
-import tech.shooting.ipsc.controller.PageAble;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
@@ -85,7 +85,8 @@ public class CompetitionService {
 	public Competition updateCompetition(Long id, CompetitionBean competition) throws BadRequestException {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
 		checkToAddedRow(existCompetition);
-		BeanUtils.copyProperties(competition, existCompetition);
+		// Do not change competitors and stages 
+		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD, Competition.STAGES_FIELD);
 		return competitionRepository.save(existCompetition);
 	}
 
@@ -113,7 +114,7 @@ public class CompetitionService {
 	}
 
 	public ResponseEntity getCompetitionsByPage(Integer page, Integer size) {
-		return PageAble.getPage(page, size, competitionRepository);
+		return Pageable.getPage(page, size, competitionRepository);
 	}
 
 	public List<Stage> getStages(Long id) throws BadRequestException {
