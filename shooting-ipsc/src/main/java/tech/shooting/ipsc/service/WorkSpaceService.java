@@ -2,6 +2,9 @@ package tech.shooting.ipsc.service;
 
 import java.util.List;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
@@ -30,9 +33,15 @@ public class WorkSpaceService {
     @Autowired
     private MqttService mqttService;
 
-    public void createWorkSpace(String remoteIp) {
+    private static final String MQTT_URL = "tcp://127.0.0.1:1883";
+    public static final String TOPIC_CREATED = "create/topic";
+
+    public void createWorkSpace(String remoteIp) throws MqttException {
         WorkSpace save = workSpaceRepository.save(new WorkSpace().setIp(remoteIp));
-        //mqttService.createMessage("add/workspace/"+remoteIp);
+        MqttClient publisher = mqttService.createPublisher(MQTT_URL, "quest", "guest");
+        MqttMessage message = mqttService.createMessage(remoteIp);
+        publisher.getTopic(TOPIC_CREATED).publish(message);
+
     }
 
     public void createTopicForAdmin() {
