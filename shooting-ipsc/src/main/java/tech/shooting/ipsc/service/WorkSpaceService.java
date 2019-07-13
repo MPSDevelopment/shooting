@@ -42,7 +42,6 @@ public class WorkSpaceService {
     public void updateWorkSpaceDataAndStartTest(List<WorkSpaceBean> beans) throws BadRequestException {
         for (WorkSpaceBean bean : beans) {
             WorkSpace save = workSpaceRepository.save(checkAllDependOn(bean));
-            // mqttService.createPublisher()
         }
     }
 
