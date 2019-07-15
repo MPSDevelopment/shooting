@@ -79,5 +79,5 @@ public class CompetitionBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's list", notes = "Competition list competitors")
-	private List<Competitor> competitors;
+	private List<CompetitorBean> competitors;
 }

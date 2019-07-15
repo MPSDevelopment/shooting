@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.pojo;
+package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,6 +8,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.pojo.Score;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,7 @@ import java.util.List;
 @TypeAlias("competitor")
 @Data
 @Accessors(chain = true)
-public class Competitor extends BaseDocument {
-	
-	public static final String PERSON = "person";
+public class CompetitorBean extends BaseDocument {
 	
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Competitor's name", required = true)
@@ -39,7 +38,7 @@ public class Competitor extends BaseDocument {
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor")
-	private Person person;
+	private Long person;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List of score")

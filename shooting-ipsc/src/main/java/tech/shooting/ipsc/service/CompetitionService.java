@@ -1,7 +1,9 @@
 package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,11 +68,16 @@ public class CompetitionService {
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
-//		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
-//			competitionBean.getCompetitors().forEach(item -> {
-//				return 
-//			});
-//		}
+		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
+			var list = new ArrayList<Competitor>();
+			for(var item : competitionBean.getCompetitors()) {
+				Competitor competitor = new Competitor();
+				BeanUtils.copyProperties(competitionBean, competitor, Competitor.PERSON);
+				competitor.setPerson(personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item))));
+				list.add(competitor);
+			}; 
+			competition.setCompetitors(list);
+		}
 		if (competitionBean.getClazz() != null) {
 			competition.setClazz(competitionBean.getClazz());
 		}

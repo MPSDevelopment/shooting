@@ -20,6 +20,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class Quiz extends BaseDocument {
+	
 	public static final String QUESTIONS = "questionList";
 
 	public static final String SUBJECT = "subject";
