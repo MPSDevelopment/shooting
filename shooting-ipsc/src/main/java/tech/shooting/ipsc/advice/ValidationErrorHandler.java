@@ -3,6 +3,7 @@ package tech.shooting.ipsc.advice;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +23,8 @@ import java.util.Map;
 @Slf4j
 public class ValidationErrorHandler {
 	
+	private static final String DEFAULR_FIELD = "message";
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Map<String, String> processValidationError (MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -30,6 +33,16 @@ public class ValidationErrorHandler {
 		Map<String, String> validationErrors = processFieldErrors(result.getFieldErrors());
 		log.error("Validation Errors: %s", validationErrors);
 		return validationErrors;
+	}
+	
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage processValidationException (HttpMessageNotReadableException ex, HttpServletRequest request) {
+		log.error("Validation exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULR_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(ValidationException.class)
@@ -45,21 +58,21 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processUnexpectedType (UnexpectedTypeException ex, HttpServletRequest request) {
 		log.error("Validation Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage("message", ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processUnexpectedType (IllegalArgumentException ex, HttpServletRequest request) {
 		log.error("IllegalArgument Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage("message", ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(InvalidFormatException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processInvalidFormatException (InvalidFormatException ex, HttpServletRequest request) {
 		log.error("Invalid Format Exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage("message", ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(BadRequestException.class)

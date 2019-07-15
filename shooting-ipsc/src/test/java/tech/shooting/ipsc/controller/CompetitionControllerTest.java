@@ -895,12 +895,12 @@ public class CompetitionControllerTest {
         String contentAsString = mockMvc
                 .perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM).header(Token.TOKEN_HEADER, judgeToken))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-        DisqualificationBean[] disqualificationBeans = JacksonUtils.fromJson(DisqualificationBean[].class, contentAsString);
+        DisqualificationEnum[] disqualificationBeans = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
         assertEquals(DisqualificationEnum.values().length, disqualificationBeans.length);
         // try access to getMarkType with admin role
         contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM).header(Token.TOKEN_HEADER, adminToken))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-        disqualificationBeans = JacksonUtils.fromJson(DisqualificationBean[].class, contentAsString);
+        disqualificationBeans = JacksonUtils.fromJson(DisqualificationEnum[].class, contentAsString);
         assertEquals(DisqualificationEnum.values().length, disqualificationBeans.length);
     }
 }

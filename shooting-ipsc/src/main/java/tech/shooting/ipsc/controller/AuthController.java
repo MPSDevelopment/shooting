@@ -84,12 +84,6 @@ public class AuthController {
 
 		User databaseUser = Optional.ofNullable(userService.checkUserInDB(user.getLogin(), user.getPassword())).orElseThrow(() -> new ValidationException(User.LOGIN_FIELD, "Wrong password for an user with login %s", user.getLogin()));
 
-//		if(passwordEncoder.matches(user.getPassword(), databaseUser.getPassword())) {
-//			log.info("Password is correct");
-//		} else {
-//			throw new BadRequestException(new ErrorMessage("Wrong password"));
-//		}
-
 		if (BooleanUtils.isNotTrue(databaseUser.isActive())) {
 			log.info("  USER DIDN'T CONFIRM REGISTRATION");
 			throw new BadRequestException(new ErrorMessage("User didn't confirm registration"));
