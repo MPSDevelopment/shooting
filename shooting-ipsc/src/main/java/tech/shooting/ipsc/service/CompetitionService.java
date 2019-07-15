@@ -362,19 +362,19 @@ public class CompetitionService {
 		if (StringUtils.isNotBlank(score.getDisqualificationReason())) {
 			switch (score.getDisqualificationReason()) {
 			case "DISQUALIFICATION":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION);
+				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
 				break;
 			case "ABSENT":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT);
+				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.getType());
 				break;
 			case "INJURED":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED);
+				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.getType());
 				break;
 			case "BROKEN_RULE":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE);
+				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.getType());
 				break;
 			default:
-				scoreResult.setDisqualificationReason(DisqualificationEnum.OTHER);
+				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
 			}
 			
 			scoreResult.setScore(0).setTimeOfExercise(0L);

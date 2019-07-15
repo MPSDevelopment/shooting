@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
-import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
@@ -44,5 +43,5 @@ public class Score extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Disqualification description")
-	private DisqualificationEnum disqualificationReason;	
+	private String disqualificationReason;
 }
