@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class CompetitionService {
 	private RankRepository rankRepository;
 
 	private Competition useBeanUtilsWithOutJudges(CompetitionBean competitionBean, Competition competition) throws BadRequestException {
-		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD);
+		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD, Competition.COMPETITORS_FIELD);
 		if (competitionBean.getRangeMaster() != null) {
 			competition.setRangeMaster(userRepository.findById(competitionBean.getRangeMaster()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Range Master id %s", competitionBean.getRangeMaster()))));
 		}
@@ -64,7 +66,12 @@ public class CompetitionService {
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
-		if(competitionBean.getClazz() != null){
+//		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
+//			competitionBean.getCompetitors().forEach(item -> {
+//				return 
+//			});
+//		}
+		if (competitionBean.getClazz() != null) {
 			competition.setClazz(competitionBean.getClazz());
 		}
 		return competition;
@@ -85,8 +92,8 @@ public class CompetitionService {
 	public Competition updateCompetition(Long id, CompetitionBean competition) throws BadRequestException {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
 		checkToAddedRow(existCompetition);
-		// Do not change competitors and stages 
-		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD, Competition.STAGES_FIELD);
+		// Do not change competitors and stages
+		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD);
 		return competitionRepository.save(existCompetition);
 	}
 
@@ -220,15 +227,11 @@ public class CompetitionService {
 	}
 
 	private Competitor checkCompetitor(List<Competitor> competitors, Long competitorId) throws BadRequestException {
-		return competitors.stream()
-						  .filter(competitor -> competitor.getId().equals(competitorId))
-						  .findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
+		return competitors.stream().filter(competitor -> competitor.getId().equals(competitorId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", competitorId)));
 	}
 
 	private Competitor checkCompetitor(List<Competitor> competitors, String mark) throws BadRequestException {
-		return competitors.stream()
-						  .filter(competitor -> competitor.getRfidCode().equals(mark))
-						  .findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", mark)));
+		return competitors.stream().filter(competitor -> competitor.getRfidCode().equals(mark)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect competitor id $s", mark)));
 	}
 
 	private Competitor saveAndReturn(Competition competition, Competitor competitorToDB, boolean flag) throws BadRequestException {
@@ -377,12 +380,12 @@ public class CompetitionService {
 	}
 
 	public List<Score> getScoreList(Long competitionId, Long stageId) throws BadRequestException {
-		checkStage(checkCompetition(competitionId),stageId);
-		//my fault score save stageId not DBref, because don't save to DB
+		checkStage(checkCompetition(competitionId), stageId);
+		// my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findAllByStageId(stageId);
 	}
 
 	public void deleteAll() {
-			competitionRepository.deleteAll();
+		competitionRepository.deleteAll();
 	}
 }

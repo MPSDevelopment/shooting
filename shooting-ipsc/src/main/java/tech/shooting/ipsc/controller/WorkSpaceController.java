@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,7 @@ public class WorkSpaceController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE)
     @ApiOperation(value = "Define work space")
-    public ResponseEntity postNewWorkSpace(HttpServletRequest request) {
+    public ResponseEntity postNewWorkSpace(HttpServletRequest request) throws MqttException {
         log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
         String remoteIp = request.getHeader("X-Forwarded-For");
         workSpaceService.createWorkSpace(remoteIp);

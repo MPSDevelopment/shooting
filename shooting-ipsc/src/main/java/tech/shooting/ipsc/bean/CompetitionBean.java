@@ -27,7 +27,7 @@ import java.util.List;
 @ApiModel(value = "Competition create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class CompetitionBean{
+public class CompetitionBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition name", required = true)
 	@NotNull(message = ValidationConstants.COMPETITION_NAME_MESSAGE)
@@ -40,7 +40,7 @@ public class CompetitionBean{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Competition qualifier rank", notes = "For whom the competition is held")
-	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
+	@NotNull(message = ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 
 	@JsonProperty("weaponType")

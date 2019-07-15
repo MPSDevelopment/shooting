@@ -13,6 +13,10 @@
 	<name>Shooting ipsc project</name>
 	<url>http://maven.apache.org</url>
 
+	<!-- <modules> -->
+	<!-- <module>../shooting-commons</module> -->
+	<!-- </modules> -->
+
 	<dependencies>
 
 		<dependency>
@@ -225,6 +229,14 @@
 							<mainClass>tech.shooting.ipsc.IpscApplication</mainClass>
 						</manifest>
 					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${deploy.plugin.version}</version>
+				<configuration>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
