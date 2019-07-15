@@ -70,12 +70,14 @@ public class CompetitionService {
 		}
 		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
 			var list = new ArrayList<Competitor>();
-			for(var item : competitionBean.getCompetitors()) {
+			for (var item : competitionBean.getCompetitors()) {
 				Competitor competitor = new Competitor();
 				BeanUtils.copyProperties(competitionBean, competitor, Competitor.PERSON);
-				competitor.setPerson(personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item))));
+				Person person = personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item)));
+				competitor.setPerson(person);
+				competitor.setName(person.getName());
 				list.add(competitor);
-			}; 
+			}
 			competition.setCompetitors(list);
 		}
 		if (competitionBean.getClazz() != null) {
@@ -100,7 +102,7 @@ public class CompetitionService {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
 		checkToAddedRow(existCompetition);
 		// Do not change competitors and stages
-		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD);
+		BeanUtils.copyProperties(competition, existCompetition);
 		return competitionRepository.save(existCompetition);
 	}
 
@@ -351,6 +353,9 @@ public class CompetitionService {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
 		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
+
+		log.info("Adding score %s to competitor id %s", score.getScore(), competitor.getId());
+
 		if (scoreRepository.findByPersonIdAndStageId(competitor.getId(), stageId) != null) {
 			return null;
 		}
