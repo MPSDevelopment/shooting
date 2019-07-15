@@ -6,4 +6,4 @@ Shooting competition
 
 ## Build docker file 
 
-mvn clean install dockerfile:push
+mvn clean install dockerfile:push -p docker -Dmaven.test.skip=true

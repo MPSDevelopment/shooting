@@ -162,7 +162,7 @@
 					<include>*.sh</include>
 					<include>*.bat</include>
 					<include>*.service</include>
-					<include>Dockerfile</include>
+					<include>Dockerfile*</include>
 					<include>docker-compose.yml</include>
 					<include>ipsc</include>
 					<include>ipsc*.zip</include>
@@ -291,6 +291,19 @@
 								</goals>
 							</execution>
 						</executions>
+<!-- 						<configuration> -->
+<!-- 							<repository>shooting.azurecr.io</repository> -->
+<!-- 							<contextDirectory>target</contextDirectory> -->
+<!-- 							<tag>${docker.image.version}-latest</tag> -->
+<!-- 							<dockerfile>target\DockerfileNginx</dockerfile> -->
+<!-- 							<repository>shooting.azurecr.io/ipsc-nginx</repository> -->
+<!-- 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
+<!-- 							<verbose>true</verbose> -->
+<!-- 							<forceCreation>true</forceCreation> -->
+<!-- 							<buildArgs> -->
+<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
+<!-- 							</buildArgs> -->
+<!-- 						</configuration> -->
 						<configuration>
 							<repository>shooting.azurecr.io</repository>
 							<contextDirectory>target</contextDirectory>
