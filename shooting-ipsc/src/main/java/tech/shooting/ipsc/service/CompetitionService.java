@@ -58,7 +58,7 @@ public class CompetitionService {
 	private RankRepository rankRepository;
 
 	private Competition useBeanUtilsWithOutJudges(CompetitionBean competitionBean, Competition competition) throws BadRequestException {
-		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD, Competition.COMPETITORS_FIELD);
+		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD, Competition.COMPETITORS_FIELD, Competition.STAGES_FIELD);
 		if (competitionBean.getRangeMaster() != null) {
 			competition.setRangeMaster(userRepository.findById(competitionBean.getRangeMaster()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Range Master id %s", competitionBean.getRangeMaster()))));
 		}
@@ -68,18 +68,18 @@ public class CompetitionService {
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
-		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
-			var list = new ArrayList<Competitor>();
-			for (var item : competitionBean.getCompetitors()) {
-				Competitor competitor = new Competitor();
-				BeanUtils.copyProperties(competitionBean, competitor, Competitor.PERSON);
-				Person person = personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item)));
-				competitor.setPerson(person);
-				competitor.setName(person.getName());
-				list.add(competitor);
-			}
-			competition.setCompetitors(list);
-		}
+//		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
+//			var list = new ArrayList<Competitor>();
+//			for (var item : competitionBean.getCompetitors()) {
+//				Competitor competitor = new Competitor();
+//				BeanUtils.copyProperties(competitionBean, competitor, Competitor.PERSON);
+//				Person person = personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item)));
+//				competitor.setPerson(person);
+//				competitor.setName(person.getName());
+//				list.add(competitor);
+//			}
+//			competition.setCompetitors(list);
+//		}
 		if (competitionBean.getClazz() != null) {
 			competition.setClazz(competitionBean.getClazz());
 		}
