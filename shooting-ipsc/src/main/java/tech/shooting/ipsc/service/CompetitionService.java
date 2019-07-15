@@ -376,6 +376,9 @@ public class CompetitionService {
 			default:
 				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
 			}
+			
+			scoreResult.setScore(0).setTimeOfExercise(0L);
+			
 		} else {
 			scoreResult.setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
 		}
@@ -396,6 +399,13 @@ public class CompetitionService {
 		// my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findAllByStageId(stageId);
 	}
+	
+	public List<Score> getScoreList(Long competitionId) throws BadRequestException {
+		var competition = checkCompetition(competitionId);
+		// my fault score save stageId not DBref, because don't save to DB
+		return scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
+	}
+
 
 	public void deleteAll() {
 		competitionRepository.deleteAll();

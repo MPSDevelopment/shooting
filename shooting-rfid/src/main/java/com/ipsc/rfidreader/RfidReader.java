@@ -75,7 +75,8 @@ public class RfidReader {
 			return dataStr;
 			// result += "\n Here must be mark -> " + dataStr;
 		} else {
-			return "Wrong mark, List EPC size is " + epcList.size();
+//			return "Wrong mark, List EPC size is " + epcList.size();
+			return "Wrong mark";
 			// result += "\n Wrong mark for hardware -> " + (manager.getFirmware() == null || manager.getFirmware().length == 0 ? "Hardware not detected" : Tools.Bytes2HexString(manager.getFirmware(), manager.getFirmware().length));
 		}
 
