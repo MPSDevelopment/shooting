@@ -359,7 +359,7 @@ public class CompetitionService {
 		if (scoreRepository.findByPersonIdAndStageId(competitor.getId(), stageId) != null) {
 			return null;
 		}
-		if (score.getDisqualificationReason() != null) {
+		if (StringUtils.isNotBlank(score.getDisqualificationReason())) {
 			switch (score.getDisqualificationReason()) {
 			case "DISQUALIFICATION":
 				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
