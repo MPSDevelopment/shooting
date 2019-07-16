@@ -649,8 +649,8 @@ public class CompetitionControllerTest {
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		List<TypeWeapon> listFromJson = JacksonUtils.getListFromJson(TypeWeapon[].class, contentAsString);
-		assertEquals(WeaponTypeEnum.getCount(), listFromJson.size());
+		var listFromJson = JacksonUtils.getListFromJson(WeaponTypeEnum[].class, contentAsString);
+		assertEquals(WeaponTypeEnum.values().length, listFromJson.size());
 	}
 
 	@Test

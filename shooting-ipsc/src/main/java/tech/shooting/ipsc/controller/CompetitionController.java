@@ -33,12 +33,12 @@ import tech.shooting.ipsc.bean.DisqualificationBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
+import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.LevelBean;
 import tech.shooting.ipsc.pojo.Score;
 import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.pojo.TypeWeapon;
 import tech.shooting.ipsc.service.CompetitionService;
 
 @Controller
@@ -186,7 +186,7 @@ public class CompetitionController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get weapon type lis", notes = "Return list of weapon type")
-	public ResponseEntity<List<TypeWeapon>> getEnumWeapon () {
+	public ResponseEntity<WeaponTypeEnum[]> getEnumWeapon () {
 		return new ResponseEntity<>(competitionService.getListTypeWeapon(), HttpStatus.OK);
 	}
 

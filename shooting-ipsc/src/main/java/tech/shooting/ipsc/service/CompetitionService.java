@@ -32,7 +32,6 @@ import tech.shooting.ipsc.pojo.LevelBean;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Score;
 import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.pojo.TypeWeapon;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
@@ -322,8 +321,8 @@ public class CompetitionService {
 		return ClassifierIPSC.getListStage();
 	}
 
-	public List<TypeWeapon> getListTypeWeapon() {
-		return WeaponTypeEnum.getList();
+	public WeaponTypeEnum[] getListTypeWeapon() {
+		return WeaponTypeEnum.values();
 	}
 
 	public Score addedScoreRow(Long competitionId, Long stageId, ScoreBean scoreBean) throws BadRequestException {

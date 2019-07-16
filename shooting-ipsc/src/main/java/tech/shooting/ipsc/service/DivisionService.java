@@ -50,6 +50,7 @@ public class DivisionService {
 		if (parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);
 			division = divisionRepository.save(division);
+//			throw new ValidationException(Division.PARENT_FIELD, "Cannot save a division %s with no parent", divisionBean.getName());
 		} else {
 			BeanUtils.copyProperties(divisionBean, division, Division.PARENT_FIELD);
 			Division divisionParent = divisionRepository.findById(parentId).get();
