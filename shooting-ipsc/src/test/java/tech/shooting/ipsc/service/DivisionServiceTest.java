@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.repository.DivisionRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,9 +42,11 @@ class DivisionServiceTest {
 
 	@Test
 	void createDivision () {
+		
+		var root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
 		//try create division
-		DivisionBean divisionBean = new DivisionBean().setName("dsdsdsds").setParent(null);
-		DivisionBean division = divisionService.createDivision(divisionBean, null);
+		DivisionBean divisionBean = new DivisionBean().setName("dsdsdsds").setParent(root.getId());
+		DivisionBean division = divisionService.createDivision(divisionBean, root.getId());
 		assertEquals(division.getName(), divisionBean.getName());
 		assertEquals(division.getParent(), divisionBean.getParent());
 	}
