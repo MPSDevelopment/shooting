@@ -47,7 +47,7 @@ class DivisionServiceTest {
 
 		var root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
 		// try create division
-		DivisionBean divisionBean = new DivisionBean().setName("dsdsdsds").setParent(root.getId());
+		DivisionBean divisionBean = new DivisionBean().setName("Все").setParent(root.getId());
 		DivisionBean division = divisionService.createDivision(divisionBean, root.getId());
 		assertEquals(division.getName(), divisionBean.getName());
 		assertEquals(division.getParent(), divisionBean.getParent());
