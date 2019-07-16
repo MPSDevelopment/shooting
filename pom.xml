@@ -113,32 +113,6 @@
 
 	</properties>
 
-
-	<!-- <repositories> -->
-	<!-- <repository> -->
-	<!-- <snapshots> -->
-	<!-- <enabled>false</enabled> -->
-	<!-- </snapshots> -->
-	<!-- <id>central</id> -->
-	<!-- <name>libs-release</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-release</url> -->
-	<!-- </repository> -->
-	<!-- <repository> -->
-	<!-- <snapshots /> -->
-	<!-- <id>snapshots</id> -->
-	<!-- <name>libs-snapshot</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot</url> -->
-	<!-- </repository> -->
-	<!-- </repositories> -->
-
-	<!-- <extensions> -->
-	<!-- <extension> -->
-	<!-- <groupId>com.spotify</groupId> -->
-	<!-- <artifactId>dockerfile-maven-extension</artifactId> -->
-	<!-- <version>${dockerfile.plugin.version}</version> -->
-	<!-- </extension> -->
-	<!-- </extensions> -->
-
 	<!-- <dependencyManagement> -->
 	<dependencies>
 		<dependency>
@@ -224,21 +198,5 @@
 			<version>${jaxb.version}</version>
 		</dependency>
 	</dependencies>
-	<!-- </dependencyManagement> -->
-
-	<!-- <distributionManagement> -->
-	<!-- <snapshotRepository> -->
-	<!-- <id>snapshots</id> -->
-	<!-- <name>mpsdevelopment-snapshots</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-snapshot-local</url> -->
-	<!-- </snapshotRepository> -->
-	<!-- <repository> -->
-	<!-- <id>central</id> -->
-	<!-- <name>libs-release</name> -->
-	<!-- <url>http://maven.mpsdevelopment.com/artifactory/libs-release-local</url> -->
-	<!-- </repository> -->
-	<!-- </distributionManagement> -->
-
-
 
 </project>

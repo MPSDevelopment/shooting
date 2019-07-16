@@ -169,7 +169,16 @@
 				</includes>
 			</resource>
 		</resources>
+
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${resources.plugin.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -292,19 +301,19 @@
 								</goals>
 							</execution>
 						</executions>
-<!-- 						<configuration> -->
-<!-- 							<repository>shooting.azurecr.io</repository> -->
-<!-- 							<contextDirectory>target</contextDirectory> -->
-<!-- 							<tag>${docker.image.version}-latest</tag> -->
-<!-- 							<dockerfile>target\DockerfileNginx</dockerfile> -->
-<!-- 							<repository>shooting.azurecr.io/ipsc-nginx</repository> -->
-<!-- 							<useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
-<!-- 							<verbose>true</verbose> -->
-<!-- 							<forceCreation>true</forceCreation> -->
-<!-- 							<buildArgs> -->
-<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
-<!-- 							</buildArgs> -->
-<!-- 						</configuration> -->
+						<!-- <configuration> -->
+						<!-- <repository>shooting.azurecr.io</repository> -->
+						<!-- <contextDirectory>target</contextDirectory> -->
+						<!-- <tag>${docker.image.version}-latest</tag> -->
+						<!-- <dockerfile>target\DockerfileNginx</dockerfile> -->
+						<!-- <repository>shooting.azurecr.io/ipsc-nginx</repository> -->
+						<!-- <useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
+						<!-- <verbose>true</verbose> -->
+						<!-- <forceCreation>true</forceCreation> -->
+						<!-- <buildArgs> -->
+						<!-- <JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
+						<!-- </buildArgs> -->
+						<!-- </configuration> -->
 						<configuration>
 							<repository>shooting.azurecr.io</repository>
 							<contextDirectory>target</contextDirectory>

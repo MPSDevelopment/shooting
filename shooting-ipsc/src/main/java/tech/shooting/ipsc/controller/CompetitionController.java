@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
@@ -202,6 +203,14 @@ public class CompetitionController {
 	public ResponseEntity<Competitor> addedMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
 		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Checks is mark(rfid or number) occupied")
+	public ResponseEntity<CompetitorMark> checkMarkForCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
+		@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId, @RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.checkMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")

@@ -270,11 +270,33 @@ public class CompetitionService {
 		}
 		return competitors.get(index);
 	}
+	
+	public CompetitorMark checkMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		checkCompetitionActive(competition);
+
+		checkIfMarkOccupied(competition, competitorId, competitorMark);
+
+		return competitorMark;
+	}
 
 	public Competitor addedMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
 
+		checkIfMarkOccupied(competition, competitorId, competitorMark);
+
+		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
+		if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
+			competitor.setRfidCode(competitorMark.getMark());
+		} else {
+			competitor.setNumber(competitorMark.getMark());
+		}
+		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
+		return saveAndReturn(competition, competitor, false);
+	}
+	
+	private void checkIfMarkOccupied(Competition competition, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		for (var competitor : competition.getCompetitors()) {
 			if (!competitor.getId().equals(competitorId)) {
 				if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
@@ -288,15 +310,6 @@ public class CompetitionService {
 				}
 			}
 		}
-
-		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
-		if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
-			competitor.setRfidCode(competitorMark.getMark());
-		} else {
-			competitor.setNumber(competitorMark.getMark());
-		}
-		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
-		return saveAndReturn(competition, competitor, false);
 	}
 
 	public Competitor addedMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMarks competitorMark) throws BadRequestException {

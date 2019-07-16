@@ -670,6 +670,54 @@ public class CompetitionControllerTest {
 	}
 
 	@Test
+	public void checkCheckMarkForCompetitor() throws Exception {
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
+		assertEquals(0, competition.getCompetitors().size());
+		competition.getCompetitors().add(testingCompetitor);
+		competition = competitionRepository.save(competition);
+		assertEquals(1, competition.getCompetitors().size());
+		testingCompetitor = competition.getCompetitors().get(0);
+		assertNotNull(testingCompetitor);
+		CompetitorMark competitorMark = new CompetitorMark().setName("aqua").setActive(true).setType(TypeMarkEnum.RFID).setMark("1032132548798");
+		String json = JacksonUtils.getJson(competitorMark);
+		assertNotNull(json);
+		// try access to addedMarkForCompetitor with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to addedMarkForCompetitor with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to addedMarkForCompetitor with judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access to addedMarkForCompetitor with admin role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// repeat check with the same mark
+		String response = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		
+		assertTrue(response.contains(competitorMark.getMark()));
+
+		// save the same mark with different competitor
+		var anotherPerson = personRepository.save(new Person().setName("Another person"));
+		var anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
+		competitorMark = new CompetitorMark().setName("beta").setActive(true).setType(TypeMarkEnum.RFID).setMark(testingCompetitor.getRfidCode());
+		competition.getCompetitors().add(anotherCompetitor);
+		competition = competitionRepository.save(competition);
+		json = JacksonUtils.getJson(competitorMark);
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
+				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, anotherCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
+
+	@Test
 	public void checkAddedMarkForCompetitor() throws Exception {
 		Competition competition = competitionRepository.findById(testingCompetition.getId()).get();
 		assertEquals(0, competition.getCompetitors().size());
