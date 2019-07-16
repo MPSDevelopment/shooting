@@ -44,12 +44,12 @@ public class RfidReader {
 //
 //		return "Here must be mark -> " + rfidMark;
 //	}
-	
+
 	public String start() {
 		startFlag = true;
 		return "Started";
 	}
-	
+
 	public String stop() {
 		startFlag = false;
 		return "Stopped";
@@ -65,9 +65,9 @@ public class RfidReader {
 //			return result + "\n Wrong password";
 			return "Wrong password";
 		}
-		
+
 		List<byte[]> epcList = manager.inventoryRealTime();
-		
+
 		// read data
 		byte[] data = manager.readFrom6C(membank, addr, length, accessPassword);
 		if (data != null && data.length > 1) {
@@ -90,6 +90,47 @@ public class RfidReader {
 //		result += "\n List EPC size is  " + listepc.size();
 //
 //		return result;
+	}
+
+	public String write(String mark) {
+
+		String result = initialize();
+
+		membank = UhfManager.RESERVE;
+
+		if (accessPassword.length != 4) {
+//			return result + "\n Wrong password";
+			return "Wrong password";
+		}
+
+		if (mark.length() % 4 != 0) {
+			return "Wrong mark";
+		}
+
+		byte[] data = Tools.HexString2Bytes(mark);
+
+		boolean writeFlag = manager.writeTo6C(accessPassword, membank, addr, data.length / 2, data);
+
+		if (writeFlag) {
+			return "Mark has been successfully wrote";
+		}
+
+		return "Cannot write a mark";
+	}
+
+	public String getList() {
+		List<byte[]> epcList = manager.inventoryRealTime(); // inventory real time
+
+		String result = "";
+
+		for (byte[] epc : epcList) {
+			String epcStr = Tools.Bytes2HexString(epc, epc.length);
+			result += "\n Code is " + epcStr;
+		}
+
+		result += "\n List EPC size is  " + listepc.size();
+
+		return result;
 	}
 
 	public void create() {
@@ -127,8 +168,6 @@ public class RfidReader {
 //		default:
 //			break;
 //		}
-		
-		
 
 		UhfManager.Port = 13;
 
