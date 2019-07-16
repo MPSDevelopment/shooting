@@ -319,7 +319,7 @@ public class CompetitionService {
 
 	private void checkToAddedRow(Competition competition) throws BadRequestException {
 		if (!competition.isActive()) {
-			throw new BadRequestException(new ErrorMessage("You try added state to the archive competition"));
+			throw new BadRequestException(new ErrorMessage("Cannot modify an archived competition, active = %s", competition.isActive()));
 		}
 	}
 
