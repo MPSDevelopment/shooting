@@ -275,6 +275,19 @@ public class CompetitionService {
 	public Competitor addedMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
+
+		for (var competitor : competition.getCompetitors()) {
+			if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
+				if (competitor.getRfidCode().equalsIgnoreCase(competitorMark.getMark())) {
+					new BadRequestException(new ErrorMessage("Rfid mark already exists %s", competitorMark.getMark()));
+				}
+			} else {
+				if (competitor.getNumber().equalsIgnoreCase(competitorMark.getMark())) {
+					new BadRequestException(new ErrorMessage("Number already exists %s", competitorMark.getMark()));
+				}
+			}
+		}
+
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
 		if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
 			competitor.setRfidCode(competitorMark.getMark());
@@ -377,9 +390,9 @@ public class CompetitionService {
 			default:
 				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
 			}
-			
+
 			scoreResult.setScore(0).setTimeOfExercise(0L);
-			
+
 		} else {
 			scoreResult.setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
 		}
@@ -400,13 +413,12 @@ public class CompetitionService {
 		// my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findAllByStageId(stageId);
 	}
-	
+
 	public List<Score> getScoreList(Long competitionId) throws BadRequestException {
 		var competition = checkCompetition(competitionId);
 		// my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 	}
-
 
 	public void deleteAll() {
 		competitionRepository.deleteAll();
