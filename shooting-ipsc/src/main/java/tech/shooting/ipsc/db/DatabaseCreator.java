@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
@@ -16,6 +18,7 @@ import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
 @Component
+@Slf4j
 public class DatabaseCreator {
 	
 	public static final String PRIVATE = "Рядовой";
@@ -92,7 +95,9 @@ public class DatabaseCreator {
 				new Rank().setRus("Подполковник").setKz("Подполковник").setOfficer(true),
 				new Rank().setRus("Полковник").setKz("Полковник").setOfficer(true)));
 		
+		long count = divisionRepository.count();
 		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
+		log.info("Division count was %s, after root save if not exist, it is %s", count, divisionRepository.count());
 		
 	}
 }

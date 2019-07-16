@@ -55,9 +55,14 @@ public class DivisionRepositoryTest {
 		Division division = new Division().setName(ROOT_NAME);
 		divisionRepository.createIfNotExists(division);
 		assertEquals(count, divisionRepository.findAll().size());
-		division = new Division().setName("New");
-		divisionRepository.createIfNotExists(division);
+		divisionRepository.createIfNotExists(new Division().setName("New"));
 		assertEquals(count + 1, divisionRepository.findAll().size());
+		divisionRepository.createIfNotExists(new Division().setName("New"));
+		assertEquals(count + 1, divisionRepository.findAll().size());
+		divisionRepository.createIfNotExists(new Division().setName("New").setParent(root));
+		assertEquals(count + 2, divisionRepository.findAll().size());
+		divisionRepository.createIfNotExists(new Division().setName("New").setParent(root));
+		assertEquals(count + 2, divisionRepository.findAll().size());
 	}
 
 	@Test
