@@ -716,13 +716,13 @@ public class CompetitionControllerTest {
 		// save the same mark with different competitor
 		var anotherPerson = personRepository.save(new Person().setName("Another person"));
 		var anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
-		competitorMark = new CompetitorMark().setName("beta").setActive(true).setType(TypeMarkEnum.RFID).setMark("1032132548798");
+		competitorMark = new CompetitorMark().setName("beta").setActive(true).setType(TypeMarkEnum.RFID).setMark(testingCompetitor.getRfidCode());
 		competition.getCompetitors().add(anotherCompetitor);
 		competition = competitionRepository.save(competition);
 		json = JacksonUtils.getJson(competitorMark);
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITOR_WITH_MARK
 				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, anotherCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test

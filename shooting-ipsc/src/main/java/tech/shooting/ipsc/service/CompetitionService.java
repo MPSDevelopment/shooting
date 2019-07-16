@@ -279,11 +279,11 @@ public class CompetitionService {
 		for (var competitor : competition.getCompetitors()) {
 			if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
 				if (competitor.getRfidCode() != null && competitor.getRfidCode().equalsIgnoreCase(competitorMark.getMark())) {
-					new BadRequestException(new ErrorMessage("Rfid mark already exists %s", competitorMark.getMark()));
+					throw new BadRequestException(new ErrorMessage("Rfid mark already exists %s", competitorMark.getMark()));
 				}
 			} else {
 				if (competitor.getNumber() != null && competitor.getNumber().equalsIgnoreCase(competitorMark.getMark())) {
-					new BadRequestException(new ErrorMessage("Number already exists %s", competitorMark.getMark()));
+					throw new BadRequestException(new ErrorMessage("Number already exists %s", competitorMark.getMark()));
 				}
 			}
 		}

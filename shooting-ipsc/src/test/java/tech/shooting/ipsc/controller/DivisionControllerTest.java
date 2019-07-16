@@ -67,6 +67,12 @@ class DivisionControllerTest {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private DivisionRepository divisionRepository;
+	
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -84,17 +90,27 @@ class DivisionControllerTest {
 
 	private DivisionBean divisionBean;
 
-	@Autowired
-	MongoTemplate mongoTemplate;
+	private Division root;
 
 	@BeforeEach
 	public void before() {
 		divisionService.deleteAllDivision();
-		divisionBean = new DivisionBean().setParent(null).setName("root");
+		
+		root = divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
+		
+		divisionBean = new DivisionBean().setParent(getRootDivision()).setName("root");
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("8523").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+	}
+
+	private Long getRootDivision() {
+		root = divisionRepository.findByParentIsNull().orElse(null);
+		
+		log.info("Root is %s", root);
+		
+		return root == null ? null : root.getId();
 	}
 
 	@Test
@@ -108,16 +124,16 @@ class DivisionControllerTest {
 		// try access admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-		Division division = JacksonUtils.fromJson(Division.class, contentAsString);
+		DivisionBean division = JacksonUtils.fromJson(DivisionBean.class, contentAsString);
 		assertEquals(division.getName(), divisionBean.getName());
 		assertEquals(division.getParent(), divisionBean.getParent());
 	}
 
 	@Test
 	public void checkAddedChildToTheRoot() throws Exception {
-		assertEquals(0, divisionService.getCount());
-		DivisionBean division = divisionService.createDivision(divisionBean, null);
 		assertEquals(1, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, getRootDivision());
+		assertEquals(2, divisionService.getCount());
 		divisionBean = new DivisionBean().setParent(division.getId()).setName("first child").setActive(true);
 		String json = JacksonUtils.getJson(divisionBean);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION).contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -125,14 +141,14 @@ class DivisionControllerTest {
 		DivisionBean divisionBeanFromBack = JacksonUtils.fromJson(DivisionBean.class, contentAsString);
 		assertEquals(division.getId(), divisionBeanFromBack.getParent());
 		assertEquals(divisionBean.getName(), divisionBeanFromBack.getName());
-		assertEquals(2, divisionService.getCount());
+		assertEquals(3, divisionService.getCount());
 	}
 
 	@Test
 	public void checkRemoveDivision() throws Exception {
-		assertEquals(0, divisionService.getCount());
-		DivisionBean test1 = divisionService.createDivision(new DivisionBean().setName("test1").setParent(null).setActive(true), null);
 		assertEquals(1, divisionService.getCount());
+		DivisionBean test1 = divisionService.createDivision(new DivisionBean().setName("test1").setParent(getRootDivision()).setActive(true), null);
+		assertEquals(2, divisionService.getCount());
 		// try access to remove division unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -142,14 +158,14 @@ class DivisionControllerTest {
 		// try access to remove division admin user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, test1.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
-		assertEquals(0, divisionService.getCount());
+		assertEquals(1, divisionService.getCount());
 	}
 
 	@Test
 	public void checkGetAllDivision() throws Exception {
-		assertEquals(0, divisionService.getCount());
+		assertEquals(1, divisionService.getCount());
 		createDivisions(20);
-		assertEquals(20, divisionService.getCount());
+		assertEquals(21, divisionService.getCount());
 		// try access to getAllDivision with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to getAllDivision with user role
@@ -158,8 +174,8 @@ class DivisionControllerTest {
 		// try access to getAllDivision with admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		Division[] divisions = JacksonUtils.fromJson(Division[].class, contentAsString);
-		assertEquals(20, divisions.length);
+		DivisionBean[] divisions = JacksonUtils.fromJson(DivisionBean[].class, contentAsString);
+		assertEquals(21, divisions.length);
 	}
 
 	@Test
@@ -214,9 +230,9 @@ class DivisionControllerTest {
 
 	@Test
 	public void checkFindOneDivisionById() throws Exception {
-		assertEquals(0, divisionService.getCount());
-		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
 		assertEquals(1, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
+		assertEquals(2, divisionService.getCount());
 		// try access to getDivisionById() with unauthorized user
 		mockMvc.perform(
 				MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())))
@@ -234,22 +250,23 @@ class DivisionControllerTest {
 
 	@Test
 	public void checkGetRoot() throws Exception {
-		DivisionBean division = divisionService.createDivision(divisionBean, null);
+		DivisionBean division = divisionService.createDivision(divisionBean, getRootDivision());
+		Division root = divisionRepository.findByParentIsNull().orElse(null);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_ROOT).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		DivisionBean divisionBean = JacksonUtils.fromJson(DivisionBean.class, contentAsString);
-		assertEquals(division.getId(), divisionBean.getId());
-		assertEquals(division.getName(), divisionBean.getName());
-		assertEquals(division.getParent(), divisionBean.getParent());
-		assertEquals(division.getChildren(), divisionBean.getChildren());
-		assertEquals(division.isActive(), divisionBean.isActive());
+		assertEquals(root.getId(), divisionBean.getId());
+		assertEquals(root.getName(), divisionBean.getName());
+		assertEquals(root.getParent(), divisionBean.getParent());
+		assertEquals(root.getChildren().size(), divisionBean.getChildren().size());
+		assertEquals(root.isActive(), divisionBean.isActive());
 	}
 
 	@Test
 	public void checkUpdateDivision() throws Exception {
-		assertEquals(0, divisionService.getCount());
-		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
 		assertEquals(1, divisionService.getCount());
+		DivisionBean division = divisionService.createDivision(divisionBean, divisionBean.getParent());
+		assertEquals(2, divisionService.getCount());
 		division.setName("updateeee");
 		// try access to getDivisionById() with admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
@@ -261,7 +278,7 @@ class DivisionControllerTest {
 
 	private void createDivisions(int count) {
 		for (int i = 0; i < count; i++) {
-			var division = new DivisionBean().setActive(true).setName("test + " + i).setParent(null);
+			var division = new DivisionBean().setActive(true).setName("test + " + i).setParent(getRootDivision());
 			divisionService.createDivision(division, division.getParent());
 			log.info("Division %s has been created", division.getName());
 		}

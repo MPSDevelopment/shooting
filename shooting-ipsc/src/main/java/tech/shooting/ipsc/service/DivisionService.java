@@ -18,6 +18,7 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
@@ -28,22 +29,25 @@ public class DivisionService {
 
 	private MongoTemplate mongoTemplate;
 
-	public DivisionService (DivisionRepository divisionRepository, MongoTemplate mongoTemplate) {
+	public DivisionService(DivisionRepository divisionRepository, MongoTemplate mongoTemplate) {
 		this.divisionRepository = divisionRepository;
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	public DivisionBean createDivision (DivisionBean divisionBean, Long parentId) {
-		if(divisionRepository.findByNameAndParent(divisionBean.getName(), parentId) != null) {
-			throw new ValidationException(Division.NAME_WITH_PARENT + "Division with name %s and parent id %s is already exist", divisionBean.getName(), parentId);
+	public DivisionBean createDivision(DivisionBean divisionBean, Long parentId) {
+		if (parentId == null) {
+			divisionRepository.findByParentIsNull().orElseThrow(() -> new ValidationException(Division.PARENT_FIELD, "Cannot save a division %s with no parent", divisionBean.getName()));
+		}
+		if (divisionRepository.findByNameAndParent(divisionBean.getName(), parentId) != null) {
+			throw new ValidationException(Division.NAME_WITH_PARENT, "Division with name %s and parent id %s is already exist", divisionBean.getName(), parentId);
 		}
 		Division division = createDivisionWithCheck(divisionBean, parentId);
 		return convertDivisionToFront(division);
 	}
 
-	private Division createDivisionWithCheck (DivisionBean divisionBean, Long parentId) {
+	private Division createDivisionWithCheck(DivisionBean divisionBean, Long parentId) {
 		Division division = new Division();
-		if(parentId == null) {
+		if (parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);
 			division = divisionRepository.save(division);
 		} else {
@@ -59,18 +63,18 @@ public class DivisionService {
 		return division;
 	}
 
-	public void deleteAllDivision () {
+	public void deleteAllDivision() {
 		divisionRepository.deleteAll();
 	}
 
-	public int getCount () {
+	public int getCount() {
 		return divisionRepository.findAll().size();
 	}
 
-	public Division removeDivision (Long id) throws BadRequestException {
+	public Division removeDivision(Long id) throws BadRequestException {
 		var division = checkDivision(id);
 		Division parent = division.getParent();
-		if (parent!=null) {
+		if (parent != null) {
 			parent.getChildren().remove(division);
 			divisionRepository.save(parent);
 		}
@@ -78,46 +82,46 @@ public class DivisionService {
 		return division;
 	}
 
-	public Division checkDivision (Long id) throws BadRequestException {
+	public Division checkDivision(Long id) throws BadRequestException {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division %s", id)));
 	}
 
-	public List<DivisionDropList> findAllDivisions () {
+	public List<DivisionDropList> findAllDivisions() {
 		long start = System.currentTimeMillis();
 		List<DivisionDropList> id = mongoTemplate.aggregate(newAggregation(new MatchOperation(Criteria.where("id").exists(true))), Division.class, DivisionDropList.class).getMappedResults();
 		log.info("getAll used %s ms", System.currentTimeMillis() - start);
 		return id;
 	}
 
-	private DivisionBean convertDivisionToFront (Division division) {
+	private DivisionBean convertDivisionToFront(Division division) {
 		DivisionBean divisionBean = new DivisionBean();
-		if(division.getParent() == null) {
-			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
+		if (division.getParent() == null) {
+			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren().stream().map(item-> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
 		} else {
-			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren()).setActive(division.isActive()).setId(division.getId());
+			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren().stream().map(item-> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
 		}
-		if(divisionBean.getChildren().contains(null) || divisionBean.getChildren().size() == 0) {
+		if (divisionBean.getChildren().contains(null) || divisionBean.getChildren().size() == 0) {
 			divisionBean.setChildren(Collections.EMPTY_LIST);
 		}
 		return divisionBean;
 	}
 
-	public ResponseEntity getDivisionByPage (int page, int size) {
+	public ResponseEntity getDivisionByPage(int page, int size) {
 		return Pageable.getPage(page, size, divisionRepository);
 	}
 
-	public DivisionBean getDivision (Long id) throws BadRequestException {
+	public DivisionBean getDivision(Long id) throws BadRequestException {
 		return convertDivisionToFront(checkDivision(id));
 	}
 
-	public DivisionBean getRoot () {
+	public DivisionBean getRoot() {
 		long start = System.currentTimeMillis();
 		DivisionBean divisionBean = convertDivisionToFront(divisionRepository.findOneByParent(null));
 		log.info("getRoot used %s ms", System.currentTimeMillis() - start);
 		return divisionBean;
 	}
 
-	public DivisionBean updateDivision (Long id, String name) {
+	public DivisionBean updateDivision(Long id, String name) {
 		return convertDivisionToFront(divisionRepository.updateDivisionName(id, name));
 	}
 }

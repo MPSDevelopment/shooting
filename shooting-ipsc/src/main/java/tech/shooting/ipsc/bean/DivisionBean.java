@@ -34,7 +34,7 @@ public class DivisionBean extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "List of children")
-	private List<Division> children = new ArrayList<>();
+	private List<DivisionBean> children = new ArrayList<>();
 
 	@JsonProperty
 	@ApiModelProperty(value = "Status division")
