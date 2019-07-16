@@ -204,6 +204,7 @@ public class CompetitionControllerTest {
                 .get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
                 .header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
     }
+    
 
     @Test
     public void checkUpdateCompetitionById() throws Exception {
@@ -225,6 +226,42 @@ public class CompetitionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(test))).header(Token.TOKEN_HEADER, adminToken))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
     }
+    
+    @Test
+    public void checkDeactivateCompetitionById() throws Exception {
+    	 Competition test = competitionRepository.findByName(testingCompetition.getName());
+         test.setName("Update Name").setLocation("cave number 2");
+         // try access to updateCompetition with unauthorized user
+         mockMvc.perform(
+                 MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getFullJson(test))))
+                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+         // try access to updateCompetition with authorized user
+         mockMvc.perform(
+                 MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, userToken))
+                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+         // try access to updateCompetition with authorized admin
+         mockMvc.perform(
+                 MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(test))).header(Token.TOKEN_HEADER, adminToken))
+                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
+         
+         test.setActive(false);
+         
+         // try access to updateCompetition with authorized admin
+         mockMvc.perform(
+                 MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(test))).header(Token.TOKEN_HEADER, adminToken))
+                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(test.getName()));
+         
+         mockMvc.perform(
+                 MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+                         .contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, adminToken))
+                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+         
+    }
+
 
     @Test
     public void checkGetCount() throws Exception {

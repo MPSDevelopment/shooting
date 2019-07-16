@@ -99,8 +99,9 @@ public class CompetitionService {
 	}
 
 	public Competition updateCompetition(Long id, CompetitionBean competition) throws BadRequestException {
-		Competition existCompetition = useBeanUtilsWithOutJudges(competition, checkCompetition(id));
-		checkToAddedRow(existCompetition);
+		Competition competitionFromDb = checkCompetition(id);
+		checkCompetitionActive(competitionFromDb);
+		Competition existCompetition = useBeanUtilsWithOutJudges(competition, competitionFromDb);
 //		// Do not change competitors and stages
 //		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD);
 		return competitionRepository.save(existCompetition);
@@ -140,7 +141,7 @@ public class CompetitionService {
 
 	public List<Stage> addedAllStages(Long id, List<Stage> toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		List<Stage> stages = competition.getStages();
 		stages.addAll(toAdded);
 		competition.setStages(stages);
@@ -149,7 +150,7 @@ public class CompetitionService {
 
 	public Stage addStage(Long id, Stage toAdded) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		competition.getStages().add(toAdded);
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
@@ -176,7 +177,7 @@ public class CompetitionService {
 
 	public Stage updateStage(Long competitionId, Long stageId, Stage stage) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		Stage stageFromDB = checkStage(competition, stageId);
 		BeanUtils.copyProperties(stage, stageFromDB);
 		List<Stage> stages = competition.getStages();
@@ -188,7 +189,7 @@ public class CompetitionService {
 
 	public Competitor addedCompetitor(Long id, Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor.setActive(false), competitorToDB);
@@ -214,7 +215,7 @@ public class CompetitionService {
 
 	public Competitor updateCompetitor(Long id, Long competitorId, Competitor competitor) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
 		BeanUtils.copyProperties(competitor, competitorFromDB);
 		return saveAndReturn(competition, competitorFromDB, false);
@@ -222,7 +223,7 @@ public class CompetitionService {
 
 	public List<Competitor> addedAllCompetitors(Long id, List<Long> competitorsIdList) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		List<Competitor> competitors = competition.getCompetitors();
 		competitors.clear();
 		for (Long idPerson : competitorsIdList) {
@@ -244,7 +245,7 @@ public class CompetitionService {
 	}
 
 	private Competitor saveAndReturn(Competition competition, Competitor competitorToDB, boolean flag) throws BadRequestException {
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		List<Competitor> competitors = competition.getCompetitors();
 		if (flag) {
 			competitors.add(competitorToDB);
@@ -273,7 +274,7 @@ public class CompetitionService {
 
 	public Competitor addedMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
 		if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
 			competitor.setRfidCode(competitorMark.getMark());
@@ -286,7 +287,7 @@ public class CompetitionService {
 
 	public Competitor addedMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMarks competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		Competitor competitor = checkCompetitor(competition.getCompetitors(), competitorId);
 		if (StringUtils.isNotEmpty(competitorMark.getRfid())) {
 			competitor.setRfidCode(competitorMark.getRfid());
@@ -312,12 +313,12 @@ public class CompetitionService {
 
 	public Score addedScoreRow(Long competitionId, Long stageId, ScoreBean scoreBean) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		checkStage(competition, stageId);
 		return addedScoreWithoutCheck(competition, stageId, scoreBean);
 	}
 
-	private void checkToAddedRow(Competition competition) throws BadRequestException {
+	private void checkCompetitionActive(Competition competition) throws BadRequestException {
 		if (!competition.isActive()) {
 			throw new BadRequestException(new ErrorMessage("Cannot modify an archived competition, active = %s", competition.isActive()));
 		}
@@ -334,7 +335,7 @@ public class CompetitionService {
 	public List<Score> addedBulk(Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {
 		List<Score> result = new ArrayList<>();
 		Competition competition = checkCompetition(competitionId);
-		checkToAddedRow(competition);
+		checkCompetitionActive(competition);
 		checkStage(competition, stageId);
 		for (ScoreBean score : scoreBean) {
 			Score score1 = addedScoreWithoutCheck(competition, stageId, score);
