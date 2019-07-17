@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +33,7 @@ public class WorkSpaceController {
     @Autowired
     private WorkSpaceService workSpaceService;
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE)
     @ApiOperation(value = "Define work space")
     public ResponseEntity<SuccessfulMessage> postNewWorkSpace(HttpServletRequest request) throws MqttException {

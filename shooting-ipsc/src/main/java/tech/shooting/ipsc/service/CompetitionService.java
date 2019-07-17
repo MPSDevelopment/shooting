@@ -1,13 +1,10 @@
 package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +163,11 @@ public class CompetitionService {
 	}
 
 	private Stage checkStage(Competition competition, Long stageId) throws BadRequestException {
-		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findAny().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+        return competition.getStages()
+                          .stream()
+                          .filter((i) -> i.getId().equals(stageId))
+                          .findFirst()
+                          .orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
 	}
 
 	public void deleteStage(Long competitionId, Long stageId) throws BadRequestException {
@@ -380,7 +381,8 @@ public class CompetitionService {
 		} else {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
-		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
+
+        Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
 
 		log.info("Adding score %s to competitor id %s", score.getScore(), competitor.getId());
 
