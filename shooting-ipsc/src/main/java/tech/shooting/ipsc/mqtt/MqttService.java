@@ -1,7 +1,10 @@
 package tech.shooting.ipsc.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
+import net.engio.mbassy.listener.Handler;
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.config.IpscMqttSettings;
+import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
@@ -30,6 +33,10 @@ public class MqttService {
 
 	private static Server mqttBroker;
 
+	public MqttService() {
+		EventBus.unsubscribe(this);
+	}
+
 	public void startBroker(String settingsFile) {
 
 		if (mqttBroker != null) {
@@ -45,7 +52,7 @@ public class MqttService {
 		log.info("authorizator_class = %s", classPathConfig.getProperty("authorizator_class"));
 
 //		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
-		
+
 		try {
 			// mqttBroker.startServer(classPathConfig, userHandlers);
 			mqttBroker.startServer(classPathConfig);
@@ -53,6 +60,7 @@ public class MqttService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public void stopBroker() {
@@ -107,6 +115,12 @@ public class MqttService {
 
 	public Collection<ClientDescriptor> getSubscribers() {
 		return mqttBroker.listConnectedClients();
+	}
+
+	@Handler
+	public void handle(MqttOnConnectEvent event) {
+		log.info("New connection detected. List of clients:");
+		getSubscribers().forEach(item -> log.info("Subscriber id &s ip &s", item.getClientID(), item.getAddress()));
 	}
 
 }
