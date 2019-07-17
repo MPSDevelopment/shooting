@@ -11,6 +11,8 @@ import io.moquette.interception.messages.InterceptUnsubscribeMessage;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
+import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
+import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
 
 @Slf4j
 public class MqttHandler implements InterceptHandler {
@@ -35,11 +37,13 @@ public class MqttHandler implements InterceptHandler {
 	@Override
 	public void onConnectionLost(InterceptConnectionLostMessage arg0) {
 		log.info("Mqtt connection loss ClientId %s Username %s", arg0.getClientID(), arg0.getUsername());
+		EventBus.publishEvent(new MqttOnConnectionLostEvent());
 	}
 
 	@Override
 	public void onDisconnect(InterceptDisconnectMessage arg0) {
 		log.info("Mqtt disconnection loss ClientId %s Username %s", arg0.getClientID(), arg0.getUsername());
+		EventBus.publishEvent(new MqttOnDisconnectEvent());
 	}
 
 	@Override

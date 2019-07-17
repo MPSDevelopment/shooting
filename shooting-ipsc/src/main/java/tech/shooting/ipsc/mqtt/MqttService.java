@@ -5,9 +5,12 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
+import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
+import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.internal.wire.MqttDisconnect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +123,18 @@ public class MqttService {
 	@Handler
 	public void handle(MqttOnConnectEvent event) {
 		log.info("New connection detected. List of clients:");
+		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+	}
+	
+	@Handler
+	public void handle(MqttOnConnectionLostEvent event) {
+		log.info("Connection lost detected. List of clients:");
+		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+	}
+	
+	@Handler
+	public void handle(MqttOnDisconnectEvent event) {
+		log.info("Disonnect detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 	}
 
