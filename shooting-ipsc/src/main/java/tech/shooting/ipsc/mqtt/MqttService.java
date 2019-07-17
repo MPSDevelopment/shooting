@@ -120,7 +120,7 @@ public class MqttService {
 	@Handler
 	public void handle(MqttOnConnectEvent event) {
 		log.info("New connection detected. List of clients:");
-		getSubscribers().forEach(item -> log.info("Subscriber id &s ip &s", item.getClientID(), item.getAddress()));
+		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 	}
 
 }
