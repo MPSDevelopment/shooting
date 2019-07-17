@@ -36,26 +36,26 @@ public class WorkSpaceController {
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE)
     @ApiOperation(value = "Define work space")
-    public ResponseEntity postNewWorkSpace(HttpServletRequest request) throws MqttException {
+    public ResponseEntity<SuccessfulMessage> postNewWorkSpace(HttpServletRequest request) throws MqttException {
         log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
         String remoteIp = request.getHeader("X-Forwarded-For");
         workSpaceService.createWorkSpace(remoteIp);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessfulMessage("Workspace posted"), HttpStatus.OK);
     }
 
     @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_GET_TOPIC)
     @ApiOperation(value = "Create topic for workspace publisher")
-    public ResponseEntity getPublisherTopic() {
+    public ResponseEntity<SuccessfulMessage> getPublisherTopic() {
         workSpaceService.createTopicForAdmin();
-        return new ResponseEntity(new SuccessfulMessage("Guest is success added to list work space"), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessfulMessage("Guest is success added to list work space"), HttpStatus.OK);
     }
 
     @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")
     @PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_GET_TOPIC)
     @ApiOperation(value = "Start test to workspace")
-    public ResponseEntity getPublisherTopic(@RequestBody List<WorkSpaceBean> beans) throws BadRequestException {
+    public ResponseEntity<SuccessfulMessage> getPublisherTopic(@RequestBody List<WorkSpaceBean> beans) throws BadRequestException {
         workSpaceService.updateWorkSpaceDataAndStartTest(beans);
-        return new ResponseEntity(new SuccessfulMessage("Admin update work space and start test"), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessfulMessage("Admin update work space and start test"), HttpStatus.OK);
     }
 }
