@@ -34,7 +34,7 @@ public class MqttService {
 	private static Server mqttBroker;
 
 	public MqttService() {
-		EventBus.unsubscribe(this);
+		EventBus.subscribe(this);
 	}
 
 	public void startBroker(String settingsFile) {

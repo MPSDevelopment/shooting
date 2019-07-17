@@ -143,9 +143,13 @@ class MqttServiceTest {
 	}
 	
 //	@Test 
-	public void checkRemoteConnection() throws MqttException {
+	public void checkRemoteConnection() throws MqttException, InterruptedException {
 		
 		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), "/workspace");
+		
+		Thread.sleep(200);
+		
+		subscriber.disconnect();
 		
 	}
 
