@@ -9,19 +9,13 @@ import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttService;
-import tech.shooting.ipsc.mqtt.PublisherListener;
 import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
 
 import org.eclipse.paho.client.mqttv3.*;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,19 +25,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import io.moquette.broker.ClientDescriptor;
-import io.moquette.broker.Server;
-import io.moquette.broker.config.ClasspathResourceLoader;
-import io.moquette.broker.config.IConfig;
-import io.moquette.broker.config.IResourceLoader;
-import io.moquette.broker.config.ResourceLoaderConfig;
-import io.moquette.interception.InterceptHandler;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class })
@@ -57,6 +41,8 @@ import java.util.List;
 class MqttServiceTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
+	
+	private static final String MQTT_REMOTE_URL = "tcp://40.69.138.82:1883";
 
 	private static final String TEST_LOGIN = "login";
 
@@ -87,6 +73,8 @@ class MqttServiceTest {
 		mqttService.startBroker("config/moquette-protected.conf");
 
 		log.info("Broker started");
+		
+		mqttService.getSubscribers();
 	}
 
 	@AfterEach
@@ -152,6 +140,13 @@ class MqttServiceTest {
 		
 		subscribers = mqttService.getSubscribers();
 		assertEquals(0, subscribers.size());
+	}
+	
+//	@Test 
+	public void checkRemoteConnection() throws MqttException {
+		
+		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), "/workspace");
+		
 	}
 
 	@Handler

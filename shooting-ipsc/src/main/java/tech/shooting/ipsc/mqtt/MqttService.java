@@ -15,7 +15,6 @@ import io.moquette.broker.config.IConfig;
 import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
 import io.moquette.interception.InterceptHandler;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,13 +41,15 @@ public class MqttService {
 
 		mqttBroker = new Server();
 
-		log.debug("authenticator_class = %s", classPathConfig.getProperty("authenticator_class"));
-		log.debug("authorizator_class = %s", classPathConfig.getProperty("authorizator_class"));
+		log.info("authenticator_class = %s", classPathConfig.getProperty("authenticator_class"));
+		log.info("authorizator_class = %s", classPathConfig.getProperty("authorizator_class"));
 
-		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
+//		List<? extends InterceptHandler> userHandlers = Collections.singletonList(new PublisherListener());
 		
 		try {
-			mqttBroker.startServer(classPathConfig, userHandlers);
+			// mqttBroker.startServer(classPathConfig, userHandlers);
+			mqttBroker.startServer(classPathConfig);
+			mqttBroker.addInterceptHandler(new MqttHandler());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
