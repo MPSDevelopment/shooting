@@ -439,4 +439,16 @@ public class CompetitionService {
 	public void deleteAll() {
 		competitionRepository.deleteAll();
 	}
+
+	public Competition startCompetition(Long id) throws BadRequestException {
+		var competiton = checkCompetition(id);
+		log.info("Competition %s started", competiton.getName());
+		return competiton;
+	}
+	
+	public Competition stopCompetition(Long id) throws BadRequestException {
+		var competiton = checkCompetition(id);
+		log.info("Competition %s stopped", competiton.getName());
+		return competiton;
+	}
 }

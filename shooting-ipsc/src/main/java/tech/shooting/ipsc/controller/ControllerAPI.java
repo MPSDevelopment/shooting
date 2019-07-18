@@ -131,6 +131,8 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION = "/" + REQUEST_COMPETITION_ID;
 	public static final String COMPETITION_CONTROLLER_DELETE_COMPETITION = "/" + REQUEST_COMPETITION_ID;
 	public static final String COMPETITION_CONTROLLER_PUT_COMPETITION = "/" + REQUEST_COMPETITION_ID;
+	public static final String COMPETITION_CONTROLLER_POST_COMPETITION_START = "/competition/" + REQUEST_COMPETITION_ID + "/start";
+	public static final String COMPETITION_CONTROLLER_POST_COMPETITION_STOP = "/competition/" + REQUEST_COMPETITION_ID + "/stop";
 	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITIONS = "/all";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;

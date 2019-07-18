@@ -75,7 +75,21 @@ public class CompetitionController {
 		competitionService.removeCompetition(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Start a competition")
+	public ResponseEntity<SuccessfulMessage> startCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
+		var competition = competitionService.startCompetition(id);
+		return new ResponseEntity<>(new SuccessfulMessage("Competition %s started", competition.getName()), HttpStatus.CREATED);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Start a competition")
+	public ResponseEntity<SuccessfulMessage> stopCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
+		var competition = competitionService.stopCompetition(id);
+		return new ResponseEntity<>(new SuccessfulMessage("Competition %s stopped", competition.getName()), HttpStatus.CREATED);
+	}
+	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get count competitions", notes = "Return long count of competitions")
 	public ResponseEntity<Integer> getCount () {
