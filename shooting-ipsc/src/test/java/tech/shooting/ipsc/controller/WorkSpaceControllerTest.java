@@ -141,7 +141,7 @@ public class WorkSpaceControllerTest {
         assertNotNull(guestToken);
     }
 
-    @Test
+//    @Test
     void checkPostNewWorkSpace() throws Exception {
         mockMvc.perform(
             MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE)
