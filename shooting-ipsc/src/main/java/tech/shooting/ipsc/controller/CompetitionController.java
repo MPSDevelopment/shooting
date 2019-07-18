@@ -31,6 +31,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.DisqualificationBean;
+import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
@@ -290,6 +291,13 @@ public class CompetitionController {
 	@ApiOperation(value = "Get score list by stage")
 	public ResponseEntity<List<Score>> getScoreList (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID)@NotNull Long competitionId) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.getScoreList(competitionId), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_RATING)
+	@ApiOperation(value = "Get score list by stage")
+	public ResponseEntity<List<RatingBean>> getRating (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID)@NotNull Long competitionId) throws BadRequestException {
+		return new ResponseEntity<>(competitionService.getRating(competitionId), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_ALL_COMPETITION)

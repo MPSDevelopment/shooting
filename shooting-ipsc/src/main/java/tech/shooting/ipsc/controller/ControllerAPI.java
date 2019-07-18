@@ -150,6 +150,7 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
 	public static final String COMPETITION_CONTROLLER_GET_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/score/list";
+	public static final String COMPETITION_CONTROLLER_GET_RATING = "/competition/" + REQUEST_COMPETITION_ID + "/rating";
 
 	/*
 	 * competition competitor

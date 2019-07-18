@@ -2,9 +2,12 @@ package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
+import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
@@ -144,14 +148,17 @@ public class CompetitionService {
 		return competitionRepository.save(competition).getStages();
 	}
 
-	public Stage addStage(Long id, Stage toAdded) throws BadRequestException {
+	public Stage addStage(Long id, Stage stageToAdd) throws BadRequestException {
 		Competition competition = checkCompetition(id);
 		checkCompetitionActive(competition);
-		competition.getStages().add(toAdded);
+		if (StringUtils.isBlank(stageToAdd.getName())) {
+			stageToAdd.setName(Integer.valueOf(competition.getStages().size() + 1).toString());
+		}
+		competition.getStages().add(stageToAdd);
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
 		for (int i = 0; i < stages.size(); i++) {
-			if (stages.get(i).getName().equals(toAdded.getName()) && stages.get(i).getMaximumPoints().equals(toAdded.getMaximumPoints()) && stages.get(i).getTargets().equals(toAdded.getTargets())) {
+			if (stages.get(i).getName().equals(stageToAdd.getName()) && stages.get(i).getMaximumPoints().equals(stageToAdd.getMaximumPoints()) && stages.get(i).getTargets().equals(stageToAdd.getTargets())) {
 				index = i;
 			}
 		}
@@ -163,11 +170,7 @@ public class CompetitionService {
 	}
 
 	private Stage checkStage(Competition competition, Long stageId) throws BadRequestException {
-        return competition.getStages()
-                          .stream()
-                          .filter((i) -> i.getId().equals(stageId))
-                          .findFirst()
-                          .orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
 	}
 
 	public void deleteStage(Long competitionId, Long stageId) throws BadRequestException {
@@ -271,7 +274,7 @@ public class CompetitionService {
 		}
 		return competitors.get(index);
 	}
-	
+
 	public CompetitorMark checkMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
@@ -296,7 +299,7 @@ public class CompetitionService {
 		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
 		return saveAndReturn(competition, competitor, false);
 	}
-	
+
 	private void checkIfMarkOccupied(Competition competition, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
 		for (var competitor : competition.getCompetitors()) {
 			if (!competitor.getId().equals(competitorId)) {
@@ -382,7 +385,7 @@ public class CompetitionService {
 			competitor = checkCompetitorByNumberCode(competition, score.getMark());
 		}
 
-        Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
+		Score scoreResult = new Score().setStageId(stageId).setPersonId(competitor.getPerson().getId());
 
 		log.info("Adding score %s to competitor id %s", score.getScore(), competitor.getId());
 
@@ -436,6 +439,32 @@ public class CompetitionService {
 		return scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 	}
 
+	public List<RatingBean> getRating(Long competitionId) throws BadRequestException {
+		var competition = checkCompetition(competitionId);
+		// my fault score save stageId not DBref, because don't save to DB
+		var scores = scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
+
+		return convertScoresToRating(scores);
+	}
+
+	public List<RatingBean> convertScoresToRating(List<Score> scores) {
+		var result = new ArrayList<RatingBean>();
+		if (CollectionUtils.isEmpty(scores)) {
+			return result;
+		}
+
+		Map<Long, List<Score>> map = scores.stream().collect(Collectors.groupingBy(Score::getPersonId, Collectors.toList()));
+
+		for (var personId : map.keySet()) {
+			RatingBean personalRating = new RatingBean();
+			personalRating.setPersonId(personId);
+			personalRating.setScores(map.get(personId));
+			result.add(personalRating);
+		}
+
+		return result;
+	}
+
 	public void deleteAll() {
 		competitionRepository.deleteAll();
 	}
@@ -445,7 +474,7 @@ public class CompetitionService {
 		log.info("Competition %s started", competiton.getName());
 		return competiton;
 	}
-	
+
 	public Competition stopCompetition(Long id) throws BadRequestException {
 		var competiton = checkCompetition(id);
 		log.info("Competition %s stopped", competiton.getName());
