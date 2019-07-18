@@ -125,7 +125,7 @@ public class CompetitionController {
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Add stage to exist stages", notes = "Return created stage")
+	@ApiOperation(value = "Add stage to competition")
 	public ResponseEntity<Stage> postStage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid Stage toAdded) throws BadRequestException {
 		return new ResponseEntity<>(competitionService.addStage(id, toAdded), HttpStatus.OK);
 	}

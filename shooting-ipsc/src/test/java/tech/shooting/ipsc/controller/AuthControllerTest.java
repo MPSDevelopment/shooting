@@ -85,6 +85,10 @@ public class AuthControllerTest {
 	@Autowired
 	private UserDao userDao;
 
+	private User guest;
+
+	private String tokenGuest;
+
 	@BeforeEach
 	public void before() {
 		userRepository.deleteByRoleName(RoleName.USER);
@@ -93,9 +97,11 @@ public class AuthControllerTest {
 		userFromDB = userRepository.save(user.setPassword(passwordEncoder.encode(user.getPassword())).setRoleName(RoleName.USER).setName("testing name"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+		guest = userRepository.findByLogin(DatabaseCreator.GUEST_LOGIN);
 		tokenUser = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		tokenAdmin = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		tokenJudge = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		tokenGuest = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 	}
 
 	@Test
@@ -130,6 +136,16 @@ public class AuthControllerTest {
 				.content(userJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
 		// try to login to the system from other server, check cors
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, token)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	public void checkPostLoginGuest() throws Exception {
+		userJson = JacksonUtils.getFullJson(new User().setLogin(DatabaseCreator.GUEST_LOGIN).setPassword(DatabaseCreator.GUEST_PASSWORD));
+		// try to login to the system from other server, check cors
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGIN).header("Origin", "http://www.someurl.com").contentType(MediaType.APPLICATION_JSON)
+				.content(userJson)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getHeader(Token.TOKEN_HEADER);
+		// try to login to the system from other server, check cors
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AUTH_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AUTH_CONTROLLER_POST_LOGOUT).header(Token.TOKEN_HEADER, tokenGuest)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
