@@ -25,11 +25,11 @@ public class DatabaseCreator {
 
 	public static final String ADMIN_PASSWORD = "test";
 
-	public static final String GUEST_PASSWORD = "quest";
+	public static final String GUEST_PASSWORD = "guest";
 
 	public static final String JUDGE_PASSWORD = "judgeTest";
 
-	public static final String GUEST_LOGIN = "quest";
+	public static final String GUEST_LOGIN = "guest";
 
 	public static final String ADMIN_LOGIN = "admin";
 
