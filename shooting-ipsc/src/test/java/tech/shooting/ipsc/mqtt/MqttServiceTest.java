@@ -78,7 +78,7 @@ class MqttServiceTest {
 	}
 
 	@AfterEach
-	public void after() {
+	public void after() throws MqttException {
 		mqttService.stopBroker();
 	}
 

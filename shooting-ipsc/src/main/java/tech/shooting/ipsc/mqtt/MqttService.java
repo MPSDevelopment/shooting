@@ -3,7 +3,9 @@ package tech.shooting.ipsc.mqtt;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
+import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
@@ -36,6 +38,8 @@ public class MqttService {
 
 	private static Server mqttBroker;
 
+	private MqttClient publisher;
+
 	public MqttService() {
 		EventBus.subscribe(this);
 	}
@@ -66,13 +70,28 @@ public class MqttService {
 
 	}
 
-	public void stopBroker() {
+	public void stopBroker() throws MqttException {
 		if (mqttBroker == null) {
 			return;
 		}
 
+		if (publisher == null) {
+			publisher.disconnect();
+		}
+
 		mqttBroker.stopServer();
 		log.info("Moquette Server stopped");
+	}
+
+	public MqttClient getPublisher() {
+		if (publisher == null) {
+
+		}
+		return publisher;
+	}
+	
+	public MqttMessage createJsonMessage(Object object) {
+		return createMessage(JacksonUtils.getJson(object));
 	}
 
 	public MqttMessage createMessage(String payload) {
@@ -125,17 +144,25 @@ public class MqttService {
 		log.info("New connection detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 	}
-	
+
 	@Handler
 	public void handle(MqttOnConnectionLostEvent event) {
 		log.info("Connection lost detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 	}
-	
+
 	@Handler
 	public void handle(MqttOnDisconnectEvent event) {
 		log.info("Disonnect detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 	}
 
+	@Handler
+	public void handle(CompetitionUpdatedEvent event) {
+		try {
+			getPublisher().publish(MqttConstants.COMPETITION_TOPIC, createJsonMessage(event));
+		} catch (MqttException e) {
+			log.error("Cannot send a mqtt message %s", event);
+		}
+	}
 }

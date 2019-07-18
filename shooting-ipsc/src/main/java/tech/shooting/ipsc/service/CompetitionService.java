@@ -13,6 +13,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
@@ -27,6 +29,7 @@ import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.LevelBean;
@@ -471,6 +474,7 @@ public class CompetitionService {
 
 	public Competition startCompetition(Long id) throws BadRequestException {
 		var competiton = checkCompetition(id);
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id));
 		log.info("Competition %s started", competiton.getName());
 		return competiton;
 	}

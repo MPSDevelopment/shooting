@@ -3,6 +3,8 @@ package tech.shooting.ipsc;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.mqtt.MqttService;
 import java.io.IOException;
+
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -43,7 +45,11 @@ public class IpscApplication {
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
 				public void run() {
-					mqttService.stopBroker();
+					try {
+						mqttService.stopBroker();
+					} catch (MqttException e) {
+						e.printStackTrace();
+					}
 				}
 			});
 		};

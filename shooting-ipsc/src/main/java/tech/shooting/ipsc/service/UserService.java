@@ -46,7 +46,7 @@ public class UserService {
 //				userLockUtils.successfulLogin(login);
 				return databaseUser;
 			} else {
-				log.error("  PASSWORD  does not match");
+				log.error("  PASSWORD %s does not match s% (%s)", databaseUser.getPassword(), password, passwordEncoder.encode(password));
 //				userLockUtils.unsuccessfulLogin(login);
 			}
 		}
