@@ -75,7 +75,7 @@ public class MqttService {
 			return;
 		}
 
-		if (publisher == null) {
+		if (publisher != null) {
 			publisher.disconnect();
 		}
 
