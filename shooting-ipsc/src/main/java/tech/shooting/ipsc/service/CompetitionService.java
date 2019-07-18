@@ -474,6 +474,8 @@ public class CompetitionService {
 
 	public Competition startCompetition(Long id) throws BadRequestException {
 		var competiton = checkCompetition(id);
+		competiton.setStarted(true);
+		competitionRepository.save(competiton);
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id));
 		log.info("Competition %s started", competiton.getName());
 		return competiton;
@@ -481,6 +483,8 @@ public class CompetitionService {
 
 	public Competition stopCompetition(Long id) throws BadRequestException {
 		var competiton = checkCompetition(id);
+		competiton.setStarted(false);
+		competitionRepository.save(competiton);
 		log.info("Competition %s stopped", competiton.getName());
 		return competiton;
 	}

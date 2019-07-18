@@ -63,6 +63,10 @@ public class Competition extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Competition active ")
 	private boolean active = true;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Competition started ")
+	private boolean started = false;
 
 	@JsonProperty("director")
 	@ApiModelProperty(value = "Competition's Match Director", notes = "Competition's Match Director ")
