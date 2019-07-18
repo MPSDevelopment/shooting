@@ -32,21 +32,21 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public User checkUserInDB (String userLogin, String userPassword) {
+	public User checkUserInDB(String userLogin, String userPassword) {
 		String login = userLogin.trim().toLowerCase();
 		String password = userPassword.trim();
 		User databaseUser = userRepository.findByLogin(login);
-		if(databaseUser != null) {
-			
+		if (databaseUser != null) {
+
 			log.error("User with login %s has been found", userLogin);
-			
+
 			boolean ok = passwordEncoder.matches(password, databaseUser.getPassword());
-			if(ok) {
+			if (ok) {
 				log.info("  PASSWORD  OK. user active %s", databaseUser.isActive());
 //				userLockUtils.successfulLogin(login);
 				return databaseUser;
 			} else {
-				log.error("  PASSWORD %s does not match s% (%s)", databaseUser.getPassword(), password, passwordEncoder.encode(password));
+				log.error("  PASSWORD %s does not match %s (%s)", databaseUser.getPassword(), password, passwordEncoder.encode(password));
 //				userLockUtils.unsuccessfulLogin(login);
 			}
 		}
@@ -56,7 +56,7 @@ public class UserService {
 
 	private User createUser(User user, RoleName role) {
 		log.info("User with login %s", user.getLogin());
-		if(userRepository.findByLogin(user.getLogin()) != null) {
+		if (userRepository.findByLogin(user.getLogin()) != null) {
 			throw new ValidationException(User.LOGIN_FIELD, "User with login %s already exists", user.getLogin());
 		}
 		user.setRoleName(role);
@@ -65,7 +65,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public User add (UserSignupBean signupUser,RoleName role ) {
+	public User add(UserSignupBean signupUser, RoleName role) {
 		User user = new User();
 		BeanUtils.copyProperties(signupUser, user);
 		return createUser(user, role);
@@ -78,11 +78,11 @@ public class UserService {
 		return userRepository.save(dbUser);
 	}
 
-	public User getDbUserIfExist (long id) throws BadRequestException {
+	public User getDbUserIfExist(long id) throws BadRequestException {
 		return userRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect userId %s", id)));
 	}
 
-	public User changePassword (Long userId, ChangePasswordBean bean) throws BadRequestException {
+	public User changePassword(Long userId, ChangePasswordBean bean) throws BadRequestException {
 		checkPathIdAndCurrentId(userId, bean.getId());
 		User dbUser = getDbUserIfExist(bean.getId());
 		dbUser.setPassword(passwordEncoder.encode(bean.getNewPassword().trim()));
@@ -91,35 +91,35 @@ public class UserService {
 		return dbUser;
 	}
 
-	private void checkPathIdAndCurrentId (Long userId, Long beanId) throws BadRequestException {
-		if(!userId.equals(beanId)) {
+	private void checkPathIdAndCurrentId(Long userId, Long beanId) throws BadRequestException {
+		if (!userId.equals(beanId)) {
 			throw new BadRequestException(new ErrorMessage("Path userId %s does not match bean userId %s", userId, beanId));
 		}
 	}
 
-	public void deleteUser (Long userId) throws BadRequestException {
+	public void deleteUser(Long userId) throws BadRequestException {
 		log.info("Trying to delete user by id %s", userId);
 		User user = getDbUserIfExist(userId);
 		userRepository.delete(user);
 	}
 
-	public List<User> getAll () {
+	public List<User> getAll() {
 		return userRepository.findAll();
 	}
 
-	public Long getCount () {
+	public Long getCount() {
 		return userRepository.count();
 	}
 
-	public ResponseEntity<List<User>> getUsersByPage (Integer page, Integer size) {
+	public ResponseEntity<List<User>> getUsersByPage(Integer page, Integer size) {
 		return Pageable.getPage(page, size, userRepository);
 	}
 
-	public List<User> getListJudges () {
+	public List<User> getListJudges() {
 		return userRepository.findByRoleName(RoleName.JUDGE);
 	}
 
-	public List<User> getListUsers () {
+	public List<User> getListUsers() {
 		return userRepository.findByRoleName(RoleName.USER);
 	}
 }
