@@ -74,7 +74,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
-@Execution(ExecutionMode.CONCURRENT)
 public class CompetitionControllerTest {
 
 	@Autowired
@@ -339,59 +338,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-	}
-	
-//	@Test
-	public void checkMqtt() throws Exception {
-		
-		mqttService.startBroker("config/moquette.conf");
-		
-		messageCount = 0;
-		subscriber = mqttService.createSubscriber(mqttService.getServerUrl(), settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
-
-			@Override
-			public void messageArrived(String topic, MqttMessage message) throws Exception {
-				log.info("Message arrived: %s", new String(message.getPayload()));
-				messageCount++;
-			}
-
-			@Override
-			public void deliveryComplete(IMqttDeliveryToken token) {
-			}
-
-			@Override
-			public void connectionLost(Throwable cause) {
-			}
-		}, MqttConstants.COMPETITION_TOPIC);
-		
-		Competition test = competitionRepository.findByName(testingCompetition.getName());
-		// try access to start competition with judge
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to stop competition with judge
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to start competition with authorized admin
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to stop competition with authorized admin
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		subscriber.disconnect();
-		subscriber.close(true);
-		mqttService.stopBroker();
-		
-		assertEquals(4, messageCount);
-	}
-		
+	}	
 
 	@Test
 	public void checkGetCount() throws Exception {
