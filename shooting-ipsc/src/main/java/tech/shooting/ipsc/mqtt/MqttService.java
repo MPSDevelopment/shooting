@@ -33,6 +33,10 @@ import java.util.List;
 @Slf4j
 public class MqttService {
 
+	private static final String MQTT_HOST = "host";
+
+	private static final String MQTT_PORT = "port";
+
 	@Autowired
 	private IpscMqttSettings mqttSettings;
 
@@ -40,18 +44,29 @@ public class MqttService {
 
 	private MqttClient publisher;
 
+	private IConfig classPathConfig;
+
 	public MqttService() {
 		EventBus.subscribe(this);
 	}
 
 	public void startBroker(String settingsFile) {
+		startBroker(settingsFile, null);
+	}
+
+	public void startBroker(String settingsFile, Integer port) {
 
 		if (mqttBroker != null) {
 			return;
 		}
 
 		IResourceLoader classpathLoader = new ClasspathResourceLoader();
-		final IConfig classPathConfig = StringUtils.isNotBlank(settingsFile) ? new ResourceLoaderConfig(classpathLoader, settingsFile) : new ResourceLoaderConfig(classpathLoader);
+		classPathConfig = StringUtils.isNotBlank(settingsFile) ? new ResourceLoaderConfig(classpathLoader, settingsFile) : new ResourceLoaderConfig(classpathLoader);
+
+		if (port != null) {
+			log.info("Changed mqtt port from %s to %s", classPathConfig.getProperty(MQTT_PORT), port);
+			classPathConfig.setProperty(MQTT_PORT, port.toString());
+		}
 
 		mqttBroker = new Server();
 
@@ -83,13 +98,17 @@ public class MqttService {
 		log.info("Moquette Server stopped");
 	}
 
-	public MqttClient getPublisher() {
+	public MqttClient getPublisher() throws MqttException {
 		if (publisher == null) {
-
+			publisher = createPublisher(getServerUrl(), mqttSettings.getAdminLogin(), mqttSettings.getAdminPassword());
 		}
 		return publisher;
 	}
-	
+
+	public String getServerUrl() {
+		return "tcp://" + classPathConfig.getProperty(MQTT_HOST) + ":" + classPathConfig.getProperty(MQTT_PORT);
+	}
+
 	public MqttMessage createJsonMessage(Object object) {
 		return createMessage(JacksonUtils.getJson(object));
 	}
@@ -113,9 +132,9 @@ public class MqttService {
 		publisher.connect(connOpts);
 		return publisher;
 	}
-	
+
 	public MqttClient createSubscriber(String url, String userName, String password, String... topicNames) throws MqttException {
-		return createSubscriber(url,  userName,  password, new JsonMqttCallBack(), topicNames);
+		return createSubscriber(url, userName, password, new JsonMqttCallBack(), topicNames);
 	}
 
 	public MqttClient createSubscriber(String url, String userName, String password, MqttCallback callback, String... topicNames) throws MqttException {

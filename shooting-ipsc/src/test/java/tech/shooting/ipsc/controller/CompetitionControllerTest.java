@@ -3,10 +3,22 @@ package tech.shooting.ipsc.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Before;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -36,6 +48,7 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.*;
+import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -53,15 +66,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CompetitionController.class, CompetitionService.class, MqttService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CompetitionController.class,
+		CompetitionService.class, MqttService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
+@Execution(ExecutionMode.CONCURRENT)
 public class CompetitionControllerTest {
-	
+
+	@Autowired
+	private IpscMqttSettings settings;
+
+	@Autowired
+	private MqttService mqttService;
+
 	@Autowired
 	private CompetitionRepository competitionRepository;
 
@@ -108,8 +129,12 @@ public class CompetitionControllerTest {
 
 	private Rank rank;
 
+	private int messageCount;
+
+	private MqttClient subscriber;
+
 	@BeforeEach
-	public void before() {
+	public void beforeEach() {
 		competitionRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		rank = rank == null ? rankRepository.save(new Rank().setRus("бла бла бла").setKz("major").setOfficer(true)) : rank;
@@ -126,6 +151,14 @@ public class CompetitionControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		
+//		mqttService.startBroker("config/moquette.conf");
+	}
+	
+	
+	@AfterEach
+	public void afterEach() throws MqttException {
+//		mqttService.stopBroker();
 	}
 
 	// utils method's
@@ -266,10 +299,7 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkStartCompetition() throws Exception {
-		
-		
-		
-		
+
 		Competition test = competitionRepository.findByName(testingCompetition.getName());
 		// try access to start competition with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders
@@ -286,29 +316,82 @@ public class CompetitionControllerTest {
 		// try access to start competition with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void checkStopCompetition() throws Exception {
+		
+		Competition test = competitionRepository.findByName(testingCompetition.getName());
+		// try access to stop competition with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to stop competition with authorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to stop competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access to stop competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
 	@Test
-	public void checkStopCompetition() throws Exception {
+	public void checkMqtt() throws Exception {
+		
+		mqttService.startBroker("config/moquette.conf");
+		
+		messageCount = 0;
+		subscriber = mqttService.createSubscriber(mqttService.getServerUrl(), settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
+
+			@Override
+			public void messageArrived(String topic, MqttMessage message) throws Exception {
+				log.info("Message arrived: %s", new String(message.getPayload()));
+				messageCount++;
+			}
+
+			@Override
+			public void deliveryComplete(IMqttDeliveryToken token) {
+			}
+
+			@Override
+			public void connectionLost(Throwable cause) {
+			}
+		}, MqttConstants.COMPETITION_TOPIC);
+		
 		Competition test = competitionRepository.findByName(testingCompetition.getName());
-		// try access to start competition with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to start competition with authorized user
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to start competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		// try access to stop competition with judge
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
 		// try access to start competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		// try access to stop competition with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		subscriber.disconnect();
+		subscriber.close(true);
+		mqttService.stopBroker();
+		
+		assertEquals(4, messageCount);
 	}
+		
 
 	@Test
 	public void checkGetCount() throws Exception {

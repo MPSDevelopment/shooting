@@ -40,8 +40,6 @@ import java.io.IOException;
 //@TestMethodOrder(OrderAnnotation.class)
 class MqttServiceTest {
 
-	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
-
 	private static final String MQTT_REMOTE_URL = "tcp://40.69.138.82:1883";
 
 	private static final String TEST_LOGIN = "login";
@@ -58,6 +56,8 @@ class MqttServiceTest {
 	@Autowired
 	private IpscMqttSettings settings;
 
+	private String mqttServerUrl;
+
 	@BeforeEach
 	public void before() throws IOException {
 
@@ -72,7 +72,9 @@ class MqttServiceTest {
 
 		mqttService.startBroker("config/moquette-protected.conf");
 
-		log.info("Broker started");
+		mqttServerUrl = mqttService.getServerUrl();
+
+		log.info("Broker started %s", mqttServerUrl);
 
 		mqttService.getSubscribers();
 	}
@@ -96,22 +98,22 @@ class MqttServiceTest {
 
 		// subscriber
 
-		var subscriber1 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName1);
-		var subscriber2 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
-		var subscriber3 = mqttService.createSubscriber(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
+		var subscriber1 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName1);
+		var subscriber2 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
+		var subscriber3 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
 
 		assertThrows(MqttSecurityException.class, () -> {
-			mqttService.createSubscriber(MQTT_URL, TEST_LOGIN, TEST_PASSWORD, topicName2);
+			mqttService.createSubscriber(mqttServerUrl, TEST_LOGIN, TEST_PASSWORD, topicName2);
 		});
 
-		var subscriberAll = mqttService.createSubscriber(MQTT_URL, settings.getAdminLogin(), settings.getAdminPassword(), "command/#");
+		var subscriberAll = mqttService.createSubscriber(mqttServerUrl, settings.getAdminLogin(), settings.getAdminPassword(), "command/#");
 
 		// publisher
 
-		var publisher = mqttService.createPublisher(MQTT_URL, settings.getGuestLogin(), settings.getGuestPassword());
+		var publisher = mqttService.createPublisher(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword());
 
 		assertThrows(MqttException.class, () -> {
-			mqttService.createPublisher(MQTT_URL, TEST_LOGIN, TEST_PASSWORD);
+			mqttService.createPublisher(mqttServerUrl, TEST_LOGIN, TEST_PASSWORD);
 		});
 
 		// publish a message
@@ -142,7 +144,7 @@ class MqttServiceTest {
 		assertEquals(0, subscribers.size());
 	}
 
-	@Test
+//	@Test
 	public void checkRemoteConnection() throws MqttException, InterruptedException {
 
 		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {

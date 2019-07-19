@@ -476,7 +476,7 @@ public class CompetitionService {
 		var competiton = checkCompetition(id);
 		competiton.setStarted(true);
 		competitionRepository.save(competiton);
-		EventBus.publishEvent(new CompetitionUpdatedEvent(id));
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s started", competiton.getName()));
 		log.info("Competition %s started", competiton.getName());
 		return competiton;
 	}
@@ -485,6 +485,7 @@ public class CompetitionService {
 		var competiton = checkCompetition(id);
 		competiton.setStarted(false);
 		competitionRepository.save(competiton);
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stopped", competiton.getName()));
 		log.info("Competition %s stopped", competiton.getName());
 		return competiton;
 	}
