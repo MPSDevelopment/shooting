@@ -341,7 +341,7 @@ public class CompetitionControllerTest {
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
-	@Test
+//	@Test
 	public void checkMqtt() throws Exception {
 		
 		mqttService.startBroker("config/moquette.conf");
