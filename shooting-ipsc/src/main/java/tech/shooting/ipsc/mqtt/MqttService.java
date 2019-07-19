@@ -113,8 +113,12 @@ public class MqttService {
 		publisher.connect(connOpts);
 		return publisher;
 	}
-
+	
 	public MqttClient createSubscriber(String url, String userName, String password, String... topicNames) throws MqttException {
+		return createSubscriber(url,  userName,  password, new JsonMqttCallBack(), topicNames);
+	}
+
+	public MqttClient createSubscriber(String url, String userName, String password, MqttCallback callback, String... topicNames) throws MqttException {
 		MqttConnectOptions connOpts = new MqttConnectOptions();
 		connOpts.setCleanSession(true); // no persistent session
 		connOpts.setKeepAliveInterval(10000);
@@ -122,7 +126,7 @@ public class MqttService {
 		connOpts.setPassword(password.toCharArray());
 
 		var subscriber = new MqttClient(url, MqttClient.generateClientId());
-		subscriber.setCallback(new JsonMqttCallBack());
+		subscriber.setCallback(callback);
 		subscriber.connect(connOpts);
 		Arrays.asList(topicNames).forEach(topicName -> {
 			try {

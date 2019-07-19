@@ -41,7 +41,7 @@ import java.io.IOException;
 class MqttServiceTest {
 
 	private static final String MQTT_URL = "tcp://127.0.0.1:1883";
-	
+
 	private static final String MQTT_REMOTE_URL = "tcp://40.69.138.82:1883";
 
 	private static final String TEST_LOGIN = "login";
@@ -73,7 +73,7 @@ class MqttServiceTest {
 		mqttService.startBroker("config/moquette-protected.conf");
 
 		log.info("Broker started");
-		
+
 		mqttService.getSubscribers();
 	}
 
@@ -137,20 +137,37 @@ class MqttServiceTest {
 		subscriberAll.disconnect();
 
 		assertEquals(5, count);
-		
+
 		subscribers = mqttService.getSubscribers();
 		assertEquals(0, subscribers.size());
 	}
-	
-//	@Test 
+
+	@Test
 	public void checkRemoteConnection() throws MqttException, InterruptedException {
-		
-		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), "/workspace");
-		
-		Thread.sleep(200);
-		
+
+		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
+
+			@Override
+			public void connectionLost(Throwable cause) {
+
+			}
+
+			@Override
+			public void messageArrived(String topic, MqttMessage message) throws Exception {
+				log.info("Message arrived for topic %s: %s", topic, message.getPayload());
+			}
+
+			@Override
+			public void deliveryComplete(IMqttDeliveryToken token) {
+
+			}
+
+		}, MqttConstants.COMPETITION_TOPIC);
+
+		Thread.sleep(2000);
+
 		subscriber.disconnect();
-		
+
 	}
 
 	@Handler

@@ -30,11 +30,13 @@ import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.*;
+import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -51,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CompetitionController.class, CompetitionService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CompetitionController.class, CompetitionService.class, MqttService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -59,6 +61,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class CompetitionControllerTest {
+	
 	@Autowired
 	private CompetitionRepository competitionRepository;
 
@@ -259,6 +262,52 @@ public class CompetitionControllerTest {
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getFullJson(test))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
+	}
+
+	@Test
+	public void checkStartCompetition() throws Exception {
+		
+		
+		
+		
+		Competition test = competitionRepository.findByName(testingCompetition.getName());
+		// try access to start competition with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to start competition with authorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to start competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access to start competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	public void checkStopCompetition() throws Exception {
+		Competition test = competitionRepository.findByName(testingCompetition.getName());
+		// try access to start competition with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to start competition with authorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to start competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access to start competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
@@ -699,10 +748,13 @@ public class CompetitionControllerTest {
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		// repeat check with the same mark
-		String response = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK
-				.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID, testingCompetitor.getId().toString())).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		
+		String response = mockMvc
+				.perform(MockMvcRequestBuilders.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITOR_CHECK_MARK.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITOR_ID,
+								testingCompetitor.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
 		assertTrue(response.contains(competitorMark.getMark()));
 
 		// save the same mark with different competitor

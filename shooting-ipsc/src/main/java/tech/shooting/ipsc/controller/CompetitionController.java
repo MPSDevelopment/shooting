@@ -77,18 +77,20 @@ public class CompetitionController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Start a competition")
 	public ResponseEntity<SuccessfulMessage> startCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
 		var competition = competitionService.startCompetition(id);
-		return new ResponseEntity<>(new SuccessfulMessage("Competition %s started", competition.getName()), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessfulMessage("Competition %s started", competition.getName()), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Start a competition")
+	@ApiOperation(value = "Stop a competition")
 	public ResponseEntity<SuccessfulMessage> stopCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
 		var competition = competitionService.stopCompetition(id);
-		return new ResponseEntity<>(new SuccessfulMessage("Competition %s stopped", competition.getName()), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessfulMessage("Competition %s stopped", competition.getName()), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
