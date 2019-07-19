@@ -31,6 +31,7 @@ import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
 import tech.shooting.ipsc.bean.DisqualificationBean;
+import tech.shooting.ipsc.bean.IdBean;
 import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.bean.ScoreBean;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
@@ -80,17 +81,17 @@ public class CompetitionController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Start a competition")
-	public ResponseEntity<SuccessfulMessage> startCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<IdBean> startCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
 		var competition = competitionService.startCompetition(id);
-		return new ResponseEntity<>(new SuccessfulMessage("Competition %s started", competition.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(new IdBean(competition.getId()), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Stop a competition")
-	public ResponseEntity<SuccessfulMessage> stopCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<IdBean> stopCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
 		var competition = competitionService.stopCompetition(id);
-		return new ResponseEntity<>(new SuccessfulMessage("Competition %s stopped", competition.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(new IdBean(competition.getId()), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
