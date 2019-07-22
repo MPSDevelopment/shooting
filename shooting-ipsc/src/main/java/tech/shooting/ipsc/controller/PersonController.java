@@ -54,7 +54,7 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')  or  hasRole('GUEST')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
 	public ResponseEntity<List<Person>> getUsers () {
