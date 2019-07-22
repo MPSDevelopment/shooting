@@ -112,21 +112,70 @@ public class MqttLogicTest {
 				: userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		
+
 		mqttService.startBroker("config/moquette.conf");
 	}
-	
-	
+
 	@AfterEach
 	public void afterEach() throws MqttException {
 		mqttService.stopBroker();
 	}
-	
+
 //	@Test
 	public void checkMqtt() throws Exception {
-		
+
 		messageCount = 0;
-		subscriber = mqttService.createSubscriber(mqttService.getServerUrl(), settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
+		subscriber = createSubscriber();
+
+		Competition test = competitionRepository.findByName(testingCompetition.getName());
+		// try access to start competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// try access to stop competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// try access to start competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// try access to stop competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		subscriber.disconnect();
+		subscriber.close(true);
+
+		assertEquals(4, messageCount);
+
+		// try access to start competition with judge
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		subscriber = createSubscriber();
+
+		// try access to stop competition with authorized admin
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		Thread.sleep(200);
+		
+		subscriber.disconnect();
+		subscriber.close(true);
+
+		assertEquals(5, messageCount);
+
+	}
+
+	private MqttClient createSubscriber() throws MqttException {
+		return mqttService.createSubscriber(mqttService.getServerUrl(), settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
 
 			@Override
 			public void messageArrived(String topic, MqttMessage message) throws Exception {
@@ -142,31 +191,5 @@ public class MqttLogicTest {
 			public void connectionLost(Throwable cause) {
 			}
 		}, MqttConstants.COMPETITION_TOPIC);
-		
-		Competition test = competitionRepository.findByName(testingCompetition.getName());
-		// try access to start competition with judge
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to stop competition with judge
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to start competition with authorized admin
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		// try access to stop competition with authorized admin
-		mockMvc.perform(MockMvcRequestBuilders
-				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		subscriber.disconnect();
-		subscriber.close(true);
-		
-		assertEquals(4, messageCount);
 	}
 }

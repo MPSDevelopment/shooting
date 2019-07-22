@@ -89,7 +89,7 @@ public class CompetitionService {
 		return competition;
 	}
 
-	private void createCompetition(Competition competition) {
+	private Competition createCompetition(Competition competition) {
 		log.info("Create competition with name %s ", competition.getName());
 		if (competitionRepository.findByName(competition.getName()) != null) {
 			throw new ValidationException(Competition.NAME_FIELD, "Competition with name %s is already exist", competition.getName());
@@ -98,7 +98,7 @@ public class CompetitionService {
 		if (competition.getStages() == null) {
 			competition.setStages(new ArrayList<>());
 		}
-		competitionRepository.save(competition);
+		return competitionRepository.save(competition);
 	}
 
 	public Competition updateCompetition(Long id, CompetitionBean competition) throws BadRequestException {
@@ -107,12 +107,18 @@ public class CompetitionService {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, competitionFromDb);
 //		// Do not change competitors and stages
 //		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s updated", competitionFromDb.getName()));
+		log.info("Competition %s updated", competitionFromDb.getName());
+		
 		return competitionRepository.save(existCompetition);
 	}
 
 	public Competition createCompetition(CompetitionBean competitionBean) throws BadRequestException {
 		Competition competition = useBeanUtilsWithOutJudges(competitionBean, new Competition());
-		createCompetition(competition);
+		var competiton = createCompetition(competition);
+		EventBus.publishEvent(new CompetitionUpdatedEvent(competiton.getId(), "Competition %s created", competiton.getName()));
+		log.info("Competition %s created", competiton.getName());
 		return competition;
 	}
 
@@ -165,6 +171,9 @@ public class CompetitionService {
 				index = i;
 			}
 		}
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stage added", competition.getName()));
+		
 		return stages.get(index);
 	}
 
@@ -179,6 +188,8 @@ public class CompetitionService {
 	public void deleteStage(Long competitionId, Long stageId) throws BadRequestException {
 		checkCompetition(competitionId);
 		competitionRepository.pullStageFromCompetition(competitionId, stageId);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(competitionId, "Competition %s stage deleted", competitionId));
 	}
 
 	public Stage updateStage(Long competitionId, Long stageId, Stage stage) throws BadRequestException {
@@ -190,6 +201,9 @@ public class CompetitionService {
 		stages.remove(stageFromDB);
 		stages.add(stageFromDB);
 		competitionRepository.save(competition.setStages(stages));
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(competitionId, "Competition %s stage updated", competitionId));
+		
 		return stageFromDB;
 	}
 
@@ -199,7 +213,11 @@ public class CompetitionService {
 		checkPerson(competitor.getPerson().getId());
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor.setActive(false), competitorToDB);
-		return saveAndReturn(competition, competitorToDB, true);
+		Competitor saveAndReturn = saveAndReturn(competition, competitorToDB, true);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor added", competition.getName()));
+		
+		return saveAndReturn;
 	}
 
 	private Person checkPerson(Long id) throws BadRequestException {
@@ -207,8 +225,10 @@ public class CompetitionService {
 	}
 
 	public void deleteCompetitor(Long id, Long competitorId) throws BadRequestException {
-		checkCompetition(id);
+		var competition = checkCompetition(id);
 		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor deleted", competition.getId()));
 	}
 
 	public Competitor getCompetitor(Long id, Long competitorId) throws BadRequestException {
@@ -224,7 +244,11 @@ public class CompetitionService {
 		checkCompetitionActive(competition);
 		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
 		BeanUtils.copyProperties(competitor, competitorFromDB);
-		return saveAndReturn(competition, competitorFromDB, false);
+		Competitor saveAndReturn = saveAndReturn(competition, competitorFromDB, false);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor updated", competition.getId()));
+		
+		return saveAndReturn;
 	}
 
 	public List<Competitor> addedAllCompetitors(Long id, List<Long> competitorsIdList) throws BadRequestException {
@@ -239,7 +263,11 @@ public class CompetitionService {
 			competitors.add(competitor);
 		}
 		competition.setCompetitors(competitors);
-		return competitionRepository.save(competition).getCompetitors();
+		competition = competitionRepository.save(competition);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitors updated", competition.getId()));
+		
+		return competition.getCompetitors();
 	}
 
 	private Competitor checkCompetitor(List<Competitor> competitors, Long competitorId) throws BadRequestException {
