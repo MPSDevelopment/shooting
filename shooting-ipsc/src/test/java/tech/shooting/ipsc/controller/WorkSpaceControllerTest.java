@@ -49,8 +49,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class,
-    DatabaseCreator.class, WorkSpaceController.class, WorkSpaceService.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class})
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkSpaceController.class, WorkSpaceService.class,
+		IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -60,95 +60,79 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class WorkSpaceControllerTest {
 
-    @Autowired
-    private MqttService mqttService;
+	@Autowired
+	private MqttService mqttService;
 
-    @Autowired
-    private IpscMqttSettings settings;
+	@Autowired
+	private IpscMqttSettings settings;
 
-    @Autowired
-    private WorkSpaceService workSpaceService;
+	@Autowired
+	private WorkSpaceService workSpaceService;
 
+	@Autowired
+	private WorkSpaceRepository workSpaceRepository;
 
-    @Autowired
-    private WorkSpaceRepository workSpaceRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+	@Autowired
+	private QuizRepository quizRepository;
 
-    @Autowired
-    private QuizRepository quizRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private TokenUtils tokenUtils;
 
-    @Autowired
-    private TokenUtils tokenUtils;
+	private User user;
 
+	private User guest;
 
-    private User user;
+	private User admin;
 
-    private User guest;
+	private User judge;
 
-    private User admin;
+	private Person testingPerson;
 
-    private User judge;
+	private String adminToken;
 
+	private String judgeToken;
 
-    private Person testingPerson;
+	private String userToken;
 
-    private String adminToken;
+	private String guestToken;
 
-    private String judgeToken;
+	@BeforeEach
+	public void before() {
+		workSpaceRepository.deleteAll();
+		String password = RandomStringUtils.randomAscii(14);
+		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 
-    private String userToken;
+		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
+		guest = userRepository.findByLogin(DatabaseCreator.GUEST_LOGIN);
+		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
+		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN) == null ? userRepository.save(new User().setLogin("judge").setRoleName(RoleName.JUDGE).setName("judge_name").setPassword(RandomStringUtils.randomAscii(14)))
+				: userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 
-    private String guestToken;
+		userToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+	}
 
-    @BeforeEach
-    public void before() {
-        workSpaceRepository.deleteAll();
-        String password = RandomStringUtils.randomAscii(14);
-        testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
-
-        user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15))
-                         .setName("Test firstname")
-                         .setPassword(password)
-                         .setRoleName(RoleName.USER)
-                         .setAddress(new Address().setIndex("08150"));
-        guest = userRepository.findByLogin(DatabaseCreator.GUEST_LOGIN);
-        admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-        judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN) == null ? userRepository.save(
-            new User().setLogin("judge").setRoleName(RoleName.JUDGE).setName("judge_name").setPassword(RandomStringUtils.randomAscii(14)))
-            : userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
-
-        userToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1),
-                                           DateUtils.addDays(new Date(), -1));
-        guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date()
-            , 1), DateUtils.addDays(new Date(), -1));
-        adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1),
-                                            DateUtils.addDays(new Date(), -1));
-        judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1),
-                                            DateUtils.addDays(new Date(), -1));
-    }
-
-    @Test
-    void checkWorrkSpaceRepo() throws Exception {
-        assertEquals(0, workSpaceRepository.findAll().size());
-        assertNotNull(guestToken);
-    }
+	@Test
+	void checkWorrkSpaceRepo() throws Exception {
+		assertEquals(0, workSpaceRepository.findAll().size());
+		assertNotNull(guestToken);
+	}
 
 //    @Test
-    void checkPostNewWorkSpace() throws Exception {
-        mockMvc.perform(
-            MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE)
-                                  .contentType(
-                                      MediaType.APPLICATION_JSON_UTF8)
-                                  .header(Token.TOKEN_HEADER, guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
+	void checkPostNewWorkSpace() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER,
+				guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
 }

@@ -38,7 +38,7 @@ public class WorkSpaceService {
 
     public void createWorkSpace(String remoteIp) throws MqttException {
         WorkSpace save = workSpaceRepository.save(new WorkSpace().setIp(remoteIp));
-        MqttClient publisher = mqttService.createPublisher(MQTT_URL, "quest", "guest");
+        MqttClient publisher = mqttService.createPublisher(MQTT_URL, "guest", "guest");
         MqttMessage message = mqttService.createMessage(remoteIp);
         publisher.getTopic(TOPIC_CREATED).publish(message);
 

@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .permitAll()
 		    .and()
 		    .authorizeRequests()
-		    .anyRequest().hasAnyRole("ADMIN", "JUDGE", "USER");
+		    .anyRequest().hasAnyRole("ADMIN", "JUDGE", "USER", "GUEST");
 	}
 
 	@Bean

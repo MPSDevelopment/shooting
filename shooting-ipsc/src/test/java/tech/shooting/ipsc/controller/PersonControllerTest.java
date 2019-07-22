@@ -97,6 +97,10 @@ public class PersonControllerTest {
 
 	private Rank privateRank;
 
+	private String guestToken;
+
+	private User guest;
+
 	@BeforeEach
 	public void before() {
 		personRepository.deleteAll();
@@ -108,9 +112,11 @@ public class PersonControllerTest {
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
-		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		guest = userRepository.findByLogin(DatabaseCreator.GUEST_LOGIN);
+		userToken = tokenUtils.createToken(user.getId(), Token.TokenType.USER, user.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		handgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.HANDGUN).setCode("121212121212121");
 		shotgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121");
 		rifle = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121");
@@ -252,6 +258,12 @@ public class PersonControllerTest {
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 		List<Person> listFromJson = JacksonUtils.getListFromJson(Person[].class, mvcResult.getResponse().getContentAsString());
+		assertEquals(listFromJson.size(), personRepository.findAll().size());
+
+		// try to access getAll() with guest role
+		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS).header(Token.TOKEN_HEADER, guestToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		listFromJson = JacksonUtils.getListFromJson(Person[].class, mvcResult.getResponse().getContentAsString());
 		assertEquals(listFromJson.size(), personRepository.findAll().size());
 	}
 
