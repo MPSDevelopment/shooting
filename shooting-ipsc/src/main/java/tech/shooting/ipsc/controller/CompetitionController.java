@@ -296,7 +296,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.getScoreList(competitionId), HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('GUEST')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_RATING)
 	@ApiOperation(value = "Get score list by stage")
 	public ResponseEntity<List<RatingBean>> getRating (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID)@NotNull Long competitionId) throws BadRequestException {
