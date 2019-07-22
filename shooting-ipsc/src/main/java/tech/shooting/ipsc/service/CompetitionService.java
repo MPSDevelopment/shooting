@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -490,6 +491,10 @@ public class CompetitionService {
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
 			personalRating.setScores(map.get(personId));
+			
+			personalRating.setScore(personalRating.getScores().stream().mapToLong(Score::getScore).sum());
+			personalRating.setTimeOfExercise(personalRating.getScores().stream().mapToLong(Score::getTimeOfExercise).sum());
+			
 			result.add(personalRating);
 		}
 

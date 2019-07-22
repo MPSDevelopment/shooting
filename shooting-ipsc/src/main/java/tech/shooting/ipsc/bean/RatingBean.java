@@ -17,6 +17,14 @@ public class RatingBean {
 	private Long personId;
 	
 	@JsonProperty
+	@ApiModelProperty(value = "Person score", required = true)
+	private Long score;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person time of execution", required = true)
+	private Long timeOfExercise;
+	
+	@JsonProperty
 	private List<Score> scores = new ArrayList<>();
 
 }
