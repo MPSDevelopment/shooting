@@ -1,0 +1,9 @@
+. {
+    log
+    errors
+    auto
+    reload 10s
+    forward . 1.1.1.1:53
+    
+    hosts /etc/coredns/hosts ipsc.com
+}

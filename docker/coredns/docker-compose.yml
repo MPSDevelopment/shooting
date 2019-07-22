@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+    coredns:
+        image: coredns/coredns:1.1.4 
+        container_name: coredns
+        restart: always
+        command: -conf /etc/coredns/dns
+        expose:
+            - '53'
+            - '53/udp'
+        ports:
+            - '53:53'
+            - '53:53/udp'
+        volumes:
+            - './config:/etc/coredns'

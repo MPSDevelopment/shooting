@@ -14,9 +14,7 @@ services:
       - ./data/logs/mongo:/data/log
     ports:
       - 27018:27017
-      
     command: mongod --logpath=/data/log/mongo.log --smallfiles  --storageEngine=wiredTiger --wiredTigerCacheSizeGB=2
-    
   ipsc: 
     container_name: ipsc
     image: shooting.azurecr.io/ipsc:0.2-latest
@@ -40,3 +38,16 @@ services:
       - ./data/logs/nginx:/var/log/nginx 
     depends_on: 
       - ipsc
+  coredns:
+    image: coredns/coredns:1.1.4 
+    container_name: coredns
+    restart: always
+    command: -conf /etc/coredns/dns
+    expose:
+      - '53'
+      - '53/udp'
+    ports:
+      - '53:53'
+      - '53:53/udp'
+    volumes:
+      - './:/etc/coredns'
