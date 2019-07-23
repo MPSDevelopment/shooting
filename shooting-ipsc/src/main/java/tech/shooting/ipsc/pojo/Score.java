@@ -23,6 +23,10 @@ public class Score extends BaseDocument {
 	@NotNull(message = ValidationConstants.STAGE_ID)
 	@Positive(message = ValidationConstants.STAGE_ID_POSITIVE)
 	private Long stageId;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Stage name", required = true)
+	private String stageName;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person id", required = true)
