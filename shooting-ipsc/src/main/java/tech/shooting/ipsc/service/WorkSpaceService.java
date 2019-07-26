@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.WorkSpace;
+import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
@@ -29,7 +30,7 @@ import tech.shooting.ipsc.repository.WorkSpaceRepository;
 @Service
 public class WorkSpaceService {
 
-	private Map<String, WorkSpace> map = new HashMap<>();
+	private Map<String, Workspace> map = new HashMap<>();
 
 	@Autowired
 	private WorkSpaceRepository workSpaceRepository;
@@ -43,20 +44,23 @@ public class WorkSpaceService {
 	@Autowired
 	private MqttService mqttService;
 
-	public WorkSpace createWorkspace(String clientId, String ip) {
-		var workSpace = new WorkSpace();
-		workSpace.setStatus(WorkspaceStatusEnum.CONNECTED);
-		workSpace.setClientId(clientId);
-		workSpace.setIp(ip);
-		return workSpace;
+	public Workspace createWorkspace(String clientId, String ip) {
+		var workspace = new Workspace();
+		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
+		workspace.setClientId(clientId);
+		workspace.setIp(ip);
+		
+		map.put(clientId, workspace);
+		
+		return workspace;
 	}
 
-	public WorkSpace getWorkspaceByClientId(String clientId) {
+	public Workspace getWorkspaceByClientId(String clientId) {
 		return map.get(clientId);
 	}
 
-	public WorkSpace removeWorkspace(String clientId) {
-		WorkSpace workspace = getWorkspaceByClientId(clientId);
+	public Workspace removeWorkspace(String clientId) {
+		Workspace workspace = getWorkspaceByClientId(clientId);
 		if (workspace != null) {
 			map.remove(clientId);
 			workspace.setStatus(WorkspaceStatusEnum.DISCONNECTED);
@@ -64,8 +68,8 @@ public class WorkSpaceService {
 		return workspace;
 	}
 
-	public WorkSpace updateWorkspace(WorkSpaceBean bean) {
-		WorkSpace workspace = getWorkspaceByClientId(bean.getClientId());
+	public Workspace updateWorkspace(WorkSpaceBean bean) {
+		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
 			BeanUtils.copyProperties(workspace, bean);
 		}
@@ -97,7 +101,11 @@ public class WorkSpaceService {
 		return quizRepository.findById(quiz).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Quiz id, check id is %s", quiz)));
 	}
 
-	private WorkSpace checkWorkspace(long worksSpaceId) throws BadRequestException {
+	private Workspace checkWorkspace(long worksSpaceId) throws BadRequestException {
 		return workSpaceRepository.findById(worksSpaceId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect work space id, check id is %s", worksSpaceId)));
+	}
+
+	public Collection<Workspace> getAllWorkspaces() {
+		return map.values();
 	}
 }

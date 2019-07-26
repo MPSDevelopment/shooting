@@ -14,7 +14,7 @@ import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 @TypeAlias("workspace")
 @Data
 @Accessors(chain = true)
-public class WorkSpace extends BaseDocument {
+public class Workspace extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Status", required = true)

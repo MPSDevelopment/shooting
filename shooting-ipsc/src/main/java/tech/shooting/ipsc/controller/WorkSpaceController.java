@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.controller;
 
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.bean.WorkSpaceBean;
-import tech.shooting.ipsc.pojo.WorkSpace;
+import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.service.WorkSpaceService;
 
 @Controller
@@ -39,9 +40,15 @@ public class WorkSpaceController {
 
     @PutMapping(value = ControllerAPI.VERSION_1_0)
     @ApiOperation(value = "Define work space")
-    public ResponseEntity<WorkSpace> postNewWorkSpace(@RequestBody @Valid WorkSpaceBean bean) throws MqttException {
-    	WorkSpace workspace = workSpaceService.updateWorkspace(bean);
+    public ResponseEntity<Workspace> postNewWorkSpace(@RequestBody @Valid WorkSpaceBean bean) throws MqttException {
+    	Workspace workspace = workSpaceService.updateWorkspace(bean);
         return new ResponseEntity<>(workspace, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL)
+    @ApiOperation(value = "Define work space")
+    public ResponseEntity<Collection<Workspace>> getAll() throws MqttException {
+        return new ResponseEntity<>(workSpaceService.getAllWorkspaces(), HttpStatus.OK);
     }
 
 //    @PreAuthorize(" hasRole('USER') or hasRole('ADMIN')")

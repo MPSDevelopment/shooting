@@ -241,6 +241,7 @@ public class ControllerAPI {
 
 	// workspace
 	public static final String WORKSPACE_CONTROLLER = "/api/workspace";
+	public static final String WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL = "/all";
 
 	// weapon section
 	public static final String WEAPON_CONTROLLER = "/api/weapon";

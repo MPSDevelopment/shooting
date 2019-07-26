@@ -10,7 +10,7 @@ import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
-import tech.shooting.ipsc.pojo.WorkSpace;
+import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.service.WorkSpaceService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -186,7 +186,12 @@ public class MqttService {
 
 		var workSpace = workspaceService.createWorkspace(event.getClientId(), subscriber == null ? null : subscriber.getAddress());
 
-		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
+		MqttMessage message = createJsonMessage(workSpace);
+		try {
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
+		} catch (MqttException e) {
+			log.error("Cannot send a message %s", message);
+		}
 	}
 
 	@Handler
@@ -196,18 +201,28 @@ public class MqttService {
 
 		var workSpace = workspaceService.removeWorkspace(event.getClientId());
 
-		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
+		MqttMessage message = createJsonMessage(workSpace);
+		try {
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
+		} catch (MqttException e) {
+			log.error("Cannot send a message %s", message);
+		}
 
 	}
 
 	@Handler
-	public void handle(MqttOnDisconnectEvent event) throws MqttPersistenceException, MqttException {
+	public void handle(MqttOnDisconnectEvent event) {
 		log.info("Disonnect detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 
 		var workSpace = workspaceService.removeWorkspace(event.getClientId());
 
-		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
+		MqttMessage message = createJsonMessage(workSpace);
+		try {
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
+		} catch (MqttException e) {
+			log.error("Cannot send a message %s", message);
+		}
 	}
 
 	@Handler

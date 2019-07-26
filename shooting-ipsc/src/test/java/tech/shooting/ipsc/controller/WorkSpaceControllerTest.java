@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,6 +40,7 @@ import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
@@ -148,6 +150,24 @@ public class WorkSpaceControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
 
+	}
+
+	@Test
+	void checkGetAll() throws Exception {
+		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		
+		assertEquals(0, list.size());
+		
+		workSpaceService.createWorkspace("test", "127.0.0.1");
+		
+		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		
+		assertEquals(1, list.size());
 	}
 
 }
