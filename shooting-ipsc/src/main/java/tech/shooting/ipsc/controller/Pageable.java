@@ -19,10 +19,10 @@ import tech.shooting.ipsc.repository.UserRepository;
 @Slf4j
 public class Pageable {
 	
-	public static ResponseEntity getPage(int page, int size, MongoRepository<? extends BaseDocument, Long> personRepository) {
+	public static ResponseEntity getPage(int page, int size, MongoRepository<? extends BaseDocument, Long> repository) {
 		page = Math.max(1, page);
 		page--;
-		Page<?> pageOfUsers = Pageable.countPage(page, size, personRepository);
+		Page<?> pageOfUsers = Pageable.countPage(page, size, repository);
 		return new ResponseEntity(pageOfUsers.getContent(), setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 

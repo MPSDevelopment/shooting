@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.ReportBean;
@@ -73,7 +74,7 @@ public class QuizController {
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK)
 	@ApiOperation(value = "Get question list to check", notes = "Return list question")
 	public ResponseEntity<List<QuestionBean>> getQuizToCheck(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
-		return new ResponseEntity<>(quizService.getQuestionToCheck(id), HttpStatus.OK);
+		return new ResponseEntity<>(quizService.getQuestionList(id), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -85,9 +86,9 @@ public class QuizController {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ)
 	@ApiOperation(value = "Delete quiz from db by id", notes = "Return status")
-	public ResponseEntity deleteQuiz(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> deleteQuiz(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		quizService.removeQuiz(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(new SuccessfulMessage("Quiz %d has been successfully deleted", id), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -106,9 +107,9 @@ public class QuizController {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUESTION)
 	@ApiOperation(value = "Delete  question", notes = "Return status")
-	public ResponseEntity deleteQuestion(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> deleteQuestion(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
 		quizService.deleteQuestion(id, questionId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(new SuccessfulMessage("Question %d has been successfully deleted", id), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

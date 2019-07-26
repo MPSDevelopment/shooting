@@ -162,7 +162,7 @@ public class QuizService {
 		return (obtained / total) * 100;
 	}
 
-	public List<QuestionBean> getQuestionToCheck (Long id) throws BadRequestException {
+	public List<QuestionBean> getQuestionList (Long id) throws BadRequestException {
 		Quiz quiz = checkQuiz(id);
 		List<Question> collect = quiz.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
 		return convertToListQuestionsBean(collect);
