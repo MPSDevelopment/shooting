@@ -1,25 +1,18 @@
 package tech.shooting.ipsc.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.moquette.broker.ClientDescriptor;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WorkSpaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.mqtt.MqttService;
-import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Workspace;
@@ -68,9 +61,13 @@ public class WorkSpaceService {
 		return workspace;
 	}
 
-	public Workspace updateWorkspace(WorkSpaceBean bean) {
+	public Workspace updateWorkspace(WorkSpaceBean bean) throws BadRequestException {
 		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
+			
+			checkPerson(bean.getPersonId());
+			checkQuiz(bean.getQuizId());
+			
 			BeanUtils.copyProperties(workspace, bean);
 		}
 		return workspace;

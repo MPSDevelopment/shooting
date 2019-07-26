@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
@@ -97,6 +98,8 @@ public class ImageControllerTest {
 	@BeforeEach
 	public void before() throws FileNotFoundException, IOException {
 
+		gridFsTemplate.delete(new Query());
+
 		uploadFile = new MockMultipartFile("file", file.getName(), tika.detect(file), new FileInputStream(file));
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("8523").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
@@ -122,6 +125,15 @@ public class ImageControllerTest {
 		UploadFileBean bean = JacksonUtils.fromJson(UploadFileBean.class, result);
 
 		assertNotNull(bean.getPath());
+
+		assertEquals(1, imageService.getCount());
+
+		bean = JacksonUtils.fromJson(UploadFileBean.class, result);
+		mockMvc.perform(MockMvcRequestBuilders.multipart(ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0).file(uploadFile).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn()
+				.getResponse().getContentAsString();
+
+		assertEquals(2, imageService.getCount());
+
 	}
 
 	@Test

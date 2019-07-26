@@ -40,7 +40,7 @@ public class WorkSpaceController {
 
     @PutMapping(value = ControllerAPI.VERSION_1_0)
     @ApiOperation(value = "Define work space")
-    public ResponseEntity<Workspace> postNewWorkSpace(@RequestBody @Valid WorkSpaceBean bean) throws MqttException {
+    public ResponseEntity<Workspace> postNewWorkSpace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
     	Workspace workspace = workSpaceService.updateWorkspace(bean);
         return new ResponseEntity<>(workspace, HttpStatus.OK);
     }

@@ -36,8 +36,16 @@ public class ImageService {
 
 	@Autowired
 	private GridFsTemplate gridFsTemplate;
-	
+
 	private Tika tika = new Tika();
+
+	public int getCount() {
+		int count = 0;
+		for (var item : gridFsTemplate.find(new Query())) {
+			count++;
+		}
+		return count;
+	}
 
 	public Image getImageByFilename(String filename) throws BadRequestException {
 		Optional.ofNullable(filename).orElseThrow(() -> new BadRequestException(new ErrorMessage("Image's filename is null")));
@@ -59,14 +67,14 @@ public class ImageService {
 			return Optional.empty();
 		}
 	}
-	
+
 	public void deleteFile(String filename) {
 		GridFsResource resource = gridFsTemplate.getResource(filename);
 		if (resource == null) {
 			return;
 		}
 		gridFsTemplate.delete(new Query(Criteria.where("filename").is(filename)));
-		
+
 	}
 
 	public Image storeFile(MultipartFile file, String filename) throws IOException {

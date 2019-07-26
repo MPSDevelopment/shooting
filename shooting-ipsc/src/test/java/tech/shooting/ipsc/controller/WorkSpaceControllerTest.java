@@ -39,6 +39,8 @@ import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.Quiz;
+import tech.shooting.ipsc.pojo.QuizName;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -109,11 +111,14 @@ public class WorkSpaceControllerTest {
 
 	private String guestToken;
 
+	private Quiz testQuiz;
+
 	@BeforeEach
 	public void before() {
 		workSpaceRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
+		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
 
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		guest = userRepository.findByLogin(DatabaseCreator.GUEST_LOGIN);
@@ -134,11 +139,11 @@ public class WorkSpaceControllerTest {
 	}
 
 	@Test
-	void checkPutNewWorkSpace() throws Exception {
+	void checkPutWorkSpace() throws Exception {
 
 		WorkSpaceBean bean = new WorkSpaceBean();
-		bean.setPersonId(1L);
-		bean.setQuizId(2L);
+		bean.setPersonId(testingPerson.getId());
+		bean.setQuizId(testQuiz.getId());
 		String json = JacksonUtils.getJson(bean);
 
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, judgeToken)
