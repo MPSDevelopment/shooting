@@ -31,19 +31,19 @@ public class MqttHandler implements InterceptHandler {
 	@Override
 	public void onConnect(InterceptConnectMessage arg0) {
 		log.info("Mqtt connect ClientId %s Will topic %s Username %s", arg0.getClientID(), arg0.getWillTopic(), arg0.getUsername());
-		EventBus.publishEvent(new MqttOnConnectEvent());
+		EventBus.publishEvent(new MqttOnConnectEvent(arg0.getClientID(), arg0.getWillTopic()));
 	}
 
 	@Override
 	public void onConnectionLost(InterceptConnectionLostMessage arg0) {
 		log.info("Mqtt connection loss ClientId %s Username %s", arg0.getClientID(), arg0.getUsername());
-		EventBus.publishEvent(new MqttOnConnectionLostEvent());
+		EventBus.publishEvent(new MqttOnConnectionLostEvent(arg0.getClientID()));
 	}
 
 	@Override
 	public void onDisconnect(InterceptDisconnectMessage arg0) {
 		log.info("Mqtt disconnection loss ClientId %s Username %s", arg0.getClientID(), arg0.getUsername());
-		EventBus.publishEvent(new MqttOnDisconnectEvent());
+		EventBus.publishEvent(new MqttOnDisconnectEvent(arg0.getClientID()));
 	}
 
 	@Override

@@ -10,4 +10,5 @@ import tech.shooting.commons.eventbus.Event;
 @Setter
 public class MqttOnDisconnectEvent extends Event {
 
+	private String clientId;
 }

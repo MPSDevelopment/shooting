@@ -24,8 +24,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.commons.pojo.Token;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.WorkSpaceBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -124,15 +126,28 @@ public class WorkSpaceControllerTest {
 	}
 
 	@Test
-	void checkWorrkSpaceRepo() throws Exception {
+	void checkWorkSpaceRepo() throws Exception {
 		assertEquals(0, workSpaceRepository.findAll().size());
 		assertNotNull(guestToken);
 	}
 
-//    @Test
-	void checkPostNewWorkSpace() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_POST_WORKSPACE).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER,
-				guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
+	@Test
+	void checkPutNewWorkSpace() throws Exception {
+
+		WorkSpaceBean bean = new WorkSpaceBean();
+		bean.setPersonId(1L);
+		bean.setQuizId(2L);
+		String json = JacksonUtils.getJson(bean);
+
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, judgeToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, guestToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, userToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
+
 	}
 
 }

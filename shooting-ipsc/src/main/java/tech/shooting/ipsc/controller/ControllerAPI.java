@@ -233,13 +233,14 @@ public class ControllerAPI {
 
 	// weapon type section
 	public static final String WEAPON_TYPE_CONTROLLER = "/api/weapon/type";
-	public static final String WORKSPACE_CONTROLLER = "/api/workspace";
 	public static final String WEAPON_TYPE_CONTROLLER_GET_ALL = "/get/all";
 	public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
 	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapontype";
 	public static final String WEAPON_TYPE_CONTROLLER_PUT_TYPE = "/update/weapontype/" + REQUEST_WEAPON_TYPE_ID;
-	public static final String WORKSPACE_CONTROLLER_POST_WORKSPACE = "/create/workspace";
 	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_WEAPON_TYPE_ID;
+
+	// workspace
+	public static final String WORKSPACE_CONTROLLER = "/api/workspace";
 
 	// weapon section
 	public static final String WEAPON_CONTROLLER = "/api/weapon";
@@ -293,5 +294,4 @@ public class ControllerAPI {
 	public static final String COURSE_CONTROLLER_GET_COURSE_BY_DIVISION = "/get/by/division/" + REQUEST_DIVISION_ID + "/course";
 	public static final String COURSE_CONTROLLER_GET_COURSE_BY_PERSON = "/get/by/person/" + REQUEST_PERSON_ID + "/course";
 	public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
-	public static final String WORKSPACE_CONTROLLER_PUT_WOKRSPACE = "/add/peson/quiz";
 }

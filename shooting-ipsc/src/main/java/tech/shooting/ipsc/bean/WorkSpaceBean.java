@@ -12,24 +12,23 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class WorkSpaceBean {
-    @JsonProperty
-    @ApiModelProperty(value = "Worspace id  ", required = true)
-    @NotNull
-    private long id;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Mqtt Client id", required = true)
+	private String clientId;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Workspace name", required = true)
+	private String name;
 
     @JsonProperty
-    @ApiModelProperty(value = "Ip address", required = true)
-    @NotEmpty
-    private String ip;
+    @ApiModelProperty(value = "Quiz id", required = true)
+    @NotNull
+    private long quizId;
 
     @JsonProperty
-    @ApiModelProperty(value = "Test", required = true)
+    @ApiModelProperty(value = "Person id", required = true)
     @NotNull
-    private long test;
-
-    @JsonProperty
-    @ApiModelProperty(value = "Person who pass the test", required = true)
-    @NotNull
-    private long person;
+    private long personId;
 
 }

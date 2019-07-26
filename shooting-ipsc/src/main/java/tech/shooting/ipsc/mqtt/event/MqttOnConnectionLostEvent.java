@@ -10,4 +10,5 @@ import tech.shooting.commons.eventbus.Event;
 @Setter
 public class MqttOnConnectionLostEvent extends Event {
 
+	private String clientId;
 }

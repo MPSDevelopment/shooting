@@ -5,10 +5,13 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
+import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
+import tech.shooting.ipsc.pojo.WorkSpace;
+import tech.shooting.ipsc.service.WorkSpaceService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
@@ -39,6 +42,9 @@ public class MqttService {
 
 	@Autowired
 	private IpscMqttSettings mqttSettings;
+
+	@Autowired
+	private WorkSpaceService workspaceService;
 
 	private static Server mqttBroker;
 
@@ -162,22 +168,46 @@ public class MqttService {
 		return mqttBroker.listConnectedClients();
 	}
 
-	@Handler
-	public void handle(MqttOnConnectEvent event) {
-		log.info("New connection detected. List of clients:");
-		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+	public ClientDescriptor getSubscriberByClientId(String clientId) {
+		for (var subscriber : getSubscribers()) {
+			if (subscriber.getClientID().equals(clientId)) {
+				return subscriber;
+			}
+		}
+		return null;
 	}
 
 	@Handler
-	public void handle(MqttOnConnectionLostEvent event) {
-		log.info("Connection lost detected. List of clients:");
+	public void handle(MqttOnConnectEvent event) throws MqttPersistenceException, MqttException {
+		log.info("New connection detected %s. List of clients:", event);
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+
+		ClientDescriptor subscriber = getSubscriberByClientId(event.getClientId());
+
+		var workSpace = workspaceService.createWorkspace(event.getClientId(), subscriber == null ? null : subscriber.getAddress());
+
+		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
 	}
 
 	@Handler
-	public void handle(MqttOnDisconnectEvent event) {
+	public void handle(MqttOnConnectionLostEvent event) throws MqttPersistenceException, MqttException {
+		log.info("Connection lost detected. List of clients:", event);
+		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+
+		var workSpace = workspaceService.removeWorkspace(event.getClientId());
+
+		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
+
+	}
+
+	@Handler
+	public void handle(MqttOnDisconnectEvent event) throws MqttPersistenceException, MqttException {
 		log.info("Disonnect detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+
+		var workSpace = workspaceService.removeWorkspace(event.getClientId());
+
+		getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workSpace));
 	}
 
 	@Handler

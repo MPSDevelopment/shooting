@@ -48,6 +48,7 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CompetitionService;
+import tech.shooting.ipsc.service.WorkSpaceService;
 
 import java.util.Date;
 import java.util.List;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
 @ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CompetitionController.class,
-		CompetitionService.class, MqttService.class })
+		CompetitionService.class, MqttService.class, WorkSpaceService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -102,6 +103,8 @@ public class MqttLogicTest {
 
 	private MqttClient subscriber;
 
+	private MqttClient subscriberObserver;
+
 	@BeforeEach
 	public void beforeEach() {
 		competitionRepository.deleteAll();
@@ -121,11 +124,11 @@ public class MqttLogicTest {
 		mqttService.stopBroker();
 	}
 
-//	@Test
-	public void checkMqtt() throws Exception {
+	@Test
+	public void checkStartStopCompetition() throws Exception {
 
 		messageCount = 0;
-		subscriber = createSubscriber();
+		subscriber = createSubscriber(MqttConstants.COMPETITION_TOPIC);
 
 		Competition test = competitionRepository.findByName(testingCompetition.getName());
 		// try access to start competition with judge
@@ -158,7 +161,7 @@ public class MqttLogicTest {
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
 
-		subscriber = createSubscriber();
+		subscriber = createSubscriber(MqttConstants.COMPETITION_TOPIC);
 
 		// try access to stop competition with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders
@@ -173,8 +176,30 @@ public class MqttLogicTest {
 		assertEquals(5, messageCount);
 
 	}
+	
+	@Test
+	public void checkWorkspaces() throws Exception {
+		subscriberObserver = createSubscriber(MqttConstants.WORKSPACE_TOPIC);
+		subscriber = createSubscriber(MqttConstants.COMPETITION_TOPIC);
+		
+		Thread.sleep(2000);
+		
+		assertEquals(2, messageCount);
+		
+		subscriber.disconnect();
+		subscriber.close(true);
+		
+		Thread.sleep(1000);
 
-	private MqttClient createSubscriber() throws MqttException {
+		assertEquals(3, messageCount);
+		
+		subscriberObserver.disconnect();
+		subscriberObserver.close(true);
+		
+		
+	}
+
+	private MqttClient createSubscriber(String topic) throws MqttException {
 		return mqttService.createSubscriber(mqttService.getServerUrl(), settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
 
 			@Override
@@ -190,6 +215,6 @@ public class MqttLogicTest {
 			@Override
 			public void connectionLost(Throwable cause) {
 			}
-		}, MqttConstants.COMPETITION_TOPIC);
+		}, topic);
 	}
 }
