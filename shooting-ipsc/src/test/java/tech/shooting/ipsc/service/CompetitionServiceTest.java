@@ -19,11 +19,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import tech.shooting.commons.constraints.IpscConstants;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Competition;
+import tech.shooting.ipsc.pojo.Competitor;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Score;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -41,9 +44,23 @@ public class CompetitionServiceTest {
 //	@Autowired
 	public CompetitionService competitionService = new CompetitionService();
 
+	private List<RatingBean> rating;
+
 	@Test
 	public void checkRating() {
-		
+
+		Competition competition = new Competition();
+		addPerson(competition, 1L);
+		addPerson(competition, 2L);
+		addPerson(competition, 3L);
+		addPerson(competition, 4L);
+
+		rating = competitionService.convertScoresToRating(competition, new ArrayList<>());
+
+		log.info("Rating is %s", JacksonUtils.getFullPrettyJson(rating));
+
+		assertEquals(4, rating.size());
+
 		List<Score> scores = new ArrayList<>();
 		scores.add(new Score().setPersonId(1L).setStageId(1L).setScore(10));
 		scores.add(new Score().setPersonId(3L).setStageId(3L).setScore(1));
@@ -51,14 +68,18 @@ public class CompetitionServiceTest {
 		scores.add(new Score().setPersonId(1L).setStageId(3L).setScore(1));
 		scores.add(new Score().setPersonId(2L).setStageId(1L).setScore(10));
 		scores.add(new Score().setPersonId(2L).setStageId(2L).setScore(5));
-		
-		Competition competition = new Competition();
-		
-		var rating = competitionService.convertScoresToRating(competition, scores);
-		
+
+		rating = competitionService.convertScoresToRating(competition, scores);
+
 		log.info("Rating is %s", JacksonUtils.getFullPrettyJson(rating));
-		
-		assertEquals(3, rating.size());
-		
+
+		assertEquals(4, rating.size());
+
+	}
+
+	private void addPerson(Competition competition, Long id) {
+		var person = new Person();
+		person.setId(id);
+		competition.getCompetitors().add(new Competitor().setPerson(person));
 	}
 }

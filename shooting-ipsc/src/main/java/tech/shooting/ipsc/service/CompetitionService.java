@@ -481,9 +481,6 @@ public class CompetitionService {
 
 	public List<RatingBean> convertScoresToRating(Competition competition, List<Score> scores) {
 		var result = new ArrayList<RatingBean>();
-		if (CollectionUtils.isEmpty(scores)) {
-			return result;
-		}
 
 		Map<Long, List<Score>> map = scores.stream().collect(Collectors.groupingBy(Score::getPersonId, Collectors.toList()));
 
