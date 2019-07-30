@@ -52,7 +52,9 @@ public class CompetitionServiceTest {
 		scores.add(new Score().setPersonId(2L).setStageId(1L).setScore(10));
 		scores.add(new Score().setPersonId(2L).setStageId(2L).setScore(5));
 		
-		var rating = competitionService.convertScoresToRating(scores);
+		Competition competition = new Competition();
+		
+		var rating = competitionService.convertScoresToRating(competition, scores);
 		
 		log.info("Rating is %s", JacksonUtils.getFullPrettyJson(rating));
 		

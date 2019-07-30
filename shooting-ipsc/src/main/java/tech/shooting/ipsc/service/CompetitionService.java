@@ -108,10 +108,10 @@ public class CompetitionService {
 		Competition existCompetition = useBeanUtilsWithOutJudges(competition, competitionFromDb);
 //		// Do not change competitors and stages
 //		BeanUtils.copyProperties(competition, existCompetition, Competition.COMPETITORS_FIELD);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s updated", competitionFromDb.getName()));
 		log.info("Competition %s updated", competitionFromDb.getName());
-		
+
 		return competitionRepository.save(existCompetition);
 	}
 
@@ -172,9 +172,9 @@ public class CompetitionService {
 				index = i;
 			}
 		}
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stage added", competition.getName()));
-		
+
 		return stages.get(index);
 	}
 
@@ -189,7 +189,7 @@ public class CompetitionService {
 	public void deleteStage(Long competitionId, Long stageId) throws BadRequestException {
 		checkCompetition(competitionId);
 		competitionRepository.pullStageFromCompetition(competitionId, stageId);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(competitionId, "Competition %s stage deleted", competitionId));
 	}
 
@@ -202,9 +202,9 @@ public class CompetitionService {
 		stages.remove(stageFromDB);
 		stages.add(stageFromDB);
 		competitionRepository.save(competition.setStages(stages));
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(competitionId, "Competition %s stage updated", competitionId));
-		
+
 		return stageFromDB;
 	}
 
@@ -215,9 +215,9 @@ public class CompetitionService {
 		Competitor competitorToDB = new Competitor();
 		BeanUtils.copyProperties(competitor.setActive(false), competitorToDB);
 		Competitor saveAndReturn = saveAndReturn(competition, competitorToDB, true);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor added", competition.getName()));
-		
+
 		return saveAndReturn;
 	}
 
@@ -228,7 +228,7 @@ public class CompetitionService {
 	public void deleteCompetitor(Long id, Long competitorId) throws BadRequestException {
 		var competition = checkCompetition(id);
 		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor deleted", competition.getId()));
 	}
 
@@ -246,9 +246,9 @@ public class CompetitionService {
 		Competitor competitorFromDB = checkCompetitor(competition.getCompetitors(), competitorId);
 		BeanUtils.copyProperties(competitor, competitorFromDB);
 		Competitor saveAndReturn = saveAndReturn(competition, competitorFromDB, false);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor updated", competition.getId()));
-		
+
 		return saveAndReturn;
 	}
 
@@ -265,9 +265,9 @@ public class CompetitionService {
 		}
 		competition.setCompetitors(competitors);
 		competition = competitionRepository.save(competition);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitors updated", competition.getId()));
-		
+
 		return competition.getCompetitors();
 	}
 
@@ -476,10 +476,10 @@ public class CompetitionService {
 		// my fault score save stageId not DBref, because don't save to DB
 		var scores = scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 
-		return convertScoresToRating(scores);
+		return convertScoresToRating(competition, scores);
 	}
 
-	public List<RatingBean> convertScoresToRating(List<Score> scores) {
+	public List<RatingBean> convertScoresToRating(Competition competition, List<Score> scores) {
 		var result = new ArrayList<RatingBean>();
 		if (CollectionUtils.isEmpty(scores)) {
 			return result;
@@ -491,11 +491,24 @@ public class CompetitionService {
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
 			personalRating.setScores(map.get(personId));
-			
+
 			personalRating.setScore(personalRating.getScores().stream().mapToLong(Score::getScore).sum());
 			personalRating.setTimeOfExercise(personalRating.getScores().stream().mapToLong(Score::getTimeOfExercise).sum());
-			
+
 			result.add(personalRating);
+		}
+
+		// add empty scores for rating
+
+		for (var competitor : competition.getCompetitors()) {
+			if (!map.keySet().contains(competitor.getPerson().getId())) {
+				RatingBean personalRating = new RatingBean();
+				personalRating.setPersonId(competitor.getPerson().getId());
+				personalRating.setScore(0L);
+				personalRating.setTimeOfExercise(0L);
+				
+				result.add(personalRating);
+			}
 		}
 
 		return result;
