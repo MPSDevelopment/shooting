@@ -8,6 +8,7 @@ services:
       - ./data/logs/ipsc:/usr/share/servers/ipsc/logs
     ports:
       - 9901:9901
+      - 8080:8080
 #    depends_on: 
 #      - ipsc-mongodb     
   ipsc-nginx:

@@ -22,23 +22,22 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class ValidationErrorHandler {
-	
+
 	private static final String DEFAULR_FIELD = "message";
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public Map<String, String> processValidationError (MethodArgumentNotValidException ex, HttpServletRequest request) {
+	public Map<String, String> processValidationError(MethodArgumentNotValidException ex, HttpServletRequest request) {
 		log.error("Validation Error in request %s", request.getRequestURL());
 		BindingResult result = ex.getBindingResult();
 		Map<String, String> validationErrors = processFieldErrors(result.getFieldErrors());
 		log.error("Validation Errors: %s", validationErrors);
 		return validationErrors;
 	}
-	
-	
+
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processValidationException (HttpMessageNotReadableException ex, HttpServletRequest request) {
+	public ErrorMessage processValidationException(HttpMessageNotReadableException ex, HttpServletRequest request) {
 		log.error("Validation exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(DEFAULR_FIELD, ex.getMessage());
@@ -47,7 +46,7 @@ public class ValidationErrorHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processValidationException (ValidationException ex, HttpServletRequest request) {
+	public ErrorMessage processValidationException(ValidationException ex, HttpServletRequest request) {
 		log.error("Validation exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(ex.getField(), ex.getMessage());
@@ -56,55 +55,62 @@ public class ValidationErrorHandler {
 
 	@ExceptionHandler(UnexpectedTypeException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processUnexpectedType (UnexpectedTypeException ex, HttpServletRequest request) {
+	public ErrorMessage processUnexpectedType(UnexpectedTypeException ex, HttpServletRequest request) {
 		log.error("Validation Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processUnexpectedType (IllegalArgumentException ex, HttpServletRequest request) {
+	public ErrorMessage processUnexpectedType(IllegalArgumentException ex, HttpServletRequest request) {
 		log.error("IllegalArgument Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(InvalidFormatException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processInvalidFormatException (InvalidFormatException ex, HttpServletRequest request) {
+	public ErrorMessage processInvalidFormatException(InvalidFormatException ex, HttpServletRequest request) {
 		log.error("Invalid Format Exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(BadRequestException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processBadRequestException (BadRequestException e) {
+	public ErrorMessage processBadRequestException(BadRequestException e) {
 		log.error("Bad request %s", e.getErrorMessage());
 		return e.getErrorMessage();
 	}
 
+	@ExceptionHandler(ForbiddenException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorMessage processForbiddenException(ForbiddenException ex, HttpServletRequest request) {
+		log.error("Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, "Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+	}
+
 	@ExceptionHandler(NotAcceptableException.class)
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-	public ErrorMessage processNotAcceptableException (NotAcceptableException e) {
+	public ErrorMessage processNotAcceptableException(NotAcceptableException e) {
 		log.error("Not acceptable %s", e.getErrorMessage());
 		return e.getErrorMessage();
 	}
 
 	@ExceptionHandler(NotModifiedException.class)
 	@ResponseStatus(HttpStatus.NOT_MODIFIED)
-	public ErrorMessage processNotModifiedException (NotModifiedException e) {
+	public ErrorMessage processNotModifiedException(NotModifiedException e) {
 		return e.getErrorMessage();
 	}
 
 	@ExceptionHandler(InternalServerErrorException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ErrorMessage processInternalServerErrorException (InternalServerErrorException e) {
+	public ErrorMessage processInternalServerErrorException(InternalServerErrorException e) {
 		log.error("Internal server error %s", e.getErrorMessage());
 		return e.getErrorMessage();
 	}
 
-	private Map<String, String> processFieldErrors (List<FieldError> fieldErrors) {
+	private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {
 		Map<String, String> validationErrors = new HashMap<>();
-		for(FieldError fieldError : fieldErrors) {
+		for (FieldError fieldError : fieldErrors) {
 			ValidationException exception = resolveValidationError(fieldError);
 			String field = exception.getField();
 			validationErrors.put(field, exception.getMessage());
@@ -112,7 +118,7 @@ public class ValidationErrorHandler {
 		return validationErrors;
 	}
 
-	private ValidationException resolveValidationError (FieldError fieldError) {
+	private ValidationException resolveValidationError(FieldError fieldError) {
 		return new ValidationException(fieldError.getField(), fieldError.getDefaultMessage());
 	}
 }

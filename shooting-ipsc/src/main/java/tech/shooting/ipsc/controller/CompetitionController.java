@@ -65,6 +65,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.updateCompetition(id, competition), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get competition by id", notes = "Return competition object")
 	public ResponseEntity<Competition> getCompetitionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
@@ -94,18 +95,21 @@ public class CompetitionController {
 		return new ResponseEntity<>(new IdBean(competition.getId()), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get count competitions", notes = "Return long count of competitions")
 	public ResponseEntity<Integer> getCount () {
 		return new ResponseEntity<>(competitionService.getCount(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITIONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list competitions", notes = "Return List competition object")
 	public ResponseEntity<List<Competition>> getAllCompetitions () {
 		return new ResponseEntity<>(competitionService.getAll(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get competition by page")
 	@ApiResponses({@ApiResponse(code = 200, message = "Success", responseHeaders = {@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
@@ -115,6 +119,7 @@ public class CompetitionController {
 		return competitionService.getCompetitionsByPage(page, size);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get stages from competition", notes = "Return list of stages object")
 	public ResponseEntity<List<Stage>> getStagesFromCompetitionById (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
@@ -133,6 +138,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.addStage(id, toAdded), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_STAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get stage by id", notes = "Return stage object")
 	public ResponseEntity<Stage> getStage (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId,
@@ -155,12 +161,14 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.updateStage(competitionId, stageId, stage), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get const of ClassifierIPSC standard", notes = "Return list of ClassifierIPSC")
 	public ResponseEntity<List<Stage>> getEnum () {
 		return new ResponseEntity<>(competitionService.getEnum(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list of competitors.", notes = "Return list competitors")
 	public ResponseEntity<List<Competitor>> getCompetitors (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
@@ -188,6 +196,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.updateCompetitor(id, competitorId, competitor), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get competitor by id", notes = "Return competitor")
 	public ResponseEntity<Competitor> getCompetitor (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id,
@@ -195,6 +204,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.getCompetitor(id, competitorId), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK, produces =
         MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get competitor by rfid mark", notes = "Return competitor")
@@ -203,6 +213,7 @@ public class CompetitionController {
         return new ResponseEntity<>(competitionService.getCompetitor(id, mark), HttpStatus.OK);
     }
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get weapon type lis", notes = "Return list of weapon type")
 	public ResponseEntity<WeaponTypeEnum[]> getEnumWeapon () {

@@ -189,7 +189,7 @@ class DivisionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(5)))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getAllDivisionsByPage with admin user
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0
@@ -237,9 +237,9 @@ class DivisionControllerTest {
 		mockMvc.perform(
 				MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-		// try access to getDivisionById() with non admin user
+		// user 
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access to getDivisionById() with admin user
 		String contentAsString = mockMvc.perform(
 				MockMvcRequestBuilders.get(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()))

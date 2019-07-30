@@ -35,6 +35,7 @@ public class PersonController {
 		return new ResponseEntity<>(personService.createPerson(personBean), HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by id", notes = "Return person object")
 	public ResponseEntity<Person> getPerson (@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
@@ -54,7 +55,7 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'JUDGE', 'GUEST')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all persons", notes = "Returns all person objects")
 	public ResponseEntity<List<Person>> getUsers () {

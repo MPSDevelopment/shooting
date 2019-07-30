@@ -41,13 +41,14 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.removeDivision(id), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Get all division", notes = "Return list divisions")
 	public ResponseEntity<List<DivisionDropList>> getAllDivision() {
 		return new ResponseEntity<>(divisionService.findAllDivisions(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get division by page")
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
@@ -57,6 +58,7 @@ public class DivisionController {
 		return divisionService.getDivisionByPage(page, size);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID)
 	@ApiOperation(value = "Get division by id", notes = "Return division object")
 	public ResponseEntity<DivisionBean> getDivisionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
@@ -72,7 +74,7 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.updateDivision(updateDivisionBean.getId(), updateDivisionBean.getName()), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or  hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_ROOT)
 	@ApiOperation(value = "Return root division", notes = "Return root division object")
 	public ResponseEntity<DivisionBean> getRoot() {
