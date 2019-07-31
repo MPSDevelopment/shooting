@@ -142,7 +142,7 @@ public class CompetitionControllerTest {
 		testingCompetition = competitionRepository.save(new Competition().setName("Test name Competition").setQualifierRank(ClassificationBreaks.D).setClazz(CompetitionClassEnum.LEVEL_1));
 		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 		testingCompetitor = new Competitor().setName("testing testingPerson for competitor").setRfidCode("1234567890").setPerson(testingPerson);
-		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
+		testingStage = new Stage().setName("Testing testingStage").setTargets(20).setPopper(10).setNoShoots(12).setNumberOfRoundToBeScored(5).setMaximumPoints(25);
 		stageJson = JacksonUtils.getJson(testingStage);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -151,6 +151,9 @@ public class CompetitionControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		
+//		competition.getStages().add(testingStage);
+//		competitionRepository.save(competition);
 		
 //		mqttService.startBroker("config/moquette.conf");
 	}
@@ -551,7 +554,7 @@ public class CompetitionControllerTest {
 		testingCompetition.setStages(stages);
 		Competition save = competitionRepository.save(testingCompetition);
 		Stage saveStage = findStage(save, testingStage);
-		saveStage.setName("update name");
+		saveStage.setName("updated name");
 		// try access to putStage with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
@@ -563,11 +566,15 @@ public class CompetitionControllerTest {
 						+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to putStage with admin role
-		mockMvc.perform(MockMvcRequestBuilders
+		var content = mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("update name"));
+				.andReturn().getResponse().getContentAsString();
+		var stage = JacksonUtils.fromJson(Stage.class, content);
+		assertEquals("updated name", stage.getName());
+		assertEquals(42, stage.getAllTargets());
+		
 	}
 
 	@Test

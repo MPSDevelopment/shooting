@@ -73,18 +73,7 @@ public class CompetitionService {
 		if (competitionBean.getStatsOfficer() != null) {
 			competition.setStatsOfficer(userRepository.findById(competitionBean.getStatsOfficer()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Stats officer id %s", competitionBean.getStatsOfficer()))));
 		}
-//		if (CollectionUtils.isNotEmpty(competitionBean.getCompetitors())) {
-//			var list = new ArrayList<Competitor>();
-//			for (var item : competitionBean.getCompetitors()) {
-//				Competitor competitor = new Competitor();
-//				BeanUtils.copyProperties(competitionBean, competitor, Competitor.PERSON);
-//				Person person = personRepository.findById(item.getPerson()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person with id %s for competitor %s", item.getPerson(), item)));
-//				competitor.setPerson(person);
-//				competitor.setName(person.getName());
-//				list.add(competitor);
-//			}
-//			competition.setCompetitors(list);
-//		}
+		competition.getStages().forEach(stage -> stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots()));
 		if (competitionBean.getClazz() != null) {
 			competition.setClazz(competitionBean.getClazz());
 		}
@@ -205,8 +194,8 @@ public class CompetitionService {
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
 		Stage stageFromDB = checkStage(competition, stageId);
-		BeanUtils.copyProperties(stage, stageFromDB);
 		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
+		BeanUtils.copyProperties(stage, stageFromDB);
 		List<Stage> stages = competition.getStages();
 		stages.remove(stageFromDB);
 		stages.add(stageFromDB);
