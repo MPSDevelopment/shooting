@@ -516,7 +516,7 @@ public class CompetitionService {
 		}
 
 		for (var item : result) {
-			item.setPercentage(100 * item.getHitFactor() / maxRating);
+			item.setPercentage(maxRating == 0 ? 0 : 100 * item.getHitFactor() / maxRating);
 		}
 
 		// sort rating by percentage
