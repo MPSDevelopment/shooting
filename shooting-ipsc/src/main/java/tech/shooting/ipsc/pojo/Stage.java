@@ -20,30 +20,30 @@ import javax.validation.constraints.Size;
 @Document(collection = "stage")
 @TypeAlias("stage")
 public class Stage extends BaseDocument {
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Name or № of stage", required = true)
 //	@NotNull(message = ValidationConstants.STAGE_NAME_MESSAGE)
 //	@Size(min = 5, max = 50, message = ValidationConstants.STAGE_NAME_MESSAGE)
 	private String name;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Count of all IPSC targets", required = true)
-	private Integer allTargets;
+	private Integer allTargets = 0;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Count of IPSC target", required = true)
 	@NotNull(message = ValidationConstants.STAGE_TARGETS_COUNT_MESSAGE)
 	@Min(value = 1, message = ValidationConstants.STAGE_TARGETS_COUNT_MESSAGE)
-	private Integer targets;
+	private Integer targets = 0;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Count of IPSC popper")
-	private Integer popper;
+	private Integer popper = 0;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Count of IPSC no shoots target")
-	private Integer noShoots;
+	private Integer noShoots = 0;
 
 	@JsonProperty("minShoots")
 	@ApiModelProperty(value = "Count of round", required = true)
