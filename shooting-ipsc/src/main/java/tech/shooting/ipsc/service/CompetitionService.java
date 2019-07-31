@@ -147,6 +147,7 @@ public class CompetitionService {
 
 	public List<Stage> getStages(Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		competition.getStages().forEach(stage -> stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots()));
 		return competition.getStages();
 	}
 
@@ -182,11 +183,15 @@ public class CompetitionService {
 	}
 
 	public Stage getStage(Long competitionId, Long stageId) throws BadRequestException {
-		return checkStage(checkCompetition(competitionId), stageId);
+		var stage = checkStage(checkCompetition(competitionId), stageId);
+		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
+		return stage;
 	}
 
 	private Stage checkStage(Competition competition, Long stageId) throws BadRequestException {
-		return competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+		var stage = competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
+		return stage;
 	}
 
 	public void deleteStage(Long competitionId, Long stageId) throws BadRequestException {
