@@ -440,7 +440,7 @@ public class CompetitionService {
 				scoreResult.setDisqualificationReason(score.getDisqualificationReason());
 			}
 
-			scoreResult.setScore(0).setTimeOfExercise(0L);
+			scoreResult.setScore(0).setTimeOfExercise(0);
 
 		} else {
 			scoreResult.setScore(score.getScore()).setTimeOfExercise(score.getTimeOfExercise());
@@ -509,7 +509,7 @@ public class CompetitionService {
 				RatingBean personalRating = new RatingBean();
 				personalRating.setPersonId(competitor.getPerson().getId());
 				personalRating.setScore(0L);
-				personalRating.setTimeOfExercise(0L);
+				personalRating.setTimeOfExercise(0);
 
 				result.add(personalRating);
 			}

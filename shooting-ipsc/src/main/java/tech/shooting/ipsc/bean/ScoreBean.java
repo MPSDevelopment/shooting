@@ -34,7 +34,7 @@ public class ScoreBean {
 	@ApiModelProperty(value = "Person time of executing this stage", required = true)
 	@NotNull(message = ValidationConstants.TIME_MESSAGE)
 	@Positive(message = ValidationConstants.TIME_MESSAGE)
-	private Long timeOfExercise;
+	private double timeOfExercise;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Disqualification description")
