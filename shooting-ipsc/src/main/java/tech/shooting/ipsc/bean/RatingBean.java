@@ -11,19 +11,31 @@ import tech.shooting.ipsc.pojo.Score;
 
 @Data
 public class RatingBean {
-	
+
 	@JsonProperty
-	@ApiModelProperty(value = "Person id", required = true)
+	@ApiModelProperty(value = "Person id")
 	private Long personId;
-	
+
 	@JsonProperty
-	@ApiModelProperty(value = "Person score", required = true)
+	@ApiModelProperty(value = "Competitor score")
 	private Long score;
-	
+
 	@JsonProperty
-	@ApiModelProperty(value = "Person time of execution", required = true)
-	private Long timeOfExercise;
-	
+	@ApiModelProperty(value = "Competitor stages")
+	private int stages = 0;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor time of execution")
+	private double timeOfExercise = 0;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor hit factor")
+	private double hitFactor = 0;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Competitor percentage")
+	private double percentage;
+
 	@JsonProperty
 	private List<Score> scores = new ArrayList<>();
 

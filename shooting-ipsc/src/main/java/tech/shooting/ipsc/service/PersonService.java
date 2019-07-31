@@ -3,6 +3,10 @@ package tech.shooting.ipsc.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
@@ -13,8 +17,10 @@ import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfPresence;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.TypePresent;
+import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
@@ -29,12 +35,28 @@ public class PersonService {
 
 	@Autowired
 	private DivisionRepository divisionRepository;
-	
+
 	@Autowired
 	private RankRepository rankRepository;
 
 	public List<Person> getAllPerson() {
 		return personRepository.findAll();
+	}
+
+	public List<Person> getAllPersonsByDivision(Long divisionId) {
+		var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+		var divisions = division.getAllChildren();
+		return personRepository.findByDivisionIn(divisions);
+	}
+
+	public Page<Person> getAllPersonsByDivisionPaging(Long divisionId, Integer page, Integer size) {
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
+		if (divisionId != null) {
+			var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+			var divisions = division.getAllChildren();
+			return personRepository.findByDivisionIn(divisions, pageable);
+		}
+		return personRepository.findAll(pageable);
 	}
 
 	private void createPerson(Person person) {
@@ -75,7 +97,7 @@ public class PersonService {
 		if (personBean.getRank() != null) {
 			dbPerson.setRank(rankRepository.findById(personBean.getRank()).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect rank id %s", personBean.getRank()))));
 		}
-		
+
 		dbPerson = personRepository.save(dbPerson);
 		return dbPerson;
 	}
@@ -85,8 +107,12 @@ public class PersonService {
 		personRepository.deleteById(person.getId());
 	}
 
-	public ResponseEntity<List<Person>> getPersonByPage(Integer page, Integer size) {
-		return Pageable.getPage(page, size, personRepository);
+	public ResponseEntity<List<Person>> getPersonByPage(Long rootId, Integer page, Integer size) {
+		page = Math.max(1, page);
+		page--;
+		size = Math.min(Math.max(10, size), 20);
+		var pageOfUsers = getAllPersonsByDivisionPaging(rootId, page, size);
+		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
 	public Long getCount() {

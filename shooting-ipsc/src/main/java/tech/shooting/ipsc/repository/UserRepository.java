@@ -17,5 +17,5 @@ public interface UserRepository extends MongoRepository<User, Long> {
 	List<User> findByName (String name);
 	User findByLoginAndActive (String login, boolean active);
 	void deleteByRoleName (RoleName roleName);
-	Page<? extends BaseDocument> findAllByRoleName(String role , PageRequest pageable);
+	Page<User> findAllByRoleName(String role , PageRequest pageable);
 }

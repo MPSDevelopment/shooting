@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,11 +22,11 @@ import java.util.List;
 @ToString(exclude = "children")
 @Accessors(chain = true)
 public class Division extends BaseDocument {
-	
+
 	public static final String NAME_WITH_PARENT = "name and parent id";
 
 	public static final String PARENT_FIELD = "parent";
-	
+
 	public static final String CHILDREN_FIELD = "children";
 
 	@JsonProperty
@@ -46,4 +47,14 @@ public class Division extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Status division")
 	private boolean active;
+
+	@JsonIgnore
+	public List<Division> getAllChildren() {
+		var list = new ArrayList<Division>();
+		list.add(this);
+		for (var child : children) {
+			list.addAll(child.getAllChildren());
+		}
+		return list;
+	}
 }

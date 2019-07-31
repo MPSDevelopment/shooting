@@ -122,7 +122,9 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_DELETE_PERSON = "/" + REQUEST_PERSON_ID;
 	public static final String PERSON_CONTROLLER_GET_PERSONS = "/all";
 	public static final String PERSON_CONTROLLER_GET_USERS_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
+	public static final String PERSON_CONTROLLER_GET_USERS_BY_DIVISION_BY_PAGE = "/all/" + REQUEST_DIVISION_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
+	public static final String PERSON_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	/*
 	 * competition controller
 	 */

@@ -43,7 +43,7 @@ public class Score extends BaseDocument {
 	@ApiModelProperty(value = "Person time of executing this stage", required = true)
 	@NotNull(message = ValidationConstants.TIME_MESSAGE)
 	@Positive(message = ValidationConstants.TIME_MESSAGE)
-	private Long timeOfExercise = 0L;
+	private double timeOfExercise = 0L;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Disqualification description")

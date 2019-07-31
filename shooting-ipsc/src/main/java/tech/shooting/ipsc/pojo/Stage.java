@@ -26,6 +26,10 @@ public class Stage extends BaseDocument {
 //	@NotNull(message = ValidationConstants.STAGE_NAME_MESSAGE)
 //	@Size(min = 5, max = 50, message = ValidationConstants.STAGE_NAME_MESSAGE)
 	private String name;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Count of all IPSC targets", required = true)
+	private Integer allTargets;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Count of IPSC target", required = true)

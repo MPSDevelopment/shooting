@@ -2,6 +2,7 @@ package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -153,6 +154,7 @@ public class CompetitionService {
 		Competition competition = checkCompetition(id);
 		checkCompetitionActive(competition);
 		List<Stage> stages = competition.getStages();
+		stages.forEach(stage -> stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots()));
 		stages.addAll(toAdded);
 		competition.setStages(stages);
 		return competitionRepository.save(competition).getStages();
@@ -164,6 +166,7 @@ public class CompetitionService {
 		if (StringUtils.isBlank(stageToAdd.getName())) {
 			stageToAdd.setName(Integer.valueOf(competition.getStages().size() + 1).toString());
 		}
+		stageToAdd.setAllTargets(stageToAdd.getTargets() + stageToAdd.getPopper() + stageToAdd.getNoShoots());
 		competition.getStages().add(stageToAdd);
 		List<Stage> stages = competitionRepository.save(competition).getStages();
 		int index = 0;
@@ -198,6 +201,7 @@ public class CompetitionService {
 		checkCompetitionActive(competition);
 		Stage stageFromDB = checkStage(competition, stageId);
 		BeanUtils.copyProperties(stage, stageFromDB);
+		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
 		List<Stage> stages = competition.getStages();
 		stages.remove(stageFromDB);
 		stages.add(stageFromDB);
@@ -484,13 +488,22 @@ public class CompetitionService {
 
 		Map<Long, List<Score>> map = scores.stream().collect(Collectors.groupingBy(Score::getPersonId, Collectors.toList()));
 
+		double maxRating = 0;
+
 		for (var personId : map.keySet()) {
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
 			personalRating.setScores(map.get(personId));
 
+			personalRating.setStages(personalRating.getScores().size());
 			personalRating.setScore(personalRating.getScores().stream().mapToLong(Score::getScore).sum());
-			personalRating.setTimeOfExercise(personalRating.getScores().stream().mapToLong(Score::getTimeOfExercise).sum());
+			personalRating.setTimeOfExercise(personalRating.getScores().stream().mapToDouble(Score::getTimeOfExercise).sum());
+
+			if (personalRating.getTimeOfExercise() != 0) {
+				personalRating.setHitFactor((float) personalRating.getScore() / personalRating.getTimeOfExercise());
+			}
+
+			maxRating = Math.max(personalRating.getHitFactor(), maxRating);
 
 			result.add(personalRating);
 		}
@@ -503,12 +516,18 @@ public class CompetitionService {
 				personalRating.setPersonId(competitor.getPerson().getId());
 				personalRating.setScore(0L);
 				personalRating.setTimeOfExercise(0L);
-				
+
 				result.add(personalRating);
 			}
 		}
 
-		return result;
+		for (var item : result) {
+			item.setPercentage(100 * item.getHitFactor() / maxRating);
+		}
+
+		// sort rating by percentage
+
+		return result.stream().sorted(Comparator.comparing(RatingBean::getPercentage).reversed()).collect(Collectors.toList());
 	}
 
 	public void deleteAll() {

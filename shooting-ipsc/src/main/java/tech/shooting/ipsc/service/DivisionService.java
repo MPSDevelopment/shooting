@@ -45,7 +45,7 @@ public class DivisionService {
 		return convertDivisionToFront(division);
 	}
 
-	private Division createDivisionWithCheck(DivisionBean divisionBean, Long parentId) {
+	Division createDivisionWithCheck(DivisionBean divisionBean, Long parentId) {
 		Division division = new Division();
 		if (parentId == null) {
 			BeanUtils.copyProperties(divisionBean, division);

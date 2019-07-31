@@ -984,7 +984,7 @@ public class CompetitionControllerTest {
 		assertEquals(competitorId, score.getPersonId());
 		assertEquals(competitorId, score.getPersonId());
 		assertEquals(scoreBean.getDisqualificationReason(), score.getDisqualificationReason());
-		assertEquals(scoreBean.getTimeOfExercise(), score.getTimeOfExercise());
+		assertEquals(scoreBean.getTimeOfExercise(), score.getTimeOfExercise(), 0.01);
 		assertEquals(scoreBean.getScore(), score.getScore());
 	}
 
