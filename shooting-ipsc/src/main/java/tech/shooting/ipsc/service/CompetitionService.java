@@ -474,7 +474,18 @@ public class CompetitionService {
 		// my fault score save stageId not DBref, because don't save to DB
 		var scores = scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 
-		return convertScoresToRating(competition, scores);
+		return convertScoresToRating(competition, filterScores(scores));
+	}
+	
+	public List<Score> filterScores(List<Score> scores){
+		// need to replace this code
+		var result = new ArrayList<Score>();
+		for (var score : scores) {
+			if (!result.contains(score)) {
+				result.add(score);
+			}
+		}
+		return result;
 	}
 
 	public List<RatingBean> convertScoresToRating(Competition competition, List<Score> scores) {

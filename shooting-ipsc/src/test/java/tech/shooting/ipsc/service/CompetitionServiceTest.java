@@ -63,13 +63,14 @@ public class CompetitionServiceTest {
 
 		List<Score> scores = new ArrayList<>();
 		scores.add(new Score().setPersonId(1L).setStageId(1L).setScore(30).setTimeOfExercise(10));
+		scores.add(new Score().setPersonId(1L).setStageId(1L).setScore(30).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(3L).setStageId(3L).setScore(87).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(1L).setStageId(2L).setScore(50).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(1L).setStageId(3L).setScore(10).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(2L).setStageId(1L).setScore(10).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(2L).setStageId(2L).setScore(50).setTimeOfExercise(10));
 
-		rating = competitionService.convertScoresToRating(competition, scores);
+		rating = competitionService.convertScoresToRating(competition, competitionService.filterScores(scores));
 
 		log.info("Rating is %s", JacksonUtils.getFullPrettyJson(rating));
 
@@ -78,6 +79,8 @@ public class CompetitionServiceTest {
 		assertEquals(100, rating.get(0).getPercentage());
 		assertEquals(34.48, rating.get(1).getPercentage(), 0.1);
 		assertEquals(3L, rating.get(0).getPersonId());
+		assertEquals(1, rating.get(0).getStages());
+		assertEquals(3, rating.get(1).getStages());
 
 	}
 

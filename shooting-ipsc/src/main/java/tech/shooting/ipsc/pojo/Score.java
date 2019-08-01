@@ -3,6 +3,8 @@ package tech.shooting.ipsc.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,12 +18,14 @@ import javax.validation.constraints.Positive;
 @TypeAlias("score")
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Score extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Stage id", required = true)
 	@NotNull(message = ValidationConstants.STAGE_ID)
 	@Positive(message = ValidationConstants.STAGE_ID_POSITIVE)
+	@Include
 	private Long stageId;
 	
 	@JsonProperty
@@ -32,6 +36,7 @@ public class Score extends BaseDocument {
 	@ApiModelProperty(value = "Person id", required = true)
 	@NotNull(message = ValidationConstants.PERSON_ID)
 	@Positive(message = ValidationConstants.PERSON_ID_POSITIVE)
+	@Include
 	private Long personId;
 
 	@JsonProperty
