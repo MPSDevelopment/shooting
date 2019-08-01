@@ -989,7 +989,6 @@ public class CompetitionControllerTest {
 		Score score = JacksonUtils.fromJson(Score.class, contentAsString);
 		assertEquals(stageId, score.getStageId());
 		assertEquals(competitorId, score.getPersonId());
-		assertEquals(competitorId, score.getPersonId());
 		assertEquals(scoreBean.getDisqualificationReason(), score.getDisqualificationReason());
 		assertEquals(scoreBean.getTimeOfExercise(), score.getTimeOfExercise(), 0.01);
 		assertEquals(scoreBean.getScore(), score.getScore());
@@ -1047,7 +1046,7 @@ public class CompetitionControllerTest {
 						+ ControllerAPI.COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE.replace(ControllerAPI.REQUEST_COMPETITION_ID, competition.getId().toString()).replace(ControllerAPI.REQUEST_STAGE_ID, score.getStageId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-		List<Score> listFromJson = JacksonUtils.getListFromJson(Score[].class, contentAsString);
+		List<Score> listFromJson = JacksonUtils.getListFromJson(Score[].class, contentAsString1);
 		Score score1 = listFromJson.get(0);
 		log.info("Score %s", listFromJson);
 		assertEquals(score, score1);

@@ -399,9 +399,13 @@ public class CompetitionService {
 		checkCompetitionActive(competition);
 		checkStage(competition, stageId);
 		for (ScoreBean score : scoreBean) {
-			Score score1 = addedScoreWithoutCheck(competition, stageId, score);
-			if (score1 != null) {
-				result.add(score1);
+			Score newScore = addedScoreWithoutCheck(competition, stageId, score);
+			if (newScore != null) {
+				if (result.contains(newScore)) {
+					log.error("Duplicate score %s", newScore);
+				} else {
+					result.add(newScore);
+				}
 			}
 		}
 		return result;
@@ -419,7 +423,7 @@ public class CompetitionService {
 
 		log.info("Adding score %s to competitor id %s", score.getScore(), competitor.getId());
 
-		if (scoreRepository.findByPersonIdAndStageId(competitor.getId(), stageId) != null) {
+		if (scoreRepository.findByPersonIdAndStageId(competitor.getPerson().getId(), stageId) != null) {
 			return null;
 		}
 		if (StringUtils.isNotBlank(score.getDisqualificationReason())) {
@@ -476,8 +480,8 @@ public class CompetitionService {
 
 		return convertScoresToRating(competition, filterScores(scores));
 	}
-	
-	public List<Score> filterScores(List<Score> scores){
+
+	public List<Score> filterScores(List<Score> scores) {
 		// need to replace this code
 		var result = new ArrayList<Score>();
 		for (var score : scores) {
