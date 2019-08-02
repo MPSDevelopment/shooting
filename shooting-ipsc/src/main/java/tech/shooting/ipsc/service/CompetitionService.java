@@ -517,6 +517,8 @@ public class CompetitionService {
 			}
 
 			maxRating = Math.max(personalRating.getHitFactor(), maxRating);
+			
+			
 
 			result.add(personalRating);
 		}

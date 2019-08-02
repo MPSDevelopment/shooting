@@ -38,5 +38,9 @@ public class RatingBean {
 
 	@JsonProperty
 	private List<Score> scores = new ArrayList<>();
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Disqualification description")
+	private String disqualificationReason;
 
 }
