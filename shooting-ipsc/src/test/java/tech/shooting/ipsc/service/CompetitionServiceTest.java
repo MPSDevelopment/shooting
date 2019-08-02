@@ -24,6 +24,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Person;
@@ -66,7 +67,7 @@ public class CompetitionServiceTest {
 		scores.add(new Score().setPersonId(1L).setStageId(1L).setScore(30).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(3L).setStageId(3L).setScore(87).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(1L).setStageId(2L).setScore(50).setTimeOfExercise(10));
-		scores.add(new Score().setPersonId(1L).setStageId(3L).setScore(10).setTimeOfExercise(10));
+		scores.add(new Score().setPersonId(1L).setStageId(3L).setScore(10).setTimeOfExercise(10).setDisqualificationReason(DisqualificationEnum.INJURED.toString()));
 		scores.add(new Score().setPersonId(2L).setStageId(1L).setScore(10).setTimeOfExercise(10));
 		scores.add(new Score().setPersonId(2L).setStageId(2L).setScore(50).setTimeOfExercise(10));
 
@@ -80,6 +81,7 @@ public class CompetitionServiceTest {
 		assertEquals(34.48, rating.get(1).getPercentage(), 0.1);
 		assertEquals(3L, rating.get(0).getPersonId());
 		assertEquals(1, rating.get(0).getStages());
+		assertEquals("1", rating.get(0).getDisqualification());
 		assertEquals(87, rating.get(0).getScore());
 		assertEquals(3, rating.get(1).getStages());
 		assertEquals(90, rating.get(1).getScore());

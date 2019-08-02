@@ -40,7 +40,7 @@ public class RatingBean {
 	private List<Score> scores = new ArrayList<>();
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Disqualification description")
-	private String disqualificationReason;
+	@ApiModelProperty(value = "Competitor disqualification")
+	private String disqualification;
 
 }

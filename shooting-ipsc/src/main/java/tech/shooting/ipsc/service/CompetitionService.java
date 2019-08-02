@@ -395,9 +395,9 @@ public class CompetitionService {
 	}
 
 	public List<Score> addedBulk(Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {
-		
+
 		log.info("Adding score for competition %s, stage %s, json is %s", competitionId, stageId, JacksonUtils.getPrettyJson(scoreBean));
-		
+
 		List<Score> result = new ArrayList<>();
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
@@ -517,8 +517,11 @@ public class CompetitionService {
 			}
 
 			maxRating = Math.max(personalRating.getHitFactor(), maxRating);
-			
-			
+
+			// var disqualifications = scores.stream().collect(Collectors.groupingBy(Score::getDisqualificationReason, Collectors.counting()));
+
+			scores.removeIf(item -> StringUtils.isBlank(item.getDisqualificationReason()));
+			personalRating.setDisqualification(String.valueOf(scores.size()));
 
 			result.add(personalRating);
 		}
