@@ -20,6 +20,7 @@ import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
@@ -394,6 +395,9 @@ public class CompetitionService {
 	}
 
 	public List<Score> addedBulk(Long competitionId, Long stageId, List<ScoreBean> scoreBean) throws BadRequestException {
+		
+		log.info("Adding score for competition %s, stage %s, json is %s", competitionId, stageId, JacksonUtils.getPrettyJson(scoreBean));
+		
 		List<Score> result = new ArrayList<>();
 		Competition competition = checkCompetition(competitionId);
 		checkCompetitionActive(competition);
@@ -423,7 +427,7 @@ public class CompetitionService {
 
 		log.info("Adding score %s to competitor id %s", score.getScore(), competitor.getId());
 
-		if (scoreRepository.findByPersonIdAndStageId(competitor.getPerson().getId(), stageId) != null) {
+		if (scoreRepository.findByPersonIdAndStageId(competitor.getId(), stageId) != null) {
 			return null;
 		}
 		if (StringUtils.isNotBlank(score.getDisqualificationReason())) {

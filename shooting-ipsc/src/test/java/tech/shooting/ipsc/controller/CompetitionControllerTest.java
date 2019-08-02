@@ -54,6 +54,7 @@ import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
+import tech.shooting.ipsc.repository.ScoreRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CompetitionService;
 import tech.shooting.ipsc.service.WorkSpaceService;
@@ -100,6 +101,9 @@ public class CompetitionControllerTest {
 
 	@Autowired
 	private RankRepository rankRepository;
+	
+	@Autowired
+	private ScoreRepository scoreRepository;
 
 	private User user;
 
@@ -136,6 +140,7 @@ public class CompetitionControllerTest {
 	@BeforeEach
 	public void beforeEach() {
 		competitionRepository.deleteAll();
+		scoreRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
 		rank = rank == null ? rankRepository.save(new Rank().setRus("бла бла бла").setKz("major").setOfficer(true)) : rank;
 		competition = new Competition().setName("Alladin").setLocation("Cave!").setQualifierRank(ClassificationBreaks.D).setClazz(CompetitionClassEnum.LEVEL_1);
