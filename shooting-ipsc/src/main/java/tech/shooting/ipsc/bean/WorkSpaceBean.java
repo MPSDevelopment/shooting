@@ -24,11 +24,15 @@ public class WorkSpaceBean {
     @JsonProperty
     @ApiModelProperty(value = "Quiz id", required = true)
     @NotNull
-    private long quizId;
+    private Long quizId;
 
     @JsonProperty
     @ApiModelProperty(value = "Person id", required = true)
     @NotNull
-    private long personId;
+    private Long personId;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Use workspace in test", required = true)
+    private boolean useInTest;
 
 }

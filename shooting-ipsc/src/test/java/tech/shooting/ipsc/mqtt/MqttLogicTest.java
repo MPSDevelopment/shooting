@@ -38,7 +38,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.controller.CompetitionController;
 import tech.shooting.ipsc.controller.ControllerAPI;
-import tech.shooting.ipsc.controller.WorkSpaceController;
+import tech.shooting.ipsc.controller.WorkspaceController;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.*;
@@ -50,7 +50,7 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CompetitionService;
-import tech.shooting.ipsc.service.WorkSpaceService;
+import tech.shooting.ipsc.service.WorkspaceService;
 
 import java.util.Date;
 import java.util.List;
@@ -61,8 +61,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkSpaceController.class, CompetitionController.class,
-		CompetitionService.class, MqttService.class, WorkSpaceService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class, CompetitionController.class,
+		CompetitionService.class, MqttService.class, WorkspaceService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest

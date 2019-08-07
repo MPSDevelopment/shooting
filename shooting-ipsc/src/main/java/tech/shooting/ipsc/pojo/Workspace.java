@@ -41,7 +41,9 @@ public class Workspace extends BaseDocument {
 	@ApiModelProperty(value = "Person id")
 	@DBRef
 	private Long personId;
-	
-	
 
+    @JsonProperty
+    @ApiModelProperty(value = "Use workspace in test", required = true)
+    private boolean useInTest;
+	
 }

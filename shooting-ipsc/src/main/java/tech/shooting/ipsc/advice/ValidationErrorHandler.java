@@ -24,6 +24,15 @@ import java.util.Map;
 public class ValidationErrorHandler {
 
 	private static final String DEFAULR_FIELD = "message";
+	
+	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ErrorMessage processValidationError(NotFoundException ex, HttpServletRequest request) {
+		log.error("Not found error in request %s", request.getRequestURL());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULR_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

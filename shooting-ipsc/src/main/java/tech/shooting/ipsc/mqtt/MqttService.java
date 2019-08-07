@@ -11,7 +11,7 @@ import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
 import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
 import tech.shooting.ipsc.pojo.Workspace;
-import tech.shooting.ipsc.service.WorkSpaceService;
+import tech.shooting.ipsc.service.WorkspaceService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
@@ -44,7 +44,7 @@ public class MqttService {
 	private IpscMqttSettings mqttSettings;
 
 	@Autowired
-	private WorkSpaceService workspaceService;
+	private WorkspaceService workspaceService;
 
 	private static Server mqttBroker;
 

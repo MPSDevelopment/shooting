@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
@@ -48,14 +51,13 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
-import tech.shooting.ipsc.service.WorkSpaceService;
+import tech.shooting.ipsc.service.WorkspaceService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkSpaceController.class, WorkSpaceService.class,
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class, WorkspaceService.class,
 		IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
@@ -64,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 
-public class WorkSpaceControllerTest {
+public class WorkspaceControllerTest {
 
 	@Autowired
 	private MqttService mqttService;
@@ -73,7 +75,7 @@ public class WorkSpaceControllerTest {
 	private IpscMqttSettings settings;
 
 	@Autowired
-	private WorkSpaceService workSpaceService;
+	private WorkspaceService workspaceService;
 
 	@Autowired
 	private WorkSpaceRepository workSpaceRepository;
@@ -133,7 +135,7 @@ public class WorkSpaceControllerTest {
 	}
 
 	@Test
-	void checkWorkSpaceRepo() throws Exception {
+	void checkWorkSpaceRepository() throws Exception {
 		assertEquals(0, workSpaceRepository.findAll().size());
 		assertNotNull(guestToken);
 	}
@@ -163,16 +165,74 @@ public class WorkSpaceControllerTest {
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
-		
+
 		assertEquals(0, list.size());
-		
-		workSpaceService.createWorkspace("test", "127.0.0.1");
-		
+
+		workspaceService.createWorkspace("test", "127.0.0.1");
+
 		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		list = JacksonUtils.getListFromJson(Workspace[].class, content);
-		
+
 		assertEquals(1, list.size());
+	}
+
+	@Test
+	void checkGetAllForTest() throws Exception {
+		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
+
+		assertEquals(0, list.size());
+
+		var workspace = workspaceService.createWorkspace("test", "127.0.0.1");
+
+		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(Workspace[].class, content);
+
+		assertEquals(0, list.size());
+
+		workspace.setUseInTest(true);
+		workspace.setPersonId(testingPerson.getId());
+		workspace.setQuizId(testQuiz.getId());
+
+		WorkSpaceBean bean = new WorkSpaceBean();
+		BeanUtils.copyProperties(workspace, bean);
+
+		workspaceService.updateWorkspace(bean);
+
+		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(Workspace[].class, content);
+
+		assertEquals(1, list.size());
+
+	}
+
+	@Test
+	void getWorkspace() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.5d")))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+
+		workspaceService.createWorkspace("test", "127.0.0.10");
+
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.8")))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+
+		var content = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.10")))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		var workspace = JacksonUtils.fromJson(Workspace.class, content);
+		assertNotNull(workspace);
+	}
+
+	private static RequestPostProcessor remoteHost(final String remoteHost) {
+		return request -> {
+			request.setRemoteAddr(remoteHost);
+			return request;
+		};
 	}
 
 }

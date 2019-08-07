@@ -3,16 +3,23 @@ package tech.shooting.ipsc.service;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WorkSpaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
+import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttService;
+import tech.shooting.ipsc.mqtt.event.TestStartedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Workspace;
@@ -21,7 +28,7 @@ import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
 
 @Service
-public class WorkSpaceService {
+public class WorkspaceService {
 
 	private Map<String, Workspace> map = new HashMap<>();
 
@@ -42,14 +49,21 @@ public class WorkSpaceService {
 		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);
-		
 		map.put(clientId, workspace);
-		
 		return workspace;
 	}
 
 	public Workspace getWorkspaceByClientId(String clientId) {
 		return map.get(clientId);
+	}
+
+	public Workspace getWorkspaceByIp(String ip) throws NotFoundException {
+		for (var workspace : map.values()) {
+			if (workspace.getIp().equals(ip)) {
+				return workspace;
+			}
+		}
+		throw new NotFoundException(new ErrorMessage("There is no workspace for ip %s", ip));
 	}
 
 	public Workspace removeWorkspace(String clientId) {
@@ -61,13 +75,21 @@ public class WorkSpaceService {
 		return workspace;
 	}
 
+	public Workspace startWorkspace(WorkSpaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
+		var workspace = updateWorkspace(bean);
+
+		mqttService.getPublisher().publish(MqttConstants.TEST_TOPIC + "/" + workspace.getIp(), mqttService.createJsonMessage(workspace));
+
+		return workspace;
+	}
+
 	public Workspace updateWorkspace(WorkSpaceBean bean) throws BadRequestException {
 		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
-			
+
 			checkPerson(bean.getPersonId());
 			checkQuiz(bean.getQuizId());
-			
+
 			BeanUtils.copyProperties(workspace, bean);
 		}
 		return workspace;
@@ -104,5 +126,9 @@ public class WorkSpaceService {
 
 	public Collection<Workspace> getAllWorkspaces() {
 		return map.values();
+	}
+
+	public Collection<Workspace> getAllWorkspacesForTest() {
+		return map.values().stream().filter(item -> item.isUseInTest()).collect(Collectors.toList());
 	}
 }
