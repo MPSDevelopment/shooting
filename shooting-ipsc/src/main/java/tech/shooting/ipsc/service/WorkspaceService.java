@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.pojo.ErrorMessage;
@@ -28,6 +29,7 @@ import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
 
 @Service
+@Slf4j
 public class WorkspaceService {
 
 	private Map<String, Workspace> map = new HashMap<>();
@@ -45,7 +47,22 @@ public class WorkspaceService {
 	private MqttService mqttService;
 
 	public Workspace createWorkspace(String clientId, String ip) {
-		var workspace = new Workspace();
+
+		Workspace workspace;
+		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
+			log.error("Workspace with clientid %s already exists", clientId);
+			return workspace;
+		}
+		try {
+			if ((workspace = getWorkspaceByIp(ip)) != null) {
+				log.error("Workspace with ip %s already exists", ip);
+				return workspace;
+			}
+		} catch (NotFoundException e) {
+		}
+		
+
+		workspace = new Workspace();
 		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);

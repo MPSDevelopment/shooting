@@ -175,6 +175,20 @@ public class WorkspaceControllerTest {
 		list = JacksonUtils.getListFromJson(Workspace[].class, content);
 
 		assertEquals(1, list.size());
+		
+		// the same clientid
+		workspaceService.createWorkspace("test", "127.0.0.1");
+		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		assertEquals(1, list.size());
+		
+		// the same ip
+		workspaceService.createWorkspace("test2", "127.0.0.1");
+		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		assertEquals(1, list.size());
 	}
 
 	@Test
@@ -216,7 +230,7 @@ public class WorkspaceControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.5d")))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 
-		workspaceService.createWorkspace("test", "127.0.0.10");
+		workspaceService.createWorkspace("test3", "127.0.0.10");
 
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.8")))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
