@@ -41,7 +41,7 @@ public class AppConfig extends WebMvcConfigurationSupport {
 	
 	public static final String NOT_INCLUDE_VERSION_REGEXP = "^((?!v[0123456789.]*).)*$";
 
-	public static final String INCLUDE_VERSION_REGEXP = ".*/v[0123456789.]*/.*";
+	public static final String INCLUDE_VERSION_REGEXP = ".*/v[0123456789.]*/?.*";
 
 	private static final String SLASH_API = "";
 
