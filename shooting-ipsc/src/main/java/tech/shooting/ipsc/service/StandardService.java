@@ -23,105 +23,104 @@ import javax.validation.Valid;
 
 @Service
 public class StandardService {
-	
-    @Autowired
-    private StandardRepository standardRepository;
-    
-    @Autowired
-    private StandardScoreRepository standardScoreRepository;
 
-    @Autowired
-    private UnitsRepository unitsRepository;
+	@Autowired
+	private StandardRepository standardRepository;
 
-    @Autowired
-    private CategoriesRepository categoriesRepository;
+	@Autowired
+	private StandardScoreRepository standardScoreRepository;
 
-    @Autowired
-    private SubjectRepository subjectRepository;
+	@Autowired
+	private UnitsRepository unitsRepository;
 
-    public List<Standard> getAllStandards() {
-        return standardRepository.findAll();
-    }
+	@Autowired
+	private CategoriesRepository categoriesRepository;
 
-    public List<Standard> getStandardsBySubject(Long subjectId) throws BadRequestException {
-        return standardRepository.findAllBySubject(checkSubject(subjectId));
-    }
+	@Autowired
+	private SubjectRepository subjectRepository;
 
-    private Subject checkSubject(Long subjectId) throws BadRequestException {
-        return subjectRepository.findById(subjectId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect subject id %s ", subjectId)));
-    }
+	public List<Standard> getAllStandards() {
+		return standardRepository.findAll();
+	}
 
-    public Standard getStandardById(Long standardId) throws BadRequestException {
-        return checkStandard(standardId);
-    }
+	public List<Standard> getStandardsBySubject(Long subjectId) throws BadRequestException {
+		return standardRepository.findAllBySubject(checkSubject(subjectId));
+	}
 
-    private Standard checkStandard(Long standardId) throws BadRequestException {
-        return standardRepository.findById(standardId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect standard id %s ", standardId)));
-    }
+	private Subject checkSubject(Long subjectId) throws BadRequestException {
+		return subjectRepository.findById(subjectId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect subject id %s ", subjectId)));
+	}
 
-    public Standard postStandard(StandardBean bean) throws BadRequestException {
-        return standardRepository.save(getStandardFromBean(bean));
-    }
+	public Standard getStandardById(Long standardId) throws BadRequestException {
+		return checkStandard(standardId);
+	}
 
-    private Standard getStandardFromBean(StandardBean bean) throws BadRequestException {
-        Subject subject = checkSubject(bean.getSubject());
-        List<CategoriesAndTime> categories = checkCategoriesAndTime(bean.getCategoriesList());
-        List<Conditions> conditions = checkConditionList(bean.getConditionsList());
-        List<Fails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList())? new ArrayList<>() : bean.getFailsList();
-        return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setInfo(bean.getInfo()).setCategoriesList(categories).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
-    }
+	private Standard checkStandard(Long standardId) throws BadRequestException {
+		return standardRepository.findById(standardId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect standard id %s ", standardId)));
+	}
 
-    private List<Conditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {
-        if (conditionsList == null || Collections.EMPTY_LIST.equals(conditionsList)) {
-            return new ArrayList<>();
-        }
-        List<Conditions> res = new ArrayList<>();
-        for (int i = 0; i < conditionsList.size(); i++) {
-            Conditions condition = new Conditions();
-            Units unit = checkUnit(conditionsList.get(i).getUnits());
-            BeanUtils.copyProperties(conditionsList.get(i), condition, Conditions.UNIT);
-            condition.setUnits(unit);
-            res.add(condition);
-        }
-        return res;
-    }
+	public Standard postStandard(StandardBean bean) throws BadRequestException {
+		return standardRepository.save(getStandardFromBean(bean));
+	}
 
-    private Units checkUnit(Long units) throws BadRequestException {
-        return unitsRepository.findById(units).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect unit id %s", units)));
-    }
+	private Standard getStandardFromBean(StandardBean bean) throws BadRequestException {
+		Subject subject = checkSubject(bean.getSubject());
+		List<CategoriesAndTime> categories = checkCategoriesAndTime(bean.getCategoriesList());
+		List<Conditions> conditions = checkConditionList(bean.getConditionsList());
+		List<Fails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList()) ? new ArrayList<>() : bean.getFailsList();
+		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setInfo(bean.getInfo()).setCategoriesList(categories).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
+	}
 
-    private List<CategoriesAndTime> checkCategoriesAndTime(List<CategoriesBean> categoriesList) throws BadRequestException {
-        List<CategoriesAndTime> res = new ArrayList<>();
-        for (int i = 0; i < categoriesList.size(); i++) {
-            CategoriesBean bean = categoriesList.get(i);
-            Categories categories = checkCategory(bean.getCategory());
-            res.add(new CategoriesAndTime().setCategory(categories).setTime(bean.getTime()));
-        }
-        return res;
-    }
+	private List<Conditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {
+		if (conditionsList == null || Collections.EMPTY_LIST.equals(conditionsList)) {
+			return new ArrayList<>();
+		}
+		List<Conditions> res = new ArrayList<>();
+		for (int i = 0; i < conditionsList.size(); i++) {
+			Conditions condition = new Conditions();
+			Units unit = checkUnit(conditionsList.get(i).getUnits());
+			BeanUtils.copyProperties(conditionsList.get(i), condition, Conditions.UNIT);
+			condition.setUnits(unit);
+			res.add(condition);
+		}
+		return res;
+	}
 
-    private Categories checkCategory(Long categoriesBean) throws BadRequestException {
-        return categoriesRepository.findById(categoriesBean).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect category id %s", categoriesBean)));
-    }
+	private Units checkUnit(Long units) throws BadRequestException {
+		return unitsRepository.findById(units).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect unit id %s", units)));
+	}
 
-    public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
-        Standard standard = checkStandard(standardId);
-        Standard standardFromBean = getStandardFromBean(bean);
-        standard.setCategoriesList(standardFromBean.getCategoriesList())
-                .setSubject(standardFromBean.getSubject())
-                .setFailsList(standardFromBean.getFailsList())
-                .setConditionsList(standardFromBean.getConditionsList())
-                .setInfo(standardFromBean.getInfo())
-                .setGroups(standardFromBean.isGroups())
-                .setActive(standardFromBean.isActive());
-        return standardRepository.save(standard);
-    }
+	private List<CategoriesAndTime> checkCategoriesAndTime(List<CategoriesBean> categoriesList) throws BadRequestException {
+		List<CategoriesAndTime> res = new ArrayList<>();
+		for (int i = 0; i < categoriesList.size(); i++) {
+			CategoriesBean bean = categoriesList.get(i);
+			Categories categories = checkCategory(bean.getCategory());
+			res.add(new CategoriesAndTime().setCategory(categories).setTime(bean.getTime()));
+		}
+		return res;
+	}
 
-    public void deleteStandardById(Long standardId) {
-        standardRepository.deleteById(standardId);
-    }
+	private Categories checkCategory(Long categoriesBean) throws BadRequestException {
+		return categoriesRepository.findById(categoriesBean).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect category id %s", categoriesBean)));
+	}
+
+	public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
+		Standard standard = checkStandard(standardId);
+		Standard standardFromBean = getStandardFromBean(bean);
+		standard.setCategoriesList(standardFromBean.getCategoriesList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList()).setConditionsList(standardFromBean.getConditionsList())
+				.setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setActive(standardFromBean.isActive());
+		return standardRepository.save(standard);
+	}
+
+	public void deleteStandardById(Long standardId) {
+		standardRepository.deleteById(standardId);
+	}
 
 	public StandardScore addScore(Long standardId, StandardScore score) {
 		return standardScoreRepository.save(score);
+	}
+
+	public StandardScore getScore(Long standardId, Long personId) {
+		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 	}
 }

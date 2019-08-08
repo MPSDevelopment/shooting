@@ -63,6 +63,9 @@ class StandardControllerTest {
 	private StandardRepository standardRepository;
 
 	@Autowired
+	private StandardScoreRepository standardScoreRepository;
+
+	@Autowired
 	private UnitsRepository unitsRepository;
 
 	@Autowired
@@ -335,11 +338,11 @@ class StandardControllerTest {
 		Standard save = standardRepository.save(testStandard);
 
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		StandardScore score = new StandardScore();
@@ -349,8 +352,32 @@ class StandardControllerTest {
 		score.setTimeOfExercise(23);
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
 
+	}
+
+	@Test
+	void checkGetScore() throws Exception {
+
+		Standard standard = standardRepository.save(testStandard);
+
+		StandardScore score = new StandardScore();
+		score.setPersonId(testingPerson.getId());
+		score.setStandardId(testStandard.getId());
+		score.setScore(4);
+		score.setTimeOfExercise(23);
+
+		standardScoreRepository.save(score);
+
+		// try access with user role
+		var content = mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.STANDARD_CONTROLLER_GET_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_ID, testingPerson.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var gotScore = JacksonUtils.fromJson(StandardScore.class, content);
+
+		assertEquals(4, gotScore.getScore());
 	}
 }

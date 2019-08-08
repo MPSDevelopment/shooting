@@ -67,11 +67,17 @@ public class StandardController {
 		standardService.deleteStandardById(standardId);
 		return new ResponseEntity<>(new SuccessfulMessage("Standard was successfully deleted"), HttpStatus.OK);
 	}
-	
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Added single score", notes = "Return score object")
-	public ResponseEntity<StandardScore> createScore (@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @RequestBody @Valid StandardScore score) throws BadRequestException {
+
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Submit a score")
+	public ResponseEntity<StandardScore> postScore(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @RequestBody @Valid StandardScore score) throws BadRequestException {
 		return new ResponseEntity<>(standardService.addScore(standardId, score), HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get a score", notes = "Return score object")
+	public ResponseEntity<StandardScore> getScore(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+		return new ResponseEntity<>(standardService.getScore(standardId, personId), HttpStatus.OK);
 	}
 
 }
