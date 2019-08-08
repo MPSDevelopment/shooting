@@ -58,6 +58,8 @@ public class ValidationConstants {
 	public static final String PERSON_ID_POSITIVE = "Person id is required, must be positive";
 
 	public static final String SCORE_MESSAGE = "Must be not null";
+	
+	public static final String STANDARD_ID = "Standard id is required, must be not null";
 
 	public static final String TIME_MESSAGE = "The time must be not null and positive";
 

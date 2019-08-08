@@ -11,6 +11,7 @@ import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CategoriesRepository;
 import tech.shooting.ipsc.repository.StandardRepository;
+import tech.shooting.ipsc.repository.StandardScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.UnitsRepository;
 
@@ -18,10 +19,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.validation.Valid;
+
 @Service
 public class StandardService {
+	
     @Autowired
     private StandardRepository standardRepository;
+    
+    @Autowired
+    private StandardScoreRepository standardScoreRepository;
 
     @Autowired
     private UnitsRepository unitsRepository;
@@ -113,4 +120,8 @@ public class StandardService {
     public void deleteStandardById(Long standardId) {
         standardRepository.deleteById(standardId);
     }
+
+	public StandardScore addScore(Long standardId, StandardScore score) {
+		return standardScoreRepository.save(score);
+	}
 }

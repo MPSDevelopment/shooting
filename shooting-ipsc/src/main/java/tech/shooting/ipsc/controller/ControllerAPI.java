@@ -267,6 +267,7 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_POST_STANDARD = "/post/standard";
 	public static final String STANDARD_CONTROLLER_PUT_STANDARD = "/put/standard/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID = "/delete/standard/" + REQUEST_STANDARD_ID;;
+	public static final String STANDARD_CONTROLLER_POST_SCORE = "/score/" + REQUEST_STANDARD_ID;
 
 	public static final String COMMON_CONDITION_CONTROLLER = "/api/common/condition";
 	public static final String COMMON_CONDITION_CONTROLLER_GET_ALL = "/get/all";

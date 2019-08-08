@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = StandardRepository.class)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, StandardController.class, StandardService.class})
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, StandardController.class, StandardService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -54,262 +54,303 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 class StandardControllerTest {
-    @Autowired
-    private StandardService standardService;
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private StandardService standardService;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private StandardRepository standardRepository;
+	@Autowired
+	private StandardRepository standardRepository;
 
-    @Autowired
-    private UnitsRepository unitsRepository;
+	@Autowired
+	private UnitsRepository unitsRepository;
 
-    @Autowired
-    private CategoriesRepository categoriesRepository;
+	@Autowired
+	private CategoriesRepository categoriesRepository;
 
-    @Autowired
-    private SubjectRepository subjectRepository;
+	@Autowired
+	private SubjectRepository subjectRepository;
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private PersonRepository personRepository;
 
-    @Autowired
-    private TokenUtils tokenUtils;
+	@Autowired
+	private MockMvc mockMvc;
 
-    private User user;
+	@Autowired
+	private TokenUtils tokenUtils;
 
-    private User admin;
+	private User user;
 
-    private User judge;
+	private User admin;
 
-    private String adminToken;
+	private User judge;
 
-    private String judgeToken;
+	private String adminToken;
 
-    private String userToken;
+	private String judgeToken;
 
-    private Units testUnit;
+	private String userToken;
 
-    private Categories testCategory;
+	private Units testUnit;
 
-    private Subject testSubject;
+	private Categories testCategory;
 
-    private Standard testStandard;
+	private Subject testSubject;
 
+	private Standard testStandard;
 
-    @BeforeEach
-    public void before() {
-        standardRepository.deleteAll();
+	private Person testingPerson;
 
-        testUnit = testUnit == null ? unitsRepository.save(new Units().setUnits("testUnits")) : testUnit;
-        testCategory = testCategory == null ? categoriesRepository.save(new Categories().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training")) : testCategory;
-        testSubject = testSubject == null ? subjectRepository.save(new Subject().setRus("LitrBooool").setKz("Physical training")) : testSubject;
-        testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false).setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz("Возраст. Спортсмен может получить определенный разряд только при условии достижения им определенного возраста: с 10 лет — 1-3 юношеские разряды и взрослые разряды, с 14 лет — КМС, с 15 лет — МС, а с 16 лет — МСМК."));
+	@BeforeEach
+	public void before() {
+		standardRepository.deleteAll();
 
-        String password = RandomStringUtils.randomAscii(14);
-        user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
-        admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
-        judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
+		testUnit = testUnit == null ? unitsRepository.save(new Units().setUnits("testUnits")) : testUnit;
+		testCategory = testCategory == null ? categoriesRepository.save(new Categories().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training")) : testCategory;
+		testSubject = testSubject == null ? subjectRepository.save(new Subject().setRus("LitrBooool").setKz("Physical training")) : testSubject;
+		testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false)
+				.setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz(
+						"Возраст. Спортсмен может получить определенный разряд только при условии достижения им определенного возраста: с 10 лет — 1-3 юношеские разряды и взрослые разряды, с 14 лет — КМС, с 15 лет — МС, а с 16 лет — МСМК."));
+		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 
-        userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-        adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-        judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-    }
+		String password = RandomStringUtils.randomAscii(14);
+		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
+		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
+		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 
-    @Test
-    void checkGetAllStandard() throws Exception {
-        assertEquals(Collections.emptyList(), standardRepository.findAll());
-        // try access with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+	}
 
-        // try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+	@Test
+	void checkGetAllStandard() throws Exception {
+		assertEquals(Collections.emptyList(), standardRepository.findAll());
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-        // try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 
-        // try access with admin role
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-        List<Standard> listFromJson = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
-        assertEquals(Collections.EMPTY_LIST, listFromJson);
+		// try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-    }
+		List<Standard> listFromJson = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
+		assertEquals(Collections.EMPTY_LIST, listFromJson);
 
-    @Test
-    void checkGetStandardById() throws Exception {
-        assertEquals(Collections.emptyList(), standardRepository.findAll());
-        int count = standardRepository.findAll().size();
-        Standard save = standardRepository.save(testStandard);
-        assertEquals(count + 1, standardRepository.findAll().size());
+	}
 
-        //try access with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+	@Test
+	void checkGetStandardById() throws Exception {
+		assertEquals(Collections.emptyList(), standardRepository.findAll());
+		int count = standardRepository.findAll().size();
+		Standard save = standardRepository.save(testStandard);
+		assertEquals(count + 1, standardRepository.findAll().size());
 
-        //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-        //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        //try access with admin role
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-        Standard standard = JacksonUtils.fromJson(Standard.class, contentAsString);
-        assertEquals(save, standard);
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
-    }
+		// try access with admin role
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Standard standard = JacksonUtils.fromJson(Standard.class, contentAsString);
+		assertEquals(save, standard);
 
-    @Test
-    void checkGetStandardByIdWithIncorrectValue() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, "34342343243243243243")).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
+	}
 
-    @Test
-    void checkGetStandardsBySubject() throws Exception {
-        Standard save = standardRepository.save(testStandard);
-        //try access with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+	@Test
+	void checkGetStandardByIdWithIncorrectValue() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, "34342343243243243243"))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
-        //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+	@Test
+	void checkGetStandardsBySubject() throws Exception {
+		Standard save = standardRepository.save(testStandard);
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-        //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        //try access with admin role
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString())).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-        List<Standard> standard = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
-        assertEquals(save, standard.get(0));
-    }
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
-    @Test
-    void checkGetStandardsBySubjectWithIncorrectValue() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, "12e4324343")).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
+		// try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		List<Standard> standard = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
+		assertEquals(save, standard.get(0));
+	}
 
-    @Test
-    void checkPostStandard() throws Exception {
-        StandardBean bean = createStandardBean();
-        String json = JacksonUtils.getJson(bean);
-        int count = standardRepository.findAll().size();
-        //try with unauthorized user role
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
-        //try with user role
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
-        count++;
-        //try with judge role
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
-        //try with admin role
-        mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
-        assertEquals(count + 1, standardRepository.findAll().size());
-    }
+	@Test
+	void checkGetStandardsBySubjectWithIncorrectValue() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, "12e4324343"))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
-    private StandardBean createStandardBean(){
-        StandardBean bean = new StandardBean();
-        bean.setInfo(testStandard.getInfo()).setSubject(testStandard.getSubject().getId()).setGroups(testStandard.isGroups()).setActive(testStandard.isActive());
-        List<CategoriesAndTime> res = new ArrayList<>();
-        res.add(new CategoriesAndTime().setCategory(testCategory).setTime(Long.valueOf(10)));
-        testStandard.setCategoriesList(res);
-        List<CategoriesBean> categoriesBeans = new ArrayList<>();
-        for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
-            CategoriesAndTime categoriesAndTime = testStandard.getCategoriesList().get(i);
-            categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setTime(categoriesAndTime.getTime()));
-        }
-        bean.setCategoriesList(categoriesBeans);
-        return bean;
-    }
+	@Test
+	void checkPostStandard() throws Exception {
+		StandardBean bean = createStandardBean();
+		String json = JacksonUtils.getJson(bean);
+		int count = standardRepository.findAll().size();
+		// try with unauthorized user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		count++;
+		// try with judge role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try with admin role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		assertEquals(count + 1, standardRepository.findAll().size());
+	}
 
+	private StandardBean createStandardBean() {
+		StandardBean bean = new StandardBean();
+		bean.setInfo(testStandard.getInfo()).setSubject(testStandard.getSubject().getId()).setGroups(testStandard.isGroups()).setActive(testStandard.isActive());
+		List<CategoriesAndTime> res = new ArrayList<>();
+		res.add(new CategoriesAndTime().setCategory(testCategory).setTime(Long.valueOf(10)));
+		testStandard.setCategoriesList(res);
+		List<CategoriesBean> categoriesBeans = new ArrayList<>();
+		for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
+			CategoriesAndTime categoriesAndTime = testStandard.getCategoriesList().get(i);
+			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setTime(categoriesAndTime.getTime()));
+		}
+		bean.setCategoriesList(categoriesBeans);
+		return bean;
+	}
 
-    @Test
-    void checkPutStandard() throws Exception{
-        int count = standardRepository.findAll().size();
-        assertEquals(0, count);
-        StandardBean bean = createStandardBean();
-        Standard standard = standardService.postStandard(bean);
-        assertEquals(count+1, standardRepository.findAll().size());
-        bean.setGroups(true);
-        String json = JacksonUtils.getJson(bean);
-        //try with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,standard.getId().toString()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+	@Test
+	void checkPutStandard() throws Exception {
+		int count = standardRepository.findAll().size();
+		assertEquals(0, count);
+		StandardBean bean = createStandardBean();
+		Standard standard = standardService.postStandard(bean);
+		assertEquals(count + 1, standardRepository.findAll().size());
+		bean.setGroups(true);
+		String json = JacksonUtils.getJson(bean);
+		// try with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-        //try with user role
-        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,standard.getId().toString()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json).header(Token.TOKEN_HEADER,userToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+		// try with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        //try with judge role
-        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,standard.getId().toString()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json).header(Token.TOKEN_HEADER,judgeToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try with judge role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
-        //try with admin role
-        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
-                .replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json).header(Token.TOKEN_HEADER, adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-        assertEquals(count+1, standardRepository.findAll().size());
-        Standard standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
-        assertEquals(standard.getId(),standard1.getId());
-        assertEquals(standard.getCategoriesList(),standard1.getCategoriesList());
-        assertEquals(standard.getConditionsList(),standard1.getConditionsList());
-        assertEquals(standard.getFailsList(),standard1.getFailsList());
-        assertEquals(standard.getInfo(),standard1.getInfo());
-        assertEquals(standard.getSubject(),standard1.getSubject());
-        assertEquals(standard.isActive(),standard1.isActive());
-        assertNotEquals(standard.isGroups(),standard1.isGroups());
+		// try with admin role
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		assertEquals(count + 1, standardRepository.findAll().size());
+		Standard standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
+		assertEquals(standard.getId(), standard1.getId());
+		assertEquals(standard.getCategoriesList(), standard1.getCategoriesList());
+		assertEquals(standard.getConditionsList(), standard1.getConditionsList());
+		assertEquals(standard.getFailsList(), standard1.getFailsList());
+		assertEquals(standard.getInfo(), standard1.getInfo());
+		assertEquals(standard.getSubject(), standard1.getSubject());
+		assertEquals(standard.isActive(), standard1.isActive());
+		assertNotEquals(standard.isGroups(), standard1.isGroups());
 
-    }
+	}
 
-    @Test
-    void checkPutStandardWithIncorrectValue()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD
-                .replace(ControllerAPI.REQUEST_STANDARD_ID, "243343432432432"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(JacksonUtils.getJson(null)).header(Token.TOKEN_HEADER, adminToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
+	@Test
+	void checkPutStandardWithIncorrectValue() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, "243343432432432"))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(null)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
-    @Test
-    void checkDeleteStandardById() throws Exception{
-        int actual = standardRepository.findAll().size();
-        assertEquals(0, actual);
+	@Test
+	void checkDeleteStandardById() throws Exception {
+		int actual = standardRepository.findAll().size();
+		assertEquals(0, actual);
 
-        Standard save = standardRepository.save(testStandard);
-        assertEquals(actual+1,standardRepository.findAll().size());
+		Standard save = standardRepository.save(testStandard);
+		assertEquals(actual + 1, standardRepository.findAll().size());
 
-        //try access with unauthorized user
-        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,save.getId().toString())))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-        //try access with user role
-        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,save.getId().toString()))
-                .header(Token.TOKEN_HEADER,userToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+		// try access with user role
+		mockMvc.perform(
+				MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 
-        //try access with judge role
-        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,save.getId().toString()))
-                .header(Token.TOKEN_HEADER,judgeToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access with judge role
+		mockMvc.perform(
+				MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
-        //try access with admin role
-        mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER+ControllerAPI.VERSION_1_0+ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID
-                .replace(ControllerAPI.REQUEST_STANDARD_ID,save.getId().toString()))
-                .header(Token.TOKEN_HEADER,adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+		// try access with admin role
+		mockMvc.perform(
+				MockMvcRequestBuilders.delete(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 
-        assertEquals(actual,standardRepository.findAll().size());
-    }
+		assertEquals(actual, standardRepository.findAll().size());
+	}
+
+	@Test
+	void checkStandardScore() throws Exception {
+
+		Standard save = standardRepository.save(testStandard);
+
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		StandardScore score = new StandardScore();
+		score.setPersonId(testingPerson.getId());
+		score.setStandardId(testStandard.getId());
+		score.setScore(4);
+		score.setTimeOfExercise(23);
+
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+
+	}
 }
