@@ -42,22 +42,15 @@ public class WorkspaceController {
 	private WorkspaceService workSpaceService;
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0)
-	@ApiOperation(value = "Set work space")
+	@ApiOperation(value = "Set workspace")
 	public ResponseEntity<Workspace> putWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
-		Workspace workspace = workSpaceService.updateWorkspace(bean);
-		return new ResponseEntity<>(workspace, HttpStatus.OK);
-	}
-	
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START)
-	@ApiOperation(value = "Start workspace test")
-	public ResponseEntity<Workspace> startWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
 		Workspace workspace = workSpaceService.updateWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START)
 	@ApiOperation(value = "Start workspace test")
-	public ResponseEntity<Workspace> getWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
+	public ResponseEntity<Workspace> startWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
 		Workspace workspace = workSpaceService.startWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
