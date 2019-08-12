@@ -43,6 +43,7 @@ public class WorkspaceController {
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0)
 	@ApiOperation(value = "Set workspace")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
 	public ResponseEntity<Workspace> putWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
 		Workspace workspace = workSpaceService.updateWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
@@ -57,6 +58,7 @@ public class WorkspaceController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0)
 	@ApiOperation(value = "Get a workspace")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
 	public ResponseEntity<Workspace> getWorkspace(HttpServletRequest request) throws BadRequestException, NotFoundException {
 
 		log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());

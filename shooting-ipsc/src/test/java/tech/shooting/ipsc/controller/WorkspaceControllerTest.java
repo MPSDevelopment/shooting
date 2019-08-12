@@ -151,7 +151,7 @@ public class WorkspaceControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, judgeToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, guestToken)
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, userToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)
