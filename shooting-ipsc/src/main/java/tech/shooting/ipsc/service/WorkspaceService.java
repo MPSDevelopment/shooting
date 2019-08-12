@@ -47,7 +47,7 @@ public class WorkspaceService {
 	private MqttService mqttService;
 
 	public Workspace createWorkspace(String clientId, String ip) {
-
+		
 		Workspace workspace;
 		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
 			log.error("Workspace with clientid %s already exists", clientId);
@@ -67,6 +67,9 @@ public class WorkspaceService {
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);
 		map.put(clientId, workspace);
+		
+		log.info("Create workspace %s in the map", workspace);
+		
 		return workspace;
 	}
 
@@ -101,6 +104,7 @@ public class WorkspaceService {
 	}
 
 	public Workspace updateWorkspace(WorkSpaceBean bean) throws BadRequestException {
+		log.info("Update workspace %s in the map", bean);
 		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
 
@@ -150,6 +154,11 @@ public class WorkspaceService {
 	}
 
 	public void putWorkspace(Workspace workspace) {
+		log.info("Put workspace %s to the map", workspace);
 		map.put(workspace.getClientId(), workspace);
+	}
+
+	public void clear() {
+		map.clear();
 	}
 }
