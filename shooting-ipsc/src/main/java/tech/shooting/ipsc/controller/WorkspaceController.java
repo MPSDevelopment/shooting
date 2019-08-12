@@ -43,7 +43,6 @@ public class WorkspaceController {
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0)
 	@ApiOperation(value = "Set workspace")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
 	public ResponseEntity<Workspace> putWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
 		Workspace workspace = workSpaceService.updateWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
@@ -65,6 +64,32 @@ public class WorkspaceController {
 		String remoteIp = Optional.ofNullable(request.getHeader("X-Forwarded-For")).orElse(request.getRemoteAddr());
 
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
+		return new ResponseEntity<>(workspace, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST)
+	@ApiOperation(value = "Set a workspace to use in test")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
+	public ResponseEntity<Workspace> setWorkspaceForUseInTest(HttpServletRequest request) throws BadRequestException, NotFoundException {
+
+		log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
+		String remoteIp = Optional.ofNullable(request.getHeader("X-Forwarded-For")).orElse(request.getRemoteAddr());
+
+		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
+		workspace.setUseInTest(true);
+		return new ResponseEntity<>(workspace, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_NOT_USE_IN_TEST)
+	@ApiOperation(value = "Set a workspace to use in test")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
+	public ResponseEntity<Workspace> setWorkspaceForNotUseInTest(HttpServletRequest request) throws BadRequestException, NotFoundException {
+
+		log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
+		String remoteIp = Optional.ofNullable(request.getHeader("X-Forwarded-For")).orElse(request.getRemoteAddr());
+
+		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
+		workspace.setUseInTest(false);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
 
