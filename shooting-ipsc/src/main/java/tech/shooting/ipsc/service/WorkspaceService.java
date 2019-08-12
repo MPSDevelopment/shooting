@@ -148,4 +148,8 @@ public class WorkspaceService {
 	public Collection<Workspace> getAllWorkspacesForTest() {
 		return map.values().stream().filter(item -> item.isUseInTest()).collect(Collectors.toList());
 	}
+
+	public void putWorkspace(Workspace workspace) {
+		map.put(workspace.getClientId(), workspace);
+	}
 }

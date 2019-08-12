@@ -77,6 +77,7 @@ public class WorkspaceController {
 
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
 		workspace.setUseInTest(true);
+		workSpaceService.putWorkspace(workspace);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
 	
@@ -90,6 +91,7 @@ public class WorkspaceController {
 
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
 		workspace.setUseInTest(false);
+		workSpaceService.putWorkspace(workspace);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
 
