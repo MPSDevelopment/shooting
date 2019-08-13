@@ -22198,7 +22198,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: false,
     version: 'v1.0',
-    BASE_URL: 'http://40.69.138.82:9901',
+    BASE_URL: 'http://127.0.0.1:9900', 
+    // BASE_URL: 'http://40.69.138.82:9901',
     // BASE_URL: 'http://ipsc.com',
     mqttHost: '40.69.138.82',
     mqttPort: 8080,
