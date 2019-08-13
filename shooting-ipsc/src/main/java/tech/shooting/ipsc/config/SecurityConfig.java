@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final String[] AUTH_WHITELIST = {
 		// -- swagger ui
-		"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error", "/index.html"
+		"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error", "/index.html", "/favicon.ico", "/*.js"
 		// other public endpoints of your API may be appended to this array
 	};
 
@@ -77,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(ControllerAPI.VALIDATION_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers("/favicon.ico")
-			.antMatchers("/index.html")
+			.antMatchers("/**.html")
+			.antMatchers("/**.js")
 			.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 
@@ -101,6 +102,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .and()
 		    .authorizeRequests()
 		    .anyRequest().hasAnyRole("ADMIN", "JUDGE", "USER", "GUEST");
+		
+//		http.antMatcher("/**").authorizeRequests().anyRequest().anonymous();
 	}
 
 	@Bean
