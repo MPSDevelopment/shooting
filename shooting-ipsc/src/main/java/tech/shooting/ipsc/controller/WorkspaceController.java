@@ -27,7 +27,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.DivisionBean;
-import tech.shooting.ipsc.bean.WorkSpaceBean;
+import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.service.WorkspaceService;
 
@@ -43,21 +43,21 @@ public class WorkspaceController {
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0)
 	@ApiOperation(value = "Set workspace")
-	public ResponseEntity<Workspace> putWorkspace(@RequestBody @Valid WorkSpaceBean bean) throws BadRequestException {
+	public ResponseEntity<Workspace> putWorkspace(@RequestBody @Valid WorkspaceBean bean) throws BadRequestException {
 		Workspace workspace = workSpaceService.updateWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_CHECK)
 	@ApiOperation(value = "Check workspaces")
-	public ResponseEntity<List<Workspace>> checkWorkspace(@RequestBody @Valid List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+	public ResponseEntity<List<Workspace>> checkWorkspace(@RequestBody @Valid List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		var result = workSpaceService.checkWorkspaces(list);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START)
 	@ApiOperation(value = "Start workspace tests")
-	public ResponseEntity<List<Workspace>> startWorkspace(@RequestBody @Valid List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+	public ResponseEntity<List<Workspace>> startWorkspace(@RequestBody @Valid List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		var result = workSpaceService.startWorkspaces(list);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

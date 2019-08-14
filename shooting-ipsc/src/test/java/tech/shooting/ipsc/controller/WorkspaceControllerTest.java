@@ -31,7 +31,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.WorkSpaceBean;
+import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -145,7 +145,7 @@ public class WorkspaceControllerTest {
 	@Test
 	void checkPutWorkSpace() throws Exception {
 
-		WorkSpaceBean bean = new WorkSpaceBean();
+		WorkspaceBean bean = new WorkspaceBean();
 		bean.setPersonId(testingPerson.getId());
 		bean.setQuizId(testQuiz.getId());
 		String json = JacksonUtils.getJson(bean);
@@ -214,7 +214,7 @@ public class WorkspaceControllerTest {
 		workspace.setPersonId(testingPerson.getId());
 		workspace.setQuizId(testQuiz.getId());
 
-		WorkSpaceBean bean = new WorkSpaceBean();
+		WorkspaceBean bean = new WorkspaceBean();
 		BeanUtils.copyProperties(workspace, bean);
 
 		workspaceService.updateWorkspace(bean);

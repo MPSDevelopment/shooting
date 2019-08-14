@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.springframework.beans.BeanUtils;
@@ -18,16 +19,18 @@ import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.pojo.ErrorMessage;
-import tech.shooting.ipsc.bean.WorkSpaceBean;
+import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.mqtt.event.TestStartedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
+import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
+import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
 
 @Service
@@ -46,9 +49,12 @@ public class WorkspaceService {
 	private QuizRepository quizRepository;
 
 	@Autowired
+	private SubjectRepository subjectRepository;
+
+	@Autowired
 	private MqttService mqttService;
 
-	public Workspace createWorkspace(String clientId, String ip) {
+	public Workspace createWorkspace(String clientId, String ip) throws MqttException {
 
 		Workspace workspace;
 		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
@@ -56,7 +62,9 @@ public class WorkspaceService {
 			return workspace;
 		}
 		try {
-			if ((workspace = getWorkspaceByIp(ip)) != null) {
+			workspace = getWorkspaceByIp(ip);
+			if (workspace != null && mqttService.getPublisher() != null && !mqttService.getPublisher().getClientId().equals(clientId)) {
+//			if (workspace != null) {
 				log.error("Workspace with ip %s already exists", ip);
 				return workspace;
 			}
@@ -92,11 +100,13 @@ public class WorkspaceService {
 		if (workspace != null) {
 			map.remove(clientId);
 			workspace.setStatus(WorkspaceStatusEnum.DISCONNECTED);
+		} else {
+			log.error("Cannot remove a workspace with cliendId %s. It does not exist (%s)", clientId, StringUtils.join(map.keySet(), ","));
 		}
 		return workspace;
 	}
-	
-	public List<Workspace> checkWorkspaces(List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+
+	public List<Workspace> checkWorkspaces(List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
 
 		var result = new ArrayList<Workspace>();
@@ -106,7 +116,7 @@ public class WorkspaceService {
 		return result;
 	}
 
-	public List<Workspace> startWorkspaces(List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+	public List<Workspace> startWorkspaces(List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
 
 		var result = new ArrayList<Workspace>();
@@ -116,22 +126,34 @@ public class WorkspaceService {
 		return result;
 	}
 
-	public Workspace startWorkspace(WorkSpaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
+	public Workspace startWorkspace(WorkspaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
 		var workspace = updateWorkspace(bean);
-		mqttService.getPublisher().publish(MqttConstants.TEST_TOPIC + "/" + workspace.getIp(), mqttService.createJsonMessage(workspace));
+
+		if (workspace == null) {
+			log.error("Cannot start workspace unknown workspace %s, existing list:", bean);
+			getAllWorkspaces().forEach(item -> log.info("Workspace %s", item));
+			return workspace;
+		} else {
+			log.error("Cannot start not existing workspace %s", bean);
+		}
+
+		String topic = MqttConstants.TEST_TOPIC + "/" + workspace.getIp();
+		log.info("Sending test start to the topic %s", topic);
+		mqttService.getPublisher().publish(topic, mqttService.createJsonMessage(workspace));
 		return workspace;
 	}
 
-	public Workspace updateWorkspace(WorkSpaceBean bean) throws BadRequestException {
-		log.info("Update workspace %s in the map", bean);
+	public Workspace updateWorkspace(WorkspaceBean bean) throws BadRequestException {
+
 		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
 
 			checkPerson(bean.getPersonId());
 			checkQuiz(bean.getQuizId());
 //			checkSubject(bean.getSubjectId());
-
 			BeanUtils.copyProperties(bean, workspace);
+			putWorkspace(workspace);
+			log.info("Updated workspace %s in the map. Size is %s", bean, map.size());
 		}
 		return workspace;
 	}
@@ -161,6 +183,10 @@ public class WorkspaceService {
 		return quizRepository.findById(quiz).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Quiz id, check id is %s", quiz)));
 	}
 
+	private Subject checkSubject(long subject) throws BadRequestException {
+		return subjectRepository.findById(subject).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect subject id, check id is %s", subject)));
+	}
+
 	private Workspace checkWorkspace(long worksSpaceId) throws BadRequestException {
 		return workSpaceRepository.findById(worksSpaceId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect work space id, check id is %s", worksSpaceId)));
 	}
@@ -171,6 +197,12 @@ public class WorkspaceService {
 
 	public Collection<Workspace> getAllWorkspacesForTest() {
 		return map.values().stream().filter(item -> item.isUseInTest()).collect(Collectors.toList());
+	}
+
+	public void putWorkspace(WorkspaceBean bean) {
+		var workspace = new Workspace();
+		BeanUtils.copyProperties(bean, workspace);
+		map.put(workspace.getClientId(), workspace);
 	}
 
 	public void putWorkspace(Workspace workspace) {

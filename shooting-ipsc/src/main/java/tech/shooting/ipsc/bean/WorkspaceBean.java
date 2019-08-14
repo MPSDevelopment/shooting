@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class WorkSpaceBean {
+public class WorkspaceBean {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Mqtt Client id", required = true)

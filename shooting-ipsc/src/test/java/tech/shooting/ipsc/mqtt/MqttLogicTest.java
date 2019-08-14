@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.enums.RoleName;
@@ -31,7 +34,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.WorkSpaceBean;
+import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -47,11 +50,13 @@ import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
+import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CompetitionService;
 import tech.shooting.ipsc.service.WorkspaceService;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -61,8 +66,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class, CompetitionController.class,
-		CompetitionService.class, MqttService.class, WorkspaceService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class,
+		CompetitionController.class, CompetitionService.class, MqttService.class, WorkspaceService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -70,7 +75,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 //@Tag(IpscConstants.UNIT_TEST_TAG)
 public class MqttLogicTest {
-	
+
+private static final String IP_ADRESS = "127.0.0.9";
+
+//	@RegisterExtension
+//	private MqttExtension mqttExtension = new MqttExtension();
+
 	private CountDownLatch latch;
 
 	@Autowired
@@ -78,12 +88,21 @@ public class MqttLogicTest {
 
 	@Autowired
 	private MqttService mqttService;
+	
+	@Autowired
+	private WorkspaceService workspaceService;
 
 	@Autowired
 	private CompetitionRepository competitionRepository;
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private QuizRepository quizRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -112,6 +131,10 @@ public class MqttLogicTest {
 
 	private MqttClient subscriberObserver;
 
+	private Person testingPerson;
+
+	private Quiz testQuiz;
+
 	@BeforeEach
 	public void beforeEach() {
 		competitionRepository.deleteAll();
@@ -122,6 +145,9 @@ public class MqttLogicTest {
 				: userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
+		
+		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
+		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
 
 		mqttService.startBroker("config/moquette.conf");
 	}
@@ -133,6 +159,8 @@ public class MqttLogicTest {
 
 	@Test
 	public void checkStartStopCompetition() throws Exception {
+
+		latch = new CountDownLatch(4);
 
 		messageCount = 0;
 		subscriber = createSubscriber(MqttConstants.COMPETITION_TOPIC);
@@ -158,10 +186,13 @@ public class MqttLogicTest {
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
 
-		subscriber.disconnect();
-		subscriber.close(true);
+		latch.await(5, TimeUnit.SECONDS);
+
+		closeSubscriber(subscriber);
 
 		assertEquals(4, messageCount);
+
+		latch = new CountDownLatch(1);
 
 		// try access to start competition with judge
 		mockMvc.perform(MockMvcRequestBuilders
@@ -174,51 +205,77 @@ public class MqttLogicTest {
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-		
-		Thread.sleep(200);
-		
-		subscriber.disconnect();
-		subscriber.close(true);
+
+		latch.await(5, TimeUnit.SECONDS);
+
+		closeSubscriber(subscriber);
 
 		assertEquals(5, messageCount);
 
 	}
-	
+
+	private void closeSubscriber(MqttClient client) throws MqttException {
+		if (client.isConnected()) {
+			client.disconnect();
+			client.close(true);
+		}
+	}
+
 	@Test
 	public void checkWorkspaces() throws Exception {
-		
+
 		latch = new CountDownLatch(2);
-		
+
 		subscriberObserver = createSubscriber(MqttConstants.WORKSPACE_TOPIC);
 		subscriber = createSubscriber(MqttConstants.COMPETITION_TOPIC);
-		
-		WorkSpaceBean bean = new WorkSpaceBean();
-		bean.setClientId(subscriber.getClientId());
-		bean.setPersonId(1L);
-		bean.setQuizId(2L);
-		String json = JacksonUtils.getJson(bean);
-		
-		latch.await(5, TimeUnit.SECONDS);
-		
 
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)
+		WorkspaceBean bean = new WorkspaceBean();
+		bean.setClientId(subscriber.getClientId());
+		bean.setPersonId(testingPerson.getId());
+		bean.setQuizId(testQuiz.getId());
+		String json = JacksonUtils.getJson(bean);
+
+		latch.await(5, TimeUnit.SECONDS);
+
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.8"))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
-		
+
 		assertEquals(2, messageCount);
-		
+
 		latch = new CountDownLatch(1);
-		
-		subscriber.disconnect();
-		subscriber.close(true);
-		
+
+		closeSubscriber(subscriber);
+
 		latch.await(5, TimeUnit.SECONDS);
 
 		assertEquals(3, messageCount);
+
+		closeSubscriber(subscriberObserver);
 		
-		subscriberObserver.disconnect();
-		subscriberObserver.close(true);
+		// start test
 		
+		latch = new CountDownLatch(1);
 		
+		subscriber = createSubscriber(MqttConstants.TEST_TOPIC + "/" + IP_ADRESS);
+		json = JacksonUtils.getJson(bean.setClientId(subscriber.getClientId()).setUseInTest(true));
+		
+		var workspace = new Workspace();
+		BeanUtils.copyProperties(bean, workspace);
+		workspace.setIp(IP_ADRESS);
+		
+		workspaceService.putWorkspace(workspace);
+
+		json = JacksonUtils.getJson(Arrays.asList(bean.setClientId(subscriber.getClientId()).setUseInTest(true)));
+
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken).with(remoteHost(IP_ADRESS)).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		latch.await(5, TimeUnit.SECONDS);
+		
+		assertEquals(4, messageCount);
+
+		closeSubscriber(subscriber);
+
 	}
 
 	private MqttClient createSubscriber(String topic) throws MqttException {
@@ -239,5 +296,12 @@ public class MqttLogicTest {
 			public void connectionLost(Throwable cause) {
 			}
 		}, topic);
+	}
+	
+	private static RequestPostProcessor remoteHost(final String remoteHost) {
+		return request -> {
+			request.setRemoteAddr(remoteHost);
+			return request;
+		};
 	}
 }
