@@ -3,6 +3,8 @@ package tech.shooting.ipsc.bean;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,6 +22,11 @@ public class WorkSpaceBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Workspace name", required = true)
 	private String name;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Subject id")
+	@DBRef
+	private Long subjectId;
 
     @JsonProperty
     @ApiModelProperty(value = "Quiz id", required = true)

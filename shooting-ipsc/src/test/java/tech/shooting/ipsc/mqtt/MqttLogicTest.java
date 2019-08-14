@@ -68,7 +68,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DirtiesContext
 @Slf4j
-@Tag(IpscConstants.UNIT_TEST_TAG)
+//@Tag(IpscConstants.UNIT_TEST_TAG)
 public class MqttLogicTest {
 	
 	private CountDownLatch latch;
@@ -131,7 +131,7 @@ public class MqttLogicTest {
 		mqttService.stopBroker();
 	}
 
-//	@Test
+	@Test
 	public void checkStartStopCompetition() throws Exception {
 
 		messageCount = 0;
@@ -184,7 +184,7 @@ public class MqttLogicTest {
 
 	}
 	
-//	@Test
+	@Test
 	public void checkWorkspaces() throws Exception {
 		
 		latch = new CountDownLatch(2);

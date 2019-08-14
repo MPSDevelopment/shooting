@@ -111,7 +111,7 @@ public class WorkspaceService {
 
 		var result = new ArrayList<Workspace>();
 		for (var bean : list) {
-			result.add(startWorkspace(bean));
+			result.add(startWorkspace(bean.setCheck(false)));
 		}
 		return result;
 	}

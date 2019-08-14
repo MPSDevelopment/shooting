@@ -31,6 +31,11 @@ public class Workspace extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Ip address", required = true)
 	private String ip;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Subject id")
+	@DBRef
+	private Long subjectId;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz id")
