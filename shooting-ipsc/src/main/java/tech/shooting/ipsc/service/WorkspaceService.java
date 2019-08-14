@@ -129,8 +129,9 @@ public class WorkspaceService {
 
 			checkPerson(bean.getPersonId());
 			checkQuiz(bean.getQuizId());
+//			checkSubject(bean.getSubjectId());
 
-			BeanUtils.copyProperties(workspace, bean);
+			BeanUtils.copyProperties(bean, workspace);
 		}
 		return workspace;
 	}
