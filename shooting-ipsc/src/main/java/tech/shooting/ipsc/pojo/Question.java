@@ -30,9 +30,9 @@ public class Question extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Random write")
-	private boolean random;
+	private boolean random = true;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Is active")
-	private boolean active;
+	private boolean active = true;
 }
