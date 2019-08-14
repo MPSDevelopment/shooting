@@ -33,6 +33,10 @@ public class WorkSpaceBean {
     
     @JsonProperty
     @ApiModelProperty(value = "Use workspace in test", required = true)
-    private boolean useInTest;
+    private boolean useInTest = false;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Just check workspace", required = true)
+    private boolean check = false;
 
 }

@@ -246,6 +246,7 @@ public class ControllerAPI {
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL = "/all";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST = "/allfortest";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_START = "/start";
+	public static final String WORKSPACE_CONTROLLER_CONTROLLER_CHECK = "/check";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST = "/useintest";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_NOT_USE_IN_TEST = "/notuseintest";
 

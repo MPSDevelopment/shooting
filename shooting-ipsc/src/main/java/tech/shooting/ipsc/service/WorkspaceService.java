@@ -1,7 +1,9 @@
 package tech.shooting.ipsc.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -47,7 +49,7 @@ public class WorkspaceService {
 	private MqttService mqttService;
 
 	public Workspace createWorkspace(String clientId, String ip) {
-		
+
 		Workspace workspace;
 		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
 			log.error("Workspace with clientid %s already exists", clientId);
@@ -60,16 +62,15 @@ public class WorkspaceService {
 			}
 		} catch (NotFoundException e) {
 		}
-		
 
 		workspace = new Workspace();
 		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);
 		map.put(clientId, workspace);
-		
+
 		log.info("Create workspace %s in the map", workspace);
-		
+
 		return workspace;
 	}
 
@@ -94,12 +95,30 @@ public class WorkspaceService {
 		}
 		return workspace;
 	}
+	
+	public List<Workspace> checkWorkspaces(List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
+
+		var result = new ArrayList<Workspace>();
+		for (var bean : list) {
+			result.add(startWorkspace(bean.setCheck(true)));
+		}
+		return result;
+	}
+
+	public List<Workspace> startWorkspaces(List<WorkSpaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
+		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
+
+		var result = new ArrayList<Workspace>();
+		for (var bean : list) {
+			result.add(startWorkspace(bean));
+		}
+		return result;
+	}
 
 	public Workspace startWorkspace(WorkSpaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
 		var workspace = updateWorkspace(bean);
-
 		mqttService.getPublisher().publish(MqttConstants.TEST_TOPIC + "/" + workspace.getIp(), mqttService.createJsonMessage(workspace));
-
 		return workspace;
 	}
 
