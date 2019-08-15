@@ -95,11 +95,11 @@ public class CourseRepositoryTest {
 //		assertEquals(2, list.size());
 //	}
 
-	@Test
-	public void findByPersonDivisionId() {
-		list = courseRepository.findByPersonDivisionId(division.getId());
-		assertEquals(2, list.size());
-	}
+//	@Test
+//	public void findByPersonDivisionId() {
+//		list = courseRepository.findByPersonDivisionId(division.getId());
+//		assertEquals(2, list.size());
+//	}
 
 	@Test
 	public void findByPersonDivisionIn() {
