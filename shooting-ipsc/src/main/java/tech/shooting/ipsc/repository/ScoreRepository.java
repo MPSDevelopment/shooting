@@ -8,12 +8,12 @@ import java.util.List;
 
 @Repository
 public interface ScoreRepository extends MongoRepository<Score, Long> {
-	
-	List<Score> findAllByPersonId (Long personId);
 
-	List<Score> findAllByStageId (Long stageId);
-	
+	List<Score> findAllByPersonId(Long personId);
+
+	List<Score> findAllByStageId(Long stageId);
+
 	List<Score> findByStageIdIn(List<Long> stageId);
 
-	Score findByPersonIdAndStageId (Long personId, Long stageId);
+	Score findByPersonIdAndStageId(Long personId, Long stageId);
 }

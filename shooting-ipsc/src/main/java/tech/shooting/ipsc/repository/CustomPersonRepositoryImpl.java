@@ -9,6 +9,7 @@ import java.util.List;
 
 @Slf4j
 class CustomPersonRepositoryImpl implements CustomPersonRepository {
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 

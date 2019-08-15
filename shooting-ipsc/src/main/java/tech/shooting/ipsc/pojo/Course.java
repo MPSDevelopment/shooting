@@ -16,15 +16,13 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 public class Course extends BaseDocument {
+	
     public static final String COURSE_PERSON = "person";
+    
     @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Person", required = true)
     private Person person;
-
-    @JsonProperty
-    @ApiModelProperty(value = "Division id")
-    private Long division;
 
     @JsonProperty
     @ApiModelProperty(value = "Course name", required = true)

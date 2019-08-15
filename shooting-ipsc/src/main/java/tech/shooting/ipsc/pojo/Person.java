@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class Person extends BaseDocument {
 	public static final String NAME_AND_BIRTHDAY = "name and birthday";
 
 	public static final String DIVISION = "division";
-	
+
 	public static final String RANK = "rank";
 
 	@JsonProperty("userName")
@@ -57,4 +58,10 @@ public class Person extends BaseDocument {
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private ClassificationBreaks qualifierRank;
+
+//	public Person setDivision(Division division) {
+//		this.division = division;
+//		divid = division == null ? null : division.getId();
+//		return this;
+//	}
 }
