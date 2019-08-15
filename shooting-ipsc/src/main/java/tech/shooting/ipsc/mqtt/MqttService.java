@@ -104,6 +104,10 @@ public class MqttService {
 		log.info("Moquette Server stopped");
 	}
 
+	public boolean isPublisherExists() {
+		return publisher != null;
+	}
+
 	public MqttClient getPublisher() throws MqttException {
 		if (publisher == null) {
 			publisher = createPublisher(getServerUrl(), mqttSettings.getAdminLogin(), mqttSettings.getAdminPassword());

@@ -63,8 +63,8 @@ public class WorkspaceService {
 		}
 		try {
 			workspace = getWorkspaceByIp(ip);
-			if (workspace != null && mqttService.getPublisher() != null && !mqttService.getPublisher().getClientId().equals(clientId)) {
-//			if (workspace != null) {
+//			if (workspace != null && mqttService.isPublisherExists() && !mqttService.getPublisher().getClientId().equals(clientId)) {
+			if (workspace != null) {
 				log.error("Workspace with ip %s already exists", ip);
 				return workspace;
 			}
