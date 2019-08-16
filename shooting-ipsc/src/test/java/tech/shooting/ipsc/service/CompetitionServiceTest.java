@@ -1,36 +1,25 @@
 package tech.shooting.ipsc.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import tech.shooting.commons.constraints.IpscConstants;
-import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.commons.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.RatingBean;
-import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Score;
-import tech.shooting.ipsc.pojo.Stage;
-import tech.shooting.ipsc.repository.CompetitionRepository;
 
 @ExtendWith(SpringExtension.class)
 //@EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
@@ -81,7 +70,8 @@ public class CompetitionServiceTest {
 		assertEquals(34.48, rating.get(1).getPercentage(), 0.1);
 		assertEquals(3L, rating.get(0).getPersonId());
 		assertEquals(1, rating.get(0).getStages());
-		assertEquals("1(" + DisqualificationEnum.INJURED.toString() + ")", rating.get(0).getDisqualification());
+		assertNull(rating.get(0).getDisqualification());
+		assertEquals("1(" + DisqualificationEnum.INJURED.toString() + ")", rating.get(1).getDisqualification());
 		assertEquals(87, rating.get(0).getScore());
 		assertEquals(3, rating.get(1).getStages());
 		assertEquals(90, rating.get(1).getScore());

@@ -504,9 +504,12 @@ public class CompetitionService {
 		double maxRating = 0;
 
 		for (var personId : map.keySet()) {
+			
+			var personScores = map.get(personId);
+			
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
-			personalRating.setScores(map.get(personId));
+			personalRating.setScores(personScores);
 
 			personalRating.setStages(personalRating.getScores().size());
 			personalRating.setScore(personalRating.getScores().stream().mapToLong(Score::getScore).sum());
@@ -520,12 +523,12 @@ public class CompetitionService {
 
 			// var disqualifications = scores.stream().collect(Collectors.groupingBy(Score::getDisqualificationReason, Collectors.counting()));
 
-			scores.removeIf(item -> StringUtils.isBlank(item.getDisqualificationReason()));
+			personScores.removeIf(item -> StringUtils.isBlank(item.getDisqualificationReason()));
 
-			var disqualifications = scores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
+			var disqualifications = personScores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
 
 			if (CollectionUtils.isNotEmpty(disqualifications)) {
-				personalRating.setDisqualification(String.valueOf(scores.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
+				personalRating.setDisqualification(String.valueOf(disqualifications.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
 			}
 
 			result.add(personalRating);
