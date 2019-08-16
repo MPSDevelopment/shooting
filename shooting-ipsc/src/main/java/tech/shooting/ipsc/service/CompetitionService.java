@@ -521,7 +521,10 @@ public class CompetitionService {
 			// var disqualifications = scores.stream().collect(Collectors.groupingBy(Score::getDisqualificationReason, Collectors.counting()));
 
 			scores.removeIf(item -> StringUtils.isBlank(item.getDisqualificationReason()));
-			personalRating.setDisqualification(String.valueOf(scores.size()));
+
+			var disqualifications = scores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
+
+			personalRating.setDisqualification(String.valueOf(scores.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
 
 			result.add(personalRating);
 		}
