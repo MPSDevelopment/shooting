@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -103,7 +104,7 @@ class CourseControllerTest {
 		personRepository.deleteAll();
 		courseRepository.deleteAll();
 		divisionRepository.deleteAll();
-		
+
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("Root").setActive(true)) : testDivision;
 		testing = personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D).setDivision(testDivision));
 		user = user == null
@@ -158,7 +159,7 @@ class CourseControllerTest {
 
 	private Pair<CourseBean, Course> createCourse() throws Exception {
 //		assertEquals(0, courseRepository.findAll().size());
-		
+
 		long count = courseRepository.count();
 
 		CourseBean bean = new CourseBean().setPerson(testing.getId()).setName("bla bla").setImagePath("fdgdsfdsfsdfsd").setAddress("fsdfds").setDate(OffsetDateTime.now());
@@ -261,26 +262,29 @@ class CourseControllerTest {
 						.replace(ControllerAPI.REQUEST_PAGE_NUMBER, "0").replace(ControllerAPI.REQUEST_PAGE_SIZE, "10")).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// user role
-		String contentAsString = mockMvc
+		MockHttpServletResponse response = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.COURSE_CONTROLLER_GET_COURCES_BY_DIVISION_BY_PAGE.replace(ControllerAPI.REQUEST_DIVISION_ID, division.getId().toString()).replace(ControllerAPI.REQUEST_PAGE_NUMBER, "0")
 								.replace(ControllerAPI.REQUEST_PAGE_SIZE, "10"))
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var list = JacksonUtils.getListFromJson(Course[].class, contentAsString);
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
+		var list = JacksonUtils.getListFromJson(Course[].class, response.getContentAsString());
 
 		assertEquals(2, list.size());
+
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(1));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(1));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(2));
 	}
-	
+
 	@Test
 	void checkCoursesByPerson() throws Exception {
 		Pair<CourseBean, Course> course = createCourse();
 		CourseBean first = course.getFirst().setName("fsdfdsfdsfds");
 		String json = JacksonUtils.getJson(first);
 		// unauthorized user
-		mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURCES_BY_PERSON_BY_PAGE.replace(ControllerAPI.REQUEST_PERSON_ID, person.getId().toString())
-						.replace(ControllerAPI.REQUEST_PAGE_NUMBER, "0").replace(ControllerAPI.REQUEST_PAGE_SIZE, "10")).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURCES_BY_PERSON_BY_PAGE
+				.replace(ControllerAPI.REQUEST_PERSON_ID, person.getId().toString()).replace(ControllerAPI.REQUEST_PAGE_NUMBER, "0").replace(ControllerAPI.REQUEST_PAGE_SIZE, "10")).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// user role
 		String contentAsString = mockMvc
