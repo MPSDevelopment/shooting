@@ -305,5 +305,9 @@ public class ControllerAPI {
 	public static final String COURSE_CONTROLLER_GET_COURSE_BY_PERSON = "/get/by/person/" + REQUEST_PERSON_ID + "/course";
 	public static final String COURSE_CONTROLLER_GET_COURCES_BY_DIVISION_BY_PAGE = "/division/" + REQUEST_DIVISION_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COURSE_CONTROLLER_GET_COURCES_BY_PERSON_BY_PAGE = "/person/" + REQUEST_PERSON_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
+	public static final String COURSE_CONTROLLER_GET_COUNT = "/count";
+	
+	
+	
 	public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
 }

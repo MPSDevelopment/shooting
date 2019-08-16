@@ -95,7 +95,7 @@ public class CourseService {
 		}
 		return courseRepository.findAll(pageable);
 	}
-	
+
 	public ResponseEntity<List<Course>> getCourcesByPersonPage(Long divisionId, Integer page, Integer size) {
 		page = Math.max(1, page);
 		page--;
@@ -121,5 +121,9 @@ public class CourseService {
 		var pageOfUsers = getAllCoursesByDivisionPaging(divisionId, page, size);
 		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 
+	}
+
+	public Long getCount() {
+		return courseRepository.count();
 	}
 }

@@ -95,4 +95,10 @@ public class CourseController {
 			@PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
 		return courseService.getCourcesByPersonPage(divisionId, page, size);
 	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COUNT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get all course count")
+	public ResponseEntity<Long> getCount() {
+		return new ResponseEntity<>(courseService.getCount(), HttpStatus.OK);
+	}
 }
