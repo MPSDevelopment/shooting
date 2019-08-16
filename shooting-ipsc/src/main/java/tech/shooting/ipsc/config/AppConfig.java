@@ -157,7 +157,7 @@ public class AppConfig extends WebMvcConfigurationSupport {
 		config.setAllowedOrigins(Collections.singletonList("*"));
 		config.setAllowedMethods(Collections.singletonList("*"));
 		config.setAllowedHeaders(Collections.singletonList("*"));
-		config.setExposedHeaders(Collections.singletonList("*"));
+		config.setExposedHeaders(Collections.singletonList("page,pages,total"));
 		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
