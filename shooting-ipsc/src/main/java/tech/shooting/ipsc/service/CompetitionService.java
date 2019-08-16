@@ -524,7 +524,9 @@ public class CompetitionService {
 
 			var disqualifications = scores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
 
-			personalRating.setDisqualification(String.valueOf(scores.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
+			if (CollectionUtils.isEmpty(disqualifications)) {
+				personalRating.setDisqualification(String.valueOf(scores.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
+			}
 
 			result.add(personalRating);
 		}
