@@ -50,5 +50,9 @@ public class Workspace extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Use workspace in test", required = true)
     private boolean useInTest;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Just check workspace", required = true)
+    private boolean check = false;
 	
 }
