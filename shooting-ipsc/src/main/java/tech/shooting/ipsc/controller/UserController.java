@@ -47,6 +47,7 @@ public class UserController {
 		return new ResponseEntity<>(userService.getCount(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or  hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list judges", notes = "Return list of judges object")
 	public ResponseEntity<List<User>> getJudges () {

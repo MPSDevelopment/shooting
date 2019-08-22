@@ -334,7 +334,7 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to getJudges with judge user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES).header(Token.TOKEN_HEADER, judgeToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access to getJudges with admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_GET_JUDGES).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
