@@ -72,7 +72,7 @@ spring:
       host: 52.176.90.219
       port: 27018
       database: shooting
-      #      authentication-database: admin
+      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
