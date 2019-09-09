@@ -69,14 +69,14 @@ spring:
       max-request-size: 10MB
   data:
     mongodb:
-      host: 40.69.138.82
+      host: 52.176.90.219
       port: 27017
       database: shooting
       #      authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
-  address: 10.0.6.4
+  address: 10.0.0.5
   port: 9901
   http2:
     enabled: true
