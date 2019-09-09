@@ -70,7 +70,7 @@ spring:
   data:
     mongodb:
       host: 52.176.90.219
-      port: 27017
+      port: 27018
       database: shooting
       #      authentication-database: admin
       username: ipsc
