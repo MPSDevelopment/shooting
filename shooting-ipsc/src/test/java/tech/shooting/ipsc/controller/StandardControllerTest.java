@@ -242,12 +242,12 @@ class StandardControllerTest {
 		StandardBean bean = new StandardBean();
 		bean.setInfo(testStandard.getInfo()).setSubject(testStandard.getSubject().getId()).setGroups(testStandard.isGroups()).setActive(testStandard.isActive());
 		List<CategoriesAndTime> res = new ArrayList<>();
-		res.add(new CategoriesAndTime().setCategory(testCategory).setTime(Long.valueOf(10)));
+		res.add(new CategoriesAndTime().setCategory(testCategory).setExcellentTime(10L).setGoodTime(12L).setSalTime(14L));
 		testStandard.setCategoriesList(res);
 		List<CategoriesBean> categoriesBeans = new ArrayList<>();
 		for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
 			CategoriesAndTime categoriesAndTime = testStandard.getCategoriesList().get(i);
-			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setTime(categoriesAndTime.getTime()));
+			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime()).setSalTime(categoriesAndTime.getSalTime()));
 		}
 		bean.setCategoriesList(categoriesBeans);
 		return bean;

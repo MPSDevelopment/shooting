@@ -14,13 +14,24 @@ import javax.validation.constraints.Positive;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class CategoriesAndTime {
-    @JsonProperty
-    @ApiModelProperty(value = "Standard execute time for this category", required = true)
-    @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Long time;
 
     @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Standard category", required = true)
     private Categories category;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Excellent execute time for this category", required = true)
+    @Positive(message = ValidationConstants.TIME_MESSAGE)
+    private Long excellentTime;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Good execute time for this category", required = true)
+    @Positive(message = ValidationConstants.TIME_MESSAGE)
+    private Long goodTime;
+    
+    @JsonProperty("salTime")
+    @ApiModelProperty(value = "Standard execute time for this category", required = true)
+    @Positive(message = ValidationConstants.TIME_MESSAGE)
+    private Long salTime;
 }
