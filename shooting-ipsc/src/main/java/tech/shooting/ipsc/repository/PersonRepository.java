@@ -9,6 +9,7 @@ import tech.shooting.ipsc.pojo.Person;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends MongoRepository<Person, Long> {
@@ -20,4 +21,8 @@ public interface PersonRepository extends MongoRepository<Person, Long> {
 	List<Person> findByDivisionIn (List<Division> division);
 	
 	Page<Person> findByDivisionIn (List<Division> division, PageRequest pageable);
+	
+	Optional<Person> findByRfidCode(String rfidCode);
+	
+	Optional<Person> findByNumber(String number);
 }

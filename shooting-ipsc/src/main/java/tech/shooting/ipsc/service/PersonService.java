@@ -84,6 +84,14 @@ public class PersonService {
 	public Person getPersonByIdIfExist(Long personId) throws BadRequestException {
 		return personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 	}
+	
+	public Person getPersonByRfidCode(String code) throws BadRequestException {
+		return personRepository.findByRfidCode(code).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person rfid code %s", code)));
+	}
+	
+	public Person getPersonByNumber(String number) throws BadRequestException {
+		return personRepository.findByNumber(number).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person number %s", number)));
+	}
 
 	public Person updatePerson(Long personId, UpdatePerson personBean) throws BadRequestException {
 		if (!personId.equals(personBean.getId())) {

@@ -41,6 +41,20 @@ public class PersonController {
 	public ResponseEntity<Person> getPerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(personService.getPersonByIdIfExist(personId), HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get person by rfid code", notes = "Return person object")
+	public ResponseEntity<Person> getPersonByRfidCode(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String rfidCode) throws BadRequestException {
+		return new ResponseEntity<>(personService.getPersonByRfidCode(rfidCode), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get person by number", notes = "Return person object")
+	public ResponseEntity<Person> getPersoByNumber(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String number) throws BadRequestException {
+		return new ResponseEntity<>(personService.getPersonByNumber(number), HttpStatus.OK);
+	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")

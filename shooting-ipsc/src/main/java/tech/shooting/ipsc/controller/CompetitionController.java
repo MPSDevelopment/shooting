@@ -207,7 +207,7 @@ public class CompetitionController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITOR_BY_MARK, produces =
         MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Get competitor by rfid mark", notes = "Return competitor")
+    @ApiOperation(value = "Get competitor by rfid code", notes = "Return competitor")
     public ResponseEntity<Competitor> getCompetitor(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id,
                                                     @PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_MARK) String mark) throws BadRequestException {
         return new ResponseEntity<>(competitionService.getCompetitor(id, mark), HttpStatus.OK);

@@ -19,6 +19,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class Person extends BaseDocument {
+	
 	public static final String NAME_AND_BIRTHDAY = "name and birthday";
 
 	public static final String DIVISION = "division";
@@ -58,6 +59,14 @@ public class Person extends BaseDocument {
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private ClassificationBreaks qualifierRank;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person's rfid code")
+	private String rfidCode;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Person's number code")
+	private String number;
 
 //	public Person setDivision(Division division) {
 //		this.division = division;
