@@ -20,7 +20,7 @@ public class ConditionsBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
-    private Long coefficient;
+    private Double coefficient;
 
     @DBRef
     @JsonProperty

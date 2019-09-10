@@ -139,6 +139,11 @@ public class AuthControllerTest {
 	}
 	
 	@Test
+	public void checkPostLoginNotExisted() throws Exception {
+		
+	}
+	
+	@Test
 	public void checkPostLoginGuest() throws Exception {
 		userJson = JacksonUtils.getFullJson(new User().setLogin(DatabaseCreator.GUEST_LOGIN).setPassword(DatabaseCreator.GUEST_PASSWORD));
 		// try to login to the system from other server, check cors
