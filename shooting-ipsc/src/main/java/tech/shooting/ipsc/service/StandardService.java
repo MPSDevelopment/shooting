@@ -95,7 +95,7 @@ public class StandardService {
 		for (int i = 0; i < categoriesList.size(); i++) {
 			CategoriesBean bean = categoriesList.get(i);
 			Categories categories = checkCategory(bean.getCategory());
-			res.add(new CategoriesAndTime().setCategory(categories).setExcellentTime(bean.getExcellentTime()).setGoodTime(bean.getGoodTime()).setSalTime(bean.getSalTime()));
+			res.add(new CategoriesAndTime().setCategory(categories).setExcellentTime(bean.getExcellentTime()).setGoodTime(bean.getGoodTime()).setSatisfactoryTime(bean.getSatisfactoryTime()));
 		}
 		return res;
 	}

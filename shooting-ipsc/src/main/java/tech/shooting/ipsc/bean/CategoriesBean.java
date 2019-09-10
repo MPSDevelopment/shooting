@@ -28,8 +28,8 @@ public class CategoriesBean {
     @Positive(message = ValidationConstants.TIME_MESSAGE)
     private Float goodTime;
     
-    @JsonProperty("salTime")
+    @JsonProperty("satTime")
     @ApiModelProperty(value = "Standard execute time for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float salTime;
+    private Float satisfactoryTime;
 }
