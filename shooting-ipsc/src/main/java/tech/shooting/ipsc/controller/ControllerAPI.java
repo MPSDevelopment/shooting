@@ -36,7 +36,7 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_QUESTION_ID = "questionId";
 	public static final String PATH_VARIABLE_SUBJECT_ID = "subjectId";
 	public static final String PATH_VARIABLE_WEAPON_ID = "weaponId";
-	public static final String PATH_VARIABLE_WEAPON_TYPE_ID = "weaponTypeId";
+	public static final String PATH_VARIABLE_TYPE_ID = "typeId";
 	public static final String PATH_VARIABLE_INTERVAL = "interval";
 	public static final String PATH_VARIABLE_DATE = "date";
 	public static final String PATH_VARIABLE_COURSE_ID = "courseId";
@@ -52,7 +52,7 @@ public class ControllerAPI {
 	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
 	public static final String REQUEST_FIRED_COUNT = "{" + PATH_VARIABLE_FIRED_COUNT + "}";
 	public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
-	public static final String REQUEST_WEAPON_TYPE_ID = "{" + PATH_VARIABLE_WEAPON_TYPE_ID + "}";
+	public static final String REQUEST_TYPE_ID = "{" + PATH_VARIABLE_TYPE_ID + "}";
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 	public static final String REQUEST_CATEGORY_ID = "{" + PATH_VARIABLE_CATEGORY_ID + "}";
 	public static final String REQUEST_STANDARD_ID = "{" + PATH_VARIABLE_STANDARD_ID + "}";
@@ -236,10 +236,26 @@ public class ControllerAPI {
 	// weapon type section
 	public static final String WEAPON_TYPE_CONTROLLER = "/api/weapon/type";
 	public static final String WEAPON_TYPE_CONTROLLER_GET_ALL = "/get/all";
-	public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_TYPE_ID;
+	public static final String WEAPON_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
 	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapontype";
-	public static final String WEAPON_TYPE_CONTROLLER_PUT_TYPE = "/update/weapontype/" + REQUEST_WEAPON_TYPE_ID;
-	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_WEAPON_TYPE_ID;
+	public static final String WEAPON_TYPE_CONTROLLER_PUT_TYPE = "/update/weapontype/" + REQUEST_TYPE_ID;
+	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_TYPE_ID;
+	
+	// communication equipment type section
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER = "/api/commequipmenttype";
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_ALL = "/get/all";
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE = "/create";
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update" + REQUEST_TYPE_ID;
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
+	
+	// vehicle type section
+	public static final String VEHICLE_TYPE_CONTROLLER = "/api/vehicletype";
+	public static final String VEHICLE_TYPE_CONTROLLER_GET_ALL = "/get/all";
+	public static final String VEHICLE_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
+	public static final String VEHICLE_TYPE_CONTROLLER_POST_TYPE = "/create";
+	public static final String VEHICLE_TYPE_CONTROLLER_PUT_TYPE = "/update" + REQUEST_TYPE_ID;
+	public static final String VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 
 	// workspace
 	public static final String WORKSPACE_CONTROLLER = "/api/workspace";

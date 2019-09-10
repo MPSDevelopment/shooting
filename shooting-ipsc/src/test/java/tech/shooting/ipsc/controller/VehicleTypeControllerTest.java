@@ -25,7 +25,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.WeaponTypeBean;
+import tech.shooting.ipsc.bean.VehicleTypeBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -34,10 +34,10 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.pojo.WeaponType;
+import tech.shooting.ipsc.pojo.VehicleType;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.repository.WeaponTypeRepository;
-import tech.shooting.ipsc.service.WeaponTypeService;
+import tech.shooting.ipsc.repository.VehicleTypeRepository;
+import tech.shooting.ipsc.service.VehicleTypeService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,15 +47,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@EnableMongoRepositories(basePackageClasses = WeaponTypeRepository.class)
+@EnableMongoRepositories(basePackageClasses = VehicleTypeRepository.class)
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WeaponTypeController.class, WeaponTypeService.class })
-class WeaponTypeControllerTest {
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, VehicleTypeController.class, VehicleTypeService.class })
+class VehicleTypeControllerTest {
 
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -64,7 +64,7 @@ class WeaponTypeControllerTest {
 	private UserRepository userRepository;
 
 	@Autowired
-	private WeaponTypeRepository weaponTypeRepository;
+	private VehicleTypeRepository vehicleTypeRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -83,7 +83,7 @@ class WeaponTypeControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		weaponTypeRepository.deleteAll();
+		vehicleTypeRepository.deleteAll();
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
 				.setPerson(new Person().setName("fgdgfgd"))) : user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -95,114 +95,114 @@ class WeaponTypeControllerTest {
 
 	@Test
 	void checkGetAllTypeOfWeapon() throws Exception {
-		assertEquals(Collections.emptyList(), weaponTypeRepository.findAll());
-		createFewWeaponType();
+		assertEquals(Collections.emptyList(), vehicleTypeRepository.findAll());
+		createFewVehicleType();
 		// try access with unauthorized user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		List<WeaponType> listFromJson = JacksonUtils.getListFromJson(WeaponType[].class, contentAsString);
-		assertEquals(weaponTypeRepository.findAll().size(), listFromJson.size());
+		List<VehicleType> listFromJson = JacksonUtils.getListFromJson(VehicleType[].class, contentAsString);
+		assertEquals(vehicleTypeRepository.findAll().size(), listFromJson.size());
 	}
 
-	private void createFewWeaponType() {
-		List<WeaponType> types = new ArrayList<>();
-		types.add(new WeaponType().setName("AKM"));
-		types.add(new WeaponType().setName("AK-47"));
-		types.add(new WeaponType().setName("AK-74"));
-		types.add(new WeaponType().setName("AKC-74"));
-		weaponTypeRepository.saveAll(types);
+	private void createFewVehicleType() {
+		List<VehicleType> types = new ArrayList<>();
+		types.add(new VehicleType().setName("AKM"));
+		types.add(new VehicleType().setName("AK-47"));
+		types.add(new VehicleType().setName("AK-74"));
+		types.add(new VehicleType().setName("AKC-74"));
+		vehicleTypeRepository.saveAll(types);
 	}
 
 	@Test
 	void checkGetTypeOfWeaponById() throws Exception {
-		assertEquals(Collections.emptyList(), weaponTypeRepository.findAll());
-		createFewWeaponType();
-		WeaponType type = weaponTypeRepository.findAll().get(0);
+		assertEquals(Collections.emptyList(), vehicleTypeRepository.findAll());
+		createFewVehicleType();
+		VehicleType type = vehicleTypeRepository.findAll().get(0);
 		// try access with unauthorized user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		// try access with admin role
 		String contentAsString = mockMvc
-				.perform(MockMvcRequestBuilders.get(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString()))
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		WeaponType listFromJson = JacksonUtils.fromJson(WeaponType.class, contentAsString);
+		VehicleType listFromJson = JacksonUtils.fromJson(VehicleType.class, contentAsString);
 		assertEquals(type, listFromJson);
 	}
 
 	@Test
 	void checkPostTypeOfWeapon() throws Exception {
-		assertEquals(Collections.emptyList(), weaponTypeRepository.findAll());
-		WeaponTypeBean bean = new WeaponTypeBean().setName("Test");
+		assertEquals(Collections.emptyList(), vehicleTypeRepository.findAll());
+		VehicleTypeBean bean = new VehicleTypeBean().setName("Test");
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		WeaponType typeFromDB = JacksonUtils.fromJson(WeaponType.class, contentAsString);
-		assertEquals(1, weaponTypeRepository.findAll().size());
+		VehicleType typeFromDB = JacksonUtils.fromJson(VehicleType.class, contentAsString);
+		assertEquals(1, vehicleTypeRepository.findAll().size());
 		assertEquals(bean.getName(), typeFromDB.getName());
 	}
 
 	@Test
-	void checkDeleteWeaponType() throws Exception {
-		assertEquals(Collections.emptyList(), weaponTypeRepository.findAll());
-		WeaponType bean = new WeaponType().setName("Test");
-		bean = weaponTypeRepository.save(bean);
+	void checkDeleteVehicleType() throws Exception {
+		assertEquals(Collections.emptyList(), vehicleTypeRepository.findAll());
+		VehicleType bean = new VehicleType().setName("Test");
+		bean = vehicleTypeRepository.save(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(
-				MockMvcRequestBuilders.delete(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString())))
+				MockMvcRequestBuilders.delete(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// try access with user role
 		mockMvc.perform(
-				MockMvcRequestBuilders.delete(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
+				MockMvcRequestBuilders.delete(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
 						.header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with judge role
 		mockMvc.perform(
-				MockMvcRequestBuilders.delete(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
+				MockMvcRequestBuilders.delete(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
 						.header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 
 		// try access with admin role
 		mockMvc.perform(
-				MockMvcRequestBuilders.delete(ControllerAPI.WEAPON_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
+				MockMvcRequestBuilders.delete(ControllerAPI.VEHICLE_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, bean.getId().toString()))
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
-		assertEquals(0, weaponTypeRepository.findAll().size());
+		assertEquals(0, vehicleTypeRepository.findAll().size());
 	}
 }

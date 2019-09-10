@@ -12,29 +12,30 @@ import tech.shooting.ipsc.repository.WeaponTypeRepository;
 
 @Service
 public class WeaponTypeService  {
+	
     @Autowired
-    private WeaponTypeRepository weaponType;
+    private WeaponTypeRepository repository;
 
     public List<WeaponType> getAllType() {
-        List<WeaponType> all = weaponType.findAll();
+        List<WeaponType> all = repository.findAll();
         return all;
     }
 
     public WeaponType getTypeById(Long weaponTypeId) throws BadRequestException {
-        return checkWeaponType(weaponTypeId);
+        return checkType(weaponTypeId);
     }
 
-    private WeaponType checkWeaponType(Long weaponTypeId) throws BadRequestException {
-        return weaponType.findById(weaponTypeId).orElseThrow(()-> new BadRequestException(new ErrorMessage("Incorrect weapon type id, check id is %s",weaponTypeId)));
+    private WeaponType checkType(Long weaponTypeId) throws BadRequestException {
+        return repository.findById(weaponTypeId).orElseThrow(()-> new BadRequestException(new ErrorMessage("Incorrect weapon type id, check id is %s",weaponTypeId)));
     }
 
-    public WeaponType postWeaponType(WeaponTypeBean bean) {
-        WeaponType save = weaponType.save(checkWeaponTypeExist(bean));
+    public WeaponType postType(WeaponTypeBean bean) {
+        WeaponType save = repository.save(checkWeaponTypeExist(bean));
         return save;
     }
 
     private WeaponType checkWeaponTypeExist(WeaponTypeBean bean) {
-        WeaponType byName = weaponType.findByName(bean);
+        WeaponType byName = repository.findByName(bean);
         if (byName==null){
             return new WeaponType().setName(bean.getName());
         }else{
@@ -43,12 +44,12 @@ public class WeaponTypeService  {
 
     }
 
-    public void deleteWeaponType(long weaponTypeId) throws BadRequestException {
-        weaponType.delete(checkWeaponType(weaponTypeId));
+    public void deleteType(long typeId) throws BadRequestException {
+        repository.delete(checkType(typeId));
     }
 
-    public WeaponType updateWeaponType(long weaponTypeId, WeaponTypeBean bean) throws BadRequestException {
-        return weaponType.save(checkWeaponType(weaponTypeId).setName(bean.getName()));
+    public WeaponType updateType(long typeId, WeaponTypeBean bean) throws BadRequestException {
+        return repository.save(checkType(typeId).setName(bean.getName()));
     }
 }
 

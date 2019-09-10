@@ -11,14 +11,14 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotBlank;
 
-@Document(collection = "weapontype")
-@TypeAlias("weapontype")
+@Document(collection = "commequipmenttype")
+@TypeAlias("commequipmenttype")
 @Data
 @Accessors(chain = true)
-public class WeaponType extends BaseDocument {
+public class CommEquipmentType extends BaseDocument {
 
-    @JsonProperty
-    @ApiModelProperty(value = "Weapon type name", required = true)
-    @NotBlank(message = ValidationConstants.WEAPON_NAME_MESSAGE)
-    private String name;
+	@JsonProperty
+	@ApiModelProperty(value = "Communication equipment type name", required = true)
+	@NotBlank(message = ValidationConstants.WEAPON_NAME_MESSAGE)
+	private String name;
 }
