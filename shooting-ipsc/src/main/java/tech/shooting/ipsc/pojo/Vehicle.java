@@ -13,12 +13,13 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
-@Document(collection = "communicationequipment")
-@TypeAlias("communicationequipment")
+@Document(collection = "vehicle")
+@TypeAlias("vehicle")
 @Data
 @Accessors(chain = true)
-public class CommunicationEquipment extends BaseDocument {
+public class Vehicle extends BaseDocument {
 	
     @JsonProperty
     @ApiModelProperty(value = "Division", required = true)
@@ -27,16 +28,22 @@ public class CommunicationEquipment extends BaseDocument {
 
     @JsonProperty
     @Indexed(unique = true)
-    @ApiModelProperty(value = "Serial number of equipment", required = true)
-    @NotBlank(message = ValidationConstants.COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE )
-    @Min(value = 7,message = ValidationConstants.COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE)
-    //example AK-74 №4405222
+    @ApiModelProperty(value = "Serial number of vehicle", required = true)
+    @NotBlank(message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE )
+    @Min(value = 7,message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
+    
+    @JsonProperty
+    @Indexed(unique = true)
+    @ApiModelProperty(value = "Passport number of vehicle", required = true)
+    @NotBlank(message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE )
+    @Min(value = 7,message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
+    private String passportNumber;
 
     @JsonProperty
-    @ApiModelProperty(value = "Equipment type", required = true)
+    @ApiModelProperty(value = "Vehicle type name", required = true)
     @DBRef
-    private CommEquipmentType type;
+    private VehicleType type;
 
     @DBRef
     @JsonProperty
