@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
+import java.time.OffsetDateTime;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -18,20 +20,21 @@ import javax.validation.constraints.Positive;
 @TypeAlias("standardScore")
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class StandardScore extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Standard id", required = true)
 	@NotNull(message = ValidationConstants.STANDARD_ID)
-	@Include
 	private Long standardId;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person id", required = true)
 	@NotNull(message = ValidationConstants.PERSON_ID)
-	@Include
 	private Long personId;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Score's datetime")
+	private OffsetDateTime datetime;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person score of this standard", required = true)

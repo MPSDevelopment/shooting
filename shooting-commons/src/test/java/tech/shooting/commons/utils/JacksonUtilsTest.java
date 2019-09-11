@@ -130,6 +130,16 @@ public class JacksonUtilsTest {
 		assertEquals(list, listConverted);
 
 	}
+	
+	@Test
+	public void checkNulls() throws IOException {
+		var user = new User().setName("Thor");
+		String json = JacksonUtils.getJson(user);
+//		assertFalse(json.contains("drakkar"));
+//		user.setDrakkar("Epic");
+//		assertTrue(json.contains("drakkar"));
+		
+	}
 
 	@Test
 	public void checkMap() throws IOException {

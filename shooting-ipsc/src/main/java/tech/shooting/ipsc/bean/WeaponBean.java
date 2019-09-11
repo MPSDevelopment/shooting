@@ -14,10 +14,6 @@ import javax.validation.constraints.PositiveOrZero;
 public class WeaponBean {
 
     @JsonProperty
-    @ApiModelProperty(value = "Division", required = true)
-    private Long division;
-
-    @JsonProperty
     @ApiModelProperty(value = "Serial number of weapon", required = true)
     @Min(value = 7, message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE)
     //example AK-74 №4405222

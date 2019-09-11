@@ -9,8 +9,11 @@ import tech.shooting.ipsc.pojo.Weapon;
 import java.util.List;
 
 @Repository
-public interface WeaponRepository extends MongoRepository<Weapon,Long> {
+public interface WeaponRepository extends MongoRepository<Weapon,Long>, CustomWeaponRepository {
+	
     Weapon findBySerialNumber(String serial);
-    List<Weapon> findAllByDivision(Division division);
-    List<Weapon> findAllByOwner(Person person);
+    
+    List<Weapon> findByOwner(Person person);
+    
+    List<Weapon> findByOwnerIn(List<Person> list);
 }

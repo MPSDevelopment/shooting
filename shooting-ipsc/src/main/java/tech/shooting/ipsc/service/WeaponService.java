@@ -46,13 +46,12 @@ public class WeaponService {
 
     public Weapon postWeapon(WeaponBean bean) throws BadRequestException {
         Person owner = checkPerson(bean.getOwner());
-        Division division = checkDivision(bean.getDivision());
         Weapon bySerialNumber = weaponRepository.findBySerialNumber(bean.getSerialNumber());
         WeaponType weaponType = checkWeaponType(bean.getWeaponType());
         if (bySerialNumber == null){
-            bySerialNumber = new Weapon().setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+            bySerialNumber = new Weapon().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
         }else{
-            bySerialNumber.setDivision(division).setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+            bySerialNumber.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
         }
         return weaponRepository.save(bySerialNumber);
     }
@@ -96,11 +95,11 @@ public class WeaponService {
     }
 
     public List<Weapon> getAllByDivision(Long divisionId) throws BadRequestException {
-        return weaponRepository.findAllByDivision(checkDivision(divisionId));
+        return weaponRepository.findByPersonDivision(checkDivision(divisionId));
     }
 
     public List<Weapon> getAllByPerson(Long personId) throws BadRequestException {
-            return weaponRepository.findAllByOwner(checkPerson(personId));
+            return weaponRepository.findByOwner(checkPerson(personId));
     }
 
     public List<Weapon> getAllByPersonWeapon(String personName, long divisionId) throws BadRequestException {

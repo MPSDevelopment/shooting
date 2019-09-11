@@ -17,35 +17,35 @@ import java.util.List;
 @Document(collection = "standard")
 @TypeAlias("standard")
 @ToString(callSuper = true)
-public class Standard  extends BaseDocument {
+public class Standard extends BaseDocument {
 
-    @JsonProperty
-    @ApiModelProperty(value = "Info from standard", required = true)
-    private Info info;
+	@JsonProperty
+	@ApiModelProperty(value = "Info from standard", required = true)
+	private Info info;
 
-    @DBRef
-    @JsonProperty
-    @ApiModelProperty(value = "Subject standard", required = true)
-    private Subject subject;
+	@DBRef
+	@JsonProperty
+	@ApiModelProperty(value = "Subject standard", required = true)
+	private Subject subject;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Is active", required = true)
-    private boolean active;
+	@JsonProperty
+	@ApiModelProperty(value = "Is active", required = true)
+	private boolean active;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Is groups", required = true)
-    private boolean groups;
+	@JsonProperty
+	@ApiModelProperty(value = "Is groups", required = true)
+	private boolean groups;
 
-    @JsonProperty
-    @ApiModelProperty(value = "List categories", required = true)
-    private List<CategoriesAndTime> categoriesList;
+	@JsonProperty
+	@ApiModelProperty(value = "List categories", required = true)
+	private List<CategoriesAndTime> categoriesList;
 
-    @JsonProperty
-    @ApiModelProperty(value = "List fails")
-    private List<Fails> failsList;
+	@JsonProperty
+	@ApiModelProperty(value = "List fails")
+	private List<Fails> failsList;
 
-    @JsonProperty
-    @ApiModelProperty(value = "List conditions")
-    private List<Conditions> conditionsList;
+	@JsonProperty
+	@ApiModelProperty(value = "List conditions")
+	private List<Conditions> conditionsList;
 
 }

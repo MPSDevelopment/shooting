@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -37,4 +38,8 @@ public class User {
 	
 	@JsonProperty("dateTime")
 	private OffsetDateTime offsetDate;
+	
+	@JsonProperty
+	@JsonInclude(JsonInclude.Include.ALWAYS)
+	private String drakkar;
 }

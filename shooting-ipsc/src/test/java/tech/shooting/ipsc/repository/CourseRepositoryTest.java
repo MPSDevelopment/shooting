@@ -56,8 +56,6 @@ public class CourseRepositoryTest {
 
 	private Page<Course> page;
 
-	private Course cource;
-
 	@BeforeEach
 	public void before() {
 		personRepository.deleteAll();
@@ -69,7 +67,7 @@ public class CourseRepositoryTest {
 		person = personRepository.save(new Person().setName("First person").setBirthDate(offsetDateTime).setDivision(division));
 		otherPerson = personRepository.save(new Person().setName("Second person").setBirthDate(offsetDateTime).setDivision(division));
 
-		cource = courseRepository.save(new Course().setPerson(person).setName("Test"));
+		courseRepository.save(new Course().setPerson(person).setName("Test"));
 		courseRepository.save(new Course().setPerson(otherPerson).setName("Test"));
 		
 		log.info("Division is %s", division.getId());
