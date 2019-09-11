@@ -80,7 +80,7 @@ public class WeaponService {
         } else {
             weapon.setOwner(checkPerson(personId));
         }
-        return weapon;
+        return weaponRepository.save(weapon);
     }
 
     public Weapon addNumberOfShootingForWeapon(Long weaponId, Integer firedCount) throws BadRequestException {

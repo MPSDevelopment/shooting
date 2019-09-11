@@ -54,7 +54,7 @@ server:
 ipsc:
   mqtt:
     adminLogin: ipsc
-    adminpassword: ip2342354dsdsnkjqsc
+    adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
 
 ---
@@ -88,7 +88,7 @@ server:
 ipsc:
   mqtt:
     adminLogin: ipsc
-    adminpassword: ip2342354dsdsnkjqsc
+    adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
 logging:
   level:
@@ -123,5 +123,5 @@ server:
 ipsc:
   mqtt:
     adminLogin: ipsc
-    adminpassword: ip2342354dsdsnkjqsc
+    adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
