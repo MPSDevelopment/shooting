@@ -109,8 +109,8 @@ class WeaponControllerTest {
 	void setUp() {
 		weaponRepository.deleteAll();
 		testWeapon = new Weapon().setCount(0).setOwner(testPerson).setWeaponName(testWeaponType).setSerialNumber("1234567");
-		testPerson = testPerson == null ? personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
+		testPerson = testPerson == null ? personRepository.save(new Person().setDivision(testDivision).setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testWeaponType = testWeaponType == null ? weaponTypeRepository.save(new WeaponType().setName("Test-AK")) : testWeaponType;
 		testWeaponBean = new WeaponBean().setWeaponType(testWeaponType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
