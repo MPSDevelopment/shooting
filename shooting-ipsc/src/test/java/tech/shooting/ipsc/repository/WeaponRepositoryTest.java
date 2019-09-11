@@ -53,7 +53,7 @@ public class WeaponRepositoryTest {
 
 	private Person otherPerson;
 
-	private Page<Course> page;
+	private Page<Weapon> page;
 
 	private Division division;
 	
@@ -84,8 +84,6 @@ public class WeaponRepositoryTest {
 	public void findByPersonIn() {
 		list = weaponRepository.findByOwnerIn(Arrays.asList(person));
 		assertEquals(1, list.size());
-		
-		
 	}
 
 	@Test
@@ -94,11 +92,11 @@ public class WeaponRepositoryTest {
 		assertEquals(2, list.size());
 	}
 
-//	@Test
-//	public void findByPersonDivisionInPageable() {
-//		page = weaponRepository.findByOwnerIn(personRepository.findByDivisionIn(division.getAllChildren()), PageRequest.of(0, 10));
-//		assertEquals(0, page.getNumber());
-//		assertEquals(10, page.getSize());
-//		assertEquals(2, page.getTotalElements());
-//	}
+	@Test
+	public void findByPersonDivisionInPageable() {
+		page = weaponRepository.findByOwnerIn(personRepository.findByDivisionIn(division.getAllChildren()), PageRequest.of(0, 10));
+		assertEquals(0, page.getNumber());
+		assertEquals(10, page.getSize());
+		assertEquals(2, page.getTotalElements());
+	}
 }

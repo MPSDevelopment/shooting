@@ -1,7 +1,11 @@
 package tech.shooting.ipsc.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weapon;
@@ -16,4 +20,6 @@ public interface WeaponRepository extends MongoRepository<Weapon,Long>, CustomWe
     List<Weapon> findByOwner(Person person);
     
     List<Weapon> findByOwnerIn(List<Person> list);
+    
+    Page<Weapon> findByOwnerIn(List<Person> persons, PageRequest pageable);
 }
