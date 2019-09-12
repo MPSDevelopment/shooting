@@ -37,7 +37,7 @@ public class Weapon extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Fired count by weapon")
-    @PositiveOrZero(message = ValidationConstants.WEAPON_COUNT_MESSAGE)
+    @PositiveOrZero(message = ValidationConstants.VEHICLE_COUNT_MESSAGE)
     private Integer count;
 
     @DBRef

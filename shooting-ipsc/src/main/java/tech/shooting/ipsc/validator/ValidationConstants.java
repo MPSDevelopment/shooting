@@ -99,6 +99,7 @@ public class ValidationConstants {
 	public static final String COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
 	public static final String VEHICLE_NAME_MESSAGE = "Vehicle type name must be not blank";
 	public static final String VEHICLE_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
+	public static final String VEHICLE_COUNT_MESSAGE = "Must be 0 or greater";
 	public static final String PASSPORT_NUMBER_NUMBER_MESSAGE = "Passport number 7 characters min";
 	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
 	public static final String COURSE_NAME_MESSAGE = "Course name must be min 3 characters";
