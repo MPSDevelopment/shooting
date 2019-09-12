@@ -9,6 +9,7 @@ import tech.shooting.ipsc.enums.WeaponTypeEnum;
 @Accessors(chain = true)
 @Data
 public class WeaponIpscCode {
+	
 	@JsonProperty
 	@ApiModelProperty(value = "IPSC code")
 	private String code;

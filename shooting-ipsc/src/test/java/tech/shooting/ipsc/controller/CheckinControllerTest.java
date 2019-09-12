@@ -109,7 +109,7 @@ class CheckinControllerTest {
         personRepository.deleteAll(personRepository.findByDivision(root));
         root = divisionRepository.save(new Division().setParent(null).setName("Root").setActive(true));
         testPerson = testPerson == null
-                ? personRepository.save(new Person().setName("testing").setCodes(List.of(new WeaponIpscCode().setCode("43423423423423").setTypeWeapon(WeaponTypeEnum.HANDGUN))).setQualifierRank(ClassificationBreaks.D).setDivision(root))
+                ? personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D).setDivision(root))
                 : testPerson;
         user = user == null
                 ? userRepository.save(
