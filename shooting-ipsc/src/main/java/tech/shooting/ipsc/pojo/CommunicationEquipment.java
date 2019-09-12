@@ -31,7 +31,7 @@ public class CommunicationEquipment extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Equipment type", required = true)
     @DBRef
-    private CommEquipmentType type;
+    private CommunicationEquipmentType type;
 
     @DBRef
     @JsonProperty

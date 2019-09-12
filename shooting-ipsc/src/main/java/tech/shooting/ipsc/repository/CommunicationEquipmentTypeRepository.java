@@ -5,12 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
 import tech.shooting.ipsc.bean.WeaponTypeBean;
-import tech.shooting.ipsc.pojo.CommEquipmentType;
+import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
 import tech.shooting.ipsc.pojo.WeaponType;
 
 
 @Repository
-public interface CommEquipmentTypeRepository extends MongoRepository<CommEquipmentType,Long> {
+public interface CommunicationEquipmentTypeRepository extends MongoRepository<CommunicationEquipmentType,Long> {
 	
-	CommEquipmentType findByName(CommEquipmentTypeBean bean);
+	CommunicationEquipmentType findByName(CommEquipmentTypeBean bean);
 }

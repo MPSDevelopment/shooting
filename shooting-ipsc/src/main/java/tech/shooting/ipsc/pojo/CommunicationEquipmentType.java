@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @TypeAlias("commequipmenttype")
 @Data
 @Accessors(chain = true)
-public class CommEquipmentType extends BaseDocument {
+public class CommunicationEquipmentType extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Communication equipment type name", required = true)
