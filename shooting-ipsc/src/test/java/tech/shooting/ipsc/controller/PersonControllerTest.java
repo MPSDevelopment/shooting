@@ -201,10 +201,10 @@ public class PersonControllerTest {
 		// prepare
 		UpdatePerson updatePerson = new UpdatePerson();
 		BeanUtils.copyProperties(testing, updatePerson);
-		List<WeaponIpscCode> codes = updatePerson.getCodes();
-		codes.add(shotgun);
-		codes.add(rifle);
-		updatePerson.setCodes(codes);
+//		List<WeaponIpscCode> codes = updatePerson.getCodes();
+//		codes.add(shotgun);
+//		codes.add(rifle);
+//		updatePerson.setCodes(codes);
 		// try to access updatePerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(testing.getId())))
 				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
