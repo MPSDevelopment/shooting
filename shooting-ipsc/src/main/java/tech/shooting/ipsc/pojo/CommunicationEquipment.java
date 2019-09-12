@@ -19,11 +19,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Accessors(chain = true)
 public class CommunicationEquipment extends BaseDocument {
-	
-    @JsonProperty
-    @ApiModelProperty(value = "Division", required = true)
-    @DBRef
-    private Division division;
 
     @JsonProperty
     @Indexed(unique = true)

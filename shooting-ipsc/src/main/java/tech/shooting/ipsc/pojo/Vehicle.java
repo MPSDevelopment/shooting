@@ -20,11 +20,6 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @Accessors(chain = true)
 public class Vehicle extends BaseDocument {
-	
-    @JsonProperty
-    @ApiModelProperty(value = "Division", required = true)
-    @DBRef
-    private Division division;
 
     @JsonProperty
     @Indexed(unique = true)
