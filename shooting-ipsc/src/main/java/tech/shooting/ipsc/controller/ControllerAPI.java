@@ -248,7 +248,7 @@ public class ControllerAPI {
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_ALL = "/get/all";
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE = "/create";
-	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update" + REQUEST_TYPE_ID;
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 	
 	// vehicle type section
@@ -256,7 +256,7 @@ public class ControllerAPI {
 	public static final String VEHICLE_TYPE_CONTROLLER_GET_ALL = "/get/all";
 	public static final String VEHICLE_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
 	public static final String VEHICLE_TYPE_CONTROLLER_POST_TYPE = "/create";
-	public static final String VEHICLE_TYPE_CONTROLLER_PUT_TYPE = "/update" + REQUEST_TYPE_ID;
+	public static final String VEHICLE_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 
 	// workspace
