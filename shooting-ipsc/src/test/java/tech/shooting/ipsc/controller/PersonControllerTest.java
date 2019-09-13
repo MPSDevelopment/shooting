@@ -45,7 +45,6 @@ import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.PersonService;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,12 +99,6 @@ public class PersonControllerTest {
 
 	private String userToken;
 
-	private WeaponIpscCode handgun;
-
-	private WeaponIpscCode shotgun;
-
-	private WeaponIpscCode rifle;
-
 	private Rank privateRank;
 
 	private String guestToken;
@@ -122,9 +115,7 @@ public class PersonControllerTest {
 		root = divisionRepository.save(new Division().setName("root"));
 
 		String password = RandomStringUtils.randomAscii(14);
-		WeaponIpscCode weaponIpscCode = new WeaponIpscCode().setCode("445645645").setTypeWeapon(WeaponTypeEnum.HANDGUN);
-		List<WeaponIpscCode> codes = new ArrayList<>();
-		codes.add(weaponIpscCode);
+		
 		testing = personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D).setRfidCode(TEST_RFID_CODE).setNumber(TEST_NUMBER).setCall(TEST_CALL));
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -134,9 +125,6 @@ public class PersonControllerTest {
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		handgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.HANDGUN).setCode("121212121212121");
-		shotgun = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.SHOTGUN).setCode("121212121212121");
-		rifle = new WeaponIpscCode().setTypeWeapon(WeaponTypeEnum.RIFLE).setCode("121212121212121");
 
 		privateRank = rankRepository.findByRus(DatabaseCreator.PRIVATE);
 	}
@@ -145,11 +133,6 @@ public class PersonControllerTest {
 	public void checkCreatePerson() throws Exception {
 		// prepare
 		PersonBean personBean = new PersonBean().setName("qwerty").setRank(privateRank.getId()).setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
-//		List<WeaponIpscCode> codes = new ArrayList<>();
-//		codes.add(handgun);
-//		codes.add(shotgun);
-//		codes.add(rifle);
-//		personBean.setCodes(codes);
 		String json = JacksonUtils.getJson(personBean);
 		// try access to createPerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).content(json).contentType(MediaType.APPLICATION_JSON_UTF8))

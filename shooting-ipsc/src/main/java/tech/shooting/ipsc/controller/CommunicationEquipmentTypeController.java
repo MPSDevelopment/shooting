@@ -23,6 +23,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
 import tech.shooting.ipsc.bean.WeaponTypeBean;
+import tech.shooting.ipsc.enums.CommunicationEquipmentEnum;
 import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
 import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.service.CommunicationEquipmentTypeService;
@@ -40,7 +41,7 @@ public class CommunicationEquipmentTypeController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_ALL)
-	@ApiOperation(value = "Return list of type weapon's", notes = "List<WeaponType> or Optional.empty()")
+	@ApiOperation(value = "Return list of type equipmentss")
 	public ResponseEntity<List<CommunicationEquipmentType>> getAllTypes() {
 		return new ResponseEntity<>(service.getAllType(), HttpStatus.OK);
 	}
@@ -69,6 +70,12 @@ public class CommunicationEquipmentTypeController {
 	public ResponseEntity<SuccessfulMessage> deleteWeaponType(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long typeId) throws BadRequestException {
 		service.deleteType(typeId);
 		return new ResponseEntity<>(new SuccessfulMessage("Comminication type %s has been successfully deleted", typeId), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM)
+	@ApiOperation(value = "Return list of type equipment type enum")
+	public ResponseEntity<CommunicationEquipmentEnum[]> getTypeTypes() {
+		return new ResponseEntity<>(CommunicationEquipmentEnum.values(), HttpStatus.OK);
 	}
 
 }

@@ -31,6 +31,8 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.CommunicationEquipmentEnum;
+import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
@@ -204,5 +206,26 @@ class CommunicationEquipmentTypeControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertEquals(0, commEquipmentTypeRepository.findAll().size());
+	}
+	
+	@Test
+	public void checkGetTypeEnum() throws Exception {
+		// try access to getMarkType with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access to getMarkType with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access to getMarkType with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM).header(Token.TOKEN_HEADER, judgeToken))
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
+		
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		
+		
+		CommunicationEquipmentEnum[] enums = JacksonUtils.fromJson(CommunicationEquipmentEnum[].class, contentAsString);
+		assertEquals(CommunicationEquipmentEnum.values().length, enums.length);
 	}
 }

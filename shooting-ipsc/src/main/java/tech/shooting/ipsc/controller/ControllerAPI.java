@@ -255,6 +255,7 @@ public class ControllerAPI {
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE = "/create";
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
+	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM = "/enum/type";
 	
 	// vehicle type section
 	public static final String VEHICLE_TYPE_CONTROLLER = "/api/vehicletype";
