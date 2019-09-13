@@ -154,7 +154,7 @@ class CourseControllerTest {
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Course> listFromJson = JacksonUtils.getListFromJson(Course[].class, contentAsString1);
 
-		assertEquals(course.getId(), listFromJson.get(0).getId());
+		assertEquals(course.getId(), listFromJson.get(2).getId());
 	}
 
 	private Pair<CourseBean, Course> createCourse() throws Exception {
@@ -270,11 +270,11 @@ class CourseControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
 		var list = JacksonUtils.getListFromJson(Course[].class, response.getContentAsString());
 
-		assertEquals(2, list.size());
+		assertEquals(3, list.size());
 
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(1));
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(1));
-		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(2));
+		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(3));
 	}
 
 	@Test

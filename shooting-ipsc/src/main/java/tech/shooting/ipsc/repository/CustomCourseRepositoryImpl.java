@@ -27,10 +27,10 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 			return mongoTemplate.find(query, Course.class);
 		}
 
-		query.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-		var persons = mongoTemplate.find(query, Person.class);
+		Query personQuery = new Query();
+		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+		var persons = mongoTemplate.find(personQuery, Person.class);
 
-		query = new Query();
 		query.addCriteria(Criteria.where("person").in(persons));
 		return mongoTemplate.find(query, Course.class);
 	}
