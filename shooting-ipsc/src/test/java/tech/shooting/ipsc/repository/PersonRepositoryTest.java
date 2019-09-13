@@ -36,6 +36,7 @@ public class PersonRepositoryTest {
 
 	@Autowired
 	private DivisionRepository divisionRepository;
+	
 	@BeforeEach
 	public void before () {
 		personRepository.deleteAll();
@@ -67,5 +68,15 @@ public class PersonRepositoryTest {
 		assertNotNull(findByDivision);
 		assertEquals(1, findByDivision.size());
 		
+	}
+	
+	@Test
+	public void checkFindByCall() {
+		String name = "Tigran";
+		String call = "Bore";
+		OffsetDateTime offsetDateTime = OffsetDateTime.now();
+		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime).setCall(call));
+		
+		assertNotNull(personRepository.findByCall(call).orElseGet(null));
 	}
 }

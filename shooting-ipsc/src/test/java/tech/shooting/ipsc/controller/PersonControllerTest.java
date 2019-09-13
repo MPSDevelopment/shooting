@@ -61,6 +61,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class PersonControllerTest {
+	
+	private static final String TEST_RFID_CODE = "123";
+
+	private static final String TEST_NUMBER = "124";
+
+	private static final String TEST_CALL = "Bore";
+
 	@Autowired
 	private PersonRepository personRepository;
 
@@ -118,7 +125,7 @@ public class PersonControllerTest {
 		WeaponIpscCode weaponIpscCode = new WeaponIpscCode().setCode("445645645").setTypeWeapon(WeaponTypeEnum.HANDGUN);
 		List<WeaponIpscCode> codes = new ArrayList<>();
 		codes.add(weaponIpscCode);
-		testing = personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D));
+		testing = personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D).setRfidCode(TEST_RFID_CODE).setNumber(TEST_NUMBER).setCall(TEST_CALL));
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
 		judge = userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
@@ -193,6 +200,54 @@ public class PersonControllerTest {
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getPerson() with admin role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(testing.getId())))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+	}
+	
+	@Test
+	public void checkGetPersonByRfid() throws Exception {
+		// try to access getPerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_RFID_CODE)))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getPerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_RFID_CODE))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_RFID_CODE))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_RFID_CODE))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+	}
+	
+	@Test
+	public void checkGetPersonByNumber() throws Exception {
+		// try to access getPerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_NUMBER)))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getPerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_NUMBER))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_NUMBER))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_NUMBER))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
+	}
+	
+	@Test
+	public void checkGetPersonByCall() throws Exception {
+		// try to access getPerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_CALL)))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getPerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_CALL))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_CALL))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_CALL))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
 	}
 
