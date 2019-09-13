@@ -286,7 +286,7 @@ public class ControllerAPI {
 	public static final String WEAPON_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
 	
 	// communication equipment section
-	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER = "/api/vehicle";
+	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER = "/api/communicationequipment";
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL = "/all";
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID = "/" + REQUEST_EQUIPMENT_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_POST = "/create";
