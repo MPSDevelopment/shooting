@@ -647,182 +647,192 @@ var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ ".
 var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.module */ "./src/app/app.module.ts");
 var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../node_modules/@angular/router/router.ngfactory */ "./node_modules/@angular/router/router.ngfactory.js");
-var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/tests/tests.component.ngfactory */ "./src/app/common/modules/quiz/components/tests/tests.component.ngfactory.js");
-var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standards/standards.component.ngfactory */ "./src/app/common/modules/quiz/components/standards/standards.component.ngfactory.js");
-var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/categories/categories.component.ngfactory */ "./src/app/common/modules/quiz/components/categories/categories.component.ngfactory.js");
-var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/conditions/conditions.component.ngfactory */ "./src/app/common/modules/quiz/components/conditions/conditions.component.ngfactory.js");
-var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/units/units.component.ngfactory */ "./src/app/common/modules/quiz/components/units/units.component.ngfactory.js");
-var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-details/standard-details.component.ngfactory */ "./src/app/common/modules/quiz/components/standard-details/standard-details.component.ngfactory.js");
-var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ngfactory.js");
-var i11 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-exam/standard-exam.component.ngfactory */ "./src/app/common/modules/quiz/components/standard-exam/standard-exam.component.ngfactory.js");
-var i12 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ngfactory.js");
-var i13 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ngfactory.js");
-var i14 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/questions/questions.component.ngfactory */ "./src/app/common/modules/quiz/components/questions/questions.component.ngfactory.js");
-var i15 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin-details/checkin-details.component.ngfactory */ "./src/app/common/modules/checkin/components/checkin-details/checkin-details.component.ngfactory.js");
-var i16 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-types/weapon-types.component.ngfactory */ "./src/app/common/modules/weapon/components/weapon-types/weapon-types.component.ngfactory.js");
-var i17 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory */ "./node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory.js");
-var i18 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/components/login/login.component.ngfactory */ "./src/app/common/modules/login/components/login/login.component.ngfactory.js");
-var i19 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/components/dashboard/dashboard.component.ngfactory */ "./src/app/common/modules/dashboard/components/dashboard/dashboard.component.ngfactory.js");
-var i20 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/components/exercise/exercise.component.ngfactory */ "./src/app/common/modules/exercise/components/exercise/exercise.component.ngfactory.js");
-var i21 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/dialog-modal/dialog-modal.component.ngfactory */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ngfactory.js");
-var i22 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/change-password-modal/change-password-modal.component.ngfactory */ "./src/app/common/modules/modal/components/change-password-modal/change-password-modal.component.ngfactory.js");
-var i23 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/base-modal/base-modal.component.ngfactory */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ngfactory.js");
-var i24 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/test-result-modal/test-result-modal.component.ngfactory */ "./src/app/common/modules/modal/components/test-result-modal/test-result-modal.component.ngfactory.js");
-var i25 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/check-modal/check-modal.component.ngfactory */ "./src/app/common/modules/modal/components/check-modal/check-modal.component.ngfactory.js");
-var i26 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/weapon-modal/weapon-modal.component.ngfactory */ "./src/app/common/modules/modal/components/weapon-modal/weapon-modal.component.ngfactory.js");
-var i27 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/components/tournaments/tournaments.component.ngfactory */ "./src/app/common/modules/tournaments/components/tournaments/tournaments.component.ngfactory.js");
-var i28 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/components/judges/judges.component.ngfactory */ "./src/app/common/modules/judges/components/judges/judges.component.ngfactory.js");
-var i29 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/components/persons/persons.component.ngfactory */ "./src/app/common/modules/persons/components/persons/persons.component.ngfactory.js");
-var i30 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/components/stages/stages.component.ngfactory */ "./src/app/common/modules/stages/components/stages/stages.component.ngfactory.js");
-var i31 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/components/competitors/competitors.component.ngfactory */ "./src/app/common/modules/competitors/components/competitors/competitors.component.ngfactory.js");
-var i32 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ngfactory */ "./src/app/common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ngfactory.js");
-var i33 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/components/divisions/divisions.component.ngfactory */ "./src/app/common/modules/divisions/components/divisions/divisions.component.ngfactory.js");
-var i34 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/subjects/subjects.component.ngfactory */ "./src/app/common/modules/quiz/components/subjects/subjects.component.ngfactory.js");
-var i35 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin/checkin.component.ngfactory */ "./src/app/common/modules/checkin/components/checkin/checkin.component.ngfactory.js");
-var i36 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/components/answers/answers.component.ngfactory */ "./src/app/common/modules/answers/components/answers/answers.component.ngfactory.js");
-var i37 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list/combat-list.component.ngfactory */ "./src/app/common/modules/combat-list/combat-list/combat-list.component.ngfactory.js");
-var i38 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ngfactory */ "./src/app/common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ngfactory.js");
-var i39 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/components/modal-root/modal-root.component.ngfactory */ "./src/app/common/modules/shared/components/modal-root/modal-root.component.ngfactory.js");
-var i40 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/components/specialities.component.ngfactory */ "./src/app/common/modules/specialities/components/specialities.component.ngfactory.js");
-var i41 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/components/user/user.component.ngfactory */ "./src/app/common/modules/user/components/user/user.component.ngfactory.js");
-var i42 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-list/weapon-list.component.ngfactory */ "./src/app/common/modules/weapon/components/weapon-list/weapon-list.component.ngfactory.js");
-var i43 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course/course.component.ngfactory */ "./src/app/common/modules/course/course/course.component.ngfactory.js");
-var i44 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../node_modules/ngx-toastr/ngx-toastr.ngfactory */ "./node_modules/ngx-toastr/ngx-toastr.ngfactory.js");
-var i45 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.component.ngfactory */ "./src/app/app.component.ngfactory.js");
-var i46 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-var i47 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-var i48 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/animations/browser */ "./node_modules/@angular/animations/fesm5/browser.js");
-var i49 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
-var i50 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
-var i51 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-var i52 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-var i53 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/interceptors/auth.interceptor */ "./src/app/common/interceptors/auth.interceptor.ts");
-var i54 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ng-http-loader */ "./node_modules/ng-http-loader/fesm5/ng-http-loader.js");
-var i55 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/token.service */ "./src/app/common/services/token.service.ts");
-var i56 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-var i57 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
-var i58 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/services/login.service */ "./src/app/common/modules/login/services/login.service.ts");
-var i59 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-mqtt/src/mqtt.service */ "./node_modules/ngx-mqtt/src/mqtt.service.js");
-var i60 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-mqtt/src/mqtt.module */ "./node_modules/ngx-mqtt/src/mqtt.module.js");
-var i61 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! angular-tree-component/dist/models/tree-dragged-element.model */ "./node_modules/angular-tree-component/dist/models/tree-dragged-element.model.js");
-var i62 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
-var i63 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-var i64 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
-var i65 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/guards/login.guard */ "./src/app/common/guards/login.guard.ts");
-var i66 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/guards/auth.guard */ "./src/app/common/guards/auth.guard.ts");
-var i67 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/subject.service */ "./src/app/common/services/subject.service.ts");
-var i68 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.routes */ "./src/app/app.routes.ts");
-var i69 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/tests/tests.component */ "./src/app/common/modules/quiz/components/tests/tests.component.ts");
-var i70 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standards/standards.component */ "./src/app/common/modules/quiz/components/standards/standards.component.ts");
-var i71 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/categories/categories.component */ "./src/app/common/modules/quiz/components/categories/categories.component.ts");
-var i72 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/conditions/conditions.component */ "./src/app/common/modules/quiz/components/conditions/conditions.component.ts");
-var i73 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/units/units.component */ "./src/app/common/modules/quiz/components/units/units.component.ts");
-var i74 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-details/standard-details.component */ "./src/app/common/modules/quiz/components/standard-details/standard-details.component.ts");
-var i75 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component */ "./src/app/common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ts");
-var i76 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-exam/standard-exam.component */ "./src/app/common/modules/quiz/components/standard-exam/standard-exam.component.ts");
-var i77 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-errors-modal/standard-errors-modal.component */ "./src/app/common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ts");
-var i78 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component */ "./src/app/common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ts");
-var i79 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/questions/questions.component */ "./src/app/common/modules/quiz/components/questions/questions.component.ts");
-var i80 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin-details/checkin-details.component */ "./src/app/common/modules/checkin/components/checkin-details/checkin-details.component.ts");
-var i81 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-types/weapon-types.component */ "./src/app/common/modules/weapon/components/weapon-types/weapon-types.component.ts");
-var i82 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/components/login/login.component */ "./src/app/common/modules/login/components/login/login.component.ts");
-var i83 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/components/dashboard/dashboard.component */ "./src/app/common/modules/dashboard/components/dashboard/dashboard.component.ts");
-var i84 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/components/exercise/exercise.component */ "./src/app/common/modules/exercise/components/exercise/exercise.component.ts");
-var i85 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/components/tournaments/tournaments.component */ "./src/app/common/modules/tournaments/components/tournaments/tournaments.component.ts");
-var i86 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/components/judges/judges.component */ "./src/app/common/modules/judges/components/judges/judges.component.ts");
-var i87 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/components/persons/persons.component */ "./src/app/common/modules/persons/components/persons/persons.component.ts");
-var i88 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/components/stages/stages.component */ "./src/app/common/modules/stages/components/stages/stages.component.ts");
-var i89 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/components/competitors/competitors.component */ "./src/app/common/modules/competitors/components/competitors/competitors.component.ts");
-var i90 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/components/competitors-rating/competitors-rating.component */ "./src/app/common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ts");
-var i91 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/components/divisions/divisions.component */ "./src/app/common/modules/divisions/components/divisions/divisions.component.ts");
-var i92 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/subjects/subjects.component */ "./src/app/common/modules/quiz/components/subjects/subjects.component.ts");
-var i93 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin/checkin.component */ "./src/app/common/modules/checkin/components/checkin/checkin.component.ts");
-var i94 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/components/answers/answers.component */ "./src/app/common/modules/answers/components/answers/answers.component.ts");
-var i95 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list/combat-list.component */ "./src/app/common/modules/combat-list/combat-list/combat-list.component.ts");
-var i96 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component */ "./src/app/common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ts");
-var i97 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/components/specialities.component */ "./src/app/common/modules/specialities/components/specialities.component.ts");
-var i98 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/components/user/user.component */ "./src/app/common/modules/user/components/user/user.component.ts");
-var i99 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-list/weapon-list.component */ "./src/app/common/modules/weapon/components/weapon-list/weapon-list.component.ts");
-var i100 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course/course.component */ "./src/app/common/modules/course/course/course.component.ts");
-var i101 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-var i102 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
-var i103 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/shared.module */ "./src/app/common/modules/shared/shared.module.ts");
-var i104 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/login.module */ "./src/app/common/modules/login/login.module.ts");
-var i105 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/dashboard.module */ "./src/app/common/modules/dashboard/dashboard.module.ts");
-var i106 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/exercise.module */ "./src/app/common/modules/exercise/exercise.module.ts");
-var i107 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toggle-switch */ "./node_modules/ngx-toggle-switch/ui-switch.es5.js");
-var i108 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
-var i109 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/table/table.module */ "./src/app/common/modules/table/table.module.ts");
-var i110 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/forms/forms.module */ "./src/app/common/modules/forms/forms.module.ts");
-var i111 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/modal.module */ "./src/app/common/modules/modal/modal.module.ts");
-var i112 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/tournaments.module */ "./src/app/common/modules/tournaments/tournaments.module.ts");
-var i113 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/judges.module */ "./src/app/common/modules/judges/judges.module.ts");
-var i114 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/persons.module */ "./src/app/common/modules/persons/persons.module.ts");
-var i115 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/stages.module */ "./src/app/common/modules/stages/stages.module.ts");
-var i116 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/competitors.module */ "./src/app/common/modules/competitors/competitors.module.ts");
-var i117 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/competitors-rating.module */ "./src/app/common/modules/competitors-rating/competitors-rating.module.ts");
-var i118 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! mobx-angular */ "./node_modules/mobx-angular/dist/mobx-angular.js");
-var i119 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! angular-tree-component/dist/angular-tree-component */ "./node_modules/angular-tree-component/dist/angular-tree-component.js");
-var i120 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/divisions.module */ "./src/app/common/modules/divisions/divisions.module.ts");
-var i121 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/quiz.module */ "./src/app/common/modules/quiz/quiz.module.ts");
-var i122 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/checkin.module */ "./src/app/common/modules/checkin/checkin.module.ts");
-var i123 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/answers.module */ "./src/app/common/modules/answers/answers.module.ts");
-var i124 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list.module */ "./src/app/common/modules/combat-list/combat-list.module.ts");
-var i125 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/specialities.module */ "./src/app/common/modules/specialities/specialities.module.ts");
-var i126 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/user.module */ "./src/app/common/modules/user/user.module.ts");
-var i127 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/weapon.module */ "./src/app/common/modules/weapon/weapon.module.ts");
-var i128 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course.module */ "./src/app/common/modules/course/course.module.ts");
-var i129 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
-var i130 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/reducers/reducer */ "./src/app/common/modules/persons/reducers/reducer.ts");
-var i131 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/reducers/reducer */ "./src/app/common/modules/stages/reducers/reducer.ts");
-var i132 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/reducers/reducer */ "./src/app/common/modules/tournaments/reducers/reducer.ts");
-var i133 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/reducers/reducer */ "./src/app/common/modules/competitors/reducers/reducer.ts");
-var i134 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/reducers/reducer */ "./src/app/common/modules/divisions/reducers/reducer.ts");
-var i135 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/reducers/judges.reducer */ "./src/app/common/modules/judges/reducers/judges.reducer.ts");
-var i136 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/reducers/reducer */ "./src/app/common/modules/shared/reducers/reducer.ts");
-var i137 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/reducers/reducer */ "./src/app/common/modules/quiz/reducers/reducer.ts");
-var i138 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/reducers/reducer */ "./src/app/common/modules/checkin/reducers/reducer.ts");
-var i139 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/reducers/reducer */ "./src/app/common/modules/combat-list/reducers/reducer.ts");
-var i140 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/reducers/reducer */ "./src/app/common/modules/specialities/reducers/reducer.ts");
-var i141 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/reducers/reducer */ "./src/app/common/modules/user/reducers/reducer.ts");
-var i142 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/reducers/reducer */ "./src/app/common/modules/weapon/reducers/reducer.ts");
-var i143 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/reducers/reducer */ "./src/app/common/modules/course/reducers/reducer.ts");
-var i144 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/reducers/reducer */ "./src/app/common/modules/workspace/reducers/reducer.ts");
-var i145 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
-var i146 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/service/person.service */ "./src/app/common/modules/persons/service/person.service.ts");
-var i147 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/message.service */ "./src/app/common/services/message.service.ts");
-var i148 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/effects/effects */ "./src/app/common/modules/persons/effects/effects.ts");
-var i149 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/service/stages.service */ "./src/app/common/modules/stages/service/stages.service.ts");
-var i150 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/effects/effects */ "./src/app/common/modules/stages/effects/effects.ts");
-var i151 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/effects/effects */ "./src/app/common/modules/tournaments/effects/effects.ts");
-var i152 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/services/tournaments.service */ "./src/app/common/modules/tournaments/services/tournaments.service.ts");
-var i153 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/local-storage.service */ "./src/app/common/services/local-storage.service.ts");
-var i154 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/services/dialogs.service */ "./src/app/common/modules/shared/services/dialogs.service.ts");
-var i155 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/effects/effects */ "./src/app/common/modules/competitors/effects/effects.ts");
-var i156 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/services/competitors.service */ "./src/app/common/modules/competitors/services/competitors.service.ts");
-var i157 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/services/divisions.service */ "./src/app/common/modules/divisions/services/divisions.service.ts");
-var i158 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/effects/effects */ "./src/app/common/modules/divisions/effects/effects.ts");
-var i159 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/effects/judges-effects.service */ "./src/app/common/modules/judges/effects/judges-effects.service.ts");
-var i160 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/service/judges.service */ "./src/app/common/modules/judges/service/judges.service.ts");
-var i161 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/effects/effects */ "./src/app/common/modules/shared/effects/effects.ts");
-var i162 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/services/shared.service */ "./src/app/common/modules/shared/services/shared.service.ts");
-var i163 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/effects/effects */ "./src/app/common/modules/quiz/effects/effects.ts");
-var i164 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/services/quiz.service */ "./src/app/common/modules/quiz/services/quiz.service.ts");
-var i165 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/effects/effects */ "./src/app/common/modules/checkin/effects/effects.ts");
-var i166 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/services/checkin.service */ "./src/app/common/modules/checkin/services/checkin.service.ts");
-var i167 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/services/combat-list.service */ "./src/app/common/modules/combat-list/services/combat-list.service.ts");
-var i168 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/effects/effects */ "./src/app/common/modules/combat-list/effects/effects.ts");
-var i169 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/effects/effects */ "./src/app/common/modules/specialities/effects/effects.ts");
-var i170 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/services/specialities.service */ "./src/app/common/modules/specialities/services/specialities.service.ts");
-var i171 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/effects/effects */ "./src/app/common/modules/user/effects/effects.ts");
-var i172 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/services/user.service */ "./src/app/common/modules/user/services/user.service.ts");
-var i173 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/effects/effects */ "./src/app/common/modules/weapon/effects/effects.ts");
-var i174 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/services/weapons.service */ "./src/app/common/modules/weapon/services/weapons.service.ts");
-var i175 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/effects/effects */ "./src/app/common/modules/course/effects/effects.ts");
-var i176 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/services/courses.service */ "./src/app/common/modules/course/services/courses.service.ts");
-var i177 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/effects/effects */ "./src/app/common/modules/workspace/effects/effects.ts");
-var i178 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/services/workspace.service */ "./src/app/common/modules/workspace/services/workspace.service.ts");
-var AppModuleNgFactory = /*@__PURE__*/ /*@__PURE__*/ i0.ɵcmf(i1.AppModule, [i2.AppComponent], function (_l) { return i0.ɵmod([i0.ɵmpd(512, i0.ComponentFactoryResolver, i0.ɵCodegenComponentFactoryResolver, [[8, [i3.ɵangular_packages_router_router_lNgFactory, i4.TestsComponentNgFactory, i5.StandardsComponentNgFactory, i6.CategoriesComponentNgFactory, i7.ConditionsComponentNgFactory, i8.UnitsComponentNgFactory, i9.StandardDetailsComponentNgFactory, i10.StandardCompetitorModalComponentNgFactory, i11.StandardExamComponentNgFactory, i12.StandardErrorsModalComponentNgFactory, i13.StandardConditionsModalComponentNgFactory, i14.QuestionsComponentNgFactory, i15.CheckinDetailsComponentNgFactory, i16.WeaponTypesComponentNgFactory, i17.NgbDatepickerNgFactory, i17.NgbAlertNgFactory, i17.ɵuNgFactory, i17.ɵvNgFactory, i17.ɵnNgFactory, i17.ɵqNgFactory, i17.ɵrNgFactory, i18.LoginComponentNgFactory, i19.DashboardComponentNgFactory, i20.ExerciseComponentNgFactory, i21.DialogModalComponentNgFactory, i22.ChangePasswordModalComponentNgFactory, i23.BaseModalComponentNgFactory, i24.TestResultModalComponentNgFactory, i25.CheckModalComponentNgFactory, i26.WeaponModalComponentNgFactory, i27.TournamentsComponentNgFactory, i28.JudgesComponentNgFactory, i29.PersonsComponentNgFactory, i30.StagesComponentNgFactory, i31.CompetitorsComponentNgFactory, i32.CompetitorsRatingComponentNgFactory, i33.DivisionsComponentNgFactory, i34.SubjectsComponentNgFactory, i35.CheckinComponentNgFactory, i36.AnswersComponentNgFactory, i37.CombatListComponentNgFactory, i38.CombatListModalViewComponentNgFactory, i39.ModalRootComponentNgFactory, i40.SpecialitiesComponentNgFactory, i41.UserComponentNgFactory, i42.WeaponListComponentNgFactory, i43.CourseComponentNgFactory, i44.ToastNgFactory, i45.AppComponentNgFactory]], [3, i0.ComponentFactoryResolver], i0.NgModuleRef]), i0.ɵmpd(4352, i0.LOCALE_ID, "ru-KZ", []), i0.ɵmpd(4608, i46.NgLocalization, i46.NgLocaleLocalization, [i0.LOCALE_ID, [2, i46.ɵangular_packages_common_common_a]]), i0.ɵmpd(5120, i0.ɵangular_packages_core_core_bb, i0.ɵangular_packages_core_core_s, [i0.NgZone]), i0.ɵmpd(5120, i0.APP_ID, i0.ɵangular_packages_core_core_f, []), i0.ɵmpd(5120, i0.IterableDiffers, i0.ɵangular_packages_core_core_o, []), i0.ɵmpd(5120, i0.KeyValueDiffers, i0.ɵangular_packages_core_core_p, []), i0.ɵmpd(4608, i47.DomSanitizer, i47.ɵDomSanitizerImpl, [i46.DOCUMENT]), i0.ɵmpd(6144, i0.Sanitizer, null, [i47.DomSanitizer]), i0.ɵmpd(4608, i47.HAMMER_GESTURE_CONFIG, i47.HammerGestureConfig, []), i0.ɵmpd(5120, i47.EVENT_MANAGER_PLUGINS, function (p0_0, p0_1, p0_2, p1_0, p2_0, p2_1, p2_2, p2_3) { return [new i47.ɵDomEventsPlugin(p0_0, p0_1, p0_2), new i47.ɵKeyEventsPlugin(p1_0), new i47.ɵHammerGesturesPlugin(p2_0, p2_1, p2_2, p2_3)]; }, [i46.DOCUMENT, i0.NgZone, i0.PLATFORM_ID, i46.DOCUMENT, i46.DOCUMENT, i47.HAMMER_GESTURE_CONFIG, i0.ɵConsole, [2, i47.HAMMER_LOADER]]), i0.ɵmpd(4608, i47.EventManager, i47.EventManager, [i47.EVENT_MANAGER_PLUGINS, i0.NgZone]), i0.ɵmpd(135680, i47.ɵDomSharedStylesHost, i47.ɵDomSharedStylesHost, [i46.DOCUMENT]), i0.ɵmpd(4608, i47.ɵDomRendererFactory2, i47.ɵDomRendererFactory2, [i47.EventManager, i47.ɵDomSharedStylesHost, i0.APP_ID]), i0.ɵmpd(5120, i48.AnimationDriver, i49.ɵangular_packages_platform_browser_animations_animations_a, []), i0.ɵmpd(5120, i48.ɵAnimationStyleNormalizer, i49.ɵangular_packages_platform_browser_animations_animations_b, []), i0.ɵmpd(4608, i48.ɵAnimationEngine, i49.ɵInjectableAnimationEngine, [i46.DOCUMENT, i48.AnimationDriver, i48.ɵAnimationStyleNormalizer]), i0.ɵmpd(5120, i0.RendererFactory2, i49.ɵangular_packages_platform_browser_animations_animations_c, [i47.ɵDomRendererFactory2, i48.ɵAnimationEngine, i0.NgZone]), i0.ɵmpd(6144, i47.ɵSharedStylesHost, null, [i47.ɵDomSharedStylesHost]), i0.ɵmpd(4608, i0.Testability, i0.Testability, [i0.NgZone]), i0.ɵmpd(4608, i50.AnimationBuilder, i49.ɵBrowserAnimationBuilder, [i0.RendererFactory2, i46.DOCUMENT]), i0.ɵmpd(4608, i51.NoPreloading, i51.NoPreloading, []), i0.ɵmpd(6144, i51.PreloadingStrategy, null, [i51.NoPreloading]), i0.ɵmpd(135680, i51.RouterPreloader, i51.RouterPreloader, [i51.Router, i0.NgModuleFactoryLoader, i0.Compiler, i0.Injector, i51.PreloadingStrategy]), i0.ɵmpd(4608, i51.PreloadAllModules, i51.PreloadAllModules, []), i0.ɵmpd(5120, i51.ɵangular_packages_router_router_o, i51.ɵangular_packages_router_router_c, [i51.Router, i46.ViewportScroller, i51.ROUTER_CONFIGURATION]), i0.ɵmpd(5120, i51.ROUTER_INITIALIZER, i51.ɵangular_packages_router_router_j, [i51.ɵangular_packages_router_router_h]), i0.ɵmpd(5120, i0.APP_BOOTSTRAP_LISTENER, function (p0_0) { return [p0_0]; }, [i51.ROUTER_INITIALIZER]), i0.ɵmpd(4608, i52.HttpXsrfTokenExtractor, i52.ɵangular_packages_common_http_http_g, [i46.DOCUMENT, i0.PLATFORM_ID, i52.ɵangular_packages_common_http_http_e]), i0.ɵmpd(4608, i52.ɵangular_packages_common_http_http_h, i52.ɵangular_packages_common_http_http_h, [i52.HttpXsrfTokenExtractor, i52.ɵangular_packages_common_http_http_f]), i0.ɵmpd(5120, i52.HTTP_INTERCEPTORS, function (p0_0, p1_0, p2_0, p2_1) { return [p0_0, p1_0, new i53.AuthInterceptor(p2_0, p2_1)]; }, [i52.ɵangular_packages_common_http_http_h, i54.PendingRequestsInterceptor, i51.Router, i55.TokenService]), i0.ɵmpd(4608, i56.FormBuilder, i56.FormBuilder, []), i0.ɵmpd(4608, i56.ɵangular_packages_forms_forms_o, i56.ɵangular_packages_forms_forms_o, []), i0.ɵmpd(4608, i57.NgbModal, i57.NgbModal, [i0.ComponentFactoryResolver, i0.Injector, i57.ɵw, i57.NgbModalConfig]), i0.ɵmpd(4608, i57.NgbDateNativeAdapter, i57.NgbDateNativeAdapter, []), i0.ɵmpd(4608, i58.LoginService, i58.LoginService, [i52.HttpClient, i55.TokenService, i51.Router]), i0.ɵmpd(4608, i59.MqttService, i59.MqttService, [i60.MqttServiceConfig, i60.MqttClientService]), i0.ɵmpd(4608, i61.TreeDraggedElement, i61.TreeDraggedElement, []), i0.ɵmpd(5120, i62.TranslateLoader, i1.HttpLoaderFactory, [i52.HttpClient]), i0.ɵmpd(4608, i62.TranslateCompiler, i62.TranslateFakeCompiler, []), i0.ɵmpd(4608, i62.TranslateParser, i62.TranslateDefaultParser, []), i0.ɵmpd(4608, i62.MissingTranslationHandler, i62.FakeMissingTranslationHandler, []), i0.ɵmpd(4608, i62.TranslateStore, i62.TranslateStore, []), i0.ɵmpd(4608, i62.TranslateService, i62.TranslateService, [i62.TranslateStore, i62.TranslateLoader, i62.TranslateCompiler, i62.TranslateParser, i62.MissingTranslationHandler, i62.USE_DEFAULT_LANG, i62.USE_STORE]), i0.ɵmpd(135680, i63.State, i63.State, [i63.ActionsSubject, i63.ReducerObservable, i63.ScannedActionsSubject, i63.INITIAL_STATE]), i0.ɵmpd(5120, i64.ɵngrx_modules_store_devtools_store_devtools_a, i64.ɵngrx_modules_store_devtools_store_devtools_b, [i64.ɵngrx_modules_store_devtools_store_devtools_i, i64.ɵngrx_modules_store_devtools_store_devtools_e]), i0.ɵmpd(4608, i65.LoginGuard, i65.LoginGuard, [i51.Router, i55.TokenService]), i0.ɵmpd(4608, i66.AuthGuard, i66.AuthGuard, [i51.Router, i55.TokenService]), i0.ɵmpd(4608, i67.SubjectService, i67.SubjectService, []), i0.ɵmpd(1073742336, i46.CommonModule, i46.CommonModule, []), i0.ɵmpd(1024, i0.ErrorHandler, i47.ɵangular_packages_platform_browser_platform_browser_a, []), i0.ɵmpd(1024, i0.NgProbeToken, function () { return [i51.ɵangular_packages_router_router_b()]; }, []), i0.ɵmpd(512, i51.ɵangular_packages_router_router_h, i51.ɵangular_packages_router_router_h, [i0.Injector]), i0.ɵmpd(1024, i0.APP_INITIALIZER, function (p0_0, p1_0) { return [i47.ɵangular_packages_platform_browser_platform_browser_j(p0_0), i51.ɵangular_packages_router_router_i(p1_0)]; }, [[2, i0.NgProbeToken], i51.ɵangular_packages_router_router_h]), i0.ɵmpd(512, i0.ApplicationInitStatus, i0.ApplicationInitStatus, [[2, i0.APP_INITIALIZER]]), i0.ɵmpd(131584, i0.ApplicationRef, i0.ApplicationRef, [i0.NgZone, i0.ɵConsole, i0.Injector, i0.ErrorHandler, i0.ComponentFactoryResolver, i0.ApplicationInitStatus]), i0.ɵmpd(1073742336, i0.ApplicationModule, i0.ApplicationModule, [i0.ApplicationRef]), i0.ɵmpd(1073742336, i47.BrowserModule, i47.BrowserModule, [[3, i47.BrowserModule]]), i0.ɵmpd(1073742336, i49.BrowserAnimationsModule, i49.BrowserAnimationsModule, []), i0.ɵmpd(1024, i51.ɵangular_packages_router_router_a, i51.ɵangular_packages_router_router_e, [[3, i51.Router]]), i0.ɵmpd(512, i51.UrlSerializer, i51.DefaultUrlSerializer, []), i0.ɵmpd(512, i51.ChildrenOutletContexts, i51.ChildrenOutletContexts, []), i0.ɵmpd(256, i51.ROUTER_CONFIGURATION, {}, []), i0.ɵmpd(1024, i46.LocationStrategy, i51.ɵangular_packages_router_router_d, [i46.PlatformLocation, [2, i46.APP_BASE_HREF], i51.ROUTER_CONFIGURATION]), i0.ɵmpd(512, i46.Location, i46.Location, [i46.LocationStrategy, i46.PlatformLocation]), i0.ɵmpd(512, i0.Compiler, i0.Compiler, []), i0.ɵmpd(512, i0.NgModuleFactoryLoader, i0.SystemJsNgModuleLoader, [i0.Compiler, [2, i0.SystemJsNgModuleLoaderConfig]]), i0.ɵmpd(1024, i51.ROUTES, function () { return [[{ path: "", redirectTo: "/dashboard", pathMatch: "full" }, { path: "login", loadChildren: i68.ɵ0, canActivate: [i65.LoginGuard] }, { path: "dashboard", loadChildren: i68.ɵ1, canActivate: [i66.AuthGuard], data: i68.ɵ2 }, { path: "exercise", loadChildren: i68.ɵ3, canActivate: [i66.AuthGuard], data: i68.ɵ4 }, { path: "tournaments", loadChildren: i68.ɵ5, canActivate: [i66.AuthGuard], data: i68.ɵ6 }, { path: "tournaments/stages", loadChildren: i68.ɵ7, canActivate: [i66.AuthGuard], data: i68.ɵ8 }, { path: "tournaments/competitors", loadChildren: i68.ɵ9, canActivate: [i66.AuthGuard], data: i68.ɵ10 }, { path: "divisions", loadChildren: i68.ɵ11, canActivate: [i66.AuthGuard], data: i68.ɵ12 }, { path: "judges", loadChildren: i68.ɵ13, canActivate: [i66.AuthGuard], data: i68.ɵ14 }, { path: "persons", loadChildren: i68.ɵ15, canActivate: [i66.AuthGuard], data: i68.ɵ16 }, { path: "tournaments/rating", loadChildren: i68.ɵ17, canActivate: [i66.AuthGuard], data: i68.ɵ18 }, { path: "subjects", loadChildren: i68.ɵ19, canActivate: [i66.AuthGuard], data: i68.ɵ20 }, { path: "subjects/tests", component: i69.TestsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ21 }, { path: "subjects/standards", component: i70.StandardsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ22 }, { path: "subjects/standards/categories", component: i71.CategoriesComponent, canActivate: [i66.AuthGuard], data: i68.ɵ23 }, { path: "subjects/standards/conditions", component: i72.ConditionsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ24 }, { path: "subjects/standards/conditions/units", component: i73.UnitsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ25 }, { path: "subjects/standards/:id", component: i74.StandardDetailsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ26, children: [{ path: "standard-competitor-modal", component: i75.StandardCompetitorModalComponent }] }, { path: "subjects/standards/:id/exam", component: i76.StandardExamComponent, canActivate: [i66.AuthGuard], data: i68.ɵ27, children: [{ path: "standard-errors-modal", component: i77.StandardErrorsModalComponent }, { path: "standard-conditions-modal", component: i78.StandardConditionsModalComponent }] }, { path: "subjects/tests/questions", component: i79.QuestionsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ28 }, { path: "answers", loadChildren: i68.ɵ29, canActivate: [i66.AuthGuard], data: i68.ɵ30 }, { path: "checkin", loadChildren: i68.ɵ31, canActivate: [i66.AuthGuard], data: i68.ɵ32 }, { path: "checkin/checkin-details", component: i80.CheckinDetailsComponent, canActivate: [i66.AuthGuard], data: i68.ɵ33 }, { path: "combat-list", loadChildren: i68.ɵ34, canActivate: [i66.AuthGuard], data: i68.ɵ35 }, { path: "specialities", loadChildren: i68.ɵ36, canActivate: [i66.AuthGuard], data: i68.ɵ37 }, { path: "users", loadChildren: i68.ɵ38, canActivate: [i66.AuthGuard], data: i68.ɵ39 }, { path: "weapon-list", loadChildren: i68.ɵ40, canActivate: [i66.AuthGuard], data: i68.ɵ41 }, { path: "weapon-types", component: i81.WeaponTypesComponent, canActivate: [i66.AuthGuard], data: i68.ɵ42 }, { path: "courses", loadChildren: i68.ɵ43, canActivate: [i66.AuthGuard], data: i68.ɵ44 }, { path: "workspace", loadChildren: i68.ɵ45, canActivate: [i66.AuthGuard], data: i68.ɵ46 }, { path: "**", redirectTo: "" }], [{ path: "", component: i82.LoginComponent }], [{ path: "", component: i83.DashboardComponent }], [{ path: "", component: i84.ExerciseComponent }], [{ path: "", component: i85.TournamentsComponent }], [{ path: "", component: i86.JudgesComponent }], [{ path: "", component: i87.PersonsComponent }], [{ path: "", component: i88.StagesComponent }], [{ path: "", component: i89.CompetitorsComponent }], [{ path: "", component: i90.CompetitorsRatingComponent }], [{ path: "", component: i91.DivisionsComponent }], [{ path: "", component: i92.SubjectsComponent }], [{ path: "", component: i93.CheckinComponent }], [{ path: "", component: i94.AnswersComponent }], [{ path: "", component: i95.CombatListComponent, children: [{ path: "combat-list-modal-view", component: i96.CombatListModalViewComponent }] }], [{ path: "", component: i97.SpecialitiesComponent }], [{ path: "", component: i98.UserComponent }], [{ path: "", component: i99.WeaponListComponent }], [{ path: "", component: i100.CourseComponent }]]; }, []), i0.ɵmpd(1024, i51.Router, i51.ɵangular_packages_router_router_f, [i0.ApplicationRef, i51.UrlSerializer, i51.ChildrenOutletContexts, i46.Location, i0.Injector, i0.NgModuleFactoryLoader, i0.Compiler, i51.ROUTES, i51.ROUTER_CONFIGURATION, [2, i51.UrlHandlingStrategy], [2, i51.RouteReuseStrategy]]), i0.ɵmpd(1073742336, i51.RouterModule, i51.RouterModule, [[2, i51.ɵangular_packages_router_router_a], [2, i51.Router]]), i0.ɵmpd(1073742336, i101.AppRoutingModule, i101.AppRoutingModule, []), i0.ɵmpd(1073742336, i52.HttpClientXsrfModule, i52.HttpClientXsrfModule, []), i0.ɵmpd(1073742336, i52.HttpClientModule, i52.HttpClientModule, []), i0.ɵmpd(1073742336, i56.ɵangular_packages_forms_forms_d, i56.ɵangular_packages_forms_forms_d, []), i0.ɵmpd(1073742336, i56.ReactiveFormsModule, i56.ReactiveFormsModule, []), i0.ɵmpd(1073742336, i56.FormsModule, i56.FormsModule, []), i0.ɵmpd(1073742336, i62.TranslateModule, i62.TranslateModule, []), i0.ɵmpd(1073742336, i102.FontAwesomeModule, i102.FontAwesomeModule, []), i0.ɵmpd(1073742336, i57.NgbDatepickerModule, i57.NgbDatepickerModule, []), i0.ɵmpd(1073742336, i57.NgbAccordionModule, i57.NgbAccordionModule, []), i0.ɵmpd(1073742336, i57.NgbAlertModule, i57.NgbAlertModule, []), i0.ɵmpd(1073742336, i57.NgbButtonsModule, i57.NgbButtonsModule, []), i0.ɵmpd(1073742336, i57.NgbCarouselModule, i57.NgbCarouselModule, []), i0.ɵmpd(1073742336, i57.NgbCollapseModule, i57.NgbCollapseModule, []), i0.ɵmpd(1073742336, i57.NgbDropdownModule, i57.NgbDropdownModule, []), i0.ɵmpd(1073742336, i57.NgbModalModule, i57.NgbModalModule, []), i0.ɵmpd(1073742336, i57.NgbPaginationModule, i57.NgbPaginationModule, []), i0.ɵmpd(1073742336, i57.NgbPopoverModule, i57.NgbPopoverModule, []), i0.ɵmpd(1073742336, i57.NgbProgressbarModule, i57.NgbProgressbarModule, []), i0.ɵmpd(1073742336, i57.NgbRatingModule, i57.NgbRatingModule, []), i0.ɵmpd(1073742336, i57.NgbTabsetModule, i57.NgbTabsetModule, []), i0.ɵmpd(1073742336, i57.NgbTimepickerModule, i57.NgbTimepickerModule, []), i0.ɵmpd(1073742336, i57.NgbTooltipModule, i57.NgbTooltipModule, []), i0.ɵmpd(1073742336, i57.NgbTypeaheadModule, i57.NgbTypeaheadModule, []), i0.ɵmpd(1073742336, i57.NgbModule, i57.NgbModule, []), i0.ɵmpd(1073742336, i103.SharedModule, i103.SharedModule, []), i0.ɵmpd(1073742336, i104.LoginModule, i104.LoginModule, []), i0.ɵmpd(1073742336, i105.DashboardModule, i105.DashboardModule, []), i0.ɵmpd(1073742336, i106.ExerciseModule, i106.ExerciseModule, []), i0.ɵmpd(1073742336, i107.UiSwitchModule, i107.UiSwitchModule, []), i0.ɵmpd(1073742336, i108.NgSelectModule, i108.NgSelectModule, []), i0.ɵmpd(1073742336, i109.TableModule, i109.TableModule, []), i0.ɵmpd(1073742336, i110.FormsModule, i110.FormsModule, []), i0.ɵmpd(1073742336, i111.ModalModule, i111.ModalModule, []), i0.ɵmpd(1073742336, i112.TournamentsModule, i112.TournamentsModule, []), i0.ɵmpd(1073742336, i113.JudgesModule, i113.JudgesModule, []), i0.ɵmpd(1073742336, i114.PersonsModule, i114.PersonsModule, []), i0.ɵmpd(1073742336, i115.StagesModule, i115.StagesModule, []), i0.ɵmpd(1073742336, i116.CompetitorsModule, i116.CompetitorsModule, []), i0.ɵmpd(1073742336, i117.CompetitorsRatingModule, i117.CompetitorsRatingModule, []), i0.ɵmpd(1073742336, i118.MobxAngularModule, i118.MobxAngularModule, []), i0.ɵmpd(1073742336, i119.TreeModule, i119.TreeModule, []), i0.ɵmpd(1073742336, i120.DivisionsModule, i120.DivisionsModule, []), i0.ɵmpd(1073742336, i121.QuizModule, i121.QuizModule, []), i0.ɵmpd(1073742336, i122.CheckinModule, i122.CheckinModule, []), i0.ɵmpd(1073742336, i123.AnswersModule, i123.AnswersModule, []), i0.ɵmpd(1073742336, i124.CombatListModule, i124.CombatListModule, []), i0.ɵmpd(1073742336, i125.SpecialitiesModule, i125.SpecialitiesModule, []), i0.ɵmpd(1073742336, i126.UserModule, i126.UserModule, []), i0.ɵmpd(1073742336, i127.WeaponModule, i127.WeaponModule, []), i0.ɵmpd(1073742336, i128.CourseModule, i128.CourseModule, []), i0.ɵmpd(1073742336, i129.ToastrModule, i129.ToastrModule, []), i0.ɵmpd(1073742336, i54.NgHttpLoaderModule, i54.NgHttpLoaderModule, []), i0.ɵmpd(131584, i63.ActionsSubject, i63.ActionsSubject, []), i0.ɵmpd(131584, i64.ɵngrx_modules_store_devtools_store_devtools_k, i64.ɵngrx_modules_store_devtools_store_devtools_k, []), i0.ɵmpd(2048, i63.ReducerManagerDispatcher, null, [i64.ɵngrx_modules_store_devtools_store_devtools_k]), i0.ɵmpd(256, i63._INITIAL_STATE, undefined, []), i0.ɵmpd(1024, i63.INITIAL_STATE, i63._initialStateFactory, [i63._INITIAL_STATE]), i0.ɵmpd(256, i63._INITIAL_REDUCERS, { persons: i130.reducer, stages: i131.reducer, tournaments: i132.reducer, competitors: i133.reducer, divisions: i134.reducer, judges: i135.reducer, shared: i136.reducer, quiz: i137.reducer, checkin: i138.reducer, combatList: i139.reducer, specialities: i140.reducer, users: i141.reducer, weapons: i142.reducer, courses: i143.reducer, workspaces: i144.reducer }, []), i0.ɵmpd(2048, i63._STORE_REDUCERS, null, [i63._INITIAL_REDUCERS]), i0.ɵmpd(1024, i63.INITIAL_REDUCERS, i63._createStoreReducers, [i0.Injector, i63._INITIAL_REDUCERS, i63._STORE_REDUCERS]), i0.ɵmpd(256, i63._REDUCER_FACTORY, i63.combineReducers, []), i0.ɵmpd(256, i63.META_REDUCERS, [], []), i0.ɵmpd(1024, i63.REDUCER_FACTORY, i63.createReducerFactory, [i63._REDUCER_FACTORY, i63.META_REDUCERS]), i0.ɵmpd(131584, i63.ReducerManager, i63.ReducerManager, [i63.ReducerManagerDispatcher, i63.INITIAL_STATE, i63.INITIAL_REDUCERS, i63.REDUCER_FACTORY]), i0.ɵmpd(2048, i63.ReducerObservable, null, [i63.ReducerManager]), i0.ɵmpd(131584, i63.ScannedActionsSubject, i63.ScannedActionsSubject, []), i0.ɵmpd(1024, i64.ɵngrx_modules_store_devtools_store_devtools_i, i64.ɵngrx_modules_store_devtools_store_devtools_c, []), i0.ɵmpd(256, i64.ɵngrx_modules_store_devtools_store_devtools_f, { maxAge: 25, logOnly: true }, []), i0.ɵmpd(1024, i64.ɵngrx_modules_store_devtools_store_devtools_e, i64.ɵngrx_modules_store_devtools_store_devtools_h, [i64.ɵngrx_modules_store_devtools_store_devtools_f]), i0.ɵmpd(512, i64.ɵngrx_modules_store_devtools_store_devtools_j, i64.ɵngrx_modules_store_devtools_store_devtools_j, [i64.ɵngrx_modules_store_devtools_store_devtools_i, i64.ɵngrx_modules_store_devtools_store_devtools_e, i64.ɵngrx_modules_store_devtools_store_devtools_k]), i0.ɵmpd(512, i64.StoreDevtools, i64.StoreDevtools, [i64.ɵngrx_modules_store_devtools_store_devtools_k, i63.ActionsSubject, i63.ReducerObservable, i64.ɵngrx_modules_store_devtools_store_devtools_j, i63.ScannedActionsSubject, i0.ErrorHandler, i63.INITIAL_STATE, i64.ɵngrx_modules_store_devtools_store_devtools_e]), i0.ɵmpd(1024, i63.StateObservable, i64.ɵngrx_modules_store_devtools_store_devtools_d, [i64.StoreDevtools]), i0.ɵmpd(512, i63.Store, i63.Store, [i63.StateObservable, i63.ActionsSubject, i63.ReducerManager]), i0.ɵmpd(1073742336, i63.StoreRootModule, i63.StoreRootModule, [i63.ActionsSubject, i63.ReducerObservable, i63.ScannedActionsSubject, i63.Store]), i0.ɵmpd(512, i145.EffectSources, i145.EffectSources, [i0.ErrorHandler, i63.Store]), i0.ɵmpd(131584, i145.ɵngrx_modules_effects_effects_f, i145.ɵngrx_modules_effects_effects_f, [i145.EffectSources, i63.Store]), i0.ɵmpd(512, i145.Actions, i145.Actions, [i63.ScannedActionsSubject]), i0.ɵmpd(512, i52.ɵangular_packages_common_http_http_d, i52.ɵangular_packages_common_http_http_d, []), i0.ɵmpd(2048, i52.XhrFactory, null, [i52.ɵangular_packages_common_http_http_d]), i0.ɵmpd(512, i52.HttpXhrBackend, i52.HttpXhrBackend, [i52.XhrFactory]), i0.ɵmpd(2048, i52.HttpBackend, null, [i52.HttpXhrBackend]), i0.ɵmpd(512, i52.HttpHandler, i52.ɵHttpInterceptingHandler, [i52.HttpBackend, i0.Injector]), i0.ɵmpd(512, i52.HttpClient, i52.HttpClient, [i52.HttpHandler]), i0.ɵmpd(1024, i51.ActivatedRoute, i51.ɵangular_packages_router_router_g, [i51.Router]), i0.ɵmpd(512, i146.PersonService, i146.PersonService, [i52.HttpClient, i51.Router, i51.ActivatedRoute]), i0.ɵmpd(512, i147.MessageService, i147.MessageService, [i129.ToastrService]), i0.ɵmpd(512, i148.PersonEffects, i148.PersonEffects, [i145.Actions, i146.PersonService, i147.MessageService, i63.Store]), i0.ɵmpd(512, i149.StagesService, i149.StagesService, [i52.HttpClient]), i0.ɵmpd(512, i150.StagesEffects, i150.StagesEffects, [i145.Actions, i149.StagesService, i147.MessageService, i63.Store]), i0.ɵmpd(512, i151.TournamentsEffects, i151.TournamentsEffects, [i145.Actions, i152.TournamentsService, i147.MessageService, i153.LocalStorageService, i63.Store, i154.DialogsService, i46.Location]), i0.ɵmpd(512, i155.CompetitorsEffects, i155.CompetitorsEffects, [i145.Actions, i156.CompetitorsService, i147.MessageService, i153.LocalStorageService, i46.Location]), i0.ɵmpd(512, i157.DivisionsService, i157.DivisionsService, [i52.HttpClient]), i0.ɵmpd(512, i158.DivisionsEffects, i158.DivisionsEffects, [i145.Actions, i157.DivisionsService, i147.MessageService]), i0.ɵmpd(512, i159.JudgesEffects, i159.JudgesEffects, [i145.Actions, i160.JudgesService, i147.MessageService, i129.ToastrService, i63.Store]), i0.ɵmpd(512, i161.SharedEffects, i161.SharedEffects, [i145.Actions, i149.StagesService, i162.SharedService, i156.CompetitorsService, i147.MessageService]), i0.ɵmpd(512, i163.QuizEffects, i163.QuizEffects, [i145.Actions, i164.QuizService, i147.MessageService, i63.Store]), i0.ɵmpd(512, i165.CheckinEffects, i165.CheckinEffects, [i145.Actions, i147.MessageService, i166.CheckinService, i63.Store]), i0.ɵmpd(512, i167.CombatListService, i167.CombatListService, [i52.HttpClient]), i0.ɵmpd(512, i168.CombatListEffects, i168.CombatListEffects, [i145.Actions, i147.MessageService, i167.CombatListService]), i0.ɵmpd(512, i169.SpecialitiesEffects, i169.SpecialitiesEffects, [i145.Actions, i170.SpecialitiesService, i147.MessageService, i63.Store]), i0.ɵmpd(512, i171.UserEffects, i171.UserEffects, [i145.Actions, i172.UserService, i147.MessageService, i146.PersonService, i160.JudgesService, i63.Store]), i0.ɵmpd(512, i173.WeaponsEffects, i173.WeaponsEffects, [i145.Actions, i147.MessageService, i63.Store, i174.WeaponsService]), i0.ɵmpd(512, i175.CourseEffects, i175.CourseEffects, [i145.Actions, i63.Store, i176.CoursesService, i147.MessageService, i146.PersonService]), i0.ɵmpd(512, i177.WorkspaceEffects, i177.WorkspaceEffects, [i145.Actions, i178.WorkspaceService, i147.MessageService]), i0.ɵmpd(1024, i145.ɵngrx_modules_effects_effects_d, i145.ɵngrx_modules_effects_effects_a, [i148.PersonEffects, i150.StagesEffects, i151.TournamentsEffects, i155.CompetitorsEffects, i158.DivisionsEffects, i159.JudgesEffects, i161.SharedEffects, i163.QuizEffects, i165.CheckinEffects, i168.CombatListEffects, i169.SpecialitiesEffects, i171.UserEffects, i173.WeaponsEffects, i175.CourseEffects, i177.WorkspaceEffects]), i0.ɵmpd(1073742336, i145.ɵngrx_modules_effects_effects_b, i145.ɵngrx_modules_effects_effects_b, [i145.EffectSources, i145.ɵngrx_modules_effects_effects_f, i63.Store, i145.ɵngrx_modules_effects_effects_d, [2, i63.StoreRootModule], [2, i63.StoreFeatureModule]]), i0.ɵmpd(1073742336, i64.StoreDevtoolsModule, i64.StoreDevtoolsModule, []), i0.ɵmpd(1073742336, i60.MqttModule, i60.MqttModule, []), i0.ɵmpd(1073742336, i1.AppModule, i1.AppModule, []), i0.ɵmpd(256, i0.ɵAPP_ROOT, true, []), i0.ɵmpd(256, i49.ANIMATION_MODULE_TYPE, "BrowserAnimations", []), i0.ɵmpd(256, i52.ɵangular_packages_common_http_http_e, "XSRF-TOKEN", []), i0.ɵmpd(256, i52.ɵangular_packages_common_http_http_f, "X-XSRF-TOKEN", []), i0.ɵmpd(256, i108.SELECTION_MODEL_FACTORY, i108.ɵb, []), i0.ɵmpd(256, i60.MqttServiceConfig, { hostname: "ipsc.com", port: 8080, path: "/mqtt", username: "guest", password: "guest" }, []), i0.ɵmpd(256, i60.MqttClientService, undefined, []), i0.ɵmpd(256, i129.TOAST_CONFIG, { default: i129.DefaultGlobalConfig, config: { timeOut: 10000, positionClass: "toast-top-center", preventDuplicates: true } }, []), i0.ɵmpd(256, i62.USE_STORE, undefined, []), i0.ɵmpd(256, i62.USE_DEFAULT_LANG, undefined, [])]); });
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/communication/components/communication-type/communication-type.component.ngfactory */ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ngfactory.js");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/machine/components/machine-type/machine-type.component.ngfactory */ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ngfactory.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/tests/tests.component.ngfactory */ "./src/app/common/modules/quiz/components/tests/tests.component.ngfactory.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standards/standards.component.ngfactory */ "./src/app/common/modules/quiz/components/standards/standards.component.ngfactory.js");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/categories/categories.component.ngfactory */ "./src/app/common/modules/quiz/components/categories/categories.component.ngfactory.js");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/conditions/conditions.component.ngfactory */ "./src/app/common/modules/quiz/components/conditions/conditions.component.ngfactory.js");
+var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/units/units.component.ngfactory */ "./src/app/common/modules/quiz/components/units/units.component.ngfactory.js");
+var i11 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-details/standard-details.component.ngfactory */ "./src/app/common/modules/quiz/components/standard-details/standard-details.component.ngfactory.js");
+var i12 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ngfactory.js");
+var i13 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-exam/standard-exam.component.ngfactory */ "./src/app/common/modules/quiz/components/standard-exam/standard-exam.component.ngfactory.js");
+var i14 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ngfactory.js");
+var i15 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ngfactory */ "./src/app/common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ngfactory.js");
+var i16 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/questions/questions.component.ngfactory */ "./src/app/common/modules/quiz/components/questions/questions.component.ngfactory.js");
+var i17 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin-details/checkin-details.component.ngfactory */ "./src/app/common/modules/checkin/components/checkin-details/checkin-details.component.ngfactory.js");
+var i18 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-types/weapon-types.component.ngfactory */ "./src/app/common/modules/weapon/components/weapon-types/weapon-types.component.ngfactory.js");
+var i19 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory */ "./node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory.js");
+var i20 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/components/login/login.component.ngfactory */ "./src/app/common/modules/login/components/login/login.component.ngfactory.js");
+var i21 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/components/dashboard/dashboard.component.ngfactory */ "./src/app/common/modules/dashboard/components/dashboard/dashboard.component.ngfactory.js");
+var i22 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/components/exercise/exercise.component.ngfactory */ "./src/app/common/modules/exercise/components/exercise/exercise.component.ngfactory.js");
+var i23 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/dialog-modal/dialog-modal.component.ngfactory */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ngfactory.js");
+var i24 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/change-password-modal/change-password-modal.component.ngfactory */ "./src/app/common/modules/modal/components/change-password-modal/change-password-modal.component.ngfactory.js");
+var i25 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/base-modal/base-modal.component.ngfactory */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ngfactory.js");
+var i26 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/test-result-modal/test-result-modal.component.ngfactory */ "./src/app/common/modules/modal/components/test-result-modal/test-result-modal.component.ngfactory.js");
+var i27 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/check-modal/check-modal.component.ngfactory */ "./src/app/common/modules/modal/components/check-modal/check-modal.component.ngfactory.js");
+var i28 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/weapon-modal/weapon-modal.component.ngfactory */ "./src/app/common/modules/modal/components/weapon-modal/weapon-modal.component.ngfactory.js");
+var i29 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/components/tournaments/tournaments.component.ngfactory */ "./src/app/common/modules/tournaments/components/tournaments/tournaments.component.ngfactory.js");
+var i30 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/components/judges/judges.component.ngfactory */ "./src/app/common/modules/judges/components/judges/judges.component.ngfactory.js");
+var i31 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/components/persons/persons.component.ngfactory */ "./src/app/common/modules/persons/components/persons/persons.component.ngfactory.js");
+var i32 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/components/stages/stages.component.ngfactory */ "./src/app/common/modules/stages/components/stages/stages.component.ngfactory.js");
+var i33 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/components/competitors/competitors.component.ngfactory */ "./src/app/common/modules/competitors/components/competitors/competitors.component.ngfactory.js");
+var i34 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ngfactory */ "./src/app/common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ngfactory.js");
+var i35 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/components/divisions/divisions.component.ngfactory */ "./src/app/common/modules/divisions/components/divisions/divisions.component.ngfactory.js");
+var i36 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/subjects/subjects.component.ngfactory */ "./src/app/common/modules/quiz/components/subjects/subjects.component.ngfactory.js");
+var i37 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin/checkin.component.ngfactory */ "./src/app/common/modules/checkin/components/checkin/checkin.component.ngfactory.js");
+var i38 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/components/answers/answers.component.ngfactory */ "./src/app/common/modules/answers/components/answers/answers.component.ngfactory.js");
+var i39 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list/combat-list.component.ngfactory */ "./src/app/common/modules/combat-list/combat-list/combat-list.component.ngfactory.js");
+var i40 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ngfactory */ "./src/app/common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ngfactory.js");
+var i41 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/components/modal-root/modal-root.component.ngfactory */ "./src/app/common/modules/shared/components/modal-root/modal-root.component.ngfactory.js");
+var i42 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/components/specialities.component.ngfactory */ "./src/app/common/modules/specialities/components/specialities.component.ngfactory.js");
+var i43 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/components/user/user.component.ngfactory */ "./src/app/common/modules/user/components/user/user.component.ngfactory.js");
+var i44 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-list/weapon-list.component.ngfactory */ "./src/app/common/modules/weapon/components/weapon-list/weapon-list.component.ngfactory.js");
+var i45 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course/course.component.ngfactory */ "./src/app/common/modules/course/course/course.component.ngfactory.js");
+var i46 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../node_modules/ngx-toastr/ngx-toastr.ngfactory */ "./node_modules/ngx-toastr/ngx-toastr.ngfactory.js");
+var i47 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.component.ngfactory */ "./src/app/app.component.ngfactory.js");
+var i48 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i49 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+var i50 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/animations/browser */ "./node_modules/@angular/animations/fesm5/browser.js");
+var i51 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+var i52 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
+var i53 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var i54 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var i55 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/interceptors/auth.interceptor */ "./src/app/common/interceptors/auth.interceptor.ts");
+var i56 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ng-http-loader */ "./node_modules/ng-http-loader/fesm5/ng-http-loader.js");
+var i57 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/token.service */ "./src/app/common/services/token.service.ts");
+var i58 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+var i59 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+var i60 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/services/login.service */ "./src/app/common/modules/login/services/login.service.ts");
+var i61 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-mqtt/src/mqtt.service */ "./node_modules/ngx-mqtt/src/mqtt.service.js");
+var i62 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-mqtt/src/mqtt.module */ "./node_modules/ngx-mqtt/src/mqtt.module.js");
+var i63 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! angular-tree-component/dist/models/tree-dragged-element.model */ "./node_modules/angular-tree-component/dist/models/tree-dragged-element.model.js");
+var i64 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i65 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var i66 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
+var i67 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/guards/login.guard */ "./src/app/common/guards/login.guard.ts");
+var i68 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/guards/auth.guard */ "./src/app/common/guards/auth.guard.ts");
+var i69 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/subject.service */ "./src/app/common/services/subject.service.ts");
+var i70 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app.routes */ "./src/app/app.routes.ts");
+var i71 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/communication/components/communication-type/communication-type.component */ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ts");
+var i72 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/machine/components/machine-type/machine-type.component */ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ts");
+var i73 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/tests/tests.component */ "./src/app/common/modules/quiz/components/tests/tests.component.ts");
+var i74 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standards/standards.component */ "./src/app/common/modules/quiz/components/standards/standards.component.ts");
+var i75 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/categories/categories.component */ "./src/app/common/modules/quiz/components/categories/categories.component.ts");
+var i76 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/conditions/conditions.component */ "./src/app/common/modules/quiz/components/conditions/conditions.component.ts");
+var i77 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/units/units.component */ "./src/app/common/modules/quiz/components/units/units.component.ts");
+var i78 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-details/standard-details.component */ "./src/app/common/modules/quiz/components/standard-details/standard-details.component.ts");
+var i79 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component */ "./src/app/common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ts");
+var i80 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/standard-exam/standard-exam.component */ "./src/app/common/modules/quiz/components/standard-exam/standard-exam.component.ts");
+var i81 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-errors-modal/standard-errors-modal.component */ "./src/app/common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ts");
+var i82 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component */ "./src/app/common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ts");
+var i83 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/questions/questions.component */ "./src/app/common/modules/quiz/components/questions/questions.component.ts");
+var i84 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin-details/checkin-details.component */ "./src/app/common/modules/checkin/components/checkin-details/checkin-details.component.ts");
+var i85 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-types/weapon-types.component */ "./src/app/common/modules/weapon/components/weapon-types/weapon-types.component.ts");
+var i86 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/components/login/login.component */ "./src/app/common/modules/login/components/login/login.component.ts");
+var i87 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/components/dashboard/dashboard.component */ "./src/app/common/modules/dashboard/components/dashboard/dashboard.component.ts");
+var i88 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/components/exercise/exercise.component */ "./src/app/common/modules/exercise/components/exercise/exercise.component.ts");
+var i89 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/components/tournaments/tournaments.component */ "./src/app/common/modules/tournaments/components/tournaments/tournaments.component.ts");
+var i90 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/components/judges/judges.component */ "./src/app/common/modules/judges/components/judges/judges.component.ts");
+var i91 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/components/persons/persons.component */ "./src/app/common/modules/persons/components/persons/persons.component.ts");
+var i92 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/components/stages/stages.component */ "./src/app/common/modules/stages/components/stages/stages.component.ts");
+var i93 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/components/competitors/competitors.component */ "./src/app/common/modules/competitors/components/competitors/competitors.component.ts");
+var i94 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/components/competitors-rating/competitors-rating.component */ "./src/app/common/modules/competitors-rating/components/competitors-rating/competitors-rating.component.ts");
+var i95 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/components/divisions/divisions.component */ "./src/app/common/modules/divisions/components/divisions/divisions.component.ts");
+var i96 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/components/subjects/subjects.component */ "./src/app/common/modules/quiz/components/subjects/subjects.component.ts");
+var i97 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/components/checkin/checkin.component */ "./src/app/common/modules/checkin/components/checkin/checkin.component.ts");
+var i98 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/components/answers/answers.component */ "./src/app/common/modules/answers/components/answers/answers.component.ts");
+var i99 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list/combat-list.component */ "./src/app/common/modules/combat-list/combat-list/combat-list.component.ts");
+var i100 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component */ "./src/app/common/modules/modal/components/combat-list-modal-view/combat-list-modal-view.component.ts");
+var i101 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/components/specialities.component */ "./src/app/common/modules/specialities/components/specialities.component.ts");
+var i102 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/components/user/user.component */ "./src/app/common/modules/user/components/user/user.component.ts");
+var i103 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/components/weapon-list/weapon-list.component */ "./src/app/common/modules/weapon/components/weapon-list/weapon-list.component.ts");
+var i104 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course/course.component */ "./src/app/common/modules/course/course/course.component.ts");
+var i105 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+var i106 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
+var i107 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/shared.module */ "./src/app/common/modules/shared/shared.module.ts");
+var i108 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/login/login.module */ "./src/app/common/modules/login/login.module.ts");
+var i109 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/dashboard/dashboard.module */ "./src/app/common/modules/dashboard/dashboard.module.ts");
+var i110 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/exercise/exercise.module */ "./src/app/common/modules/exercise/exercise.module.ts");
+var i111 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toggle-switch */ "./node_modules/ngx-toggle-switch/ui-switch.es5.js");
+var i112 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
+var i113 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/table/table.module */ "./src/app/common/modules/table/table.module.ts");
+var i114 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/forms/forms.module */ "./src/app/common/modules/forms/forms.module.ts");
+var i115 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/modal/modal.module */ "./src/app/common/modules/modal/modal.module.ts");
+var i116 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/tournaments.module */ "./src/app/common/modules/tournaments/tournaments.module.ts");
+var i117 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/judges.module */ "./src/app/common/modules/judges/judges.module.ts");
+var i118 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/persons.module */ "./src/app/common/modules/persons/persons.module.ts");
+var i119 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/stages.module */ "./src/app/common/modules/stages/stages.module.ts");
+var i120 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/competitors.module */ "./src/app/common/modules/competitors/competitors.module.ts");
+var i121 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors-rating/competitors-rating.module */ "./src/app/common/modules/competitors-rating/competitors-rating.module.ts");
+var i122 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! mobx-angular */ "./node_modules/mobx-angular/dist/mobx-angular.js");
+var i123 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! angular-tree-component/dist/angular-tree-component */ "./node_modules/angular-tree-component/dist/angular-tree-component.js");
+var i124 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/divisions.module */ "./src/app/common/modules/divisions/divisions.module.ts");
+var i125 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/quiz.module */ "./src/app/common/modules/quiz/quiz.module.ts");
+var i126 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/checkin.module */ "./src/app/common/modules/checkin/checkin.module.ts");
+var i127 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/answers/answers.module */ "./src/app/common/modules/answers/answers.module.ts");
+var i128 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/combat-list.module */ "./src/app/common/modules/combat-list/combat-list.module.ts");
+var i129 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/specialities.module */ "./src/app/common/modules/specialities/specialities.module.ts");
+var i130 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/user.module */ "./src/app/common/modules/user/user.module.ts");
+var i131 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/weapon.module */ "./src/app/common/modules/weapon/weapon.module.ts");
+var i132 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/course.module */ "./src/app/common/modules/course/course.module.ts");
+var i133 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
+var i134 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/reducers/reducer */ "./src/app/common/modules/persons/reducers/reducer.ts");
+var i135 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/reducers/reducer */ "./src/app/common/modules/stages/reducers/reducer.ts");
+var i136 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/reducers/reducer */ "./src/app/common/modules/tournaments/reducers/reducer.ts");
+var i137 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/reducers/reducer */ "./src/app/common/modules/competitors/reducers/reducer.ts");
+var i138 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/reducers/reducer */ "./src/app/common/modules/divisions/reducers/reducer.ts");
+var i139 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/reducers/judges.reducer */ "./src/app/common/modules/judges/reducers/judges.reducer.ts");
+var i140 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/reducers/reducer */ "./src/app/common/modules/shared/reducers/reducer.ts");
+var i141 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/reducers/reducer */ "./src/app/common/modules/quiz/reducers/reducer.ts");
+var i142 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/reducers/reducer */ "./src/app/common/modules/checkin/reducers/reducer.ts");
+var i143 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/reducers/reducer */ "./src/app/common/modules/combat-list/reducers/reducer.ts");
+var i144 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/reducers/reducer */ "./src/app/common/modules/specialities/reducers/reducer.ts");
+var i145 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/reducers/reducer */ "./src/app/common/modules/user/reducers/reducer.ts");
+var i146 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/reducers/reducer */ "./src/app/common/modules/weapon/reducers/reducer.ts");
+var i147 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/reducers/reducer */ "./src/app/common/modules/course/reducers/reducer.ts");
+var i148 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/reducers/reducer */ "./src/app/common/modules/workspace/reducers/reducer.ts");
+var i149 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/communication/reducers/reducer */ "./src/app/common/modules/communication/reducers/reducer.ts");
+var i150 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/machine/reducers/reducer */ "./src/app/common/modules/machine/reducers/reducer.ts");
+var i151 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+var i152 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/service/person.service */ "./src/app/common/modules/persons/service/person.service.ts");
+var i153 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/message.service */ "./src/app/common/services/message.service.ts");
+var i154 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/persons/effects/effects */ "./src/app/common/modules/persons/effects/effects.ts");
+var i155 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/service/stages.service */ "./src/app/common/modules/stages/service/stages.service.ts");
+var i156 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/stages/effects/effects */ "./src/app/common/modules/stages/effects/effects.ts");
+var i157 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/effects/effects */ "./src/app/common/modules/tournaments/effects/effects.ts");
+var i158 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/tournaments/services/tournaments.service */ "./src/app/common/modules/tournaments/services/tournaments.service.ts");
+var i159 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/services/local-storage.service */ "./src/app/common/services/local-storage.service.ts");
+var i160 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/services/dialogs.service */ "./src/app/common/modules/shared/services/dialogs.service.ts");
+var i161 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/effects/effects */ "./src/app/common/modules/competitors/effects/effects.ts");
+var i162 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/competitors/services/competitors.service */ "./src/app/common/modules/competitors/services/competitors.service.ts");
+var i163 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/services/divisions.service */ "./src/app/common/modules/divisions/services/divisions.service.ts");
+var i164 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/divisions/effects/effects */ "./src/app/common/modules/divisions/effects/effects.ts");
+var i165 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/effects/judges-effects.service */ "./src/app/common/modules/judges/effects/judges-effects.service.ts");
+var i166 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/judges/service/judges.service */ "./src/app/common/modules/judges/service/judges.service.ts");
+var i167 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/effects/effects */ "./src/app/common/modules/shared/effects/effects.ts");
+var i168 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/shared/services/shared.service */ "./src/app/common/modules/shared/services/shared.service.ts");
+var i169 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/effects/effects */ "./src/app/common/modules/quiz/effects/effects.ts");
+var i170 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/quiz/services/quiz.service */ "./src/app/common/modules/quiz/services/quiz.service.ts");
+var i171 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/effects/effects */ "./src/app/common/modules/checkin/effects/effects.ts");
+var i172 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/checkin/services/checkin.service */ "./src/app/common/modules/checkin/services/checkin.service.ts");
+var i173 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/services/combat-list.service */ "./src/app/common/modules/combat-list/services/combat-list.service.ts");
+var i174 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/combat-list/effects/effects */ "./src/app/common/modules/combat-list/effects/effects.ts");
+var i175 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/effects/effects */ "./src/app/common/modules/specialities/effects/effects.ts");
+var i176 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/specialities/services/specialities.service */ "./src/app/common/modules/specialities/services/specialities.service.ts");
+var i177 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/effects/effects */ "./src/app/common/modules/user/effects/effects.ts");
+var i178 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/user/services/user.service */ "./src/app/common/modules/user/services/user.service.ts");
+var i179 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/effects/effects */ "./src/app/common/modules/weapon/effects/effects.ts");
+var i180 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/weapon/services/weapons.service */ "./src/app/common/modules/weapon/services/weapons.service.ts");
+var i181 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/effects/effects */ "./src/app/common/modules/course/effects/effects.ts");
+var i182 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/course/services/courses.service */ "./src/app/common/modules/course/services/courses.service.ts");
+var i183 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/effects/effects */ "./src/app/common/modules/workspace/effects/effects.ts");
+var i184 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/workspace/services/workspace.service */ "./src/app/common/modules/workspace/services/workspace.service.ts");
+var i185 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/communication/effects/effects */ "./src/app/common/modules/communication/effects/effects.ts");
+var i186 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/communication/services/communication.service */ "./src/app/common/modules/communication/services/communication.service.ts");
+var i187 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/machine/effects/effects */ "./src/app/common/modules/machine/effects/effects.ts");
+var i188 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./common/modules/machine/services/machine.service */ "./src/app/common/modules/machine/services/machine.service.ts");
+var AppModuleNgFactory = /*@__PURE__*/ /*@__PURE__*/ i0.ɵcmf(i1.AppModule, [i2.AppComponent], function (_l) { return i0.ɵmod([i0.ɵmpd(512, i0.ComponentFactoryResolver, i0.ɵCodegenComponentFactoryResolver, [[8, [i3.ɵangular_packages_router_router_lNgFactory, i4.CommunicationTypeComponentNgFactory, i5.MachineTypeComponentNgFactory, i6.TestsComponentNgFactory, i7.StandardsComponentNgFactory, i8.CategoriesComponentNgFactory, i9.ConditionsComponentNgFactory, i10.UnitsComponentNgFactory, i11.StandardDetailsComponentNgFactory, i12.StandardCompetitorModalComponentNgFactory, i13.StandardExamComponentNgFactory, i14.StandardErrorsModalComponentNgFactory, i15.StandardConditionsModalComponentNgFactory, i16.QuestionsComponentNgFactory, i17.CheckinDetailsComponentNgFactory, i18.WeaponTypesComponentNgFactory, i19.NgbDatepickerNgFactory, i19.NgbAlertNgFactory, i19.ɵuNgFactory, i19.ɵvNgFactory, i19.ɵnNgFactory, i19.ɵqNgFactory, i19.ɵrNgFactory, i20.LoginComponentNgFactory, i21.DashboardComponentNgFactory, i22.ExerciseComponentNgFactory, i23.DialogModalComponentNgFactory, i24.ChangePasswordModalComponentNgFactory, i25.BaseModalComponentNgFactory, i26.TestResultModalComponentNgFactory, i27.CheckModalComponentNgFactory, i28.WeaponModalComponentNgFactory, i29.TournamentsComponentNgFactory, i30.JudgesComponentNgFactory, i31.PersonsComponentNgFactory, i32.StagesComponentNgFactory, i33.CompetitorsComponentNgFactory, i34.CompetitorsRatingComponentNgFactory, i35.DivisionsComponentNgFactory, i36.SubjectsComponentNgFactory, i37.CheckinComponentNgFactory, i38.AnswersComponentNgFactory, i39.CombatListComponentNgFactory, i40.CombatListModalViewComponentNgFactory, i41.ModalRootComponentNgFactory, i42.SpecialitiesComponentNgFactory, i43.UserComponentNgFactory, i44.WeaponListComponentNgFactory, i45.CourseComponentNgFactory, i46.ToastNgFactory, i47.AppComponentNgFactory]], [3, i0.ComponentFactoryResolver], i0.NgModuleRef]), i0.ɵmpd(4352, i0.LOCALE_ID, "ru-KZ", []), i0.ɵmpd(4608, i48.NgLocalization, i48.NgLocaleLocalization, [i0.LOCALE_ID, [2, i48.ɵangular_packages_common_common_a]]), i0.ɵmpd(5120, i0.ɵangular_packages_core_core_bb, i0.ɵangular_packages_core_core_s, [i0.NgZone]), i0.ɵmpd(5120, i0.APP_ID, i0.ɵangular_packages_core_core_f, []), i0.ɵmpd(5120, i0.IterableDiffers, i0.ɵangular_packages_core_core_o, []), i0.ɵmpd(5120, i0.KeyValueDiffers, i0.ɵangular_packages_core_core_p, []), i0.ɵmpd(4608, i49.DomSanitizer, i49.ɵDomSanitizerImpl, [i48.DOCUMENT]), i0.ɵmpd(6144, i0.Sanitizer, null, [i49.DomSanitizer]), i0.ɵmpd(4608, i49.HAMMER_GESTURE_CONFIG, i49.HammerGestureConfig, []), i0.ɵmpd(5120, i49.EVENT_MANAGER_PLUGINS, function (p0_0, p0_1, p0_2, p1_0, p2_0, p2_1, p2_2, p2_3) { return [new i49.ɵDomEventsPlugin(p0_0, p0_1, p0_2), new i49.ɵKeyEventsPlugin(p1_0), new i49.ɵHammerGesturesPlugin(p2_0, p2_1, p2_2, p2_3)]; }, [i48.DOCUMENT, i0.NgZone, i0.PLATFORM_ID, i48.DOCUMENT, i48.DOCUMENT, i49.HAMMER_GESTURE_CONFIG, i0.ɵConsole, [2, i49.HAMMER_LOADER]]), i0.ɵmpd(4608, i49.EventManager, i49.EventManager, [i49.EVENT_MANAGER_PLUGINS, i0.NgZone]), i0.ɵmpd(135680, i49.ɵDomSharedStylesHost, i49.ɵDomSharedStylesHost, [i48.DOCUMENT]), i0.ɵmpd(4608, i49.ɵDomRendererFactory2, i49.ɵDomRendererFactory2, [i49.EventManager, i49.ɵDomSharedStylesHost, i0.APP_ID]), i0.ɵmpd(5120, i50.AnimationDriver, i51.ɵangular_packages_platform_browser_animations_animations_a, []), i0.ɵmpd(5120, i50.ɵAnimationStyleNormalizer, i51.ɵangular_packages_platform_browser_animations_animations_b, []), i0.ɵmpd(4608, i50.ɵAnimationEngine, i51.ɵInjectableAnimationEngine, [i48.DOCUMENT, i50.AnimationDriver, i50.ɵAnimationStyleNormalizer]), i0.ɵmpd(5120, i0.RendererFactory2, i51.ɵangular_packages_platform_browser_animations_animations_c, [i49.ɵDomRendererFactory2, i50.ɵAnimationEngine, i0.NgZone]), i0.ɵmpd(6144, i49.ɵSharedStylesHost, null, [i49.ɵDomSharedStylesHost]), i0.ɵmpd(4608, i0.Testability, i0.Testability, [i0.NgZone]), i0.ɵmpd(4608, i52.AnimationBuilder, i51.ɵBrowserAnimationBuilder, [i0.RendererFactory2, i48.DOCUMENT]), i0.ɵmpd(4608, i53.NoPreloading, i53.NoPreloading, []), i0.ɵmpd(6144, i53.PreloadingStrategy, null, [i53.NoPreloading]), i0.ɵmpd(135680, i53.RouterPreloader, i53.RouterPreloader, [i53.Router, i0.NgModuleFactoryLoader, i0.Compiler, i0.Injector, i53.PreloadingStrategy]), i0.ɵmpd(4608, i53.PreloadAllModules, i53.PreloadAllModules, []), i0.ɵmpd(5120, i53.ɵangular_packages_router_router_o, i53.ɵangular_packages_router_router_c, [i53.Router, i48.ViewportScroller, i53.ROUTER_CONFIGURATION]), i0.ɵmpd(5120, i53.ROUTER_INITIALIZER, i53.ɵangular_packages_router_router_j, [i53.ɵangular_packages_router_router_h]), i0.ɵmpd(5120, i0.APP_BOOTSTRAP_LISTENER, function (p0_0) { return [p0_0]; }, [i53.ROUTER_INITIALIZER]), i0.ɵmpd(4608, i54.HttpXsrfTokenExtractor, i54.ɵangular_packages_common_http_http_g, [i48.DOCUMENT, i0.PLATFORM_ID, i54.ɵangular_packages_common_http_http_e]), i0.ɵmpd(4608, i54.ɵangular_packages_common_http_http_h, i54.ɵangular_packages_common_http_http_h, [i54.HttpXsrfTokenExtractor, i54.ɵangular_packages_common_http_http_f]), i0.ɵmpd(5120, i54.HTTP_INTERCEPTORS, function (p0_0, p1_0, p2_0, p2_1) { return [p0_0, p1_0, new i55.AuthInterceptor(p2_0, p2_1)]; }, [i54.ɵangular_packages_common_http_http_h, i56.PendingRequestsInterceptor, i53.Router, i57.TokenService]), i0.ɵmpd(4608, i58.FormBuilder, i58.FormBuilder, []), i0.ɵmpd(4608, i58.ɵangular_packages_forms_forms_o, i58.ɵangular_packages_forms_forms_o, []), i0.ɵmpd(4608, i59.NgbModal, i59.NgbModal, [i0.ComponentFactoryResolver, i0.Injector, i59.ɵw, i59.NgbModalConfig]), i0.ɵmpd(4608, i59.NgbDateNativeAdapter, i59.NgbDateNativeAdapter, []), i0.ɵmpd(4608, i60.LoginService, i60.LoginService, [i54.HttpClient, i57.TokenService, i53.Router]), i0.ɵmpd(4608, i61.MqttService, i61.MqttService, [i62.MqttServiceConfig, i62.MqttClientService]), i0.ɵmpd(4608, i63.TreeDraggedElement, i63.TreeDraggedElement, []), i0.ɵmpd(5120, i64.TranslateLoader, i1.HttpLoaderFactory, [i54.HttpClient]), i0.ɵmpd(4608, i64.TranslateCompiler, i64.TranslateFakeCompiler, []), i0.ɵmpd(4608, i64.TranslateParser, i64.TranslateDefaultParser, []), i0.ɵmpd(4608, i64.MissingTranslationHandler, i64.FakeMissingTranslationHandler, []), i0.ɵmpd(4608, i64.TranslateStore, i64.TranslateStore, []), i0.ɵmpd(4608, i64.TranslateService, i64.TranslateService, [i64.TranslateStore, i64.TranslateLoader, i64.TranslateCompiler, i64.TranslateParser, i64.MissingTranslationHandler, i64.USE_DEFAULT_LANG, i64.USE_STORE]), i0.ɵmpd(135680, i65.State, i65.State, [i65.ActionsSubject, i65.ReducerObservable, i65.ScannedActionsSubject, i65.INITIAL_STATE]), i0.ɵmpd(5120, i66.ɵngrx_modules_store_devtools_store_devtools_a, i66.ɵngrx_modules_store_devtools_store_devtools_b, [i66.ɵngrx_modules_store_devtools_store_devtools_i, i66.ɵngrx_modules_store_devtools_store_devtools_e]), i0.ɵmpd(4608, i67.LoginGuard, i67.LoginGuard, [i53.Router, i57.TokenService]), i0.ɵmpd(4608, i68.AuthGuard, i68.AuthGuard, [i53.Router, i57.TokenService]), i0.ɵmpd(4608, i69.SubjectService, i69.SubjectService, []), i0.ɵmpd(1073742336, i48.CommonModule, i48.CommonModule, []), i0.ɵmpd(1024, i0.ErrorHandler, i49.ɵangular_packages_platform_browser_platform_browser_a, []), i0.ɵmpd(1024, i0.NgProbeToken, function () { return [i53.ɵangular_packages_router_router_b()]; }, []), i0.ɵmpd(512, i53.ɵangular_packages_router_router_h, i53.ɵangular_packages_router_router_h, [i0.Injector]), i0.ɵmpd(1024, i0.APP_INITIALIZER, function (p0_0, p1_0) { return [i49.ɵangular_packages_platform_browser_platform_browser_j(p0_0), i53.ɵangular_packages_router_router_i(p1_0)]; }, [[2, i0.NgProbeToken], i53.ɵangular_packages_router_router_h]), i0.ɵmpd(512, i0.ApplicationInitStatus, i0.ApplicationInitStatus, [[2, i0.APP_INITIALIZER]]), i0.ɵmpd(131584, i0.ApplicationRef, i0.ApplicationRef, [i0.NgZone, i0.ɵConsole, i0.Injector, i0.ErrorHandler, i0.ComponentFactoryResolver, i0.ApplicationInitStatus]), i0.ɵmpd(1073742336, i0.ApplicationModule, i0.ApplicationModule, [i0.ApplicationRef]), i0.ɵmpd(1073742336, i49.BrowserModule, i49.BrowserModule, [[3, i49.BrowserModule]]), i0.ɵmpd(1073742336, i51.BrowserAnimationsModule, i51.BrowserAnimationsModule, []), i0.ɵmpd(1024, i53.ɵangular_packages_router_router_a, i53.ɵangular_packages_router_router_e, [[3, i53.Router]]), i0.ɵmpd(512, i53.UrlSerializer, i53.DefaultUrlSerializer, []), i0.ɵmpd(512, i53.ChildrenOutletContexts, i53.ChildrenOutletContexts, []), i0.ɵmpd(256, i53.ROUTER_CONFIGURATION, {}, []), i0.ɵmpd(1024, i48.LocationStrategy, i53.ɵangular_packages_router_router_d, [i48.PlatformLocation, [2, i48.APP_BASE_HREF], i53.ROUTER_CONFIGURATION]), i0.ɵmpd(512, i48.Location, i48.Location, [i48.LocationStrategy, i48.PlatformLocation]), i0.ɵmpd(512, i0.Compiler, i0.Compiler, []), i0.ɵmpd(512, i0.NgModuleFactoryLoader, i0.SystemJsNgModuleLoader, [i0.Compiler, [2, i0.SystemJsNgModuleLoaderConfig]]), i0.ɵmpd(1024, i53.ROUTES, function () { return [[{ path: "", redirectTo: "/dashboard", pathMatch: "full" }, { path: "login", loadChildren: i70.ɵ0, canActivate: [i67.LoginGuard] }, { path: "dashboard", loadChildren: i70.ɵ1, canActivate: [i68.AuthGuard], data: i70.ɵ2 }, { path: "exercise", loadChildren: i70.ɵ3, canActivate: [i68.AuthGuard], data: i70.ɵ4 }, { path: "tournaments", loadChildren: i70.ɵ5, canActivate: [i68.AuthGuard], data: i70.ɵ6 }, { path: "tournaments/stages", loadChildren: i70.ɵ7, canActivate: [i68.AuthGuard], data: i70.ɵ8 }, { path: "tournaments/competitors", loadChildren: i70.ɵ9, canActivate: [i68.AuthGuard], data: i70.ɵ10 }, { path: "divisions", loadChildren: i70.ɵ11, canActivate: [i68.AuthGuard], data: i70.ɵ12 }, { path: "judges", loadChildren: i70.ɵ13, canActivate: [i68.AuthGuard], data: i70.ɵ14 }, { path: "persons", loadChildren: i70.ɵ15, canActivate: [i68.AuthGuard], data: i70.ɵ16 }, { path: "tournaments/rating", loadChildren: i70.ɵ17, canActivate: [i68.AuthGuard], data: i70.ɵ18 }, { path: "communication", loadChildren: i70.ɵ19, canActivate: [i68.AuthGuard], data: i70.ɵ20 }, { path: "communication-type", component: i71.CommunicationTypeComponent, canActivate: [i68.AuthGuard], data: i70.ɵ21 }, { path: "machine", loadChildren: i70.ɵ22, canActivate: [i68.AuthGuard], data: i70.ɵ23 }, { path: "machine-type", component: i72.MachineTypeComponent, canActivate: [i68.AuthGuard], data: i70.ɵ24 }, { path: "subjects", loadChildren: i70.ɵ25, canActivate: [i68.AuthGuard], data: i70.ɵ26 }, { path: "subjects/tests", component: i73.TestsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ27 }, { path: "subjects/standards", component: i74.StandardsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ28 }, { path: "subjects/standards/categories", component: i75.CategoriesComponent, canActivate: [i68.AuthGuard], data: i70.ɵ29 }, { path: "subjects/standards/conditions", component: i76.ConditionsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ30 }, { path: "subjects/standards/conditions/units", component: i77.UnitsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ31 }, { path: "subjects/standards/:id", component: i78.StandardDetailsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ32, children: [{ path: "standard-competitor-modal", component: i79.StandardCompetitorModalComponent }] }, { path: "subjects/standards/:id/exam", component: i80.StandardExamComponent, canActivate: [i68.AuthGuard], data: i70.ɵ33, children: [{ path: "standard-errors-modal", component: i81.StandardErrorsModalComponent }, { path: "standard-conditions-modal", component: i82.StandardConditionsModalComponent }] }, { path: "subjects/tests/questions", component: i83.QuestionsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ34 }, { path: "answers", loadChildren: i70.ɵ35, canActivate: [i68.AuthGuard], data: i70.ɵ36 }, { path: "checkin", loadChildren: i70.ɵ37, canActivate: [i68.AuthGuard], data: i70.ɵ38 }, { path: "checkin/checkin-details", component: i84.CheckinDetailsComponent, canActivate: [i68.AuthGuard], data: i70.ɵ39 }, { path: "combat-list", loadChildren: i70.ɵ40, canActivate: [i68.AuthGuard], data: i70.ɵ41 }, { path: "specialities", loadChildren: i70.ɵ42, canActivate: [i68.AuthGuard], data: i70.ɵ43 }, { path: "users", loadChildren: i70.ɵ44, canActivate: [i68.AuthGuard], data: i70.ɵ45 }, { path: "weapon-list", loadChildren: i70.ɵ46, canActivate: [i68.AuthGuard], data: i70.ɵ47 }, { path: "weapon-types", component: i85.WeaponTypesComponent, canActivate: [i68.AuthGuard], data: i70.ɵ48 }, { path: "courses", loadChildren: i70.ɵ49, canActivate: [i68.AuthGuard], data: i70.ɵ50 }, { path: "workspace", loadChildren: i70.ɵ51, canActivate: [i68.AuthGuard], data: i70.ɵ52 }, { path: "**", redirectTo: "" }], [{ path: "", component: i86.LoginComponent }], [{ path: "", component: i87.DashboardComponent }], [{ path: "", component: i88.ExerciseComponent }], [{ path: "", component: i89.TournamentsComponent }], [{ path: "", component: i90.JudgesComponent }], [{ path: "", component: i91.PersonsComponent }], [{ path: "", component: i92.StagesComponent }], [{ path: "", component: i93.CompetitorsComponent }], [{ path: "", component: i94.CompetitorsRatingComponent }], [{ path: "", component: i95.DivisionsComponent }], [{ path: "", component: i96.SubjectsComponent }], [{ path: "", component: i97.CheckinComponent }], [{ path: "", component: i98.AnswersComponent }], [{ path: "", component: i99.CombatListComponent, children: [{ path: "combat-list-modal-view", component: i100.CombatListModalViewComponent }] }], [{ path: "", component: i101.SpecialitiesComponent }], [{ path: "", component: i102.UserComponent }], [{ path: "", component: i103.WeaponListComponent }], [{ path: "", component: i104.CourseComponent }]]; }, []), i0.ɵmpd(1024, i53.Router, i53.ɵangular_packages_router_router_f, [i0.ApplicationRef, i53.UrlSerializer, i53.ChildrenOutletContexts, i48.Location, i0.Injector, i0.NgModuleFactoryLoader, i0.Compiler, i53.ROUTES, i53.ROUTER_CONFIGURATION, [2, i53.UrlHandlingStrategy], [2, i53.RouteReuseStrategy]]), i0.ɵmpd(1073742336, i53.RouterModule, i53.RouterModule, [[2, i53.ɵangular_packages_router_router_a], [2, i53.Router]]), i0.ɵmpd(1073742336, i105.AppRoutingModule, i105.AppRoutingModule, []), i0.ɵmpd(1073742336, i54.HttpClientXsrfModule, i54.HttpClientXsrfModule, []), i0.ɵmpd(1073742336, i54.HttpClientModule, i54.HttpClientModule, []), i0.ɵmpd(1073742336, i58.ɵangular_packages_forms_forms_d, i58.ɵangular_packages_forms_forms_d, []), i0.ɵmpd(1073742336, i58.ReactiveFormsModule, i58.ReactiveFormsModule, []), i0.ɵmpd(1073742336, i58.FormsModule, i58.FormsModule, []), i0.ɵmpd(1073742336, i64.TranslateModule, i64.TranslateModule, []), i0.ɵmpd(1073742336, i106.FontAwesomeModule, i106.FontAwesomeModule, []), i0.ɵmpd(1073742336, i59.NgbDatepickerModule, i59.NgbDatepickerModule, []), i0.ɵmpd(1073742336, i59.NgbAccordionModule, i59.NgbAccordionModule, []), i0.ɵmpd(1073742336, i59.NgbAlertModule, i59.NgbAlertModule, []), i0.ɵmpd(1073742336, i59.NgbButtonsModule, i59.NgbButtonsModule, []), i0.ɵmpd(1073742336, i59.NgbCarouselModule, i59.NgbCarouselModule, []), i0.ɵmpd(1073742336, i59.NgbCollapseModule, i59.NgbCollapseModule, []), i0.ɵmpd(1073742336, i59.NgbDropdownModule, i59.NgbDropdownModule, []), i0.ɵmpd(1073742336, i59.NgbModalModule, i59.NgbModalModule, []), i0.ɵmpd(1073742336, i59.NgbPaginationModule, i59.NgbPaginationModule, []), i0.ɵmpd(1073742336, i59.NgbPopoverModule, i59.NgbPopoverModule, []), i0.ɵmpd(1073742336, i59.NgbProgressbarModule, i59.NgbProgressbarModule, []), i0.ɵmpd(1073742336, i59.NgbRatingModule, i59.NgbRatingModule, []), i0.ɵmpd(1073742336, i59.NgbTabsetModule, i59.NgbTabsetModule, []), i0.ɵmpd(1073742336, i59.NgbTimepickerModule, i59.NgbTimepickerModule, []), i0.ɵmpd(1073742336, i59.NgbTooltipModule, i59.NgbTooltipModule, []), i0.ɵmpd(1073742336, i59.NgbTypeaheadModule, i59.NgbTypeaheadModule, []), i0.ɵmpd(1073742336, i59.NgbModule, i59.NgbModule, []), i0.ɵmpd(1073742336, i107.SharedModule, i107.SharedModule, []), i0.ɵmpd(1073742336, i108.LoginModule, i108.LoginModule, []), i0.ɵmpd(1073742336, i109.DashboardModule, i109.DashboardModule, []), i0.ɵmpd(1073742336, i110.ExerciseModule, i110.ExerciseModule, []), i0.ɵmpd(1073742336, i111.UiSwitchModule, i111.UiSwitchModule, []), i0.ɵmpd(1073742336, i112.NgSelectModule, i112.NgSelectModule, []), i0.ɵmpd(1073742336, i113.TableModule, i113.TableModule, []), i0.ɵmpd(1073742336, i114.FormsModule, i114.FormsModule, []), i0.ɵmpd(1073742336, i115.ModalModule, i115.ModalModule, []), i0.ɵmpd(1073742336, i116.TournamentsModule, i116.TournamentsModule, []), i0.ɵmpd(1073742336, i117.JudgesModule, i117.JudgesModule, []), i0.ɵmpd(1073742336, i118.PersonsModule, i118.PersonsModule, []), i0.ɵmpd(1073742336, i119.StagesModule, i119.StagesModule, []), i0.ɵmpd(1073742336, i120.CompetitorsModule, i120.CompetitorsModule, []), i0.ɵmpd(1073742336, i121.CompetitorsRatingModule, i121.CompetitorsRatingModule, []), i0.ɵmpd(1073742336, i122.MobxAngularModule, i122.MobxAngularModule, []), i0.ɵmpd(1073742336, i123.TreeModule, i123.TreeModule, []), i0.ɵmpd(1073742336, i124.DivisionsModule, i124.DivisionsModule, []), i0.ɵmpd(1073742336, i125.QuizModule, i125.QuizModule, []), i0.ɵmpd(1073742336, i126.CheckinModule, i126.CheckinModule, []), i0.ɵmpd(1073742336, i127.AnswersModule, i127.AnswersModule, []), i0.ɵmpd(1073742336, i128.CombatListModule, i128.CombatListModule, []), i0.ɵmpd(1073742336, i129.SpecialitiesModule, i129.SpecialitiesModule, []), i0.ɵmpd(1073742336, i130.UserModule, i130.UserModule, []), i0.ɵmpd(1073742336, i131.WeaponModule, i131.WeaponModule, []), i0.ɵmpd(1073742336, i132.CourseModule, i132.CourseModule, []), i0.ɵmpd(1073742336, i133.ToastrModule, i133.ToastrModule, []), i0.ɵmpd(1073742336, i56.NgHttpLoaderModule, i56.NgHttpLoaderModule, []), i0.ɵmpd(131584, i65.ActionsSubject, i65.ActionsSubject, []), i0.ɵmpd(131584, i66.ɵngrx_modules_store_devtools_store_devtools_k, i66.ɵngrx_modules_store_devtools_store_devtools_k, []), i0.ɵmpd(2048, i65.ReducerManagerDispatcher, null, [i66.ɵngrx_modules_store_devtools_store_devtools_k]), i0.ɵmpd(256, i65._INITIAL_STATE, undefined, []), i0.ɵmpd(1024, i65.INITIAL_STATE, i65._initialStateFactory, [i65._INITIAL_STATE]), i0.ɵmpd(256, i65._INITIAL_REDUCERS, { persons: i134.reducer, stages: i135.reducer, tournaments: i136.reducer, competitors: i137.reducer, divisions: i138.reducer, judges: i139.reducer, shared: i140.reducer, quiz: i141.reducer, checkin: i142.reducer, combatList: i143.reducer, specialities: i144.reducer, users: i145.reducer, weapons: i146.reducer, courses: i147.reducer, workspaces: i148.reducer, communication: i149.reducer, machine: i150.reducer }, []), i0.ɵmpd(2048, i65._STORE_REDUCERS, null, [i65._INITIAL_REDUCERS]), i0.ɵmpd(1024, i65.INITIAL_REDUCERS, i65._createStoreReducers, [i0.Injector, i65._INITIAL_REDUCERS, i65._STORE_REDUCERS]), i0.ɵmpd(256, i65._REDUCER_FACTORY, i65.combineReducers, []), i0.ɵmpd(256, i65.META_REDUCERS, [], []), i0.ɵmpd(1024, i65.REDUCER_FACTORY, i65.createReducerFactory, [i65._REDUCER_FACTORY, i65.META_REDUCERS]), i0.ɵmpd(131584, i65.ReducerManager, i65.ReducerManager, [i65.ReducerManagerDispatcher, i65.INITIAL_STATE, i65.INITIAL_REDUCERS, i65.REDUCER_FACTORY]), i0.ɵmpd(2048, i65.ReducerObservable, null, [i65.ReducerManager]), i0.ɵmpd(131584, i65.ScannedActionsSubject, i65.ScannedActionsSubject, []), i0.ɵmpd(1024, i66.ɵngrx_modules_store_devtools_store_devtools_i, i66.ɵngrx_modules_store_devtools_store_devtools_c, []), i0.ɵmpd(256, i66.ɵngrx_modules_store_devtools_store_devtools_f, { maxAge: 25, logOnly: true }, []), i0.ɵmpd(1024, i66.ɵngrx_modules_store_devtools_store_devtools_e, i66.ɵngrx_modules_store_devtools_store_devtools_h, [i66.ɵngrx_modules_store_devtools_store_devtools_f]), i0.ɵmpd(512, i66.ɵngrx_modules_store_devtools_store_devtools_j, i66.ɵngrx_modules_store_devtools_store_devtools_j, [i66.ɵngrx_modules_store_devtools_store_devtools_i, i66.ɵngrx_modules_store_devtools_store_devtools_e, i66.ɵngrx_modules_store_devtools_store_devtools_k]), i0.ɵmpd(512, i66.StoreDevtools, i66.StoreDevtools, [i66.ɵngrx_modules_store_devtools_store_devtools_k, i65.ActionsSubject, i65.ReducerObservable, i66.ɵngrx_modules_store_devtools_store_devtools_j, i65.ScannedActionsSubject, i0.ErrorHandler, i65.INITIAL_STATE, i66.ɵngrx_modules_store_devtools_store_devtools_e]), i0.ɵmpd(1024, i65.StateObservable, i66.ɵngrx_modules_store_devtools_store_devtools_d, [i66.StoreDevtools]), i0.ɵmpd(512, i65.Store, i65.Store, [i65.StateObservable, i65.ActionsSubject, i65.ReducerManager]), i0.ɵmpd(1073742336, i65.StoreRootModule, i65.StoreRootModule, [i65.ActionsSubject, i65.ReducerObservable, i65.ScannedActionsSubject, i65.Store]), i0.ɵmpd(512, i151.EffectSources, i151.EffectSources, [i0.ErrorHandler, i65.Store]), i0.ɵmpd(131584, i151.ɵngrx_modules_effects_effects_f, i151.ɵngrx_modules_effects_effects_f, [i151.EffectSources, i65.Store]), i0.ɵmpd(512, i151.Actions, i151.Actions, [i65.ScannedActionsSubject]), i0.ɵmpd(512, i54.ɵangular_packages_common_http_http_d, i54.ɵangular_packages_common_http_http_d, []), i0.ɵmpd(2048, i54.XhrFactory, null, [i54.ɵangular_packages_common_http_http_d]), i0.ɵmpd(512, i54.HttpXhrBackend, i54.HttpXhrBackend, [i54.XhrFactory]), i0.ɵmpd(2048, i54.HttpBackend, null, [i54.HttpXhrBackend]), i0.ɵmpd(512, i54.HttpHandler, i54.ɵHttpInterceptingHandler, [i54.HttpBackend, i0.Injector]), i0.ɵmpd(512, i54.HttpClient, i54.HttpClient, [i54.HttpHandler]), i0.ɵmpd(1024, i53.ActivatedRoute, i53.ɵangular_packages_router_router_g, [i53.Router]), i0.ɵmpd(512, i152.PersonService, i152.PersonService, [i54.HttpClient, i53.Router, i53.ActivatedRoute]), i0.ɵmpd(512, i153.MessageService, i153.MessageService, [i133.ToastrService]), i0.ɵmpd(512, i154.PersonEffects, i154.PersonEffects, [i151.Actions, i152.PersonService, i153.MessageService, i65.Store]), i0.ɵmpd(512, i155.StagesService, i155.StagesService, [i54.HttpClient]), i0.ɵmpd(512, i156.StagesEffects, i156.StagesEffects, [i151.Actions, i155.StagesService, i153.MessageService, i65.Store]), i0.ɵmpd(512, i157.TournamentsEffects, i157.TournamentsEffects, [i151.Actions, i158.TournamentsService, i153.MessageService, i159.LocalStorageService, i65.Store, i160.DialogsService, i48.Location]), i0.ɵmpd(512, i161.CompetitorsEffects, i161.CompetitorsEffects, [i151.Actions, i162.CompetitorsService, i153.MessageService, i159.LocalStorageService, i48.Location]), i0.ɵmpd(512, i163.DivisionsService, i163.DivisionsService, [i54.HttpClient]), i0.ɵmpd(512, i164.DivisionsEffects, i164.DivisionsEffects, [i151.Actions, i163.DivisionsService, i153.MessageService]), i0.ɵmpd(512, i165.JudgesEffects, i165.JudgesEffects, [i151.Actions, i166.JudgesService, i153.MessageService, i133.ToastrService, i65.Store]), i0.ɵmpd(512, i167.SharedEffects, i167.SharedEffects, [i151.Actions, i155.StagesService, i168.SharedService, i162.CompetitorsService, i153.MessageService]), i0.ɵmpd(512, i169.QuizEffects, i169.QuizEffects, [i151.Actions, i170.QuizService, i153.MessageService, i65.Store]), i0.ɵmpd(512, i171.CheckinEffects, i171.CheckinEffects, [i151.Actions, i153.MessageService, i172.CheckinService, i65.Store]), i0.ɵmpd(512, i173.CombatListService, i173.CombatListService, [i54.HttpClient]), i0.ɵmpd(512, i174.CombatListEffects, i174.CombatListEffects, [i151.Actions, i153.MessageService, i173.CombatListService]), i0.ɵmpd(512, i175.SpecialitiesEffects, i175.SpecialitiesEffects, [i151.Actions, i176.SpecialitiesService, i153.MessageService, i65.Store]), i0.ɵmpd(512, i177.UserEffects, i177.UserEffects, [i151.Actions, i178.UserService, i153.MessageService, i152.PersonService, i166.JudgesService, i65.Store]), i0.ɵmpd(512, i179.WeaponsEffects, i179.WeaponsEffects, [i151.Actions, i153.MessageService, i65.Store, i180.WeaponsService]), i0.ɵmpd(512, i181.CourseEffects, i181.CourseEffects, [i151.Actions, i65.Store, i182.CoursesService, i153.MessageService, i152.PersonService]), i0.ɵmpd(512, i183.WorkspaceEffects, i183.WorkspaceEffects, [i151.Actions, i184.WorkspaceService, i153.MessageService]), i0.ɵmpd(512, i185.CommunicationEffects, i185.CommunicationEffects, [i151.Actions, i186.CommunicationService, i153.MessageService, i65.Store]), i0.ɵmpd(512, i187.MachineEffects, i187.MachineEffects, [i151.Actions, i188.MachineService, i153.MessageService, i65.Store]), i0.ɵmpd(1024, i151.ɵngrx_modules_effects_effects_d, i151.ɵngrx_modules_effects_effects_a, [i154.PersonEffects, i156.StagesEffects, i157.TournamentsEffects, i161.CompetitorsEffects, i164.DivisionsEffects, i165.JudgesEffects, i167.SharedEffects, i169.QuizEffects, i171.CheckinEffects, i174.CombatListEffects, i175.SpecialitiesEffects, i177.UserEffects, i179.WeaponsEffects, i181.CourseEffects, i183.WorkspaceEffects, i185.CommunicationEffects, i187.MachineEffects]), i0.ɵmpd(1073742336, i151.ɵngrx_modules_effects_effects_b, i151.ɵngrx_modules_effects_effects_b, [i151.EffectSources, i151.ɵngrx_modules_effects_effects_f, i65.Store, i151.ɵngrx_modules_effects_effects_d, [2, i65.StoreRootModule], [2, i65.StoreFeatureModule]]), i0.ɵmpd(1073742336, i66.StoreDevtoolsModule, i66.StoreDevtoolsModule, []), i0.ɵmpd(1073742336, i62.MqttModule, i62.MqttModule, []), i0.ɵmpd(1073742336, i1.AppModule, i1.AppModule, []), i0.ɵmpd(256, i0.ɵAPP_ROOT, true, []), i0.ɵmpd(256, i51.ANIMATION_MODULE_TYPE, "BrowserAnimations", []), i0.ɵmpd(256, i54.ɵangular_packages_common_http_http_e, "XSRF-TOKEN", []), i0.ɵmpd(256, i54.ɵangular_packages_common_http_http_f, "X-XSRF-TOKEN", []), i0.ɵmpd(256, i112.SELECTION_MODEL_FACTORY, i112.ɵb, []), i0.ɵmpd(256, i62.MqttServiceConfig, { hostname: "192.168.0.10", port: 8808, path: "/mqtt", username: "guest", password: "guest" }, []), i0.ɵmpd(256, i62.MqttClientService, undefined, []), i0.ɵmpd(256, i133.TOAST_CONFIG, { default: i133.DefaultGlobalConfig, config: { timeOut: 10000, positionClass: "toast-top-center", preventDuplicates: true } }, []), i0.ɵmpd(256, i64.USE_STORE, undefined, []), i0.ɵmpd(256, i64.USE_DEFAULT_LANG, undefined, [])]); });
 exports.AppModuleNgFactory = AppModuleNgFactory;
 
 
@@ -894,6 +904,8 @@ var standard_exam_component_1 = __webpack_require__(/*! @quiz/components/standar
 var standard_errors_modal_component_1 = __webpack_require__(/*! @modal/components/standard-errors-modal/standard-errors-modal.component */ "./src/app/common/modules/modal/components/standard-errors-modal/standard-errors-modal.component.ts");
 var standard_conditions_modal_component_1 = __webpack_require__(/*! @modal/components/standard-conditions-modal/standard-conditions-modal.component */ "./src/app/common/modules/modal/components/standard-conditions-modal/standard-conditions-modal.component.ts");
 var standard_competitor_modal_component_1 = __webpack_require__(/*! @modal/components/standard-competitor-modal/standard-competitor-modal.component */ "./src/app/common/modules/modal/components/standard-competitor-modal/standard-competitor-modal.component.ts");
+var communication_type_component_1 = __webpack_require__(/*! ./common/modules/communication/components/communication-type/communication-type.component */ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ts");
+var machine_type_component_1 = __webpack_require__(/*! ./common/modules/machine/components/machine-type/machine-type.component */ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ts");
 var REDIRECT_ROUTE = {
     path: '**',
     redirectTo: ''
@@ -943,57 +955,57 @@ var ɵ0 = function () { return Promise.resolve().then(function () { return __web
         only: ['ADMIN', 'GUEST'],
         redirectTo: 'dashboard'
     }
-}, ɵ19 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/quiz/quiz.module.ngfactory */ "./src/app/common/modules/quiz/quiz.module.ngfactory.js"); }).then(function (m) { return m.QuizModuleNgFactory; }); }, ɵ20 = {
+}, ɵ19 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/communication/communication.module.ngfactory */ "./src/app/common/modules/communication/communication.module.ngfactory.js"); }).then(function (m) { return m.CommunicationModuleNgFactory; }); }, ɵ20 = {
     permission: {
-        only: ['ADMIN'],
+        only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
 }, ɵ21 = {
     permission: {
-        only: ['ADMIN'],
-        redirectTo: 'dashboard'
-    }
-}, ɵ22 = {
-    permission: {
         only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
-}, ɵ23 = {
+}, ɵ22 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/machine/machine.module.ngfactory */ "./src/app/common/modules/machine/machine.module.ngfactory.js"); }).then(function (m) { return m.MachineModuleNgFactory; }); }, ɵ23 = {
     permission: {
-        only: ['ADMIN'],
+        only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
 }, ɵ24 = {
     permission: {
-        only: ['ADMIN'],
-        redirectTo: 'dashboard'
-    }
-}, ɵ25 = {
-    permission: {
-        only: ['ADMIN'],
-        redirectTo: 'dashboard'
-    }
-}, ɵ26 = {
-    permission: {
         only: ['ADMIN', 'USER'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ25 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/quiz/quiz.module.ngfactory */ "./src/app/common/modules/quiz/quiz.module.ngfactory.js"); }).then(function (m) { return m.QuizModuleNgFactory; }); }, ɵ26 = {
+    permission: {
+        only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
 }, ɵ27 = {
     permission: {
-        only: ['ADMIN', 'USER'],
+        only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
 }, ɵ28 = {
     permission: {
+        only: ['ADMIN', 'USER'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ29 = {
+    permission: {
         only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
-}, ɵ29 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/answers/answers.module.ngfactory */ "./src/app/common/modules/answers/answers.module.ngfactory.js"); }).then(function (m) { return m.AnswersModuleNgFactory; }); }, ɵ30 = {
+}, ɵ30 = {
     permission: {
-        only: ['ADMIN', 'USER', 'GUEST'],
+        only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
-}, ɵ31 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/checkin/checkin.module.ngfactory */ "./src/app/common/modules/checkin/checkin.module.ngfactory.js"); }).then(function (m) { return m.CheckinModuleNgFactory; }); }, ɵ32 = {
+}, ɵ31 = {
+    permission: {
+        only: ['ADMIN'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ32 = {
     permission: {
         only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
@@ -1003,37 +1015,57 @@ var ɵ0 = function () { return Promise.resolve().then(function () { return __web
         only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
-}, ɵ34 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/combat-list/combat-list.module.ngfactory */ "./src/app/common/modules/combat-list/combat-list.module.ngfactory.js"); }).then(function (m) { return m.CombatListModuleNgFactory; }); }, ɵ35 = {
+}, ɵ34 = {
+    permission: {
+        only: ['ADMIN'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ35 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/answers/answers.module.ngfactory */ "./src/app/common/modules/answers/answers.module.ngfactory.js"); }).then(function (m) { return m.AnswersModuleNgFactory; }); }, ɵ36 = {
+    permission: {
+        only: ['ADMIN', 'USER', 'GUEST'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ37 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/checkin/checkin.module.ngfactory */ "./src/app/common/modules/checkin/checkin.module.ngfactory.js"); }).then(function (m) { return m.CheckinModuleNgFactory; }); }, ɵ38 = {
     permission: {
         only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
-}, ɵ36 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/specialities/specialities.module.ngfactory */ "./src/app/common/modules/specialities/specialities.module.ngfactory.js"); }).then(function (m) { return m.SpecialitiesModuleNgFactory; }); }, ɵ37 = {
-    permission: {
-        only: ['ADMIN'],
-        redirectTo: 'dashboard'
-    }
-}, ɵ38 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/user/user.module.ngfactory */ "./src/app/common/modules/user/user.module.ngfactory.js"); }).then(function (m) { return m.UserModuleNgFactory; }); }, ɵ39 = {
-    permission: {
-        only: ['ADMIN'],
-        redirectTo: 'dashboard'
-    }
-}, ɵ40 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/weapon/weapon.module.ngfactory */ "./src/app/common/modules/weapon/weapon.module.ngfactory.js"); }).then(function (m) { return m.WeaponModuleNgFactory; }); }, ɵ41 = {
+}, ɵ39 = {
     permission: {
         only: ['ADMIN', 'USER'],
         redirectTo: 'dashboard'
     }
-}, ɵ42 = {
+}, ɵ40 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/combat-list/combat-list.module.ngfactory */ "./src/app/common/modules/combat-list/combat-list.module.ngfactory.js"); }).then(function (m) { return m.CombatListModuleNgFactory; }); }, ɵ41 = {
+    permission: {
+        only: ['ADMIN', 'USER'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ42 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/specialities/specialities.module.ngfactory */ "./src/app/common/modules/specialities/specialities.module.ngfactory.js"); }).then(function (m) { return m.SpecialitiesModuleNgFactory; }); }, ɵ43 = {
     permission: {
         only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
-}, ɵ43 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/course/course.module.ngfactory */ "./src/app/common/modules/course/course.module.ngfactory.js"); }).then(function (m) { return m.CourseModuleNgFactory; }); }, ɵ44 = {
+}, ɵ44 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/user/user.module.ngfactory */ "./src/app/common/modules/user/user.module.ngfactory.js"); }).then(function (m) { return m.UserModuleNgFactory; }); }, ɵ45 = {
     permission: {
         only: ['ADMIN'],
         redirectTo: 'dashboard'
     }
-}, ɵ45 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/workspace/workspace.module.ngfactory */ "./src/app/common/modules/workspace/workspace.module.ngfactory.js"); }).then(function (m) { return m.WorkspaceModuleNgFactory; }); }, ɵ46 = {
+}, ɵ46 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/weapon/weapon.module.ngfactory */ "./src/app/common/modules/weapon/weapon.module.ngfactory.js"); }).then(function (m) { return m.WeaponModuleNgFactory; }); }, ɵ47 = {
+    permission: {
+        only: ['ADMIN', 'USER'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ48 = {
+    permission: {
+        only: ['ADMIN'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ49 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/course/course.module.ngfactory */ "./src/app/common/modules/course/course.module.ngfactory.js"); }).then(function (m) { return m.CourseModuleNgFactory; }); }, ɵ50 = {
+    permission: {
+        only: ['ADMIN'],
+        redirectTo: 'dashboard'
+    }
+}, ɵ51 = function () { return Promise.resolve().then(function () { return __webpack_require__(/*! ./common/modules/workspace/workspace.module.ngfactory */ "./src/app/common/modules/workspace/workspace.module.ngfactory.js"); }).then(function (m) { return m.WorkspaceModuleNgFactory; }); }, ɵ52 = {
     permission: {
         only: ['ADMIN', 'USER', 'COMMANDER'],
         redirectTo: 'dashboard'
@@ -1086,6 +1118,12 @@ exports.ɵ43 = ɵ43;
 exports.ɵ44 = ɵ44;
 exports.ɵ45 = ɵ45;
 exports.ɵ46 = ɵ46;
+exports.ɵ47 = ɵ47;
+exports.ɵ48 = ɵ48;
+exports.ɵ49 = ɵ49;
+exports.ɵ50 = ɵ50;
+exports.ɵ51 = ɵ51;
+exports.ɵ52 = ɵ52;
 exports.routes = [
     {
         path: '',
@@ -1152,46 +1190,70 @@ exports.routes = [
         data: ɵ18
     },
     {
-        path: 'subjects',
+        path: 'communication',
         loadChildren: ɵ19,
         canActivate: [auth_guard_1.AuthGuard],
         data: ɵ20
     },
     {
+        path: 'communication-type',
+        component: communication_type_component_1.CommunicationTypeComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ21
+    },
+    {
+        path: 'machine',
+        loadChildren: ɵ22,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ23
+    },
+    {
+        path: 'machine-type',
+        component: machine_type_component_1.MachineTypeComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ24
+    },
+    {
+        path: 'subjects',
+        loadChildren: ɵ25,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ26
+    },
+    {
         path: 'subjects/tests',
         component: tests_component_1.TestsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ21
+        data: ɵ27
     },
     {
         path: 'subjects/standards',
         component: standards_component_1.StandardsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ22
+        data: ɵ28
     },
     {
         path: 'subjects/standards/categories',
         component: categories_component_1.CategoriesComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ23
+        data: ɵ29
     },
     {
         path: 'subjects/standards/conditions',
         component: conditions_component_1.ConditionsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ24
+        data: ɵ30
     },
     {
         path: 'subjects/standards/conditions/units',
         component: units_component_1.UnitsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ25
+        data: ɵ31
     },
     {
         path: 'subjects/standards/:id',
         component: standard_details_component_1.StandardDetailsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ26,
+        data: ɵ32,
         children: [
             {
                 path: 'standard-competitor-modal',
@@ -1203,7 +1265,7 @@ exports.routes = [
         path: 'subjects/standards/:id/exam',
         component: standard_exam_component_1.StandardExamComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ27,
+        data: ɵ33,
         children: [
             {
                 path: 'standard-errors-modal',
@@ -1219,67 +1281,67 @@ exports.routes = [
         path: 'subjects/tests/questions',
         component: questions_component_1.QuestionsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ28
+        data: ɵ34
     },
     {
         path: 'answers',
-        loadChildren: ɵ29,
+        loadChildren: ɵ35,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ30
+        data: ɵ36
     },
     {
         path: 'checkin',
-        loadChildren: ɵ31,
+        loadChildren: ɵ37,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ32
+        data: ɵ38
     },
     {
         path: 'checkin/checkin-details',
         component: checkin_details_component_1.CheckinDetailsComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ33
-    },
-    {
-        path: 'combat-list',
-        loadChildren: ɵ34,
-        canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ35
-    },
-    {
-        path: 'specialities',
-        loadChildren: ɵ36,
-        canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ37
-    },
-    {
-        path: 'users',
-        loadChildren: ɵ38,
-        canActivate: [auth_guard_1.AuthGuard],
         data: ɵ39
     },
     {
-        path: 'weapon-list',
+        path: 'combat-list',
         loadChildren: ɵ40,
         canActivate: [auth_guard_1.AuthGuard],
         data: ɵ41
     },
     {
+        path: 'specialities',
+        loadChildren: ɵ42,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ43
+    },
+    {
+        path: 'users',
+        loadChildren: ɵ44,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ45
+    },
+    {
+        path: 'weapon-list',
+        loadChildren: ɵ46,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: ɵ47
+    },
+    {
         path: 'weapon-types',
         component: weapon_types_component_1.WeaponTypesComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ42
+        data: ɵ48
     },
     {
         path: 'courses',
-        loadChildren: ɵ43,
+        loadChildren: ɵ49,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ44
+        data: ɵ50
     },
     {
         path: 'workspace',
-        loadChildren: ɵ45,
+        loadChildren: ɵ51,
         canActivate: [auth_guard_1.AuthGuard],
-        data: ɵ46
+        data: ɵ52
     },
     REDIRECT_ROUTE
 ];
@@ -1760,7 +1822,6 @@ exports.personMapperToServer = function (data) {
         rank: data.rank.id,
         division: data.division.id,
         level: data.level,
-        codes: getCodes(data.handgunCodeIpsc, data.shotgunCodeIpsc, data.rifleCodeIpsc),
         address: data.address,
     };
 };
@@ -1772,9 +1833,6 @@ exports.personMapperFromServer = function (data) {
         rank: data.rank,
         division: data.division,
         level: data.level,
-        handgunCodeIpsc: getCode(data.codes, HANDGUN) || '',
-        shotgunCodeIpsc: getCode(data.codes, SHOTGUN) || '',
-        rifleCodeIpsc: getCode(data.codes, RIFLE) || '',
         active: data.active,
         member: false,
         roleName: data.roleName,
@@ -2434,6 +2492,8 @@ var PageTypes = exports.PageTypes = /*@__PURE__*/ (function (PageTypes) {
     PageTypes["COURSE"] = "Course";
     PageTypes["RATING"] = "Rating";
     PageTypes["WORKSPACE"] = "Workspace";
+    PageTypes["COMMUNICATION_TYPES"] = "communicationTypes";
+    PageTypes["MACHINE_TYPES"] = "machineTypes";
     return PageTypes;
 })(exports.PageTypes || {});
 
@@ -2477,6 +2537,8 @@ var ToastrUsersType = exports.ToastrUsersType = /*@__PURE__*/ (function (ToastrU
     ToastrUsersType["WEAPON_TYPE"] = "Weapon type";
     ToastrUsersType["WEAPON"] = "Weapon";
     ToastrUsersType["COURSE"] = "Course";
+    ToastrUsersType["COMMUNICATION_TYPE"] = "Communication Type";
+    ToastrUsersType["MACHINE_TYPE"] = "Machine Type";
     return ToastrUsersType;
 })(exports.ToastrUsersType || {});
 var ToastrMessageType = exports.ToastrMessageType = /*@__PURE__*/ (function (ToastrMessageType) {
@@ -2502,6 +2564,27 @@ var ToastrMessageType = exports.ToastrMessageType = /*@__PURE__*/ (function (Toa
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rotate = { 'asc': 'desc', 'desc': '', '': 'asc' };
 exports.compare = function (v1, v2) { return v1 < v2 ? -1 : v1 > v2 ? 1 : 0; };
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/models/mocks/communication.ts":
+/*!******************************************************!*\
+  !*** ./src/app/common/models/mocks/communication.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CommunicationMocks;
+(function (CommunicationMocks) {
+    CommunicationMocks.emptyCommunicationTypes = {
+        name: ''
+    };
+})(CommunicationMocks = exports.CommunicationMocks || (exports.CommunicationMocks = {}));
 
 
 
@@ -2685,9 +2768,6 @@ var Mocks;
             rank: undefined,
             division: division,
             level: undefined,
-            handgunCodeIpsc: '',
-            shotgunCodeIpsc: '',
-            rifleCodeIpsc: '',
             active: true,
             roleName: ''
         };
@@ -4961,6 +5041,653 @@ exports.CombatListService = CombatListService;
 
 /***/ }),
 
+/***/ "./src/app/common/modules/communication/actions/actions.ts":
+/*!*****************************************************************!*\
+  !*** ./src/app/common/modules/communication/actions/actions.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = exports.ActionTypes = /*@__PURE__*/ (function (ActionTypes) {
+    ActionTypes["LoadCommunicationTypes"] = "[Communication Types] Load Communication Types";
+    ActionTypes["LoadedCommunicationTypes"] = "[Communication Types] Loaded Communication Types";
+    ActionTypes["CreateCommunicationType"] = "[Communication Types] Create Communication Type";
+    ActionTypes["UpdateCommunicationType"] = "[Communication Types] Update Communication Type";
+    ActionTypes["DeleteCommunicationType"] = "[Communication Types] Delete Communication Type";
+    ActionTypes["CommunicationErrors"] = "[Communication] Communication Errors";
+    return ActionTypes;
+})(exports.ActionTypes || {});
+var LoadCommunicationTypes = /** @class */ /*@__PURE__*/ (function () {
+    function LoadCommunicationTypes() {
+        this.type = ActionTypes.LoadCommunicationTypes;
+    }
+    return LoadCommunicationTypes;
+}());
+exports.LoadCommunicationTypes = LoadCommunicationTypes;
+var LoadedCommunicationTypes = /** @class */ /*@__PURE__*/ (function () {
+    function LoadedCommunicationTypes(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LoadedCommunicationTypes;
+    }
+    return LoadedCommunicationTypes;
+}());
+exports.LoadedCommunicationTypes = LoadedCommunicationTypes;
+var CreateCommunicationType = /** @class */ /*@__PURE__*/ (function () {
+    function CreateCommunicationType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.CreateCommunicationType;
+    }
+    return CreateCommunicationType;
+}());
+exports.CreateCommunicationType = CreateCommunicationType;
+var UpdateCommunicationType = /** @class */ /*@__PURE__*/ (function () {
+    function UpdateCommunicationType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.UpdateCommunicationType;
+    }
+    return UpdateCommunicationType;
+}());
+exports.UpdateCommunicationType = UpdateCommunicationType;
+var DeleteCommunicationType = /** @class */ /*@__PURE__*/ (function () {
+    function DeleteCommunicationType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.DeleteCommunicationType;
+    }
+    return DeleteCommunicationType;
+}());
+exports.DeleteCommunicationType = DeleteCommunicationType;
+var CommunicationErrors = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationErrors(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.CommunicationErrors;
+    }
+    return CommunicationErrors;
+}());
+exports.CommunicationErrors = CommunicationErrors;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/communication.module.ngfactory.js":
+/*!********************************************************************************!*\
+  !*** ./src/app/common/modules/communication/communication.module.ngfactory.js ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.module */ "./src/app/common/modules/communication/communication.module.ts");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../../node_modules/@angular/router/router.ngfactory */ "./node_modules/@angular/router/router.ngfactory.js");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../../node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory */ "./node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./components/communication/communication.component.ngfactory */ "./src/app/common/modules/communication/components/communication/communication.component.ngfactory.js");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
+var i11 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../shared/shared.module */ "./src/app/common/modules/shared/shared.module.ts");
+var i12 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toggle-switch */ "./node_modules/ngx-toggle-switch/ui-switch.es5.js");
+var i13 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
+var i14 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../table/table.module */ "./src/app/common/modules/table/table.module.ts");
+var i15 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./components/communication/communication.component */ "./src/app/common/modules/communication/components/communication/communication.component.ts");
+var CommunicationModuleNgFactory = /*@__PURE__*/ /*@__PURE__*/ i0.ɵcmf(i1.CommunicationModule, [], function (_l) { return i0.ɵmod([i0.ɵmpd(512, i0.ComponentFactoryResolver, i0.ɵCodegenComponentFactoryResolver, [[8, [i2.ɵangular_packages_router_router_lNgFactory, i3.NgbDatepickerNgFactory, i3.NgbAlertNgFactory, i3.ɵuNgFactory, i3.ɵvNgFactory, i3.ɵnNgFactory, i3.ɵqNgFactory, i3.ɵrNgFactory, i4.CommunicationComponentNgFactory]], [3, i0.ComponentFactoryResolver], i0.NgModuleRef]), i0.ɵmpd(4608, i5.NgLocalization, i5.NgLocaleLocalization, [i0.LOCALE_ID, [2, i5.ɵangular_packages_common_common_a]]), i0.ɵmpd(4608, i6.FormBuilder, i6.FormBuilder, []), i0.ɵmpd(4608, i6.ɵangular_packages_forms_forms_o, i6.ɵangular_packages_forms_forms_o, []), i0.ɵmpd(4608, i7.NgbModal, i7.NgbModal, [i0.ComponentFactoryResolver, i0.Injector, i7.ɵw, i7.NgbModalConfig]), i0.ɵmpd(4608, i7.NgbDateNativeAdapter, i7.NgbDateNativeAdapter, []), i0.ɵmpd(1073742336, i5.CommonModule, i5.CommonModule, []), i0.ɵmpd(1073742336, i8.RouterModule, i8.RouterModule, [[2, i8.ɵangular_packages_router_router_a], [2, i8.Router]]), i0.ɵmpd(1073742336, i9.TranslateModule, i9.TranslateModule, []), i0.ɵmpd(1073742336, i6.ɵangular_packages_forms_forms_d, i6.ɵangular_packages_forms_forms_d, []), i0.ɵmpd(1073742336, i6.ReactiveFormsModule, i6.ReactiveFormsModule, []), i0.ɵmpd(1073742336, i10.FontAwesomeModule, i10.FontAwesomeModule, []), i0.ɵmpd(1073742336, i6.FormsModule, i6.FormsModule, []), i0.ɵmpd(1073742336, i7.NgbDatepickerModule, i7.NgbDatepickerModule, []), i0.ɵmpd(1073742336, i7.NgbAccordionModule, i7.NgbAccordionModule, []), i0.ɵmpd(1073742336, i7.NgbAlertModule, i7.NgbAlertModule, []), i0.ɵmpd(1073742336, i7.NgbButtonsModule, i7.NgbButtonsModule, []), i0.ɵmpd(1073742336, i7.NgbCarouselModule, i7.NgbCarouselModule, []), i0.ɵmpd(1073742336, i7.NgbCollapseModule, i7.NgbCollapseModule, []), i0.ɵmpd(1073742336, i7.NgbDropdownModule, i7.NgbDropdownModule, []), i0.ɵmpd(1073742336, i7.NgbModalModule, i7.NgbModalModule, []), i0.ɵmpd(1073742336, i7.NgbPaginationModule, i7.NgbPaginationModule, []), i0.ɵmpd(1073742336, i7.NgbPopoverModule, i7.NgbPopoverModule, []), i0.ɵmpd(1073742336, i7.NgbProgressbarModule, i7.NgbProgressbarModule, []), i0.ɵmpd(1073742336, i7.NgbRatingModule, i7.NgbRatingModule, []), i0.ɵmpd(1073742336, i7.NgbTabsetModule, i7.NgbTabsetModule, []), i0.ɵmpd(1073742336, i7.NgbTimepickerModule, i7.NgbTimepickerModule, []), i0.ɵmpd(1073742336, i7.NgbTooltipModule, i7.NgbTooltipModule, []), i0.ɵmpd(1073742336, i7.NgbTypeaheadModule, i7.NgbTypeaheadModule, []), i0.ɵmpd(1073742336, i7.NgbModule, i7.NgbModule, []), i0.ɵmpd(1073742336, i11.SharedModule, i11.SharedModule, []), i0.ɵmpd(1073742336, i12.UiSwitchModule, i12.UiSwitchModule, []), i0.ɵmpd(1073742336, i13.NgSelectModule, i13.NgSelectModule, []), i0.ɵmpd(1073742336, i14.TableModule, i14.TableModule, []), i0.ɵmpd(1073742336, i1.CommunicationModule, i1.CommunicationModule, []), i0.ɵmpd(256, i13.SELECTION_MODEL_FACTORY, i13.ɵb, []), i0.ɵmpd(1024, i8.ROUTES, function () { return [[{ path: "", component: i15.CommunicationComponent }]]; }, [])]); });
+exports.CommunicationModuleNgFactory = CommunicationModuleNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/communication.module.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/common/modules/communication/communication.module.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var communication_component_1 = __webpack_require__(/*! ./components/communication/communication.component */ "./src/app/common/modules/communication/components/communication/communication.component.ts");
+var routes = [
+    {
+        path: '',
+        component: communication_component_1.CommunicationComponent
+    }
+];
+var CommunicationModule = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationModule() {
+    }
+    return CommunicationModule;
+}());
+exports.CommunicationModule = CommunicationModule;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ngfactory.js":
+/*!**********************************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication-type/communication-type.component.ngfactory.js ***!
+  \**********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication-type.component.scss.shim.ngstyle */ "./src/app/common/modules/communication/components/communication-type/communication-type.component.scss.shim.ngstyle.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../models/constants/animations */ "./src/app/common/models/constants/animations.ts");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication-type.component */ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ts");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var styles_CommunicationTypeComponent = [i0.styles];
+var RenderType_CommunicationTypeComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CommunicationTypeComponent, data: { "animation": [i2.Animations.enterLeaveOpacity] } });
+exports.RenderType_CommunicationTypeComponent = RenderType_CommunicationTypeComponent;
+function View_CommunicationTypeComponent_1(_l) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col-12"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [], null, [[null, "action"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("action" === en)) {
+                var pd_0 = (_co.handleActions($event) !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, i3.View_BaseTableComponent_0, i3.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i4.BaseTableComponent, [i5.TranslateService], { objects: [0, "objects"], actions: [1, "actions"] }, { action: "action" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _v.context.ngIf; var currVal_1 = _co.actions; _ck(_v, 3, 0, currVal_0, currVal_1); }, null);
+}
+function View_CommunicationTypeComponent_0(_l) {
+    return i1.ɵvid(0, [i1.ɵpid(0, i6.TitleCasePipe, []), (_l()(), i1.ɵeld(1, 0, null, null, 15, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 4, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 3, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵppd(7, 1), (_l()(), i1.ɵeld(8, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(9, 0, null, null, 4, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(10, 0, null, null, 3, "button", [["class", "btn btn-primary w-100"]], null, [[null, "click"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("click" === en)) {
+                var pd_0 = (_co.add() !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, null, null)), (_l()(), i1.ɵted(11, null, ["", " ", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CommunicationTypeComponent_1)), i1.ɵdid(15, 16384, null, 0, i6.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i6.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_4 = i1.ɵunv(_v, 15, 0, i1.ɵnov(_v, 16).transform(_co.communicationTypes$)); _ck(_v, 15, 0, currVal_4); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, _ck(_v, 7, 0, i1.ɵnov(_v, 0), i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("communicationTypes")))); _ck(_v, 5, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("add")); var currVal_3 = i1.ɵunv(_v, 11, 1, i1.ɵnov(_v, 13).transform("communicationType")).toLowerCase(); _ck(_v, 11, 0, currVal_2, currVal_3); });
+}
+exports.View_CommunicationTypeComponent_0 = View_CommunicationTypeComponent_0;
+function View_CommunicationTypeComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-communication-type", [], null, null, null, View_CommunicationTypeComponent_0, RenderType_CommunicationTypeComponent)), i1.ɵdid(1, 114688, null, 0, i7.CommunicationTypeComponent, [i8.Store, i9.ModalService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+exports.View_CommunicationTypeComponent_Host_0 = View_CommunicationTypeComponent_Host_0;
+var CommunicationTypeComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-communication-type", i7.CommunicationTypeComponent, View_CommunicationTypeComponent_Host_0, {}, {}, []);
+exports.CommunicationTypeComponentNgFactory = CommunicationTypeComponentNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication-type/communication-type.component.scss.shim.ngstyle.js":
+/*!******************************************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication-type/communication-type.component.scss.shim.ngstyle.js ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var styles = ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbW1vbi9tb2R1bGVzL2NvbW11bmljYXRpb24vY29tcG9uZW50cy9jb21tdW5pY2F0aW9uLXR5cGUvY29tbXVuaWNhdGlvbi10eXBlLmNvbXBvbmVudC5zY3NzIn0= */"];
+exports.styles = styles;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication-type/communication-type.component.ts":
+/*!************************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication-type/communication-type.component.ts ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var actions_1 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+var selectors_1 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var actions_2 = __webpack_require__(/*! @models/constants/actions */ "./src/app/common/models/constants/actions.ts");
+var base_modal_component_1 = __webpack_require__(/*! @modal/components/base-modal/base-modal.component */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ts");
+var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var communication_1 = __webpack_require__(/*! @models/mocks/communication */ "./src/app/common/models/mocks/communication.ts");
+var dialog_modal_component_1 = __webpack_require__(/*! @modal/components/dialog-modal/dialog-modal.component */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ts");
+var CommunicationTypeComponent = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationTypeComponent(store, modalService) {
+        this.store = store;
+        this.modalService = modalService;
+        this.pageTypes = page_types_1.PageTypes;
+    }
+    CommunicationTypeComponent.prototype.ngOnInit = function () {
+        this.actions = [actions_2.Actions.CHANGE, actions_2.Actions.REMOVE];
+        this.getCommunicationTypes();
+    };
+    CommunicationTypeComponent.prototype.getCommunicationTypes = function () {
+        var _this = this;
+        this.communicationTypes$ = this.store.pipe(store_1.select(selectors_1.selectCommunicationTypes), operators_1.tap(function (types) { return !types && _this.fetchCommunicationTypes(); }));
+    };
+    CommunicationTypeComponent.prototype.fetchCommunicationTypes = function () {
+        this.store.dispatch(new actions_1.LoadCommunicationTypes());
+    };
+    CommunicationTypeComponent.prototype.handleActions = function (event) {
+        switch (event.action) {
+            case actions_2.Actions.CHANGE:
+                return this.openCommunicationTypeModal(event.item, true);
+            case actions_2.Actions.REMOVE:
+                return this.openDialogModal('dialogQuestion', event.item);
+            default:
+                return;
+        }
+    };
+    CommunicationTypeComponent.prototype.add = function () {
+        this.openCommunicationTypeModal(communication_1.CommunicationMocks.emptyCommunicationTypes, false);
+    };
+    CommunicationTypeComponent.prototype.openCommunicationTypeModal = function (type, edit) {
+        var _this = this;
+        var objectType = this.pageTypes.COMMUNICATION_TYPES;
+        this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, type), edit: edit, objectType: objectType }, function (res) {
+            if (res) {
+                edit ? _this.updateCommunicationType(type, res) : _this.createCommunicationType(res);
+            }
+        });
+    };
+    CommunicationTypeComponent.prototype.openDialogModal = function (message, item) {
+        var _this = this;
+        this.modalService.openModal(dialog_modal_component_1.DialogModalComponent, { centered: true }, { itemName: item.name, message: message }, function (res) {
+            if (res && res === 'Yes') {
+                _this.deleteCommunicationType(item.id);
+            }
+        });
+    };
+    CommunicationTypeComponent.prototype.createCommunicationType = function (type) {
+        this.store.dispatch(new actions_1.CreateCommunicationType(type));
+    };
+    CommunicationTypeComponent.prototype.updateCommunicationType = function (type, updatedType) {
+        updatedType.id = type.id;
+        this.store.dispatch(new actions_1.UpdateCommunicationType(updatedType));
+    };
+    CommunicationTypeComponent.prototype.deleteCommunicationType = function (typeId) {
+        this.store.dispatch(new actions_1.DeleteCommunicationType(typeId));
+    };
+    return CommunicationTypeComponent;
+}());
+exports.CommunicationTypeComponent = CommunicationTypeComponent;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication/communication.component.ngfactory.js":
+/*!************************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication/communication.component.ngfactory.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.component.scss.shim.ngstyle */ "./src/app/common/modules/communication/components/communication/communication.component.scss.shim.ngstyle.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.component */ "./src/app/common/modules/communication/components/communication/communication.component.ts");
+var styles_CommunicationComponent = [i0.styles];
+var RenderType_CommunicationComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CommunicationComponent, data: {} });
+exports.RenderType_CommunicationComponent = RenderType_CommunicationComponent;
+function View_CommunicationComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "p", [], null, null, null, null, null)), (_l()(), i1.ɵted(-1, null, ["communication works!"]))], null, null); }
+exports.View_CommunicationComponent_0 = View_CommunicationComponent_0;
+function View_CommunicationComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-communication", [], null, null, null, View_CommunicationComponent_0, RenderType_CommunicationComponent)), i1.ɵdid(1, 114688, null, 0, i2.CommunicationComponent, [], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+exports.View_CommunicationComponent_Host_0 = View_CommunicationComponent_Host_0;
+var CommunicationComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-communication", i2.CommunicationComponent, View_CommunicationComponent_Host_0, {}, {}, []);
+exports.CommunicationComponentNgFactory = CommunicationComponentNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication/communication.component.scss.shim.ngstyle.js":
+/*!********************************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication/communication.component.scss.shim.ngstyle.js ***!
+  \********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var styles = ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbW1vbi9tb2R1bGVzL2NvbW11bmljYXRpb24vY29tcG9uZW50cy9jb21tdW5pY2F0aW9uL2NvbW11bmljYXRpb24uY29tcG9uZW50LnNjc3MifQ== */"];
+exports.styles = styles;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/components/communication/communication.component.ts":
+/*!**************************************************************************************************!*\
+  !*** ./src/app/common/modules/communication/components/communication/communication.component.ts ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationComponent() {
+    }
+    CommunicationComponent.prototype.ngOnInit = function () {
+    };
+    return CommunicationComponent;
+}());
+exports.CommunicationComponent = CommunicationComponent;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/effects/effects.ts":
+/*!*****************************************************************!*\
+  !*** ./src/app/common/modules/communication/effects/effects.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __decorate = /*@__PURE__*/ __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js").__decorate;
+var __metadata = /*@__PURE__*/ __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js").__metadata;
+"use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m)
+        return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+            ar.push(r.value);
+    }
+    catch (error) {
+        e = { error: error };
+    }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"]))
+                m.call(i);
+        }
+        finally {
+            if (e)
+                throw e.error;
+        }
+    }
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var effects_1 = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+var rxjs_1 = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var fromCommunication = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+var communication_service_1 = __webpack_require__(/*! @communication/services/communication.service */ "./src/app/common/modules/communication/services/communication.service.ts");
+var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
+var selectors_1 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var toastr_1 = __webpack_require__(/*! @models/constants/toastr */ "./src/app/common/models/constants/toastr.ts");
+var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationEffects(actions$, communicationService, messageService, store) {
+        var _this = this;
+        this.actions$ = actions$;
+        this.communicationService = communicationService;
+        this.messageService = messageService;
+        this.store = store;
+        this.loadCommunicationTypes$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.LoadCommunicationTypes), operators_1.mergeMap(function () {
+            return _this.communicationService.getCommunicationTypes()
+                .pipe(operators_1.map(function (communicationTypes) { return new fromCommunication.LoadedCommunicationTypes(communicationTypes); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.createCommunicationType$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.CreateCommunicationType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectCommunicationTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.communicationService.createCommunicationType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.COMMUNICATION_TYPE, type: toastr_1.ToastrMessageType.CREATE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types.push(type);
+                }
+                return new fromCommunication.LoadedCommunicationTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.updateCommunicationType$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.UpdateCommunicationType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectCommunicationTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.communicationService.updateCommunicationType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.COMMUNICATION_TYPE, type: toastr_1.ToastrMessageType.UPDATE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types = types.map(function (item) { return item.id === type.id ? type : item; });
+                }
+                return new fromCommunication.LoadedCommunicationTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.deleteCommunicationType$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.DeleteCommunicationType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectCommunicationTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.communicationService.deleteCommunicationType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.COMMUNICATION_TYPE, type: toastr_1.ToastrMessageType.REMOVE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types = types.filter(function (item) { return item.id !== action.payload; });
+                }
+                return new fromCommunication.LoadedCommunicationTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+    }
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "loadCommunicationTypes$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "createCommunicationType$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "updateCommunicationType$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "deleteCommunicationType$", void 0);
+    return CommunicationEffects;
+}());
+exports.CommunicationEffects = CommunicationEffects;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/reducers/reducer.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/common/modules/communication/reducers/reducer.ts ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var actions_1 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+exports.initialState = {
+    communicationTypes: undefined,
+    errors: undefined
+};
+function reducer(state, action) {
+    if (state === void 0) {
+        state = exports.initialState;
+    }
+    switch (action.type) {
+        case actions_1.ActionTypes.LoadedCommunicationTypes:
+            return __assign({}, state, { communicationTypes: action.payload });
+        case actions_1.ActionTypes.CommunicationErrors:
+            return __assign({}, state, { errors: action.payload });
+        default:
+            return state;
+    }
+}
+exports.reducer = reducer;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/selectors/selectors.ts":
+/*!*********************************************************************!*\
+  !*** ./src/app/common/modules/communication/selectors/selectors.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+exports.selectCommunications = store_1.createFeatureSelector('communication');
+var ɵ0 = function (state) { return state.communicationTypes; };
+exports.ɵ0 = ɵ0;
+exports.selectCommunicationTypes = store_1.createSelector(exports.selectCommunications, ɵ0);
+var ɵ1 = function (state) { return state.errors; };
+exports.ɵ1 = ɵ1;
+exports.selectCommunicationErrors = store_1.createSelector(exports.selectCommunications, ɵ1);
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/communication/services/communication.service.ts":
+/*!********************************************************************************!*\
+  !*** ./src/app/common/modules/communication/services/communication.service.ts ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var environment_1 = __webpack_require__(/*! @environments/environment */ "./src/environments/environment.ts");
+var i0 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var CommunicationService = /** @class */ /*@__PURE__*/ (function () {
+    function CommunicationService(http) {
+        this.http = http;
+        this.baseUrl = environment_1.environment.BASE_URL + '/api/commequipmenttype/' + environment_1.environment.version;
+    }
+    CommunicationService.prototype.getCommunicationTypes = function () {
+        return this.http.get(this.baseUrl + "/get/all")
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.prototype.createCommunicationType = function (body) {
+        return this.http.post(this.baseUrl + "/create", body)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.prototype.updateCommunicationType = function (type) {
+        return this.http.put(this.baseUrl + "/update/" + type.id, type)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.prototype.deleteCommunicationType = function (typeId) {
+        return this.http.delete(this.baseUrl + "/delete/" + typeId)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function CommunicationService_Factory() { return new CommunicationService(i0.ɵɵinject(i1.HttpClient)); }, token: CommunicationService, providedIn: "root" });
+    return CommunicationService;
+}());
+exports.CommunicationService = CommunicationService;
+
+
+
+/***/ }),
+
 /***/ "./src/app/common/modules/competitors-rating/competitors-rating.module.ngfactory.js":
 /*!******************************************************************************************!*\
   !*** ./src/app/common/modules/competitors-rating/competitors-rating.module.ngfactory.js ***!
@@ -5710,9 +6437,17 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         return this.tournamentsService.findTournamentById(tournaments, tournamentId);
     };
     CompetitorsComponent.prototype.selectAll = function () {
+        var _this = this;
+        if (this.divisionValue) {
+            this.persons = this.persons.filter(function (person) { return person.division.name === _this.divisionValue; });
+        }
         this.persons.forEach(function (competitor) { return competitor.member = true; });
     };
     CompetitorsComponent.prototype.unSelectAll = function () {
+        var _this = this;
+        if (this.divisionValue) {
+            this.persons = this.persons.filter(function (person) { return person.division.name === _this.divisionValue; });
+        }
         this.persons.forEach(function (competitor) { return competitor.member = false; });
     };
     CompetitorsComponent.prototype.cancel = function () {
@@ -6913,7 +7648,7 @@ function View_DashboardComponent_7(_l) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
-                var pd_0 = (_co.goTo("subjects") !== false);
+                var pd_0 = (_co.goTo("communication-type") !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -6921,7 +7656,7 @@ function View_DashboardComponent_7(_l) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
-                var pd_0 = (_co.goTo("courses") !== false);
+                var pd_0 = (_co.goTo("machine-type") !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -6937,7 +7672,7 @@ function View_DashboardComponent_7(_l) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
-                var pd_0 = (_co.goTo("specialities") !== false);
+                var pd_0 = (_co.goTo("communication") !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -6945,7 +7680,7 @@ function View_DashboardComponent_7(_l) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
-                var pd_0 = (_co.goTo("specialities") !== false);
+                var pd_0 = (_co.goTo("machine") !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -8822,6 +9557,9 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             var selectedItem = array.find(function (item) { return item === value; });
             this.formControls[control].setValue(selectedItem);
             if (control === this.fields.ISC_CLASSIFIER) {
+                if (!value) {
+                    return this.form.reset();
+                }
                 return this.form.patchValue(this.setDefaultValuesByClassifier(value));
             }
             return;
@@ -11940,7 +12678,7 @@ var LoginComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         if (this.form.invalid) {
             return;
         }
-        this.loginService.login(this.credentials).subscribe(function (res) {
+        this.loginService.login(this.form.value).subscribe(function (res) {
             _this.tokenService.setToken(res.token);
             _this.goToDashboard();
         }, function (err) {
@@ -12097,6 +12835,653 @@ var LoginService = /** @class */ /*@__PURE__*/ (function () {
     return LoginService;
 }());
 exports.LoginService = LoginService;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/actions/actions.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/common/modules/machine/actions/actions.ts ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = exports.ActionTypes = /*@__PURE__*/ (function (ActionTypes) {
+    ActionTypes["LoadMachineTypes"] = "[Machine Types] Load Machine Types";
+    ActionTypes["LoadedMachineTypes"] = "[Machine Types] Loaded Machine Types";
+    ActionTypes["CreateMachineType"] = "[Machine Types] Create Machine Type";
+    ActionTypes["UpdateMachineType"] = "[Machine Types] Update Machine Type";
+    ActionTypes["DeleteMachineType"] = "[Machine Types] Delete Machine Type";
+    ActionTypes["MachineErrors"] = "[Machine] Machine Errors";
+    return ActionTypes;
+})(exports.ActionTypes || {});
+var LoadMachineTypes = /** @class */ /*@__PURE__*/ (function () {
+    function LoadMachineTypes() {
+        this.type = ActionTypes.LoadMachineTypes;
+    }
+    return LoadMachineTypes;
+}());
+exports.LoadMachineTypes = LoadMachineTypes;
+var LoadedMachineTypes = /** @class */ /*@__PURE__*/ (function () {
+    function LoadedMachineTypes(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LoadedMachineTypes;
+    }
+    return LoadedMachineTypes;
+}());
+exports.LoadedMachineTypes = LoadedMachineTypes;
+var CreateMachineType = /** @class */ /*@__PURE__*/ (function () {
+    function CreateMachineType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.CreateMachineType;
+    }
+    return CreateMachineType;
+}());
+exports.CreateMachineType = CreateMachineType;
+var UpdateMachineType = /** @class */ /*@__PURE__*/ (function () {
+    function UpdateMachineType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.UpdateMachineType;
+    }
+    return UpdateMachineType;
+}());
+exports.UpdateMachineType = UpdateMachineType;
+var DeleteMachineType = /** @class */ /*@__PURE__*/ (function () {
+    function DeleteMachineType(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.DeleteMachineType;
+    }
+    return DeleteMachineType;
+}());
+exports.DeleteMachineType = DeleteMachineType;
+var MachineErrors = /** @class */ /*@__PURE__*/ (function () {
+    function MachineErrors(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.MachineErrors;
+    }
+    return MachineErrors;
+}());
+exports.MachineErrors = MachineErrors;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ngfactory.js":
+/*!****************************************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine-type/machine-type.component.ngfactory.js ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine-type.component.scss.shim.ngstyle */ "./src/app/common/modules/machine/components/machine-type/machine-type.component.scss.shim.ngstyle.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../models/constants/animations */ "./src/app/common/models/constants/animations.ts");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine-type.component */ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ts");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var styles_MachineTypeComponent = [i0.styles];
+var RenderType_MachineTypeComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_MachineTypeComponent, data: { "animation": [i2.Animations.enterLeaveOpacity] } });
+exports.RenderType_MachineTypeComponent = RenderType_MachineTypeComponent;
+function View_MachineTypeComponent_1(_l) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col-12"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [], null, [[null, "action"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("action" === en)) {
+                var pd_0 = (_co.handleActions($event) !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, i3.View_BaseTableComponent_0, i3.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i4.BaseTableComponent, [i5.TranslateService], { objects: [0, "objects"], actions: [1, "actions"] }, { action: "action" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _v.context.ngIf; var currVal_1 = _co.actions; _ck(_v, 3, 0, currVal_0, currVal_1); }, null);
+}
+function View_MachineTypeComponent_0(_l) {
+    return i1.ɵvid(0, [i1.ɵpid(0, i6.TitleCasePipe, []), (_l()(), i1.ɵeld(1, 0, null, null, 15, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 4, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 3, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵppd(7, 1), (_l()(), i1.ɵeld(8, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(9, 0, null, null, 4, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(10, 0, null, null, 3, "button", [["class", "btn btn-primary w-100"]], null, [[null, "click"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("click" === en)) {
+                var pd_0 = (_co.add() !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, null, null)), (_l()(), i1.ɵted(11, null, ["", " ", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_MachineTypeComponent_1)), i1.ɵdid(15, 16384, null, 0, i6.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i6.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_4 = i1.ɵunv(_v, 15, 0, i1.ɵnov(_v, 16).transform(_co.machineTypes$)); _ck(_v, 15, 0, currVal_4); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, _ck(_v, 7, 0, i1.ɵnov(_v, 0), i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("machineTypes")))); _ck(_v, 5, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("add")); var currVal_3 = i1.ɵunv(_v, 11, 1, i1.ɵnov(_v, 13).transform("machineType")).toLowerCase(); _ck(_v, 11, 0, currVal_2, currVal_3); });
+}
+exports.View_MachineTypeComponent_0 = View_MachineTypeComponent_0;
+function View_MachineTypeComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-machine-type", [], null, null, null, View_MachineTypeComponent_0, RenderType_MachineTypeComponent)), i1.ɵdid(1, 114688, null, 0, i7.MachineTypeComponent, [i8.Store, i9.ModalService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+exports.View_MachineTypeComponent_Host_0 = View_MachineTypeComponent_Host_0;
+var MachineTypeComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-machine-type", i7.MachineTypeComponent, View_MachineTypeComponent_Host_0, {}, {}, []);
+exports.MachineTypeComponentNgFactory = MachineTypeComponentNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine-type/machine-type.component.scss.shim.ngstyle.js":
+/*!************************************************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine-type/machine-type.component.scss.shim.ngstyle.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var styles = ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbW1vbi9tb2R1bGVzL21hY2hpbmUvY29tcG9uZW50cy9tYWNoaW5lLXR5cGUvbWFjaGluZS10eXBlLmNvbXBvbmVudC5zY3NzIn0= */"];
+exports.styles = styles;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine-type/machine-type.component.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine-type/machine-type.component.ts ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var actions_1 = __webpack_require__(/*! @models/constants/actions */ "./src/app/common/models/constants/actions.ts");
+var selectors_1 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var actions_2 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
+var communication_1 = __webpack_require__(/*! @models/mocks/communication */ "./src/app/common/models/mocks/communication.ts");
+var base_modal_component_1 = __webpack_require__(/*! @modal/components/base-modal/base-modal.component */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ts");
+var dialog_modal_component_1 = __webpack_require__(/*! @modal/components/dialog-modal/dialog-modal.component */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ts");
+var MachineTypeComponent = /** @class */ /*@__PURE__*/ (function () {
+    function MachineTypeComponent(store, modalService) {
+        this.store = store;
+        this.modalService = modalService;
+        this.pageTypes = page_types_1.PageTypes;
+    }
+    MachineTypeComponent.prototype.ngOnInit = function () {
+        this.actions = [actions_1.Actions.CHANGE, actions_1.Actions.REMOVE];
+        this.getMachineTypes();
+    };
+    MachineTypeComponent.prototype.getMachineTypes = function () {
+        var _this = this;
+        this.machineTypes$ = this.store.pipe(store_1.select(selectors_1.selectMachineTypes), operators_1.tap(function (types) { return !types && _this.fetchMachineTypes(); }));
+    };
+    MachineTypeComponent.prototype.fetchMachineTypes = function () {
+        this.store.dispatch(new actions_2.LoadMachineTypes());
+    };
+    MachineTypeComponent.prototype.handleActions = function (event) {
+        switch (event.action) {
+            case actions_1.Actions.CHANGE:
+                return this.openMachineTypeModal(event.item, true);
+            case actions_1.Actions.REMOVE:
+                return this.openDialogModal('dialogQuestion', event.item);
+            default:
+                return;
+        }
+    };
+    MachineTypeComponent.prototype.add = function () {
+        this.openMachineTypeModal(communication_1.CommunicationMocks.emptyCommunicationTypes, false);
+    };
+    MachineTypeComponent.prototype.openMachineTypeModal = function (type, edit) {
+        var _this = this;
+        var objectType = this.pageTypes.MACHINE_TYPES;
+        this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, type), edit: edit, objectType: objectType }, function (res) {
+            if (res) {
+                edit ? _this.updateMachineType(type, res) : _this.createMachineType(res);
+            }
+        });
+    };
+    MachineTypeComponent.prototype.openDialogModal = function (message, item) {
+        var _this = this;
+        this.modalService.openModal(dialog_modal_component_1.DialogModalComponent, { centered: true }, { itemName: item.name, message: message }, function (res) {
+            if (res && res === 'Yes') {
+                _this.deleteMachineType(item.id);
+            }
+        });
+    };
+    MachineTypeComponent.prototype.createMachineType = function (type) {
+        this.store.dispatch(new actions_2.CreateMachineType(type));
+    };
+    MachineTypeComponent.prototype.updateMachineType = function (type, updatedType) {
+        updatedType.id = type.id;
+        this.store.dispatch(new actions_2.UpdateMachineType(updatedType));
+    };
+    MachineTypeComponent.prototype.deleteMachineType = function (typeId) {
+        this.store.dispatch(new actions_2.DeleteMachineType(typeId));
+    };
+    return MachineTypeComponent;
+}());
+exports.MachineTypeComponent = MachineTypeComponent;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine/machine.component.ngfactory.js":
+/*!******************************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine/machine.component.ngfactory.js ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.component.scss.shim.ngstyle */ "./src/app/common/modules/machine/components/machine/machine.component.scss.shim.ngstyle.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.component */ "./src/app/common/modules/machine/components/machine/machine.component.ts");
+var styles_MachineComponent = [i0.styles];
+var RenderType_MachineComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_MachineComponent, data: {} });
+exports.RenderType_MachineComponent = RenderType_MachineComponent;
+function View_MachineComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "p", [], null, null, null, null, null)), (_l()(), i1.ɵted(-1, null, ["machine works!"]))], null, null); }
+exports.View_MachineComponent_0 = View_MachineComponent_0;
+function View_MachineComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-machine", [], null, null, null, View_MachineComponent_0, RenderType_MachineComponent)), i1.ɵdid(1, 114688, null, 0, i2.MachineComponent, [], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+exports.View_MachineComponent_Host_0 = View_MachineComponent_Host_0;
+var MachineComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-machine", i2.MachineComponent, View_MachineComponent_Host_0, {}, {}, []);
+exports.MachineComponentNgFactory = MachineComponentNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine/machine.component.scss.shim.ngstyle.js":
+/*!**************************************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine/machine.component.scss.shim.ngstyle.js ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var styles = ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbW1vbi9tb2R1bGVzL21hY2hpbmUvY29tcG9uZW50cy9tYWNoaW5lL21hY2hpbmUuY29tcG9uZW50LnNjc3MifQ== */"];
+exports.styles = styles;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/components/machine/machine.component.ts":
+/*!********************************************************************************!*\
+  !*** ./src/app/common/modules/machine/components/machine/machine.component.ts ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var MachineComponent = /** @class */ /*@__PURE__*/ (function () {
+    function MachineComponent() {
+    }
+    MachineComponent.prototype.ngOnInit = function () {
+    };
+    return MachineComponent;
+}());
+exports.MachineComponent = MachineComponent;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/effects/effects.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/common/modules/machine/effects/effects.ts ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __decorate = /*@__PURE__*/ __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js").__decorate;
+var __metadata = /*@__PURE__*/ __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js").__metadata;
+"use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m)
+        return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+            ar.push(r.value);
+    }
+    catch (error) {
+        e = { error: error };
+    }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"]))
+                m.call(i);
+        }
+        finally {
+            if (e)
+                throw e.error;
+        }
+    }
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var effects_1 = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/effects/fesm5/effects.js");
+var rxjs_1 = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var fromMachine = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
+var machine_service_1 = __webpack_require__(/*! @machine/services/machine.service */ "./src/app/common/modules/machine/services/machine.service.ts");
+var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
+var selectors_1 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
+var toastr_1 = __webpack_require__(/*! @models/constants/toastr */ "./src/app/common/models/constants/toastr.ts");
+var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
+    function MachineEffects(actions$, machineService, messageService, store) {
+        var _this = this;
+        this.actions$ = actions$;
+        this.machineService = machineService;
+        this.messageService = messageService;
+        this.store = store;
+        this.loadMachineTypes$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.LoadMachineTypes), operators_1.mergeMap(function () {
+            return _this.machineService.getMachineTypes()
+                .pipe(operators_1.map(function (MachineTypes) { return new fromMachine.LoadedMachineTypes(MachineTypes); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.createMachineType$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.CreateMachineType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectMachineTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.machineService.createMachineType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.MACHINE_TYPE, type: toastr_1.ToastrMessageType.CREATE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types.push(type);
+                }
+                return new fromMachine.LoadedMachineTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.updateMachineType$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.UpdateMachineType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectMachineTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.machineService.updateMachineType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.MACHINE_TYPE, type: toastr_1.ToastrMessageType.UPDATE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types = types.map(function (item) { return item.id === type.id ? type : item; });
+                }
+                return new fromMachine.LoadedMachineTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.deleteMachineType$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.DeleteMachineType), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectMachineTypes))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], types = _b[1];
+            return _this.machineService.deleteMachineType(action.payload)
+                .pipe(operators_1.map(function (type) {
+                var message = { user: toastr_1.ToastrUsersType.MACHINE_TYPE, type: toastr_1.ToastrMessageType.REMOVE };
+                if (type) {
+                    _this.messageService.showToastrSuccess(message);
+                    types = types.filter(function (item) { return item.id !== action.payload; });
+                }
+                return new fromMachine.LoadedMachineTypes(types);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+    }
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "loadMachineTypes$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "createMachineType$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "updateMachineType$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "deleteMachineType$", void 0);
+    return MachineEffects;
+}());
+exports.MachineEffects = MachineEffects;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/machine.module.ngfactory.js":
+/*!********************************************************************!*\
+  !*** ./src/app/common/modules/machine/machine.module.ngfactory.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @fileoverview This file was generated by the Angular template compiler. Do not edit.
+ *
+ * @suppress {suspiciousCode,uselessCode,missingProperties,missingOverride,checkTypes}
+ * tslint:disable
+ */
+/*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
+var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.module */ "./src/app/common/modules/machine/machine.module.ts");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../../node_modules/@angular/router/router.ngfactory */ "./node_modules/@angular/router/router.ngfactory.js");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../../node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory */ "./node_modules/@ng-bootstrap/ng-bootstrap/ng-bootstrap.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./components/machine/machine.component.ngfactory */ "./src/app/common/modules/machine/components/machine/machine.component.ngfactory.js");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
+var i11 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../shared/shared.module */ "./src/app/common/modules/shared/shared.module.ts");
+var i12 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-toggle-switch */ "./node_modules/ngx-toggle-switch/ui-switch.es5.js");
+var i13 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
+var i14 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../table/table.module */ "./src/app/common/modules/table/table.module.ts");
+var i15 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./components/machine/machine.component */ "./src/app/common/modules/machine/components/machine/machine.component.ts");
+var MachineModuleNgFactory = /*@__PURE__*/ /*@__PURE__*/ i0.ɵcmf(i1.MachineModule, [], function (_l) { return i0.ɵmod([i0.ɵmpd(512, i0.ComponentFactoryResolver, i0.ɵCodegenComponentFactoryResolver, [[8, [i2.ɵangular_packages_router_router_lNgFactory, i3.NgbDatepickerNgFactory, i3.NgbAlertNgFactory, i3.ɵuNgFactory, i3.ɵvNgFactory, i3.ɵnNgFactory, i3.ɵqNgFactory, i3.ɵrNgFactory, i4.MachineComponentNgFactory]], [3, i0.ComponentFactoryResolver], i0.NgModuleRef]), i0.ɵmpd(4608, i5.NgLocalization, i5.NgLocaleLocalization, [i0.LOCALE_ID, [2, i5.ɵangular_packages_common_common_a]]), i0.ɵmpd(4608, i6.FormBuilder, i6.FormBuilder, []), i0.ɵmpd(4608, i6.ɵangular_packages_forms_forms_o, i6.ɵangular_packages_forms_forms_o, []), i0.ɵmpd(4608, i7.NgbModal, i7.NgbModal, [i0.ComponentFactoryResolver, i0.Injector, i7.ɵw, i7.NgbModalConfig]), i0.ɵmpd(4608, i7.NgbDateNativeAdapter, i7.NgbDateNativeAdapter, []), i0.ɵmpd(1073742336, i5.CommonModule, i5.CommonModule, []), i0.ɵmpd(1073742336, i8.RouterModule, i8.RouterModule, [[2, i8.ɵangular_packages_router_router_a], [2, i8.Router]]), i0.ɵmpd(1073742336, i9.TranslateModule, i9.TranslateModule, []), i0.ɵmpd(1073742336, i6.ɵangular_packages_forms_forms_d, i6.ɵangular_packages_forms_forms_d, []), i0.ɵmpd(1073742336, i6.ReactiveFormsModule, i6.ReactiveFormsModule, []), i0.ɵmpd(1073742336, i10.FontAwesomeModule, i10.FontAwesomeModule, []), i0.ɵmpd(1073742336, i6.FormsModule, i6.FormsModule, []), i0.ɵmpd(1073742336, i7.NgbDatepickerModule, i7.NgbDatepickerModule, []), i0.ɵmpd(1073742336, i7.NgbAccordionModule, i7.NgbAccordionModule, []), i0.ɵmpd(1073742336, i7.NgbAlertModule, i7.NgbAlertModule, []), i0.ɵmpd(1073742336, i7.NgbButtonsModule, i7.NgbButtonsModule, []), i0.ɵmpd(1073742336, i7.NgbCarouselModule, i7.NgbCarouselModule, []), i0.ɵmpd(1073742336, i7.NgbCollapseModule, i7.NgbCollapseModule, []), i0.ɵmpd(1073742336, i7.NgbDropdownModule, i7.NgbDropdownModule, []), i0.ɵmpd(1073742336, i7.NgbModalModule, i7.NgbModalModule, []), i0.ɵmpd(1073742336, i7.NgbPaginationModule, i7.NgbPaginationModule, []), i0.ɵmpd(1073742336, i7.NgbPopoverModule, i7.NgbPopoverModule, []), i0.ɵmpd(1073742336, i7.NgbProgressbarModule, i7.NgbProgressbarModule, []), i0.ɵmpd(1073742336, i7.NgbRatingModule, i7.NgbRatingModule, []), i0.ɵmpd(1073742336, i7.NgbTabsetModule, i7.NgbTabsetModule, []), i0.ɵmpd(1073742336, i7.NgbTimepickerModule, i7.NgbTimepickerModule, []), i0.ɵmpd(1073742336, i7.NgbTooltipModule, i7.NgbTooltipModule, []), i0.ɵmpd(1073742336, i7.NgbTypeaheadModule, i7.NgbTypeaheadModule, []), i0.ɵmpd(1073742336, i7.NgbModule, i7.NgbModule, []), i0.ɵmpd(1073742336, i11.SharedModule, i11.SharedModule, []), i0.ɵmpd(1073742336, i12.UiSwitchModule, i12.UiSwitchModule, []), i0.ɵmpd(1073742336, i13.NgSelectModule, i13.NgSelectModule, []), i0.ɵmpd(1073742336, i14.TableModule, i14.TableModule, []), i0.ɵmpd(1073742336, i1.MachineModule, i1.MachineModule, []), i0.ɵmpd(256, i13.SELECTION_MODEL_FACTORY, i13.ɵb, []), i0.ɵmpd(1024, i8.ROUTES, function () { return [[{ path: "", component: i15.MachineComponent }]]; }, [])]); });
+exports.MachineModuleNgFactory = MachineModuleNgFactory;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/machine.module.ts":
+/*!**********************************************************!*\
+  !*** ./src/app/common/modules/machine/machine.module.ts ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var machine_component_1 = __webpack_require__(/*! ./components/machine/machine.component */ "./src/app/common/modules/machine/components/machine/machine.component.ts");
+var routes = [
+    {
+        path: '',
+        component: machine_component_1.MachineComponent
+    }
+];
+var MachineModule = /** @class */ /*@__PURE__*/ (function () {
+    function MachineModule() {
+    }
+    return MachineModule;
+}());
+exports.MachineModule = MachineModule;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/reducers/reducer.ts":
+/*!************************************************************!*\
+  !*** ./src/app/common/modules/machine/reducers/reducer.ts ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var actions_1 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
+exports.initialState = {
+    MachineTypes: undefined,
+    errors: undefined
+};
+function reducer(state, action) {
+    if (state === void 0) {
+        state = exports.initialState;
+    }
+    switch (action.type) {
+        case actions_1.ActionTypes.LoadedMachineTypes:
+            return __assign({}, state, { MachineTypes: action.payload });
+        case actions_1.ActionTypes.MachineErrors:
+            return __assign({}, state, { errors: action.payload });
+        default:
+            return state;
+    }
+}
+exports.reducer = reducer;
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/selectors/selectors.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/common/modules/machine/selectors/selectors.ts ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+exports.selectMachines = store_1.createFeatureSelector('machine');
+var ɵ0 = function (state) { return state.MachineTypes; };
+exports.ɵ0 = ɵ0;
+exports.selectMachineTypes = store_1.createSelector(exports.selectMachines, ɵ0);
+var ɵ1 = function (state) { return state.errors; };
+exports.ɵ1 = ɵ1;
+exports.selectMachineErrors = store_1.createSelector(exports.selectMachines, ɵ1);
+
+
+
+/***/ }),
+
+/***/ "./src/app/common/modules/machine/services/machine.service.ts":
+/*!********************************************************************!*\
+  !*** ./src/app/common/modules/machine/services/machine.service.ts ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var environment_1 = __webpack_require__(/*! @environments/environment */ "./src/environments/environment.ts");
+var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var i0 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var i1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var MachineService = /** @class */ /*@__PURE__*/ (function () {
+    function MachineService(http) {
+        this.http = http;
+        this.baseUrl = environment_1.environment.BASE_URL + '/api/vehicletype/' + environment_1.environment.version;
+    }
+    MachineService.prototype.getMachineTypes = function () {
+        return this.http.get(this.baseUrl + "/get/all")
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.prototype.createMachineType = function (body) {
+        return this.http.post(this.baseUrl + "/create", body)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.prototype.updateMachineType = function (type) {
+        return this.http.put(this.baseUrl + "/update/" + type.id, type)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.prototype.deleteMachineType = function (typeId) {
+        return this.http.delete(this.baseUrl + "/delete/" + typeId)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function MachineService_Factory() { return new MachineService(i0.ɵɵinject(i1.HttpClient)); }, token: MachineService, providedIn: "root" });
+    return MachineService;
+}());
+exports.MachineService = MachineService;
 
 
 
@@ -13793,14 +15178,14 @@ var PersonEffects = /** @class */ /*@__PURE__*/ (function () {
         }));
         this.updatePerson$ = this.actions$
             .pipe(effects_1.ofType(fromPerson.ActionTypes.UpdatePerson), operators_1.mergeMap(function (action) {
-            var person = action.payload.person;
+            var _a = action.payload, page = _a.page, person = _a.person;
             return _this.personService.updatePerson(person, person.id)
                 .pipe(operators_1.switchMap(function (data) {
                 var message = { user: toastr_1.ToastrUsersType.PERSON, type: toastr_1.ToastrMessageType.UPDATE };
                 if (data) {
                     _this.messageService.showToastrSuccess(message);
                 }
-                return [new fromPerson.LoadPersonsCount()];
+                return [new fromPerson.LoadPersonsPerPage(page), new fromPerson.LoadPersonsCount()];
             }), operators_1.catchError(function (err) {
                 _this.messageService.showToastrError(err);
                 _this.messageService.showPushNotification(err);
@@ -19140,12 +20525,9 @@ var SharedService = /** @class */ /*@__PURE__*/ (function () {
             { name: 'specialities', path: '/specialities', children: [] },
             { name: 'users', path: '/users', children: [] },
             { name: 'courses', path: '/courses', children: [] },
-            { name: 'weaponList', path: '/weapon-list', children: [
-                    {
-                        name: 'weaponType',
-                        path: '/weapon-types'
-                    },
-                ] },
+            { name: 'weaponList', path: '/weapon-list', children: [] },
+            { name: 'weaponType', path: '/weapon-types', children: [] },
+            { name: 'communicationTypes', path: '/communication-type', children: [] },
             {
                 name: 'divisionList', path: '/checkin', children: [
                     {
@@ -24602,10 +25984,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: true,
     version: 'v1.0',
-    BASE_URL: 'http://ipsc.com',
+    BASE_URL: 'http://192.168.0.10',
     hmr: false,
-    mqttHost: 'ipsc.com',
-    mqttPort: 8080,
+    mqttHost: '192.168.0.10',
+    mqttPort: 8808,
     mqttUserName: 'guest',
     mqttPassword: 'guest',
 };

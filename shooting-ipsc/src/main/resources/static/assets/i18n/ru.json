@@ -285,5 +285,12 @@
   "machineTypes": "Типы техники",
   "communications": "Средства связи",
   "machines": "Техника",
-  "editWeapon": "Изменить вооружение"
+  "editWeapon": "Изменить вооружение",
+  "emptyTournaments": "Нет активных соревнований. Добавьте активное соревнование.",
+  "communicationType": "Тип средства связи",
+  "editcommunicationTypes": "Изменить тип средства связи",
+  "addcommunicationTypes": "Добавить тип средства связи",
+  "machineType": "Тип техники",
+  "editmachineTypes": "Изменить тип техники",
+  "addmachineTypes": "Добавить тип техники"
 }
