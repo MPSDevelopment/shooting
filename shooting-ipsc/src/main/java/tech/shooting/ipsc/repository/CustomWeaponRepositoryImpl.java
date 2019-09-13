@@ -1,13 +1,10 @@
 package tech.shooting.ipsc.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weapon;
@@ -21,11 +18,16 @@ public class CustomWeaponRepositoryImpl implements CustomWeaponRepository {
 
 	@Override
 	public List<Weapon> findByPersonDivision(Division division) {
+		
 		Query query = new Query();
-		query.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-		var persons = mongoTemplate.find(query, Person.class);
+		if (division.getParent() == null) {
+			return mongoTemplate.find(query, Weapon.class);
+		}
+		
+		Query personQuery = new Query();
+		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+		var persons = mongoTemplate.find(personQuery, Person.class);
 
-		query = new Query();
 		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, Weapon.class);
 	}

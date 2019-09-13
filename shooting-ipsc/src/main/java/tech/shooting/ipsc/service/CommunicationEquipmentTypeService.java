@@ -37,9 +37,9 @@ public class CommunicationEquipmentTypeService {
 	private CommunicationEquipmentType checkWeaponTypeExist(CommEquipmentTypeBean bean) {
 		CommunicationEquipmentType byName = repository.findByName(bean);
 		if (byName == null) {
-			return new CommunicationEquipmentType().setName(bean.getName());
+			return new CommunicationEquipmentType().setName(bean.getName()).setType(bean.getType());
 		} else {
-			return byName.setName(bean.getName());
+			return byName.setName(bean.getName()).setType(bean.getType());
 		}
 
 	}

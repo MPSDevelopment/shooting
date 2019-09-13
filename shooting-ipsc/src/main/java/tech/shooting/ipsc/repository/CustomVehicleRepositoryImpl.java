@@ -17,11 +17,16 @@ public class CustomVehicleRepositoryImpl implements CustomVehicleRepository {
 
 	@Override
 	public List<Vehicle> findByPersonDivision(Division division) {
+		
 		Query query = new Query();
-		query.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-		var persons = mongoTemplate.find(query, Person.class);
+		if (division.getParent() == null) {
+			return mongoTemplate.find(query, Vehicle.class);
+		}
+		
+		Query personQuery = new Query();
+		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+		var persons = mongoTemplate.find(personQuery, Person.class);
 
-		query = new Query();
 		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, Vehicle.class);
 	}

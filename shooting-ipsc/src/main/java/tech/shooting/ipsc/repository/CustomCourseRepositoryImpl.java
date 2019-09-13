@@ -21,7 +21,12 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 
 	@Override
 	public List<Course> findByPersonDivisionIn(Division division) {
+
 		Query query = new Query();
+		if (division.getParent() == null) {
+			return mongoTemplate.find(query, Course.class);
+		}
+
 		query.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 		var persons = mongoTemplate.find(query, Person.class);
 
@@ -32,11 +37,17 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 
 	@Override
 	public Page<Course> findByPersonDivisionIn(Division division, PageRequest pageable) {
+
+		Query query = new Query().with(pageable);
+		if (division.getParent() == null) {
+			var list = mongoTemplate.find(query, Course.class);
+			return PageableExecutionUtils.getPage(list, pageable, () -> mongoTemplate.count(query, Course.class));
+		}
+
 		Query personQuery = new Query();
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 		var persons = mongoTemplate.find(personQuery, Person.class);
 
-		Query query = new Query().with(pageable);
 		query.addCriteria(Criteria.where("person").in(persons));
 		var list = mongoTemplate.find(query, Course.class);
 
