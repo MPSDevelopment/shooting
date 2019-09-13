@@ -155,7 +155,7 @@ class CommunicationEquipmentTypeControllerTest {
 	@Test
 	void checkPostTypeOfWeapon() throws Exception {
 		assertEquals(Collections.emptyList(), commEquipmentTypeRepository.findAll());
-		CommEquipmentTypeBean bean = new CommEquipmentTypeBean().setName("Test");
+		CommEquipmentTypeBean bean = new CommEquipmentTypeBean().setName("Test").setType(CommunicationEquipmentEnum.ULRTA_SHORT_WAVE);
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
@@ -175,6 +175,7 @@ class CommunicationEquipmentTypeControllerTest {
 		CommunicationEquipmentType typeFromDB = JacksonUtils.fromJson(CommunicationEquipmentType.class, contentAsString);
 		assertEquals(1, commEquipmentTypeRepository.findAll().size());
 		assertEquals(bean.getName(), typeFromDB.getName());
+		assertEquals(bean.getType(), typeFromDB.getType());
 	}
 
 	@Test
