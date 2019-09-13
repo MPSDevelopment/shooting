@@ -69,7 +69,7 @@ public class CourseRepositoryTest {
 
 		courseRepository.save(new Course().setPerson(person).setName("Test"));
 		courseRepository.save(new Course().setPerson(otherPerson).setName("Test"));
-		
+
 		log.info("Division is %s", division.getId());
 	}
 
@@ -83,8 +83,7 @@ public class CourseRepositoryTest {
 	public void findByPersonIn() {
 		list = courseRepository.findByPersonIn(Arrays.asList(person));
 		assertEquals(1, list.size());
-		
-		
+
 	}
 
 //	@Test
@@ -107,6 +106,14 @@ public class CourseRepositoryTest {
 
 	@Test
 	public void findByPersonDivisionInPageable() {
+		page = courseRepository.findByPersonDivisionIn(division, PageRequest.of(0, 10));
+		assertEquals(0, page.getNumber());
+		assertEquals(10, page.getSize());
+		assertEquals(2, page.getTotalElements());
+	}
+
+	@Test
+	public void findByDivisionInPageable() {
 		page = courseRepository.findByPersonIn(personRepository.findByDivisionIn(division.getAllChildren()), PageRequest.of(0, 10));
 		assertEquals(0, page.getNumber());
 		assertEquals(10, page.getSize());

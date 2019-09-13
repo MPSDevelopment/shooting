@@ -109,7 +109,7 @@ public class CourseService {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (divisionId != null) {
 			var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
-			return courseRepository.findByPersonIn(personRepository.findByDivision(division), pageable);
+			return courseRepository.findByPersonDivisionIn(division, pageable);
 		}
 		return courseRepository.findAll(pageable);
 	}

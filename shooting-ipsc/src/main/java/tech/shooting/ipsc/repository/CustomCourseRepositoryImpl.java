@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Division;
@@ -27,6 +28,19 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 		query = new Query();
 		query.addCriteria(Criteria.where("person").in(persons));
 		return mongoTemplate.find(query, Course.class);
+	}
+
+	@Override
+	public Page<Course> findByPersonDivisionIn(Division division, PageRequest pageable) {
+		Query personQuery = new Query();
+		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+		var persons = mongoTemplate.find(personQuery, Person.class);
+
+		Query query = new Query().with(pageable);
+		query.addCriteria(Criteria.where("person").in(persons));
+		var list = mongoTemplate.find(query, Course.class);
+
+		return PageableExecutionUtils.getPage(list, pageable, () -> mongoTemplate.count(query, Course.class));
 	}
 
 //	@Override

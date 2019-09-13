@@ -12,4 +12,6 @@ import org.springframework.data.domain.PageRequest;
 public interface CustomCourseRepository {
 
 	List<Course> findByPersonDivisionIn(Division division);
+	
+	Page<Course> findByPersonDivisionIn(Division division, PageRequest pageable);
 }
