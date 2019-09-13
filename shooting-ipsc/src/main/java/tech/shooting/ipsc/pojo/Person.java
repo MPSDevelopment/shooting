@@ -1,6 +1,5 @@
 package tech.shooting.ipsc.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,7 +11,6 @@ import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Document(collection = "person")
 @TypeAlias("person")
@@ -25,6 +23,8 @@ public class Person extends BaseDocument {
 	public static final String DIVISION = "division";
 
 	public static final String RANK = "rank";
+	
+	public static final String CALL = "call";
 
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
@@ -67,6 +67,10 @@ public class Person extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person's number code")
 	private String number;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person's call")
+	private String call;
 
 //	public Person setDivision(Division division) {
 //		this.division = division;

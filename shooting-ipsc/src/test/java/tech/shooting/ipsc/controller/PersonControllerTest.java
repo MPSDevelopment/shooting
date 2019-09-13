@@ -138,11 +138,11 @@ public class PersonControllerTest {
 	public void checkCreatePerson() throws Exception {
 		// prepare
 		PersonBean personBean = new PersonBean().setName("qwerty").setRank(privateRank.getId()).setTypeWeapon(WeaponTypeEnum.HANDGUN).setQualifierRank(ClassificationBreaks.D);
-		List<WeaponIpscCode> codes = new ArrayList<>();
-		codes.add(handgun);
-		codes.add(shotgun);
-		codes.add(rifle);
-		personBean.setCodes(codes);
+//		List<WeaponIpscCode> codes = new ArrayList<>();
+//		codes.add(handgun);
+//		codes.add(shotgun);
+//		codes.add(rifle);
+//		personBean.setCodes(codes);
 		String json = JacksonUtils.getJson(personBean);
 		// try access to createPerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).content(json).contentType(MediaType.APPLICATION_JSON_UTF8))

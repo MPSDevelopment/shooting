@@ -62,8 +62,20 @@ public class UpdatePerson {
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
 	@NotNull(message = ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person's rfid code")
+	private String rfidCode;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Person's IPSC codes")
-	private List<WeaponIpscCode> codes;
+	@ApiModelProperty(value = "Person's number code")
+	private String number;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person's call")
+	private String call;
+
+//	@JsonProperty
+//	@ApiModelProperty(value = "Person's IPSC codes")
+//	private List<WeaponIpscCode> codes;
 }

@@ -25,4 +25,6 @@ public interface PersonRepository extends MongoRepository<Person, Long> {
 	Optional<Person> findByRfidCode(String rfidCode);
 	
 	Optional<Person> findByNumber(String number);
+	
+	Optional<Person> findByCall(String call);
 }

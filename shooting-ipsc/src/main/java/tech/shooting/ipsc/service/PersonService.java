@@ -92,6 +92,10 @@ public class PersonService {
 	public Person getPersonByNumber(String number) throws BadRequestException {
 		return personRepository.findByNumber(number).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person number %s", number)));
 	}
+	
+	public Person getPersonByCall(String call) throws BadRequestException {
+		return personRepository.findByCall(call).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person call %s", call)));
+	}
 
 	public Person updatePerson(Long personId, UpdatePerson personBean) throws BadRequestException {
 		if (!personId.equals(personBean.getId())) {

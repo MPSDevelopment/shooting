@@ -52,8 +52,15 @@ public class PersonController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get person by number", notes = "Return person object")
-	public ResponseEntity<Person> getPersoByNumber(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String number) throws BadRequestException {
+	public ResponseEntity<Person> getPersonByNumber(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String number) throws BadRequestException {
 		return new ResponseEntity<>(personService.getPersonByNumber(number), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get person by number", notes = "Return person object")
+	public ResponseEntity<Person> getPersonByCall(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String call) throws BadRequestException {
+		return new ResponseEntity<>(personService.getPersonByCall(call), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
