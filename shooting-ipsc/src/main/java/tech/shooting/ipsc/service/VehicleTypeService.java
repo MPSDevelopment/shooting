@@ -30,11 +30,11 @@ public class VehicleTypeService {
 	}
 
 	public VehicleType postType(VehicleTypeBean bean) {
-		VehicleType save = repository.save(checkWeaponTypeExist(bean));
+		VehicleType save = repository.save(checkTypeExist(bean));
 		return save;
 	}
 
-	private VehicleType checkWeaponTypeExist(VehicleTypeBean bean) {
+	private VehicleType checkTypeExist(VehicleTypeBean bean) {
 		VehicleType byName = repository.findByName(bean);
 		if (byName == null) {
 			return new VehicleType().setName(bean.getName());

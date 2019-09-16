@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.ipsc.pojo.AnimalType;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.pojo.User;
+import tech.shooting.ipsc.repository.AnimalTypeRepository;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
@@ -49,6 +51,9 @@ public class DatabaseCreator {
 	
 	@Autowired
 	private DivisionRepository divisionRepository;
+	
+	@Autowired
+	private AnimalTypeRepository animalTypeRepository;
 
 	public DatabaseCreator () {
 	}
@@ -98,6 +103,9 @@ public class DatabaseCreator {
 		long count = divisionRepository.count();
 		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
 		log.info("Division count was %s, after root save if not exist, it is %s", count, divisionRepository.count());
+		
+		
+		animalTypeRepository.createIfNotExists(new AnimalType().setName("Собака"));
 		
 	}
 }

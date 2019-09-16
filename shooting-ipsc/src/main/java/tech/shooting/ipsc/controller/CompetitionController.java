@@ -1,6 +1,5 @@
 package tech.shooting.ipsc.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,11 +25,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
-import tech.shooting.ipsc.bean.DisqualificationBean;
 import tech.shooting.ipsc.bean.IdBean;
 import tech.shooting.ipsc.bean.RatingBean;
 import tech.shooting.ipsc.bean.ScoreBean;

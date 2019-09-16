@@ -28,7 +28,7 @@ public class Pageable {
 
 	public static Page<? extends BaseDocument> countPage(Integer page, Integer size, MongoRepository<? extends BaseDocument, Long> personRepository) {
 		size = Math.min(Math.max(10, size), 20);
-		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, User.ID_FIELD);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, BaseDocument.ID_FIELD);
 		if (personRepository instanceof UserRepository) {
 			return ((UserRepository) personRepository).findAllByRoleName(RoleName.USER.toString(), pageable);
 		}

@@ -21,51 +21,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
-import tech.shooting.ipsc.bean.VehicleTypeBean;
-import tech.shooting.ipsc.pojo.VehicleType;
-import tech.shooting.ipsc.service.VehicleTypeService;
+import tech.shooting.ipsc.bean.AmmoTypeBean;
+import tech.shooting.ipsc.pojo.AmmoType;
+import tech.shooting.ipsc.service.AmmoTypeService;
 
 @Controller
-@RequestMapping(ControllerAPI.VEHICLE_TYPE_CONTROLLER)
-@Api(ControllerAPI.VEHICLE_TYPE_CONTROLLER)
+@RequestMapping(ControllerAPI.AMMO_TYPE_CONTROLLER)
+@Api(ControllerAPI.AMMO_TYPE_CONTROLLER)
 @Slf4j
 @PreAuthorize("hasRole('ADMIN')")
-public class VehicleTypeController {
+public class AmmoTypeController {
 
 	@Autowired
-	private VehicleTypeService service;
+	private AmmoTypeService service;
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_ALL)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Return list of type's", notes = "List<WeaponType> or Optional.empty()")
-	public ResponseEntity<List<VehicleType>> getAllTypes() {
+	public ResponseEntity<List<AmmoType>> getAllTypes() {
 		return new ResponseEntity<>(service.getAllType(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_GET_BY_ID)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_GET_BY_ID)
 	@ApiOperation(value = "Return type by id", notes = "Type or BadRequestException")
-	public ResponseEntity<VehicleType> getTypeById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) Long typeId) throws BadRequestException {
+	public ResponseEntity<AmmoType> getTypeById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) Long typeId) throws BadRequestException {
 		return new ResponseEntity<>(service.getTypeById(typeId), HttpStatus.OK);
 	}
 
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_POST_TYPE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_POST_TYPE)
 	@ApiOperation(value = "Return created type", notes = "Return created name ")
-	public ResponseEntity<VehicleType> postType(@RequestBody @Valid VehicleTypeBean bean) {
+	public ResponseEntity<AmmoType> postType(@RequestBody @Valid AmmoTypeBean bean) {
 		return new ResponseEntity<>(service.postType(bean), HttpStatus.OK);
 	}
 
-	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_PUT_TYPE)
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_PUT_TYPE)
 	@ApiOperation(value = "Return created type updated", notes = "Return created name  Updated")
-	public ResponseEntity<VehicleType> postType(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long typeId, @RequestBody @Valid VehicleTypeBean bean) throws BadRequestException {
+	public ResponseEntity<AmmoType> postType(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long typeId, @RequestBody @Valid AmmoTypeBean bean) throws BadRequestException {
 		return new ResponseEntity<>(service.updateType(typeId, bean), HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_DELETE_TYPE_BY_ID)
 	@ApiOperation(value = "Delete type return status Ok")
 	public ResponseEntity<SuccessfulMessage> deleteType(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long typeId) throws BadRequestException {
 		service.deleteType(typeId);
-		return new ResponseEntity<>(new SuccessfulMessage("Vehicle type %s has been successfully deleted", typeId), HttpStatus.OK);
+		return new ResponseEntity<>(new SuccessfulMessage("Ammunition type %s has been successfully deleted", typeId), HttpStatus.OK);
 	}
 
 }

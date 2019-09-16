@@ -22,12 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
-import tech.shooting.ipsc.bean.WeaponTypeBean;
 import tech.shooting.ipsc.enums.CommunicationEquipmentEnum;
 import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
-import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.service.CommunicationEquipmentTypeService;
-import tech.shooting.ipsc.service.WeaponTypeService;
 
 @Controller
 @RequestMapping(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER)

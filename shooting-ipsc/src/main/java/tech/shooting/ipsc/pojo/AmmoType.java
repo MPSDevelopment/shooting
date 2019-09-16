@@ -11,16 +11,14 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotBlank;
 
-@Document(collection = "animaltype")
-@TypeAlias("animaltype")
+@Document(collection = "ammotype")
+@TypeAlias("ammotype")
 @Data
 @Accessors(chain = true)
-public class AnimalType extends BaseDocument {
+public class AmmoType extends BaseDocument {
 
-    public static final String NAME = "name";
-    
-	@JsonProperty
-    @ApiModelProperty(value = "Animal type name", required = true)
-    @NotBlank(message = ValidationConstants.ANIMAL_TYPE_NAME_MESSAGE)
+    @JsonProperty
+    @ApiModelProperty(value = "Ammunition type name", required = true)
+    @NotBlank(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
     private String name;
 }

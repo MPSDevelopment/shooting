@@ -17,7 +17,6 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.CourseBean;
 import tech.shooting.ipsc.pojo.Course;
-import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.service.CourseService;
 
 import javax.validation.Valid;
