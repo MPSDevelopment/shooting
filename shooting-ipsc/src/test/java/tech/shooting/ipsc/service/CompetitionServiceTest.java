@@ -71,7 +71,7 @@ public class CompetitionServiceTest {
 		assertEquals(3L, rating.get(0).getPersonId());
 		assertEquals(1, rating.get(0).getStages());
 		assertNull(rating.get(0).getDisqualification());
-		assertEquals("1(" + DisqualificationEnum.INJURED.toString() + ")", rating.get(1).getDisqualification());
+		assertEquals("1 " + DisqualificationEnum.INJURED.toString(), rating.get(1).getDisqualification());
 		assertEquals(87, rating.get(0).getScore());
 		assertEquals(3, rating.get(1).getStages());
 		assertEquals(90, rating.get(1).getScore());

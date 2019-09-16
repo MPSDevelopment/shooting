@@ -528,7 +528,7 @@ public class CompetitionService {
 			var disqualifications = personScores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
 
 			if (CollectionUtils.isNotEmpty(disqualifications)) {
-				personalRating.setDisqualification(String.valueOf(disqualifications.size()) + "(" + StringUtils.join(disqualifications, ",") + ")");
+				personalRating.setDisqualification(String.valueOf(disqualifications.size()) + " " + StringUtils.join(disqualifications, ",") + "");
 			}
 
 			result.add(personalRating);
@@ -571,7 +571,7 @@ public class CompetitionService {
 
 	public Competition stopCompetition(Long id) throws BadRequestException {
 		var competiton = checkCompetition(id);
-		competiton.setStarted(false);
+		competiton.setStarted(false).setActive(false);
 		competitionRepository.save(competiton);
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stopped", competiton.getName()));
 		log.info("Competition %s stopped", competiton.getName());
