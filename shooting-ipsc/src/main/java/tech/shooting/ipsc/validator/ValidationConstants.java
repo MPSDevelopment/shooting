@@ -120,4 +120,6 @@ public class ValidationConstants {
 	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
 	
 	public static final String COURSE_NAME_MESSAGE = "Course name must be min 3 characters";
+	
+	public static final String ANIMAL_TYPE_NAME_MESSAGE = "Animal type name must be not blank";
 }
