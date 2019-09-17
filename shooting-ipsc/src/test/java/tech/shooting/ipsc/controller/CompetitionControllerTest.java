@@ -3,22 +3,13 @@ package tech.shooting.ipsc.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Before;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -48,7 +39,6 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.*;
-import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
@@ -79,12 +69,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CompetitionControllerTest {
 
 	@Autowired
-	private IpscMqttSettings settings;
-
-	@Autowired
-	private MqttService mqttService;
-
-	@Autowired
 	private CompetitionRepository competitionRepository;
 
 	@Autowired
@@ -101,7 +85,7 @@ public class CompetitionControllerTest {
 
 	@Autowired
 	private RankRepository rankRepository;
-	
+
 	@Autowired
 	private ScoreRepository scoreRepository;
 
@@ -156,14 +140,13 @@ public class CompetitionControllerTest {
 		userToken = adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		
+
 //		competition.getStages().add(testingStage);
 //		competitionRepository.save(competition);
-		
+
 //		mqttService.startBroker("config/moquette.conf");
 	}
-	
-	
+
 	@AfterEach
 	public void afterEach() throws MqttException {
 //		mqttService.stopBroker();
@@ -237,16 +220,29 @@ public class CompetitionControllerTest {
 	public void checkDeleteCompetitionById() throws Exception {
 		// try access to deleteCompetitionById with authorized user
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
+				.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to deleteCompetitionById with authorized user
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+				.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		var competition = competitionRepository.findById(testingCompetition.getId()).orElse(null);
+		assertTrue(competition.isActive());
+
 		// try access to deleteCompetitionById with authorized admin
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testingCompetition.getName()));
+				.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		competitionRepository.save(competition.setActive(false));
+
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		competition = competitionRepository.findById(testingCompetition.getId()).orElse(null);
+		assertNull(competition);
 	}
 
 	@Test
@@ -329,7 +325,7 @@ public class CompetitionControllerTest {
 
 	@Test
 	public void checkStopCompetition() throws Exception {
-		
+
 		Competition test = competitionRepository.findByName(testingCompetition.getName());
 		// try access to stop competition with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders
@@ -347,7 +343,7 @@ public class CompetitionControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP.replace(ControllerAPI.REQUEST_COMPETITION_ID, test.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
-	}	
+	}
 
 	@Test
 	public void checkGetCount() throws Exception {
@@ -571,15 +567,16 @@ public class CompetitionControllerTest {
 						+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to putStage with admin role
-		var content = mockMvc.perform(MockMvcRequestBuilders
-				.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
-						+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk())
-				.andReturn().getResponse().getContentAsString();
+		var content = mockMvc
+				.perform(MockMvcRequestBuilders
+						.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
+								+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		var stage = JacksonUtils.fromJson(Stage.class, content);
 		assertEquals("updated name", stage.getName());
 		assertEquals(42, stage.getAllTargets());
-		
+
 	}
 
 	@Test
