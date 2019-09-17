@@ -37,7 +37,7 @@ public class AmmoTypeController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_GET_ALL)
-	@ApiOperation(value = "Return list of type's", notes = "List<WeaponType> or Optional.empty()")
+	@ApiOperation(value = "Return list of type's")
 	public ResponseEntity<List<AmmoType>> getAllTypes() {
 		return new ResponseEntity<>(service.getAllType(), HttpStatus.OK);
 	}

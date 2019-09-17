@@ -109,6 +109,12 @@
 			<version>${tika.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>OctaneSDKJava</groupId>
+			<artifactId>OctaneSDKJava</artifactId>
+			<version>${octane.version}</version>
+		</dependency>
+
 		<!-- Dependency for TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
