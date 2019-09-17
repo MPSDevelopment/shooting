@@ -8,7 +8,7 @@ public class ValidationConstants {
 	public static final String USER_PHONE_MESSAGE = "Min 7 characters (digits - and +)";
 
 	public static final String USER_NAME_MESSAGE = "Min 3 character";
-	
+
 	public static final String USER_LOGIN_MESSAGE = "Min 3 character";
 
 	public static final String USER_INCORRECT_LOGIN_MESSAGE = "Incorrect login";
@@ -26,19 +26,19 @@ public class ValidationConstants {
 	public static final String LOGIN_INCORRECT = "The account or password is incorrect. Please try again";
 
 	public static final String PERSON_NAME_MESSAGE = "Min 3 character";
-	
+
 	public static final String LEVEL_MESSAGE = "Level required";
 
 //	public static final String COMPETITION_NAME_MESSAGE = "Name min 3, max 50 character";
-	
+
 	public static final String COMPETITION_NAME_MESSAGE = "Name required";
 
 //	public static final String COMPETITION_LOCATION_MESSAGE = "Location min 5, max 50 character";
-	
+
 	public static final String COMPETITION_LOCATION_MESSAGE = "Location required";
 
 //	public static final String STAGE_NAME_MESSAGE = " Stage name min 5 , max 50 character";
-	
+
 	public static final String STAGE_NAME_MESSAGE = " Stage name required";
 
 	public static final String STAGE_TARGETS_COUNT_MESSAGE = "Count of targets must be min 1";
@@ -58,7 +58,7 @@ public class ValidationConstants {
 	public static final String PERSON_ID_POSITIVE = "Person id is required, must be positive";
 
 	public static final String SCORE_MESSAGE = "Must be not null";
-	
+
 	public static final String STANDARD_ID = "Standard id is required, must be not null";
 
 	public static final String TIME_MESSAGE = "The time must be not null and positive";
@@ -90,38 +90,42 @@ public class ValidationConstants {
 	public static final String NUMBER_MIN_MESSAGE = "Number must be min 1";
 
 	public static final String NUMBER_MAX_MESSAGE = "Number must be max 4";
-	
+
 	public static final String SPECIALITY_MESSAGE = "The speciality length must be not blank";
-	
+
 	public static final String SPECIALITY_SIZE_MESSAGE = "The speciality length must be min 3 characters";
-	
+
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
-	
+
 	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
-	
+
 	public static final String WEAPON_TYPE_NAME_MESSAGE = "Weapon type name must be not blank";
-	
+
 	public static final String COMMUNICATION_EQUIPMENT_NAME_MESSAGE = "Communication equipment type name must be not blank";
-	
+
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_MESSAGE = "Communication equipment type must be not null";
-	
+
 	public static final String COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
-	
+
+	public static final String EQUIPMENT_NAME_MESSAGE = "Equipment type name must be not blank";
+
+	public static final String EQUIPMENT_TYPE_MESSAGE = "Equipment type must be not null";
+
 	public static final String VEHICLE_NAME_MESSAGE = "Vehicle type name must be not blank";
-	
+
 	public static final String VEHICLE_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
-	
+
 	public static final String VEHICLE_COUNT_MESSAGE = "Must be 0 or greater";
-	
+
 	public static final String WEAPON_TYPE_AMMO_COUNT_MESSAGE = "Must be 0 or greater";
-	
+
 	public static final String PASSPORT_NUMBER_NUMBER_MESSAGE = "Passport number 7 characters min";
-	
+
 	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
-	
+
 	public static final String COURSE_NAME_MESSAGE = "Course name must be min 3 characters";
-	
+
 	public static final String ANIMAL_TYPE_NAME_MESSAGE = "Animal type name must be not blank";
-	
+
 	public static final String AMMO_TYPE_NAME_MESSAGE = "Ammunition type name must be not blank";
 }
