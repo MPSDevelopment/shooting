@@ -109,11 +109,38 @@
 			<version>${tika.version}</version>
 		</dependency>
 
+		<!-- <dependency> -->
+		<!-- <groupId>OctaneSDKJava</groupId> -->
+		<!-- <artifactId>OctaneSDKJava-full</artifactId> -->
+		<!-- <version>${octane.version}</version> -->
+		<!-- </dependency> -->
+
 		<dependency>
 			<groupId>OctaneSDKJava</groupId>
 			<artifactId>OctaneSDKJava</artifactId>
 			<version>${octane.version}</version>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.llrp</groupId> -->
+<!-- 			<artifactId>ltkjava</artifactId> -->
+<!-- 			<version>1.0.0.7</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.mina</groupId> -->
+<!-- 			<artifactId>mina-core</artifactId> -->
+<!-- 			<version>2.0.9</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.jcraft</groupId> -->
+<!-- 			<artifactId>jzlib</artifactId> -->
+<!-- 			<version>1.0.7</version> -->
+<!-- 			<optional>true</optional> -->
+<!-- 		</dependency> -->
+
+
 
 		<!-- Dependency for TEST -->
 		<dependency>
