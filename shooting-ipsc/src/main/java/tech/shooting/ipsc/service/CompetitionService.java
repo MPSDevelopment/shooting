@@ -120,6 +120,11 @@ public class CompetitionService {
 
 	public void removeCompetition(Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
+		
+		if (competition.isActive()) {
+			throw new BadRequestException(new ErrorMessage("Cannot delete active competition %s", competition.getName()));
+		}
+		
 		competitionRepository.delete(competition);
 	}
 

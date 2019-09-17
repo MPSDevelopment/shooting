@@ -6,7 +6,7 @@
   "competitor": "Участник",
   "competitors": "Участники",
   "persons": "Личный состав",
-  "addPerson": "Добавть персону",
+  "addPerson": "Добавить персону",
   "editPerson": "Изменить данные о персоне",
   "addCompetitor": "Добавить участника",
   "editCompetitor": "Изменить данные об участнике",
@@ -292,5 +292,11 @@
   "addcommunicationTypes": "Добавить тип средства связи",
   "machineType": "Тип техники",
   "editmachineTypes": "Изменить тип техники",
-  "addmachineTypes": "Добавить тип техники"
+  "addmachineTypes": "Добавить тип техники",
+  "ammoCount": "Кол-во боеприпасов",
+  "type": "Тип",
+  "SHORT_WAVE": "КВ",
+  "ULRTA_SHORT_WAVE": "УКВ",
+  "battlePreparing": "Учет боевой подготовки"
+
 }
