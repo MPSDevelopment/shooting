@@ -1,6 +1,6 @@
 package tech.shooting.ipsc.enums;
 
-public enum TournamentCategoryEnum {
+public enum CompetitionCategoryEnum {
 	LADY("Lady"),
 	JUNIOR("Junior"),
 	SUPER_JUNIOR("Super junior"),
@@ -9,7 +9,7 @@ public enum TournamentCategoryEnum {
 
 	private String value;
 
-	TournamentCategoryEnum (String value) {
+	CompetitionCategoryEnum (String value) {
 		this.value = value;
 	}
 

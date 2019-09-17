@@ -32,6 +32,8 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.ClassifierIPSC;
+import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.*;
 import tech.shooting.ipsc.service.StandardService;
@@ -379,5 +381,14 @@ class StandardControllerTest {
 		var gotScore = JacksonUtils.fromJson(StandardScore.class, content);
 
 		assertEquals(4, gotScore.getScore());
+	}
+	
+	@Test
+	public void checkGetEnum() throws Exception {
+		// try access to getEnum from admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		List<StandardPassEnum> listFromJson = JacksonUtils.getListFromJson(StandardPassEnum[].class, contentAsString);
+		assertEquals(3, listFromJson.size());
 	}
 }

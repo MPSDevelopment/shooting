@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import java.time.OffsetDateTime;
@@ -40,6 +41,10 @@ public class StandardScore extends BaseDocument {
 	@ApiModelProperty(value = "Person score of this standard", required = true)
 	@NotNull(message = ValidationConstants.SCORE_MESSAGE)
 	private Integer score = 0;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person pass score of this standard", required = true)
+	private StandardPassEnum passScore = StandardPassEnum.SATISFACTORY;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person time of executing this standard", required = true)

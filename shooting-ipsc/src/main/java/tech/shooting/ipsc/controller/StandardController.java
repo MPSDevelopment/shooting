@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.StandardBean;
+import tech.shooting.ipsc.enums.CompetitionClassEnum;
+import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.service.StandardService;
@@ -76,6 +78,12 @@ public class StandardController {
 	@ApiOperation(value = "Get a score", notes = "Return score object")
 	public ResponseEntity<StandardScore> getScore(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScore(standardId, personId), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "List of standard pass values")
+	public ResponseEntity<StandardPassEnum[]> getPasses () {
+		return new ResponseEntity<>(StandardPassEnum.values(), HttpStatus.OK);
 	}
 
 }

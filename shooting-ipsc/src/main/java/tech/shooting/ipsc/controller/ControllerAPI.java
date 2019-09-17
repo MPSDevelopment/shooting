@@ -330,6 +330,7 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_DELETE_STANDARD_BY_ID = "/delete/standard/" + REQUEST_STANDARD_ID;;
 	public static final String STANDARD_CONTROLLER_SCORE = "/score/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE = "/score/" + REQUEST_STANDARD_ID + "/" + REQUEST_PERSON_ID;
+	public static final String STANDARD_CONTROLLER_GET_PASS_ENUM = "/enum/pass";
 
 	public static final String COMMON_CONDITION_CONTROLLER = "/api/common/condition";
 	public static final String COMMON_CONDITION_CONTROLLER_GET_ALL = "/get/all";
