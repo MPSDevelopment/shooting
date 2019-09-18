@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,7 +36,8 @@ public class BaseDocument implements ShootingDocument {
 	@Id
 	@JsonProperty(ID_FIELD_GS)
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
-	private Long id;
+	@Include
+	protected Long id;
 
 	@CreatedDate
 	protected OffsetDateTime createdDate;

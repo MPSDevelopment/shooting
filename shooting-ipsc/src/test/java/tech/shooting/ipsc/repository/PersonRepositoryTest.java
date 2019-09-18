@@ -92,8 +92,10 @@ public class PersonRepositoryTest {
 	public void checkFindByDivisionId () {
 		List<Person> list = personRepository.findByDivisionId(division.getId());
 		assertEquals(0, list.size());
+		personRepository.save(person.setDivision(division));
 		list = personRepository.findByDivisionId(division.getId());
 		assertEquals(1, list.size());
+		personRepository.save(anotherPerson.setDivision(anotherDivision));
 		var anotherList = personRepository.findByDivisionId(anotherDivision.getId());
 		assertEquals(1, anotherList.size());
 		assertNotEquals(list, anotherList);

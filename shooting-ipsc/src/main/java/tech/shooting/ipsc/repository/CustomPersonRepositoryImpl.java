@@ -20,29 +20,29 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	@Override
 	public List<Person> findByDivisionId(Long id) {
-		// GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("devision").startWith("parent").connectFrom("parent").connectTo("children").restrict(Criteria.where("id").is(id)).as
-		// ("divisions");
-		// Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)), graphLookupOperation);
-		//
-		// TypedAggregation<Division> aggregationPipeline = Aggregation.newAggregation(Division.class, graphLookupOperation);
-		// List<Division> threadedPosts = mongoTemplate.aggregate(aggregationPipeline, Division.class).getMappedResults();
-
-//		UnwindOperation unwindOperation = Aggregation.unwind("divisions");
+		// GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("devision").startWith("parent").connectFrom("parent").connectTo("children").restrict(Criteria.where("id").is(id)).as // GraphLookupOperation
+		// graphLookupOperation = GraphLookupOperation.builder().from("devision").startWith("parent").connectFrom("parent").connectTo("children").restrict(Criteria.where("id").is(id)).as
+		// ("divisions"); // ("divisions");
+		// Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)), graphLookupOperation); // Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)),
+		// graphLookupOperation);
+		// //
+		// TypedAggregation<Division> aggregationPipeline = Aggregation.newAggregation(Division.class, graphLookupOperation); // TypedAggregation<Division> aggregationPipeline = Aggregation.newAggregation(Division.class,
+		// graphLookupOperation);
+		// List<Division> threadedPosts = mongoTemplate.aggregate(aggregationPipeline, Division.class).getMappedResults(); // List<Division> threadedPosts = mongoTemplate.aggregate(aggregationPipeline, Division.class).getMappedResults();
 
 		LookupOperation lookupOperation = LookupOperation.newLookup().from("division").localField("divisionId").foreignField("id").as("divisions");
 
 		Aggregation aggregation = Aggregation.newAggregation(Aggregation.match(Criteria.where("divisionId").is(id)), lookupOperation);
 
-		List<Person> results = mongoTemplate.aggregate(aggregation, "division", Person.class).getMappedResults();
+		List<Person> results = mongoTemplate.aggregate(aggregation, "person", Person.class).getMappedResults();
 
 		return results;
 	}
 
 	@Override
 	public List<Division> findByDivisionIdRecursive(Long id) {
-		
+
 		GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("parent").connectFrom("parentId").connectTo("childrenid").restrict(Criteria.where("id").is(id)).as("divisions");
 
 		// Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)), graphLookupOperation);
