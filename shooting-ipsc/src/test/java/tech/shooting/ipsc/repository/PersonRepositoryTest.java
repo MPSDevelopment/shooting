@@ -31,38 +31,48 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class PersonRepositoryTest {
+	
+	private static final String CALL = "Bore";
+
+	private static final String NAME = "Tigran";
+
 	@Autowired
 	private PersonRepository personRepository;
 
 	@Autowired
 	private DivisionRepository divisionRepository;
+
+	private Division division;
+
+	private Person person;
+
+	private OffsetDateTime offsetDateTime;
+
+	private Division anotherDivision;
+
+	private Person anotherPerson;
 	
 	@BeforeEach
 	public void before () {
 		personRepository.deleteAll();
+		division = divisionRepository.save(new Division().setName("Root").setParent(null));
+		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(division));
+		
+		offsetDateTime = OffsetDateTime.now();
+		person = personRepository.save(new Person().setName(NAME).setBirthDate(offsetDateTime).setCall(CALL));
+		anotherPerson = personRepository.save(new Person().setName("Another").setBirthDate(offsetDateTime).setCall("Another"));
 	}
 
 	@Test
 	public void checkFindByNameAndBirthDate () {
-		String name = "Tigran";
-		OffsetDateTime offsetDateTime = OffsetDateTime.now();
-		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime));
-		assertNotNull(personRepository.findByNameAndBirthDate(name, offsetDateTime));
+		assertNotNull(personRepository.findByNameAndBirthDate(NAME, offsetDateTime));
+		assertNull(personRepository.findByNameAndBirthDate(NAME, offsetDateTime.minusDays(1)));
 	}
 
 	@Test
 	public void checkFindByDivision () {
-		String name = "Tigran";
-		OffsetDateTime offsetDateTime = OffsetDateTime.now();
-		List<Division> all = divisionRepository.findAll();
-		Division division;
-		if(all.size() == 0) {
-			division = divisionRepository.save(new Division().setName("fdfdfdfd").setParent(null));
-		} else {
-			division = all.get(0);
-		}
 		log.info("Set division %s", division);
-		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime).setDivision(division));
+		personRepository.save(person.setDivision(division));
 		
 		List<Person> findByDivision = personRepository.findByDivision(division);
 		assertNotNull(findByDivision);
@@ -71,12 +81,22 @@ public class PersonRepositoryTest {
 	}
 	
 	@Test
+	public void checkFindByDivisionId () {
+		List<Person> list = personRepository.findByDivisionId(division.getId());
+		assertEquals(0, list.size());
+		personRepository.save(person.setDivision(division));
+		list = personRepository.findByDivisionId(division.getId());
+		assertEquals(1, list.size());
+		personRepository.save(anotherPerson.setDivision(anotherDivision));
+		list = personRepository.findByDivisionId(division.getId());
+		assertEquals(1, list.size());
+		var anotherList = personRepository.findByDivisionId(anotherDivision.getId());
+		assertEquals(1, anotherList.size());
+		assertNotEquals(list, anotherList);
+	}
+	
+	@Test
 	public void checkFindByCall() {
-		String name = "Tigran";
-		String call = "Bore";
-		OffsetDateTime offsetDateTime = OffsetDateTime.now();
-		personRepository.save(new Person().setName(name).setBirthDate(offsetDateTime).setCall(call));
-		
-		assertNotNull(personRepository.findByCall(call).orElseGet(null));
+		assertNotNull(personRepository.findByCall(CALL).orElseGet(null));
 	}
 }

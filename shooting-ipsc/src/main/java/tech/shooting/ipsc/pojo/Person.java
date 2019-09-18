@@ -51,6 +51,8 @@ public class Person extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
 	private Division division;
+	
+	private Long divisionId;
 
 //	@JsonProperty
 //	@ApiModelProperty(value = "Person's IPSC codes")
@@ -72,9 +74,9 @@ public class Person extends BaseDocument {
 	@ApiModelProperty(value = "Person's call")
 	private String call;
 
-//	public Person setDivision(Division division) {
-//		this.division = division;
-//		divid = division == null ? null : division.getId();
-//		return this;
-//	}
+	public Person setDivision(Division division) {
+		this.division = division;
+		divisionId = division == null ? null : division.getId();
+		return this;
+	}
 }
