@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.GraphLookupOperation;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 
@@ -43,7 +44,7 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 	@Override
 	public List<Division> findByDivisionIdRecursive(Long id) {
 
-		GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("parent").connectFrom("parentId").connectTo("childrenid").restrict(Criteria.where("id").is(id)).as("divisions");
+		GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("parent").connectFrom("parentId").connectTo("childrenid").restrict(Criteria.where("_id").is(id)).as("divisions");
 
 		// Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)), graphLookupOperation);
 		//
@@ -52,6 +53,8 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 
 //		UnwindOperation unwindOperation = Aggregation.unwind("divisions");
 
+		MatchOperation match = Aggregation.match(Criteria.where("_id").is(id));
+		
 		Aggregation aggregation = Aggregation.newAggregation(graphLookupOperation);
 
 		var results = mongoTemplate.aggregate(aggregation, "division", Division.class).getMappedResults();

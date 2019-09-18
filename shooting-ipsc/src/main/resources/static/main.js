@@ -1755,11 +1755,26 @@ var translateWaveType = function (waveType) {
 };
 var ɵ0 = translateWaveType;
 exports.ɵ0 = ɵ0;
-exports.communicationMapperToServer = function (data) {
+exports.communicationTypeMapperToServer = function (data) {
     return {
         id: data.id,
         name: data.name,
         type: translateWaveType(data.type)
+    };
+};
+exports.communicationMapperToServer = function (data) {
+    return {
+        owner: data.owner.id,
+        serialNumber: data.serialNumber,
+        type: data.communicationType.id
+    };
+};
+exports.communicationMapperFromServer = function (data) {
+    return {
+        owner: data.owner,
+        serialNumber: data.serialNumber,
+        communicationType: data.type,
+        id: data.id
     };
 };
 
@@ -2421,6 +2436,7 @@ var FormFieldName = exports.FormFieldName = /*@__PURE__*/ (function (FormFieldNa
     FormFieldName["SAT_TIME"] = "satTime";
     FormFieldName["AMMO_COUNT"] = "ammoCount";
     FormFieldName["TYPE"] = "type";
+    FormFieldName["COMMUNICATION_TYPE"] = "communicationType";
     return FormFieldName;
 })(exports.FormFieldName || {});
 
@@ -2579,6 +2595,7 @@ var ToastrUsersType = exports.ToastrUsersType = /*@__PURE__*/ (function (ToastrU
     ToastrUsersType["COURSE"] = "Course";
     ToastrUsersType["COMMUNICATION_TYPE"] = "Communication Type";
     ToastrUsersType["MACHINE_TYPE"] = "Machine Type";
+    ToastrUsersType["COMMUNICATION"] = "Communication";
     return ToastrUsersType;
 })(exports.ToastrUsersType || {});
 var ToastrMessageType = exports.ToastrMessageType = /*@__PURE__*/ (function (ToastrMessageType) {
@@ -2624,6 +2641,11 @@ var CommunicationMocks;
     CommunicationMocks.emptyCommunicationTypes = {
         name: '',
         type: undefined,
+    };
+    CommunicationMocks.emptyCommunication = {
+        serialNumber: '',
+        owner: undefined,
+        communicationType: undefined
     };
 })(CommunicationMocks = exports.CommunicationMocks || (exports.CommunicationMocks = {}));
 
@@ -2739,7 +2761,8 @@ var FieldsMocks;
         fields_1.FormFieldName.UNITS,
         fields_1.FormFieldName.OWNER,
         fields_1.FormFieldName.WEAPON_NAME,
-        fields_1.FormFieldName.TYPE
+        fields_1.FormFieldName.TYPE,
+        fields_1.FormFieldName.COMMUNICATION_TYPE
     ];
     FieldsMocks.datePickerFields = [
         fields_1.FormFieldName.BIRTH_DATE,
@@ -2880,7 +2903,8 @@ var Mocks;
         fields_1.FormFieldName.GOOD_TIME,
         fields_1.FormFieldName.SAT_TIME,
         fields_1.FormFieldName.AMMO_COUNT,
-        fields_1.FormFieldName.TYPE
+        fields_1.FormFieldName.TYPE,
+        fields_1.FormFieldName.COMMUNICATION_TYPE
     ];
 })(Mocks = exports.Mocks || (exports.Mocks = {}));
 
@@ -5105,6 +5129,12 @@ var ActionTypes = exports.ActionTypes = /*@__PURE__*/ (function (ActionTypes) {
     ActionTypes["DeleteCommunicationType"] = "[Communication Types] Delete Communication Type";
     ActionTypes["LoadWaveTypeList"] = "[Communication Types] Load Wave Type List";
     ActionTypes["LoadedWaveTypeList"] = "[Communication Types] Loaded Wave Type List";
+    ActionTypes["LoadCommunications"] = "[Communication Page] Load Communications";
+    ActionTypes["LoadedCommunications"] = "[Communication Page] Loaded Communications";
+    ActionTypes["CreateCommunication"] = "[Communication Page] Create Communication";
+    ActionTypes["DeleteCommunication"] = "[Communication Page] Delete Communication";
+    ActionTypes["LinkCommunication"] = "[Communication Page] Link Communication";
+    ActionTypes["UnlinkCommunication"] = "[Communication Page] Unlink Communication";
     ActionTypes["CommunicationErrors"] = "[Communication] Communication Errors";
     return ActionTypes;
 })(exports.ActionTypes || {});
@@ -5170,6 +5200,53 @@ var LoadedWaveTypeList = /** @class */ /*@__PURE__*/ (function () {
     return LoadedWaveTypeList;
 }());
 exports.LoadedWaveTypeList = LoadedWaveTypeList;
+var LoadCommunications = /** @class */ /*@__PURE__*/ (function () {
+    function LoadCommunications() {
+        this.type = ActionTypes.LoadCommunications;
+    }
+    return LoadCommunications;
+}());
+exports.LoadCommunications = LoadCommunications;
+var LoadedCommunications = /** @class */ /*@__PURE__*/ (function () {
+    function LoadedCommunications(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LoadedCommunications;
+    }
+    return LoadedCommunications;
+}());
+exports.LoadedCommunications = LoadedCommunications;
+var CreateCommunication = /** @class */ /*@__PURE__*/ (function () {
+    function CreateCommunication(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.CreateCommunication;
+    }
+    return CreateCommunication;
+}());
+exports.CreateCommunication = CreateCommunication;
+var DeleteCommunication = /** @class */ /*@__PURE__*/ (function () {
+    function DeleteCommunication(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.DeleteCommunication;
+    }
+    return DeleteCommunication;
+}());
+exports.DeleteCommunication = DeleteCommunication;
+var LinkCommunication = /** @class */ /*@__PURE__*/ (function () {
+    function LinkCommunication(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LinkCommunication;
+    }
+    return LinkCommunication;
+}());
+exports.LinkCommunication = LinkCommunication;
+var UnlinkCommunication = /** @class */ /*@__PURE__*/ (function () {
+    function UnlinkCommunication(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.UnlinkCommunication;
+    }
+    return UnlinkCommunication;
+}());
+exports.UnlinkCommunication = UnlinkCommunication;
 
 
 
@@ -5443,15 +5520,43 @@ exports.CommunicationTypeComponent = CommunicationTypeComponent;
 /*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
 var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.component.scss.shim.ngstyle */ "./src/app/common/modules/communication/components/communication/communication.component.scss.shim.ngstyle.js");
 var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.component */ "./src/app/common/modules/communication/components/communication/communication.component.ts");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../models/constants/animations */ "./src/app/common/models/constants/animations.ts");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./communication.component */ "./src/app/common/modules/communication/components/communication/communication.component.ts");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var styles_CommunicationComponent = [i0.styles];
-var RenderType_CommunicationComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CommunicationComponent, data: {} });
+var RenderType_CommunicationComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CommunicationComponent, data: { "animation": [i2.Animations.enterLeaveOpacity] } });
 exports.RenderType_CommunicationComponent = RenderType_CommunicationComponent;
-function View_CommunicationComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "p", [], null, null, null, null, null)), (_l()(), i1.ɵted(-1, null, ["communication works!"]))], null, null); }
+function View_CommunicationComponent_1(_l) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col-12"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [], null, [[null, "action"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("action" === en)) {
+                var pd_0 = (_co.handleActions($event) !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, i3.View_BaseTableComponent_0, i3.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i4.BaseTableComponent, [i5.TranslateService], { objects: [0, "objects"], actions: [1, "actions"] }, { action: "action" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _v.context.ngIf; var currVal_1 = _co.actions; _ck(_v, 3, 0, currVal_0, currVal_1); }, null);
+}
+function View_CommunicationComponent_0(_l) {
+    return i1.ɵvid(0, [i1.ɵpid(0, i6.TitleCasePipe, []), (_l()(), i1.ɵeld(1, 0, null, null, 15, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 4, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 3, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵppd(7, 1), (_l()(), i1.ɵeld(8, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(9, 0, null, null, 4, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(10, 0, null, null, 3, "button", [["class", "btn btn-primary w-100"]], null, [[null, "click"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("click" === en)) {
+                var pd_0 = (_co.add() !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, null, null)), (_l()(), i1.ɵted(11, null, ["", " ", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CommunicationComponent_1)), i1.ɵdid(15, 16384, null, 0, i6.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i6.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_4 = i1.ɵunv(_v, 15, 0, i1.ɵnov(_v, 16).transform(_co.communications$)); _ck(_v, 15, 0, currVal_4); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, _ck(_v, 7, 0, i1.ɵnov(_v, 0), i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("communications")))); _ck(_v, 5, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("add")); var currVal_3 = i1.ɵunv(_v, 11, 1, i1.ɵnov(_v, 13).transform("communication")).toLowerCase(); _ck(_v, 11, 0, currVal_2, currVal_3); });
+}
 exports.View_CommunicationComponent_0 = View_CommunicationComponent_0;
-function View_CommunicationComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-communication", [], null, null, null, View_CommunicationComponent_0, RenderType_CommunicationComponent)), i1.ɵdid(1, 114688, null, 0, i2.CommunicationComponent, [], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+function View_CommunicationComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-communication", [], null, null, null, View_CommunicationComponent_0, RenderType_CommunicationComponent)), i1.ɵdid(1, 114688, null, 0, i7.CommunicationComponent, [i8.ModalService, i9.Store], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_CommunicationComponent_Host_0 = View_CommunicationComponent_Host_0;
-var CommunicationComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-communication", i2.CommunicationComponent, View_CommunicationComponent_Host_0, {}, {}, []);
+var CommunicationComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-communication", i7.CommunicationComponent, View_CommunicationComponent_Host_0, {}, {}, []);
 exports.CommunicationComponentNgFactory = CommunicationComponentNgFactory;
 
 
@@ -5490,12 +5595,109 @@ exports.styles = styles;
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var communication_1 = __webpack_require__(/*! @models/mocks/communication */ "./src/app/common/models/mocks/communication.ts");
+var base_modal_component_1 = __webpack_require__(/*! @modal/components/base-modal/base-modal.component */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ts");
+var dialog_modal_component_1 = __webpack_require__(/*! @modal/components/dialog-modal/dialog-modal.component */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ts");
+var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var actions_1 = __webpack_require__(/*! @models/constants/actions */ "./src/app/common/models/constants/actions.ts");
+var actions_2 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+var selectors_1 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var weapon_modal_component_1 = __webpack_require__(/*! @modal/components/weapon-modal/weapon-modal.component */ "./src/app/common/modules/modal/components/weapon-modal/weapon-modal.component.ts");
 var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
-    function CommunicationComponent() {
+    function CommunicationComponent(modalService, store) {
+        this.modalService = modalService;
+        this.store = store;
+        this.pageTypes = page_types_1.PageTypes;
     }
     CommunicationComponent.prototype.ngOnInit = function () {
+        this.actions = [actions_1.Actions.CHANGE, actions_1.Actions.REMOVE, actions_1.Actions.TIE, actions_1.Actions.UNTIE];
+        this.getCommunications();
+        this.getCommunicationTypes();
+    };
+    CommunicationComponent.prototype.getCommunications = function () {
+        var _this = this;
+        this.communications$ = this.store.pipe(store_1.select(selectors_1.selectCommunicationData), operators_1.tap(function (communications) { return !communications && _this.fetchCommunications(); }));
+    };
+    CommunicationComponent.prototype.fetchCommunications = function () {
+        this.store.dispatch(new actions_2.LoadCommunications());
+    };
+    CommunicationComponent.prototype.getCommunicationTypes = function () {
+        this.store.dispatch(new actions_2.LoadCommunicationTypes());
+    };
+    CommunicationComponent.prototype.add = function () {
+        this.openCommunicationModal(communication_1.CommunicationMocks.emptyCommunication, false);
+    };
+    CommunicationComponent.prototype.handleActions = function (event) {
+        switch (event.action) {
+            case actions_1.Actions.CHANGE:
+                return this.openCommunicationModal(event.item, true);
+            case actions_1.Actions.REMOVE:
+                return this.openDialogModal('dialogQuestion', event.item);
+            case actions_1.Actions.TIE:
+                return this.openLinkModal(event.item.id, { owner: undefined });
+            case actions_1.Actions.UNTIE:
+                return this.unlinkCommunication(event.item.id);
+        }
+    };
+    CommunicationComponent.prototype.openCommunicationModal = function (communication, edit) {
+        var _this = this;
+        var objectType = this.pageTypes.COMMUNICATION_TYPES;
+        this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, communication), edit: edit, objectType: objectType }, function (res) {
+            if (res) {
+                if (edit) {
+                    var body = __assign({}, communication, res);
+                    _this.createCommunication(body);
+                }
+                else {
+                    _this.createCommunication(res);
+                }
+            }
+        });
+    };
+    CommunicationComponent.prototype.openDialogModal = function (message, item) {
+        var _this = this;
+        this.modalService.openModal(dialog_modal_component_1.DialogModalComponent, { centered: true }, { itemName: item.serialNumber, message: message }, function (res) {
+            if (res && res === 'Yes') {
+                _this.deleteCommunication(item.id);
+            }
+        });
+    };
+    CommunicationComponent.prototype.openLinkModal = function (communicationId, object) {
+        var _this = this;
+        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object }, function (res) {
+            if (res) {
+                _this.linkCommunication(communicationId, res.owner.id);
+            }
+        });
+    };
+    CommunicationComponent.prototype.createCommunication = function (communication) {
+        this.store.dispatch(new actions_2.CreateCommunication(communication));
+    };
+    CommunicationComponent.prototype.deleteCommunication = function (communicationId) {
+        this.store.dispatch(new actions_2.DeleteCommunication(communicationId));
+    };
+    CommunicationComponent.prototype.linkCommunication = function (communicationId, personId) {
+        this.store.dispatch(new actions_2.LinkCommunication({ communicationId: communicationId, personId: personId }));
+    };
+    CommunicationComponent.prototype.unlinkCommunication = function (communicationId) {
+        this.store.dispatch(new actions_2.UnlinkCommunication(communicationId));
     };
     return CommunicationComponent;
 }());
@@ -5620,6 +5822,69 @@ var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
                 return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
             }));
         }));
+        this.loadCommunications$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.LoadCommunications), operators_1.mergeMap(function () {
+            return _this.communicationService.getCommunications()
+                .pipe(operators_1.map(function (communications) { return new fromCommunication.LoadedCommunications(communications); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.createCommunication$ = this.actions$
+            .pipe(effects_1.ofType(fromCommunication.ActionTypes.CreateCommunication), operators_1.withLatestFrom(this.store.select(selectors_1.selectCommunicationData)), operators_1.switchMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], communications = _b[1];
+            return _this.communicationService.createCommunication(action.payload)
+                .pipe(operators_1.map(function (communication) {
+                var isUpdated = communications.find(function (item) { return item.id === communication.id; });
+                if (isUpdated) {
+                    var message = { user: toastr_1.ToastrUsersType.COMMUNICATION, type: toastr_1.ToastrMessageType.UPDATE };
+                    communications = communications.map(function (item) {
+                        return item.id === communication.id ? communication : item;
+                    });
+                    _this.messageService.showToastrSuccess(message);
+                }
+                else {
+                    var message = { user: toastr_1.ToastrUsersType.COMMUNICATION, type: toastr_1.ToastrMessageType.CREATE };
+                    communications.push(communication);
+                    _this.messageService.showToastrSuccess(message);
+                }
+                return new fromCommunication.LoadedCommunications(communications);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.deleteCommunication$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.DeleteCommunication), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectCommunicationData))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], communications = _b[1];
+            return _this.communicationService.deleteCommunication(action.payload)
+                .pipe(operators_1.map(function () {
+                var message = { user: toastr_1.ToastrUsersType.COMMUNICATION, type: toastr_1.ToastrMessageType.REMOVE };
+                _this.messageService.showToastrSuccess(message);
+                communications = communications.filter(function (item) { return item.id !== action.payload; });
+                return new fromCommunication.LoadedCommunications(communications);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.linkCommunication$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.LinkCommunication), operators_1.mergeMap(function (action) {
+            var _a = action.payload, communicationId = _a.communicationId, personId = _a.personId;
+            return _this.communicationService.linkCommunication(communicationId, personId).pipe(operators_1.map(function () { return new fromCommunication.LoadCommunications(); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
+        this.unlinkCommunication$ = this.actions$.pipe(effects_1.ofType(fromCommunication.ActionTypes.UnlinkCommunication), operators_1.mergeMap(function (action) {
+            return _this.communicationService.unlinkCommunication(action.payload)
+                .pipe(operators_1.map(function () { return new fromCommunication.LoadCommunications(); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromCommunication.CommunicationErrors(err));
+            }));
+        }));
     }
     __decorate([
         effects_1.Effect(),
@@ -5641,6 +5906,26 @@ var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
         effects_1.Effect(),
         __metadata("design:type", Object)
     ], CommunicationEffects.prototype, "loadWaveTypes", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "loadCommunications$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "createCommunication$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "deleteCommunication$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "linkCommunication$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], CommunicationEffects.prototype, "unlinkCommunication$", void 0);
     return CommunicationEffects;
 }());
 exports.CommunicationEffects = CommunicationEffects;
@@ -5675,7 +5960,8 @@ var actions_1 = __webpack_require__(/*! @communication/actions/actions */ "./src
 exports.initialState = {
     communicationTypes: undefined,
     waveTypeList: undefined,
-    errors: undefined
+    errors: undefined,
+    communications: undefined
 };
 function reducer(state, action) {
     if (state === void 0) {
@@ -5686,6 +5972,8 @@ function reducer(state, action) {
             return __assign({}, state, { communicationTypes: action.payload });
         case actions_1.ActionTypes.LoadedWaveTypeList:
             return __assign({}, state, { waveTypeList: action.payload });
+        case actions_1.ActionTypes.LoadedCommunications:
+            return __assign({}, state, { communications: action.payload });
         case actions_1.ActionTypes.CommunicationErrors:
             return __assign({}, state, { errors: action.payload });
         default:
@@ -5713,12 +6001,15 @@ exports.selectCommunications = store_1.createFeatureSelector('communication');
 var ɵ0 = function (state) { return state.communicationTypes; };
 exports.ɵ0 = ɵ0;
 exports.selectCommunicationTypes = store_1.createSelector(exports.selectCommunications, ɵ0);
-var ɵ1 = function (state) { return state.waveTypeList; };
+var ɵ1 = function (state) { return state.communications; };
 exports.ɵ1 = ɵ1;
-exports.selectCommunicationWaveTypes = store_1.createSelector(exports.selectCommunications, ɵ1);
-var ɵ2 = function (state) { return state.errors; };
+exports.selectCommunicationData = store_1.createSelector(exports.selectCommunications, ɵ1);
+var ɵ2 = function (state) { return state.waveTypeList; };
 exports.ɵ2 = ɵ2;
-exports.selectCommunicationErrors = store_1.createSelector(exports.selectCommunications, ɵ2);
+exports.selectCommunicationWaveTypes = store_1.createSelector(exports.selectCommunications, ɵ2);
+var ɵ3 = function (state) { return state.errors; };
+exports.ɵ3 = ɵ3;
+exports.selectCommunicationErrors = store_1.createSelector(exports.selectCommunications, ɵ3);
 
 
 
@@ -5744,20 +6035,23 @@ var CommunicationService = /** @class */ /*@__PURE__*/ (function () {
     function CommunicationService(http) {
         this.http = http;
         this.baseUrl = environment_1.environment.BASE_URL + '/api/commequipmenttype/' + environment_1.environment.version;
+        this.communicationUrl = environment_1.environment.BASE_URL + '/api/communicationequipment/' + environment_1.environment.version;
     }
     CommunicationService.prototype.getCommunicationTypes = function () {
         return this.http.get(this.baseUrl + "/get/all")
-            .pipe(operators_1.map(function (response) { return response.map(function (item) { return communication_mapper_1.communicationMapperToServer(item); }); }));
+            .pipe(operators_1.map(function (response) {
+            return response.map(function (item) { return communication_mapper_1.communicationTypeMapperToServer(item); });
+        }));
     };
     CommunicationService.prototype.createCommunicationType = function (body) {
-        var mappedBody = communication_mapper_1.communicationMapperToServer(body);
+        var mappedBody = communication_mapper_1.communicationTypeMapperToServer(body);
         return this.http.post(this.baseUrl + "/create", mappedBody)
             .pipe(operators_1.map(function (response) { return response; }));
     };
     CommunicationService.prototype.updateCommunicationType = function (type) {
-        var mappedBody = communication_mapper_1.communicationMapperToServer(type);
+        var mappedBody = communication_mapper_1.communicationTypeMapperToServer(type);
         return this.http.put(this.baseUrl + "/update/" + type.id, mappedBody)
-            .pipe(operators_1.map(function (response) { return communication_mapper_1.communicationMapperToServer(response); }));
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.communicationTypeMapperToServer(response); }));
     };
     CommunicationService.prototype.deleteCommunicationType = function (typeId) {
         return this.http.delete(this.baseUrl + "/delete/" + typeId)
@@ -5766,6 +6060,27 @@ var CommunicationService = /** @class */ /*@__PURE__*/ (function () {
     CommunicationService.prototype.getWaveTypeList = function () {
         return this.http.get(this.baseUrl + "/enum/type")
             .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.prototype.getCommunications = function () {
+        return this.http.get(this.communicationUrl + "/all")
+            .pipe(operators_1.map(function (response) { return response.map(function (item) { return communication_mapper_1.communicationMapperFromServer(item); }); }));
+    };
+    CommunicationService.prototype.createCommunication = function (communication) {
+        var mappedBody = communication_mapper_1.communicationMapperToServer(communication);
+        return this.http.post(this.communicationUrl + "/create", mappedBody)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.communicationMapperFromServer(response); }));
+    };
+    CommunicationService.prototype.deleteCommunication = function (communicationId) {
+        return this.http.delete(this.communicationUrl + "/delete/" + communicationId)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    CommunicationService.prototype.linkCommunication = function (communicationId, personId) {
+        return this.http.post(this.communicationUrl + "/" + communicationId + "/" + personId, null)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.communicationMapperFromServer(response); }));
+    };
+    CommunicationService.prototype.unlinkCommunication = function (communicationId) {
+        return this.http.post(this.communicationUrl + "/" + communicationId + "/remove", null)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.communicationMapperFromServer(response); }));
     };
     CommunicationService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function CommunicationService_Factory() { return new CommunicationService(i0.ɵɵinject(i1.HttpClient)); }, token: CommunicationService, providedIn: "root" });
     return CommunicationService;
@@ -9522,6 +9837,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
         switch (key) {
             case this.fields.DIVISION:
             case this.fields.WEAPON_NAME:
+            case this.fields.COMMUNICATION_TYPE:
                 form.addControl(key, new forms_1.FormControl(formObject[key]['name'], this.getValidation(key)));
                 break;
             case this.fields.MAIN_JUDGE:
@@ -9615,6 +9931,9 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             case this.fields.PERSON:
                 this.object[key] = this.findObject(this.persons, this.object, key);
                 return;
+            case this.fields.COMMUNICATION_TYPE:
+                this.object[key] = this.findObject(this.communicationTypes, this.object, key);
+                return;
         }
     };
     AbstractForm.prototype.findObject = function (array, object, key) {
@@ -9690,6 +10009,8 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 return this.weaponTypesWeaponList;
             case this.fields.TYPE:
                 return this.translatedWaveTypes;
+            case this.fields.COMMUNICATION_TYPE:
+                return this.communicationTypes;
             default:
                 return;
         }
@@ -9712,6 +10033,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             case this.fields.ISC_CLASSIFIER:
             case this.fields.SHOOTING_TYPE:
             case this.fields.WEAPON_NAME:
+            case this.fields.COMMUNICATION_TYPE:
                 return 'name';
             default:
                 return;
@@ -10247,6 +10569,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.getPersonsByDivision();
         this.getWeaponTypesForList();
         this.getWaveTypes();
+        this.getCommunicationTypes();
         this.scanState.next(this.object.registrationType);
     };
     BaseFormComponent.prototype.loadJudgesData = function () {
@@ -10337,6 +10660,15 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
                     _this.waveTypes = list;
                     _this.translatedWaveTypes = _this.sharedService.translateArray(_this.waveTypes);
                 });
+            }
+        });
+    };
+    BaseFormComponent.prototype.getCommunicationTypes = function () {
+        var _this = this;
+        this.controls.forEach(function (control) {
+            if (control === _this.fields.COMMUNICATION_TYPE) {
+                _this.subscriptions.sink = _this.store.select(selectors_6.selectCommunicationTypes)
+                    .subscribe(function (list) { return _this.communicationTypes = list; });
             }
         });
     };
@@ -20684,6 +21016,7 @@ var SharedService = /** @class */ /*@__PURE__*/ (function () {
             { name: 'weaponList', path: '/weapon-list', children: [] },
             { name: 'weaponType', path: '/weapon-types', children: [] },
             { name: 'communicationTypes', path: '/communication-type', children: [] },
+            { name: 'communications', path: '/communication', children: [] },
             {
                 name: 'divisionList', path: '/checkin', children: [
                     {
@@ -22110,7 +22443,7 @@ function View_BaseTableComponent_10(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(
 function View_BaseTableComponent_2(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 7, "tr", [], null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_BaseTableComponent_3)), i1.ɵdid(2, 278528, null, 0, i8.NgForOf, [i1.ViewContainerRef, i1.TemplateRef, i1.IterableDiffers], { ngForOf: [0, "ngForOf"] }, null), i1.ɵpid(0, i8.KeyValuePipe, [i1.KeyValueDiffers]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_9)), i1.ɵdid(5, 278528, null, 0, i8.NgForOf, [i1.ViewContainerRef, i1.TemplateRef, i1.IterableDiffers], { ngForOf: [0, "ngForOf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_10)), i1.ɵdid(7, 278528, null, 0, i8.NgForOf, [i1.ViewContainerRef, i1.TemplateRef, i1.IterableDiffers], { ngForOf: [0, "ngForOf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = i1.ɵunv(_v, 2, 0, i1.ɵnov(_v, 3).transform(_co.objects[0], _co.noSorting)); _ck(_v, 2, 0, currVal_0); var currVal_1 = _co.actions; _ck(_v, 5, 0, currVal_1); var currVal_2 = _co.selects; _ck(_v, 7, 0, currVal_2); }, null); }
 function View_BaseTableComponent_14(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var _co = _v.component; var currVal_0 = ((_co.language === "ru") ? ((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.nameCategoryRus) : ((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.nameCategoryKz)); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_15(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var currVal_0 = _v.parent.parent.context.$implicit.value.userName; _ck(_v, 1, 0, currVal_0); }); }
-function View_BaseTableComponent_16(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value.name)); _ck(_v, 1, 0, currVal_0); }); }
+function View_BaseTableComponent_16(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.name))); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_17(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var currVal_0 = (((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.userName) ? ((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.userName) : "-"); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_18(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_19(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵppd(2, 1)], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, _ck(_v, 2, 0, i1.ɵnov(_v.parent.parent.parent.parent.parent, 0), _v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
@@ -22136,7 +22469,7 @@ function View_BaseTableComponent_24(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(
 function View_BaseTableComponent_25(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_26(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value.substring(2))); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_27(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var currVal_0 = _v.parent.parent.context.$implicit.value; _ck(_v, 1, 0, currVal_0); }); }
-function View_BaseTableComponent_13(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 29, "td", [["class", "text-center align-middle"]], null, null, null, null, null)), i1.ɵdid(1, 16384, null, 0, i8.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_14)), i1.ɵdid(3, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_15)), i1.ɵdid(5, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_16)), i1.ɵdid(7, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_17)), i1.ɵdid(9, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_18)), i1.ɵdid(11, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_19)), i1.ɵdid(13, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_20)), i1.ɵdid(15, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_21)), i1.ɵdid(17, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_22)), i1.ɵdid(19, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_23)), i1.ɵdid(21, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_24)), i1.ɵdid(23, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_25)), i1.ɵdid(25, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_26)), i1.ɵdid(27, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_27)), i1.ɵdid(29, 16384, null, 0, i8.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = true; _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.parent.context.$implicit.key === _co.fields.CATEGORY); _ck(_v, 3, 0, currVal_1); var currVal_2 = (_v.parent.context.$implicit.key === _co.fields.PERSON); _ck(_v, 5, 0, currVal_2); var currVal_3 = ((_v.parent.context.$implicit.key === _co.fields.UNITS) || (_v.parent.context.$implicit.key === _co.fields.WEAPON_NAME)); _ck(_v, 7, 0, currVal_3); var currVal_4 = (_v.parent.context.$implicit.key === _co.fields.OWNER); _ck(_v, 9, 0, currVal_4); var currVal_5 = (_v.parent.context.$implicit.key === _co.fields.TYPE); _ck(_v, 11, 0, currVal_5); var currVal_6 = (((_v.parent.context.$implicit.key === _co.fields.EVENT_DATE) || (_v.parent.context.$implicit.key === _co.fields.BIRTH_DATE)) || (_v.parent.context.$implicit.key === _co.fields.DATE)); _ck(_v, 13, 0, currVal_6); var currVal_7 = (((_v.parent.context.$implicit.key === _co.fields.EXCELLENT_TIME) || (_v.parent.context.$implicit.key === _co.fields.GOOD_TIME)) || (_v.parent.context.$implicit.key === _co.fields.SAT_TIME)); _ck(_v, 15, 0, currVal_7); var currVal_8 = (_v.parent.context.$implicit.key === _co.fields.TIME_OF_EXERCISE); _ck(_v, 17, 0, currVal_8); var currVal_9 = _co.switcherCase(_v.parent.context.$implicit.key); _ck(_v, 19, 0, currVal_9); var currVal_10 = (_v.parent.context.$implicit.key === _co.fields.NOT_COUNTED); _ck(_v, 21, 0, currVal_10); var currVal_11 = (_v.parent.context.$implicit.key === _co.fields.RANK); _ck(_v, 23, 0, currVal_11); var currVal_12 = (_v.parent.context.$implicit.key === _co.fields.STATUS); _ck(_v, 25, 0, currVal_12); var currVal_13 = (_v.parent.context.$implicit.key === _co.fields.DISQUALIFICATION_REASON); _ck(_v, 27, 0, currVal_13); }, null); }
+function View_BaseTableComponent_13(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 29, "td", [["class", "text-center align-middle"]], null, null, null, null, null)), i1.ɵdid(1, 16384, null, 0, i8.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_14)), i1.ɵdid(3, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_15)), i1.ɵdid(5, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_16)), i1.ɵdid(7, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_17)), i1.ɵdid(9, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_18)), i1.ɵdid(11, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_19)), i1.ɵdid(13, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_20)), i1.ɵdid(15, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_21)), i1.ɵdid(17, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_22)), i1.ɵdid(19, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_23)), i1.ɵdid(21, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_24)), i1.ɵdid(23, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_25)), i1.ɵdid(25, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_26)), i1.ɵdid(27, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_27)), i1.ɵdid(29, 16384, null, 0, i8.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = true; _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.parent.context.$implicit.key === _co.fields.CATEGORY); _ck(_v, 3, 0, currVal_1); var currVal_2 = (_v.parent.context.$implicit.key === _co.fields.PERSON); _ck(_v, 5, 0, currVal_2); var currVal_3 = (((_v.parent.context.$implicit.key === _co.fields.UNITS) || (_v.parent.context.$implicit.key === _co.fields.WEAPON_NAME)) || (_v.parent.context.$implicit.key === _co.fields.COMMUNICATION_TYPE)); _ck(_v, 7, 0, currVal_3); var currVal_4 = (_v.parent.context.$implicit.key === _co.fields.OWNER); _ck(_v, 9, 0, currVal_4); var currVal_5 = (_v.parent.context.$implicit.key === _co.fields.TYPE); _ck(_v, 11, 0, currVal_5); var currVal_6 = (((_v.parent.context.$implicit.key === _co.fields.EVENT_DATE) || (_v.parent.context.$implicit.key === _co.fields.BIRTH_DATE)) || (_v.parent.context.$implicit.key === _co.fields.DATE)); _ck(_v, 13, 0, currVal_6); var currVal_7 = (((_v.parent.context.$implicit.key === _co.fields.EXCELLENT_TIME) || (_v.parent.context.$implicit.key === _co.fields.GOOD_TIME)) || (_v.parent.context.$implicit.key === _co.fields.SAT_TIME)); _ck(_v, 15, 0, currVal_7); var currVal_8 = (_v.parent.context.$implicit.key === _co.fields.TIME_OF_EXERCISE); _ck(_v, 17, 0, currVal_8); var currVal_9 = _co.switcherCase(_v.parent.context.$implicit.key); _ck(_v, 19, 0, currVal_9); var currVal_10 = (_v.parent.context.$implicit.key === _co.fields.NOT_COUNTED); _ck(_v, 21, 0, currVal_10); var currVal_11 = (_v.parent.context.$implicit.key === _co.fields.RANK); _ck(_v, 23, 0, currVal_11); var currVal_12 = (_v.parent.context.$implicit.key === _co.fields.STATUS); _ck(_v, 25, 0, currVal_12); var currVal_13 = (_v.parent.context.$implicit.key === _co.fields.DISQUALIFICATION_REASON); _ck(_v, 27, 0, currVal_13); }, null); }
 function View_BaseTableComponent_12(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_13)), i1.ɵdid(2, 16384, null, 0, i8.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(0, null, null, 0))], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.displayedCells.includes(_v.context.$implicit.key); _ck(_v, 2, 0, currVal_0); }, null); }
 function View_BaseTableComponent_28(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "td", [["class", "text-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "button", [], [[8, "className", 0], [8, "disabled", 0]], [[null, "click"]], function (_v, en, $event) {

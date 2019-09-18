@@ -53,6 +53,8 @@ public class PersonRepositoryTest {
 	private Person anotherPerson;
 
 	private Division root;
+
+	private Division childDivision;
 	
 	@BeforeEach
 	public void before () {
@@ -62,6 +64,7 @@ public class PersonRepositoryTest {
 		
 		root = divisionRepository.save(new Division().setName("Root").setParent(null));
 		division = divisionRepository.save(new Division().setName("Division").setParent(root));
+		childDivision = divisionRepository.save(new Division().setName("Child").setParent(division));
 		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
 		
 		offsetDateTime = OffsetDateTime.now();
@@ -104,8 +107,8 @@ public class PersonRepositoryTest {
 //	@Test
 //	public void checkFindByDivisionIdRecursive () {
 //		List<Division> list = personRepository.findByDivisionIdRecursive(root.getId());
-//		assertEquals(3, list.size());
-//		list = personRepository.findByDivisionIdRecursive(division.getId());
+//		assertEquals(4, list.size());
+//		list = personRepository.findByDivisionIdRecursive(childDivision.getId());
 //		assertEquals(1, list.size());
 //	}
 	

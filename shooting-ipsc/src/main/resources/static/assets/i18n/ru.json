@@ -297,5 +297,6 @@
   "type": "Тип",
   "SHORT_WAVE": "КВ",
   "ULRTA_SHORT_WAVE": "УКВ",
-  "battlePreparing": "Учет боевой подготовки"
+  "battlePreparing": "Учет боевой подготовки",
+  "communication": "Средство связи"
 }
