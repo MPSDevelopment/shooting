@@ -6537,17 +6537,9 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         return this.tournamentsService.findTournamentById(tournaments, tournamentId);
     };
     CompetitorsComponent.prototype.selectAll = function () {
-        var _this = this;
-        if (this.division) {
-            this.persons = this.persons.filter(function (person) { return person.division.id === _this.division.id; });
-        }
         this.persons.forEach(function (competitor) { return competitor.member = true; });
     };
     CompetitorsComponent.prototype.unSelectAll = function () {
-        var _this = this;
-        if (this.division) {
-            this.persons = this.persons.filter(function (person) { return person.division.id === _this.division.id; });
-        }
         this.persons.forEach(function (competitor) { return competitor.member = false; });
     };
     CompetitorsComponent.prototype.cancel = function () {
@@ -9103,10 +9095,12 @@ var ExerciseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         });
         this.promptSubs.sink = this.dialogsService.getDialogPrompt(options)
             .subscribe(function (result) {
-            _this.currentScore.mark = result.text;
-            _this.currentScore.type = 'NUMBER';
-            _this.findCompetitorByNumber();
-            _this.promptSubs.unsubscribe();
+            if (result !== 'Отменить') {
+                _this.currentScore.mark = result.text;
+                _this.currentScore.type = 'NUMBER';
+                _this.findCompetitorByNumber();
+                _this.promptSubs.unsubscribe();
+            }
         });
     };
     ExerciseComponent.prototype.getPromptOptions = function (options) {
@@ -10163,7 +10157,7 @@ function View_BaseFormComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵand(16
 exports.View_BaseFormComponent_0 = View_BaseFormComponent_0;
 function View_BaseFormComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-base-form", [], null, null, null, View_BaseFormComponent_0, RenderType_BaseFormComponent)), i1.ɵdid(1, 245760, null, 0, i21.BaseFormComponent, [i20.FormsService, i11.TranslateService, i14.Store, i22.DialogsService, i15.SharedService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_BaseFormComponent_Host_0 = View_BaseFormComponent_Host_0;
-var BaseFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-base-form", i21.BaseFormComponent, View_BaseFormComponent_Host_0, { object: "object", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel" }, []);
+var BaseFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-base-form", i21.BaseFormComponent, View_BaseFormComponent_Host_0, { object: "object", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel", scanState: "scanState" }, []);
 exports.BaseFormComponentNgFactory = BaseFormComponentNgFactory;
 
 
@@ -10235,6 +10229,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         _this.units = [];
         _this.pageTypes = page_types_1.PageTypes;
         _this.dialogSubs = new subsink_1.SubSink();
+        _this.scanState = new core_1.EventEmitter();
         return _this;
     }
     BaseFormComponent.prototype.ngOnInit = function () {
@@ -10252,6 +10247,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.getPersonsByDivision();
         this.getWeaponTypesForList();
         this.getWaveTypes();
+        this.scanState.next(this.object.registrationType);
     };
     BaseFormComponent.prototype.loadJudgesData = function () {
         var _this = this;
@@ -10358,6 +10354,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.dialogSubs.sink = this.dialogsService.getDialogAction(options).subscribe(function (result) {
             if (result !== 'Отменить') {
                 _this.selectedItem = result;
+                _this.scanState.next(_this.selectedItem);
                 _this.formControls[control].setValue(_this.selectedItem);
                 _this.dialogSubs.unsubscribe();
             }
@@ -22137,7 +22134,7 @@ function View_BaseTableComponent_22(_l) {
 function View_BaseTableComponent_23(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = (_v.parent.parent.context.$implicit.value ? i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform("yes")) : i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 3).transform("no"))); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_24(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var _co = _v.component; var currVal_0 = ((_co.language === "ru") ? ((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.rus) : ((_v.parent.parent.context.$implicit.value == null) ? null : _v.parent.parent.context.$implicit.value.kz)); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_25(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
-function View_BaseTableComponent_26(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
+function View_BaseTableComponent_26(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value.substring(2))); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_27(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var currVal_0 = _v.parent.parent.context.$implicit.value; _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_13(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 29, "td", [["class", "text-center align-middle"]], null, null, null, null, null)), i1.ɵdid(1, 16384, null, 0, i8.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_14)), i1.ɵdid(3, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_15)), i1.ɵdid(5, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_16)), i1.ɵdid(7, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_17)), i1.ɵdid(9, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_18)), i1.ɵdid(11, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_19)), i1.ɵdid(13, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_20)), i1.ɵdid(15, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_21)), i1.ɵdid(17, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_22)), i1.ɵdid(19, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_23)), i1.ɵdid(21, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_24)), i1.ɵdid(23, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_25)), i1.ɵdid(25, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_26)), i1.ɵdid(27, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_27)), i1.ɵdid(29, 16384, null, 0, i8.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = true; _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.parent.context.$implicit.key === _co.fields.CATEGORY); _ck(_v, 3, 0, currVal_1); var currVal_2 = (_v.parent.context.$implicit.key === _co.fields.PERSON); _ck(_v, 5, 0, currVal_2); var currVal_3 = ((_v.parent.context.$implicit.key === _co.fields.UNITS) || (_v.parent.context.$implicit.key === _co.fields.WEAPON_NAME)); _ck(_v, 7, 0, currVal_3); var currVal_4 = (_v.parent.context.$implicit.key === _co.fields.OWNER); _ck(_v, 9, 0, currVal_4); var currVal_5 = (_v.parent.context.$implicit.key === _co.fields.TYPE); _ck(_v, 11, 0, currVal_5); var currVal_6 = (((_v.parent.context.$implicit.key === _co.fields.EVENT_DATE) || (_v.parent.context.$implicit.key === _co.fields.BIRTH_DATE)) || (_v.parent.context.$implicit.key === _co.fields.DATE)); _ck(_v, 13, 0, currVal_6); var currVal_7 = (((_v.parent.context.$implicit.key === _co.fields.EXCELLENT_TIME) || (_v.parent.context.$implicit.key === _co.fields.GOOD_TIME)) || (_v.parent.context.$implicit.key === _co.fields.SAT_TIME)); _ck(_v, 15, 0, currVal_7); var currVal_8 = (_v.parent.context.$implicit.key === _co.fields.TIME_OF_EXERCISE); _ck(_v, 17, 0, currVal_8); var currVal_9 = _co.switcherCase(_v.parent.context.$implicit.key); _ck(_v, 19, 0, currVal_9); var currVal_10 = (_v.parent.context.$implicit.key === _co.fields.NOT_COUNTED); _ck(_v, 21, 0, currVal_10); var currVal_11 = (_v.parent.context.$implicit.key === _co.fields.RANK); _ck(_v, 23, 0, currVal_11); var currVal_12 = (_v.parent.context.$implicit.key === _co.fields.STATUS); _ck(_v, 25, 0, currVal_12); var currVal_13 = (_v.parent.context.$implicit.key === _co.fields.DISQUALIFICATION_REASON); _ck(_v, 27, 0, currVal_13); }, null); }
 function View_BaseTableComponent_12(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_13)), i1.ɵdid(2, 16384, null, 0, i8.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(0, null, null, 0))], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.displayedCells.includes(_v.context.$implicit.key); _ck(_v, 2, 0, currVal_0); }, null); }

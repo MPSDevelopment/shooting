@@ -51,16 +51,24 @@ public class PersonRepositoryTest {
 	private Division anotherDivision;
 
 	private Person anotherPerson;
+
+	private Division root;
 	
 	@BeforeEach
 	public void before () {
+		
 		personRepository.deleteAll();
-		division = divisionRepository.save(new Division().setName("Root").setParent(null));
-		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(division));
+		divisionRepository.deleteAll();
+		
+		root = divisionRepository.save(new Division().setName("Root").setParent(null));
+		division = divisionRepository.save(new Division().setName("Division").setParent(root));
+		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
 		
 		offsetDateTime = OffsetDateTime.now();
 		person = personRepository.save(new Person().setName(NAME).setBirthDate(offsetDateTime).setCall(CALL));
 		anotherPerson = personRepository.save(new Person().setName("Another").setBirthDate(offsetDateTime).setCall("Another"));
+		
+		
 	}
 
 	@Test
@@ -84,16 +92,20 @@ public class PersonRepositoryTest {
 	public void checkFindByDivisionId () {
 		List<Person> list = personRepository.findByDivisionId(division.getId());
 		assertEquals(0, list.size());
-		personRepository.save(person.setDivision(division));
-		list = personRepository.findByDivisionId(division.getId());
-		assertEquals(1, list.size());
-		personRepository.save(anotherPerson.setDivision(anotherDivision));
 		list = personRepository.findByDivisionId(division.getId());
 		assertEquals(1, list.size());
 		var anotherList = personRepository.findByDivisionId(anotherDivision.getId());
 		assertEquals(1, anotherList.size());
 		assertNotEquals(list, anotherList);
 	}
+	
+//	@Test
+//	public void checkFindByDivisionIdRecursive () {
+//		List<Division> list = personRepository.findByDivisionIdRecursive(root.getId());
+//		assertEquals(3, list.size());
+//		list = personRepository.findByDivisionIdRecursive(division.getId());
+//		assertEquals(1, list.size());
+//	}
 	
 	@Test
 	public void checkFindByCall() {
