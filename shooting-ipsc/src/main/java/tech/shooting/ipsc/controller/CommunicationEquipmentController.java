@@ -46,14 +46,14 @@ public class CommunicationEquipmentController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID)
 	@ApiOperation(value = "Return vehicle by id", notes = "Vehicle or BadRequestException")
-	public ResponseEntity<CommunicationEquipment> getById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) Long weaponId) throws BadRequestException {
-		return new ResponseEntity<>(service.getById(weaponId), HttpStatus.OK);
+	public ResponseEntity<CommunicationEquipment> getById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID)
 	@ApiOperation(value = "Return all vehicles by division")
-	public ResponseEntity<List<CommunicationEquipment>> getWeaponByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) throws BadRequestException {
+	public ResponseEntity<List<CommunicationEquipment>> getByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) throws BadRequestException {
 		return new ResponseEntity<>(service.getAllByDivision(divisionId), HttpStatus.OK);
 	}
 
@@ -83,7 +83,7 @@ public class CommunicationEquipmentController {
 	@ApiOperation(value = "Delete type return status Ok")
 	public ResponseEntity<SuccessfulMessage> deleteWeapon(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) long weaponId) {
 		service.delete(weaponId);
-		return new ResponseEntity<>(new SuccessfulMessage("Weapon %s has been deleted", weaponId), HttpStatus.OK);
+		return new ResponseEntity<>(new SuccessfulMessage("Equipment %s has been deleted", weaponId), HttpStatus.OK);
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_ADD_OWNER)

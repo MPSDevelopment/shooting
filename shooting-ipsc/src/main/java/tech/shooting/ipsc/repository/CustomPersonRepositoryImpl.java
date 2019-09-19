@@ -44,7 +44,7 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 	@Override
 	public List<Division> findByDivisionIdRecursive(Long id) {
 
-		GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("parent").connectFrom("parentId").connectTo("childrenid").restrict(Criteria.where("_id").is(id)).as("divisions");
+		GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("division").startWith("_id").connectFrom("childrenid").connectTo("_id").restrict(Criteria.where("_id").is(id)).as("divisions");
 
 		// Aggregation agg = Aggregation.newAggregation(Aggregation.match(Criteria.where("to.refId").is(id)), graphLookupOperation);
 		//

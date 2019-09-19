@@ -54,10 +54,6 @@ public class Person extends BaseDocument {
 	
 	private Long divisionId;
 
-//	@JsonProperty
-//	@ApiModelProperty(value = "Person's IPSC codes")
-//	private List<WeaponIpscCode> codes;
-
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank")
 	private ClassificationBreaks qualifierRank;

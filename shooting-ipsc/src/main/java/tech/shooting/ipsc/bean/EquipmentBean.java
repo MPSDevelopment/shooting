@@ -10,11 +10,11 @@ import javax.validation.constraints.Min;
 
 @Data
 @Accessors(chain = true)
-public class CommunicationEquipmentBean {
+public class EquipmentBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of equipment", required = true)
-    @Min(value = 7, message = ValidationConstants.COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE)
+    @Min(value = 7, message = ValidationConstants.EQUIPMENT_SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
 
     @JsonProperty

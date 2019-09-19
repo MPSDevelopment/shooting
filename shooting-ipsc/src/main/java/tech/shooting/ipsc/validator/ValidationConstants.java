@@ -110,6 +110,8 @@ public class ValidationConstants {
 	public static final String EQUIPMENT_NAME_MESSAGE = "Equipment type name must be not blank";
 
 	public static final String EQUIPMENT_TYPE_MESSAGE = "Equipment type must be not null";
+	
+	public static final String EQUIPMENT_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
 
 	public static final String VEHICLE_NAME_MESSAGE = "Vehicle type name must be not blank";
 

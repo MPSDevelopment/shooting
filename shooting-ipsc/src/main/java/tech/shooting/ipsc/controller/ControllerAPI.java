@@ -329,6 +329,19 @@ public class ControllerAPI {
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
+	
+	//  equipment section
+	public static final String EQUIPMENT_CONTROLLER = "/api/equipment";
+	public static final String EQUIPMENT_CONTROLLER_GET_ALL = "/all";
+	public static final String EQUIPMENT_CONTROLLER_GET_BY_ID = "/" + REQUEST_EQUIPMENT_ID;
+	public static final String EQUIPMENT_CONTROLLER_POST = "/create";
+	public static final String EQUIPMENT_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_EQUIPMENT_ID;
+	public static final String EQUIPMENT_CONTROLLER_POST_ADD_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/" + REQUEST_PERSON_ID;
+	public static final String EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/remove";
+	public static final String EQUIPMENT_CONTROLLER_POST_ADD_COUNT = "/" + REQUEST_EQUIPMENT_ID + "/add/firedcount/" + REQUEST_FIRED_COUNT;
+	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
+	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
+	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
 
 	public static final String STANDARD_CONTROLLER = "/api/standard";
 	public static final String STANDARD_CONTROLLER_GET_ALL = "/get/all";

@@ -508,8 +508,7 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.router.events.pipe(operators_1.filter(function (e) { return e instanceof router_1.RouterEvent; })).subscribe(function (e) {
             _this.showHeader = e.url !== '/login';
-            _this.currentRoute = e.url !== '/login' && e.url !== '/dashboard' &&
-                !(e.url.includes('/tournaments/rating?'));
+            _this.currentRoute = e.url !== '/login' && e.url !== '/dashboard';
         });
     };
     AppComponent.prototype.dispatchAllData = function () {
@@ -1777,6 +1776,25 @@ exports.communicationMapperFromServer = function (data) {
         id: data.id
     };
 };
+exports.machineMapperToServer = function (data) {
+    return {
+        owner: data.owner.id,
+        serialNumber: data.serialNumber,
+        passportNumber: data.passportNumber,
+        type: data.machineType.id,
+        count: data.fuelCount
+    };
+};
+exports.machineMapperFromServer = function (data) {
+    return {
+        owner: data.owner,
+        passportNumber: data.passportNumber,
+        serialNumber: data.serialNumber,
+        machineType: data.type,
+        fuelCount: data.count,
+        id: data.id
+    };
+};
 
 
 
@@ -1833,38 +1851,6 @@ exports.judgeRegistrationMapperToServer = function (data) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var HANDGUN = 'HANDGUN';
-var SHOTGUN = 'SHOTGUN';
-var RIFLE = 'RIFLE';
-var getCode = function (codes, type) {
-    return codes.find(function (item) { return item.name === type; });
-};
-var ɵ0 = getCode;
-exports.ɵ0 = ɵ0;
-var getCodes = function (handgunCodeIpsc, shotgunCodeIpsc, rifleCodeIpsc) {
-    var codes = [];
-    if (typeof handgunCodeIpsc === 'string') {
-        codes.push({ code: handgunCodeIpsc, name: HANDGUN });
-    }
-    else {
-        codes.push(handgunCodeIpsc);
-    }
-    if (typeof shotgunCodeIpsc === 'string') {
-        codes.push({ code: shotgunCodeIpsc, name: SHOTGUN });
-    }
-    else {
-        codes.push(shotgunCodeIpsc);
-    }
-    if (typeof rifleCodeIpsc === 'string') {
-        codes.push({ code: rifleCodeIpsc, name: RIFLE });
-    }
-    else {
-        codes.push(rifleCodeIpsc);
-    }
-    return codes;
-};
-var ɵ1 = getCodes;
-exports.ɵ1 = ɵ1;
 exports.personMapperToServer = function (data) {
     return {
         id: data.id,
@@ -1875,6 +1861,9 @@ exports.personMapperToServer = function (data) {
         rank: data.rank.id,
         division: data.division.id,
         level: data.level,
+        call: data.call,
+        rfidCode: data.rfidCode,
+        number: data.number,
         address: data.address,
     };
 };
@@ -1889,6 +1878,9 @@ exports.personMapperFromServer = function (data) {
         active: data.active,
         member: false,
         roleName: data.roleName,
+        call: data.call || '-',
+        rfidCode: data.rfidCode || '-',
+        number: data.number || '-',
         address: data.address,
     };
 };
@@ -2437,6 +2429,10 @@ var FormFieldName = exports.FormFieldName = /*@__PURE__*/ (function (FormFieldNa
     FormFieldName["AMMO_COUNT"] = "ammoCount";
     FormFieldName["TYPE"] = "type";
     FormFieldName["COMMUNICATION_TYPE"] = "communicationType";
+    FormFieldName["CALL"] = "call";
+    FormFieldName["MACHINE_TYPE"] = "machineType";
+    FormFieldName["PASSPORT_NUMBER"] = "passportNumber";
+    FormFieldName["FUEL_COUNT"] = "fuelCount";
     return FormFieldName;
 })(exports.FormFieldName || {});
 
@@ -2550,6 +2546,8 @@ var PageTypes = exports.PageTypes = /*@__PURE__*/ (function (PageTypes) {
     PageTypes["WORKSPACE"] = "Workspace";
     PageTypes["COMMUNICATION_TYPES"] = "communicationTypes";
     PageTypes["MACHINE_TYPES"] = "machineTypes";
+    PageTypes["COMMUNICATION"] = "communication";
+    PageTypes["MACHINE"] = "Machine";
     return PageTypes;
 })(exports.PageTypes || {});
 
@@ -2596,6 +2594,7 @@ var ToastrUsersType = exports.ToastrUsersType = /*@__PURE__*/ (function (ToastrU
     ToastrUsersType["COMMUNICATION_TYPE"] = "Communication Type";
     ToastrUsersType["MACHINE_TYPE"] = "Machine Type";
     ToastrUsersType["COMMUNICATION"] = "Communication";
+    ToastrUsersType["MACHINE"] = "Machine";
     return ToastrUsersType;
 })(exports.ToastrUsersType || {});
 var ToastrMessageType = exports.ToastrMessageType = /*@__PURE__*/ (function (ToastrMessageType) {
@@ -2646,6 +2645,16 @@ var CommunicationMocks;
         serialNumber: '',
         owner: undefined,
         communicationType: undefined
+    };
+    CommunicationMocks.emptyMachineTypes = {
+        name: ''
+    };
+    CommunicationMocks.emptyMachine = {
+        passportNumber: '',
+        serialNumber: '',
+        owner: undefined,
+        machineType: undefined,
+        fuelCount: 0
     };
 })(CommunicationMocks = exports.CommunicationMocks || (exports.CommunicationMocks = {}));
 
@@ -2762,7 +2771,8 @@ var FieldsMocks;
         fields_1.FormFieldName.OWNER,
         fields_1.FormFieldName.WEAPON_NAME,
         fields_1.FormFieldName.TYPE,
-        fields_1.FormFieldName.COMMUNICATION_TYPE
+        fields_1.FormFieldName.COMMUNICATION_TYPE,
+        fields_1.FormFieldName.MACHINE_TYPE
     ];
     FieldsMocks.datePickerFields = [
         fields_1.FormFieldName.BIRTH_DATE,
@@ -2834,8 +2844,10 @@ var Mocks;
             rank: undefined,
             division: division,
             level: undefined,
+            call: '',
+            rfidCode: '',
+            number: '',
             active: true,
-            roleName: ''
         };
     };
     Mocks.displayedCells = [
@@ -2904,7 +2916,13 @@ var Mocks;
         fields_1.FormFieldName.SAT_TIME,
         fields_1.FormFieldName.AMMO_COUNT,
         fields_1.FormFieldName.TYPE,
-        fields_1.FormFieldName.COMMUNICATION_TYPE
+        fields_1.FormFieldName.COMMUNICATION_TYPE,
+        fields_1.FormFieldName.CALL,
+        fields_1.FormFieldName.RFID_CODE,
+        fields_1.FormFieldName.NUMBER,
+        fields_1.FormFieldName.PASSPORT_NUMBER,
+        fields_1.FormFieldName.MACHINE_TYPE,
+        fields_1.FormFieldName.FUEL_COUNT,
     ];
 })(Mocks = exports.Mocks || (exports.Mocks = {}));
 
@@ -5651,14 +5669,14 @@ var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
             case actions_1.Actions.REMOVE:
                 return this.openDialogModal('dialogQuestion', event.item);
             case actions_1.Actions.TIE:
-                return this.openLinkModal(event.item.id, { owner: undefined });
+                return this.openLinkModal(event.item.id, { owner: undefined }, true);
             case actions_1.Actions.UNTIE:
                 return this.unlinkCommunication(event.item.id);
         }
     };
     CommunicationComponent.prototype.openCommunicationModal = function (communication, edit) {
         var _this = this;
-        var objectType = this.pageTypes.COMMUNICATION_TYPES;
+        var objectType = this.pageTypes.COMMUNICATION;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, communication), edit: edit, objectType: objectType }, function (res) {
             if (res) {
                 if (edit) {
@@ -5679,9 +5697,9 @@ var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
             }
         });
     };
-    CommunicationComponent.prototype.openLinkModal = function (communicationId, object) {
+    CommunicationComponent.prototype.openLinkModal = function (communicationId, object, isLink) {
         var _this = this;
-        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object }, function (res) {
+        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object, isLink: isLink }, function (res) {
             if (res) {
                 _this.linkCommunication(communicationId, res.owner.id);
             }
@@ -6191,10 +6209,10 @@ var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../tournament
 var styles_CompetitorsRatingComponent = [i0.styles];
 var RenderType_CompetitorsRatingComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CompetitorsRatingComponent, data: {} });
 exports.RenderType_CompetitorsRatingComponent = RenderType_CompetitorsRatingComponent;
-function View_CompetitorsRatingComponent_1(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [["class", "main__table"]], null, null, null, i2.View_BaseTableComponent_0, i2.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i3.BaseTableComponent, [i4.TranslateService], { pageType: [0, "pageType"], objects: [1, "objects"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.pageTypes.RATING; var currVal_1 = _co.rating; _ck(_v, 3, 0, currVal_0, currVal_1); }, null); }
+function View_CompetitorsRatingComponent_1(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3 ml-2 mr-2"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [["class", "main__table"]], null, null, null, i2.View_BaseTableComponent_0, i2.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i3.BaseTableComponent, [i4.TranslateService], { pageType: [0, "pageType"], objects: [1, "objects"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.pageTypes.RATING; var currVal_1 = _co.rating; _ck(_v, 3, 0, currVal_0, currVal_1); }, null); }
 function View_CompetitorsRatingComponent_3(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "col text-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "h3", [], null, null, null, null, null)), (_l()(), i1.ɵted(2, null, ["", ""])), i1.ɵpid(131072, i4.TranslatePipe, [i4.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 2, 0, i1.ɵnov(_v, 3).transform("emptyRating")); _ck(_v, 2, 0, currVal_0); }); }
 function View_CompetitorsRatingComponent_2(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, "div", [["class", "row mt-4"]], null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_3)), i1.ɵdid(2, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = !_co.rating.length; _ck(_v, 2, 0, currVal_0); }, null); }
-function View_CompetitorsRatingComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 9, "div", [["class", "container-fluid"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 3, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 2, "h1", [["class", "text-center"]], null, null, null, null, null)), (_l()(), i1.ɵted(4, null, ["", ""])), i1.ɵpid(131072, i4.TranslatePipe, [i4.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_1)), i1.ɵdid(7, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_2)), i1.ɵdid(9, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_1 = _co.rating; _ck(_v, 7, 0, currVal_1); var currVal_2 = _co.competitors; _ck(_v, 9, 0, currVal_2); }, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 4, 0, i1.ɵnov(_v, 5).transform("competitorsRating")); _ck(_v, 4, 0, currVal_0); }); }
+function View_CompetitorsRatingComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 9, "div", [["class", "container-fluid pl-5 pr-5"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 3, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 2, "h1", [["class", "text-center"]], null, null, null, null, null)), (_l()(), i1.ɵted(4, null, ["", ""])), i1.ɵpid(131072, i4.TranslatePipe, [i4.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_1)), i1.ɵdid(7, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_2)), i1.ɵdid(9, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_1 = _co.rating; _ck(_v, 7, 0, currVal_1); var currVal_2 = _co.competitors; _ck(_v, 9, 0, currVal_2); }, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 4, 0, i1.ɵnov(_v, 5).transform("competitorsRating")); _ck(_v, 4, 0, currVal_0); }); }
 exports.View_CompetitorsRatingComponent_0 = View_CompetitorsRatingComponent_0;
 function View_CompetitorsRatingComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-competitors-rating", [], null, null, null, View_CompetitorsRatingComponent_0, RenderType_CompetitorsRatingComponent)), i1.ɵdid(1, 770048, null, 0, i6.CompetitorsRatingComponent, [i7.Store, i8.ActivatedRoute, i9.TournamentsService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_CompetitorsRatingComponent_Host_0 = View_CompetitorsRatingComponent_Host_0;
@@ -7497,7 +7515,6 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.actions = [actions_4.Actions.CHANGE, actions_4.Actions.REMOVE];
         this.getRouteParams();
         this.getDivisions();
-        this.getPersonsByDivision();
     };
     CourseComponent.prototype.getRouteParams = function () {
         var _this = this;
@@ -7518,20 +7535,6 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             }
         }));
     };
-    CourseComponent.prototype.getPersons = function (divisionId) {
-        var _this = this;
-        this.subscriptions.sink = this.store.pipe(store_1.select(selectors_3.selectPersonData))
-            .subscribe(function (persons) {
-            if (!persons) {
-                return _this.store.dispatch(new actions_2.LoadPersons());
-            }
-            _this.persons = persons;
-            _this.store.dispatch(new actions_2.LoadPersonsByDivision(divisionId));
-        });
-    };
-    CourseComponent.prototype.getCourses = function () {
-        this.courses$ = this.store.select(selectors_1.selectCourseData);
-    };
     CourseComponent.prototype.getDivisions = function () {
         var _this = this;
         this.divisions$ = this.store.select(selectors_2.selectDivisionsData)
@@ -7549,9 +7552,14 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     CourseComponent.prototype.selectDefaultDivision = function (divisions) {
         var item = this.ngSelect.itemsList.findByLabel(divisions[0].name);
         this.ngSelect.select(item);
+        this.getPersons(divisions[0].id);
     };
-    CourseComponent.prototype.getPersonsByDivision = function () {
-        this.personsByDivision$ = this.store.select(selectors_3.selectPersonsByDivision);
+    CourseComponent.prototype.getPersons = function (divisionId) {
+        this.store.dispatch(new actions_2.LoadPersonsByDivisionApi(divisionId));
+        this.personsByDivision$ = this.store.pipe(store_1.select(selectors_3.selectPersonsByDivisionApi));
+    };
+    CourseComponent.prototype.getCourses = function () {
+        this.courses$ = this.store.select(selectors_1.selectCourseData);
     };
     CourseComponent.prototype.add = function () {
         this.openCourseModal(course_mocks_1.CourseMocks.emptyCourse, false);
@@ -9838,6 +9846,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             case this.fields.DIVISION:
             case this.fields.WEAPON_NAME:
             case this.fields.COMMUNICATION_TYPE:
+            case this.fields.MACHINE_TYPE:
                 form.addControl(key, new forms_1.FormControl(formObject[key]['name'], this.getValidation(key)));
                 break;
             case this.fields.MAIN_JUDGE:
@@ -9889,6 +9898,12 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 return this.formsService.generateValidationListByBean(this.validations.WeaponType, control);
             case page_types_1.PageTypes.COURSE:
                 return this.formsService.generateValidationListByBean(this.validations.CourseBean, control);
+            case page_types_1.PageTypes.COMMUNICATION_TYPES:
+                return this.formsService.generateValidationListByBean(this.validations.CommunicationEquipmentType, control);
+            case page_types_1.PageTypes.MACHINE_TYPES:
+                return this.formsService.generateValidationListByBean(this.validations.VehicleType, control);
+            case page_types_1.PageTypes.COMMUNICATION:
+                return this.formsService.generateValidationListByBean(this.validations.CommunicationEquipment, control);
             case page_types_1.PageTypes.CONDITION:
                 return [forms_1.Validators.required];
             default:
@@ -9933,6 +9948,9 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 return;
             case this.fields.COMMUNICATION_TYPE:
                 this.object[key] = this.findObject(this.communicationTypes, this.object, key);
+                return;
+            case this.fields.MACHINE_TYPE:
+                this.object[key] = this.findObject(this.machineTypes, this.object, key);
                 return;
         }
     };
@@ -10011,6 +10029,8 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 return this.translatedWaveTypes;
             case this.fields.COMMUNICATION_TYPE:
                 return this.communicationTypes;
+            case this.fields.MACHINE_TYPE:
+                return this.machineTypes;
             default:
                 return;
         }
@@ -10034,6 +10054,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             case this.fields.SHOOTING_TYPE:
             case this.fields.WEAPON_NAME:
             case this.fields.COMMUNICATION_TYPE:
+            case this.fields.MACHINE_TYPE:
                 return 'name';
             default:
                 return;
@@ -10536,6 +10557,7 @@ var subsink_1 = __webpack_require__(/*! subsink */ "./node_modules/subsink/dist/
 var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
 var shared_service_1 = __webpack_require__(/*! @shared/services/shared.service */ "./src/app/common/modules/shared/services/shared.service.ts");
 var selectors_6 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var selectors_7 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
 var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     __extends(BaseFormComponent, _super);
     function BaseFormComponent(formsService, translateService, store, dialogsService, sharedService) {
@@ -10570,6 +10592,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.getWeaponTypesForList();
         this.getWaveTypes();
         this.getCommunicationTypes();
+        this.getMachineTypes();
         this.scanState.next(this.object.registrationType);
     };
     BaseFormComponent.prototype.loadJudgesData = function () {
@@ -10669,6 +10692,15 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             if (control === _this.fields.COMMUNICATION_TYPE) {
                 _this.subscriptions.sink = _this.store.select(selectors_6.selectCommunicationTypes)
                     .subscribe(function (list) { return _this.communicationTypes = list; });
+            }
+        });
+    };
+    BaseFormComponent.prototype.getMachineTypes = function () {
+        var _this = this;
+        this.controls.forEach(function (control) {
+            if (control === _this.fields.MACHINE_TYPE) {
+                _this.subscriptions.sink = _this.store.select(selectors_7.selectMachineTypes)
+                    .subscribe(function (list) { return _this.machineTypes = list; });
             }
         });
     };
@@ -13304,6 +13336,12 @@ var ActionTypes = exports.ActionTypes = /*@__PURE__*/ (function (ActionTypes) {
     ActionTypes["CreateMachineType"] = "[Machine Types] Create Machine Type";
     ActionTypes["UpdateMachineType"] = "[Machine Types] Update Machine Type";
     ActionTypes["DeleteMachineType"] = "[Machine Types] Delete Machine Type";
+    ActionTypes["LoadMachines"] = "[Machine Page] Load Machines";
+    ActionTypes["LoadedMachines"] = "[Machine Page] Loaded Machines";
+    ActionTypes["CreateMachine"] = "[Machine Page] Create Machine";
+    ActionTypes["DeleteMachine"] = "[Machine Page] Delete Machine";
+    ActionTypes["LinkMachine"] = "[Machine Page] Link Machine";
+    ActionTypes["UnlinkMachine"] = "[Machine Page] Unlink Machine";
     ActionTypes["MachineErrors"] = "[Machine] Machine Errors";
     return ActionTypes;
 })(exports.ActionTypes || {});
@@ -13354,6 +13392,53 @@ var MachineErrors = /** @class */ /*@__PURE__*/ (function () {
     return MachineErrors;
 }());
 exports.MachineErrors = MachineErrors;
+var LoadMachines = /** @class */ /*@__PURE__*/ (function () {
+    function LoadMachines() {
+        this.type = ActionTypes.LoadMachines;
+    }
+    return LoadMachines;
+}());
+exports.LoadMachines = LoadMachines;
+var LoadedMachines = /** @class */ /*@__PURE__*/ (function () {
+    function LoadedMachines(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LoadedMachines;
+    }
+    return LoadedMachines;
+}());
+exports.LoadedMachines = LoadedMachines;
+var CreateMachine = /** @class */ /*@__PURE__*/ (function () {
+    function CreateMachine(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.CreateMachine;
+    }
+    return CreateMachine;
+}());
+exports.CreateMachine = CreateMachine;
+var DeleteMachine = /** @class */ /*@__PURE__*/ (function () {
+    function DeleteMachine(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.DeleteMachine;
+    }
+    return DeleteMachine;
+}());
+exports.DeleteMachine = DeleteMachine;
+var LinkMachine = /** @class */ /*@__PURE__*/ (function () {
+    function LinkMachine(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.LinkMachine;
+    }
+    return LinkMachine;
+}());
+exports.LinkMachine = LinkMachine;
+var UnlinkMachine = /** @class */ /*@__PURE__*/ (function () {
+    function UnlinkMachine(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.UnlinkMachine;
+    }
+    return UnlinkMachine;
+}());
+exports.UnlinkMachine = UnlinkMachine;
 
 
 
@@ -13504,7 +13589,7 @@ var MachineTypeComponent = /** @class */ /*@__PURE__*/ (function () {
         }
     };
     MachineTypeComponent.prototype.add = function () {
-        this.openMachineTypeModal(communication_1.CommunicationMocks.emptyCommunicationTypes, false);
+        this.openMachineTypeModal(communication_1.CommunicationMocks.emptyMachineTypes, false);
     };
     MachineTypeComponent.prototype.openMachineTypeModal = function (type, edit) {
         var _this = this;
@@ -13559,15 +13644,43 @@ exports.MachineTypeComponent = MachineTypeComponent;
 /*@__PURE__*/ /*@__PURE__*/ Object.defineProperty(exports, "__esModule", { value: true });
 var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.component.scss.shim.ngstyle */ "./src/app/common/modules/machine/components/machine/machine.component.scss.shim.ngstyle.js");
 var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.component */ "./src/app/common/modules/machine/components/machine/machine.component.ts");
+var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../models/constants/animations */ "./src/app/common/models/constants/animations.ts");
+var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./machine.component */ "./src/app/common/modules/machine/components/machine/machine.component.ts");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var styles_MachineComponent = [i0.styles];
-var RenderType_MachineComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_MachineComponent, data: {} });
+var RenderType_MachineComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_MachineComponent, data: { "animation": [i2.Animations.enterLeaveOpacity] } });
 exports.RenderType_MachineComponent = RenderType_MachineComponent;
-function View_MachineComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "p", [], null, null, null, null, null)), (_l()(), i1.ɵted(-1, null, ["machine works!"]))], null, null); }
+function View_MachineComponent_1(_l) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "col-12"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 1, "app-base-table", [], null, [[null, "action"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("action" === en)) {
+                var pd_0 = (_co.handleActions($event) !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, i3.View_BaseTableComponent_0, i3.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i4.BaseTableComponent, [i5.TranslateService], { objects: [0, "objects"], actions: [1, "actions"] }, { action: "action" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _v.context.ngIf; var currVal_1 = _co.actions; _ck(_v, 3, 0, currVal_0, currVal_1); }, null);
+}
+function View_MachineComponent_0(_l) {
+    return i1.ɵvid(0, [i1.ɵpid(0, i6.TitleCasePipe, []), (_l()(), i1.ɵeld(1, 0, null, null, 16, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 4, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 3, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵppd(7, 1), (_l()(), i1.ɵeld(8, 0, null, null, 6, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(9, 0, null, null, 5, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(10, 0, null, null, 4, "button", [["class", "btn btn-primary w-100"]], null, [[null, "click"]], function (_v, en, $event) {
+            var ad = true;
+            var _co = _v.component;
+            if (("click" === en)) {
+                var pd_0 = (_co.add() !== false);
+                ad = (pd_0 && ad);
+            }
+            return ad;
+        }, null, null)), (_l()(), i1.ɵted(11, null, ["", " ", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(13, { ending: 0 }), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_MachineComponent_1)), i1.ɵdid(16, 16384, null, 0, i6.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i6.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_4 = i1.ɵunv(_v, 16, 0, i1.ɵnov(_v, 17).transform(_co.machines$)); _ck(_v, 16, 0, currVal_4); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, _ck(_v, 7, 0, i1.ɵnov(_v, 0), i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("machines")))); _ck(_v, 5, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("add")); var currVal_3 = i1.ɵunv(_v, 11, 1, i1.ɵnov(_v, 14).transform("machine", _ck(_v, 13, 0, "\u0443"))).toLowerCase(); _ck(_v, 11, 0, currVal_2, currVal_3); });
+}
 exports.View_MachineComponent_0 = View_MachineComponent_0;
-function View_MachineComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-machine", [], null, null, null, View_MachineComponent_0, RenderType_MachineComponent)), i1.ɵdid(1, 114688, null, 0, i2.MachineComponent, [], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+function View_MachineComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-machine", [], null, null, null, View_MachineComponent_0, RenderType_MachineComponent)), i1.ɵdid(1, 114688, null, 0, i7.MachineComponent, [i8.ModalService, i9.Store], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_MachineComponent_Host_0 = View_MachineComponent_Host_0;
-var MachineComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-machine", i2.MachineComponent, View_MachineComponent_Host_0, {}, {}, []);
+var MachineComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-machine", i7.MachineComponent, View_MachineComponent_Host_0, {}, {}, []);
 exports.MachineComponentNgFactory = MachineComponentNgFactory;
 
 
@@ -13606,12 +13719,109 @@ exports.styles = styles;
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var communication_1 = __webpack_require__(/*! @models/mocks/communication */ "./src/app/common/models/mocks/communication.ts");
+var actions_1 = __webpack_require__(/*! @models/constants/actions */ "./src/app/common/models/constants/actions.ts");
+var base_modal_component_1 = __webpack_require__(/*! @modal/components/base-modal/base-modal.component */ "./src/app/common/modules/modal/components/base-modal/base-modal.component.ts");
+var dialog_modal_component_1 = __webpack_require__(/*! @modal/components/dialog-modal/dialog-modal.component */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ts");
+var weapon_modal_component_1 = __webpack_require__(/*! @modal/components/weapon-modal/weapon-modal.component */ "./src/app/common/modules/modal/components/weapon-modal/weapon-modal.component.ts");
+var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var actions_2 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
+var selectors_1 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
 var MachineComponent = /** @class */ /*@__PURE__*/ (function () {
-    function MachineComponent() {
+    function MachineComponent(modalService, store) {
+        this.modalService = modalService;
+        this.store = store;
+        this.pageTypes = page_types_1.PageTypes;
     }
     MachineComponent.prototype.ngOnInit = function () {
+        this.actions = [actions_1.Actions.CHANGE, actions_1.Actions.REMOVE, actions_1.Actions.TIE, actions_1.Actions.UNTIE];
+        this.getMachines();
+        this.getMachineTypes();
+    };
+    MachineComponent.prototype.getMachines = function () {
+        var _this = this;
+        this.machines$ = this.store.pipe(store_1.select(selectors_1.selectMachinesData), operators_1.tap(function (machines) { return !machines && _this.fetchMachines(); }));
+    };
+    MachineComponent.prototype.fetchMachines = function () {
+        this.store.dispatch(new actions_2.LoadMachines());
+    };
+    MachineComponent.prototype.getMachineTypes = function () {
+        this.store.dispatch(new actions_2.LoadMachineTypes());
+    };
+    MachineComponent.prototype.add = function () {
+        this.openMachineModal(communication_1.CommunicationMocks.emptyMachine, false);
+    };
+    MachineComponent.prototype.handleActions = function (event) {
+        switch (event.action) {
+            case actions_1.Actions.CHANGE:
+                return this.openMachineModal(event.item, true);
+            case actions_1.Actions.REMOVE:
+                return this.openDialogModal('dialogQuestion', event.item);
+            case actions_1.Actions.TIE:
+                return this.openLinkModal(event.item.id, { owner: undefined }, true);
+            case actions_1.Actions.UNTIE:
+                return this.unlinkMachine(event.item.id);
+        }
+    };
+    MachineComponent.prototype.openMachineModal = function (machine, edit) {
+        var _this = this;
+        var objectType = this.pageTypes.MACHINE;
+        this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, machine), edit: edit, objectType: objectType }, function (res) {
+            if (res) {
+                if (edit) {
+                    var body = __assign({}, machine, res);
+                    _this.createMachine(body);
+                }
+                else {
+                    _this.createMachine(res);
+                }
+            }
+        });
+    };
+    MachineComponent.prototype.openDialogModal = function (message, item) {
+        var _this = this;
+        this.modalService.openModal(dialog_modal_component_1.DialogModalComponent, { centered: true }, { itemName: item.serialNumber, message: message }, function (res) {
+            if (res && res === 'Yes') {
+                _this.deleteMachine(item.id);
+            }
+        });
+    };
+    MachineComponent.prototype.openLinkModal = function (machineId, object, isLink) {
+        var _this = this;
+        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object, isLink: isLink }, function (res) {
+            if (res) {
+                _this.linkMachine(machineId, res.owner.id);
+            }
+        });
+    };
+    MachineComponent.prototype.createMachine = function (machine) {
+        this.store.dispatch(new actions_2.CreateMachine(machine));
+    };
+    MachineComponent.prototype.deleteMachine = function (machineId) {
+        this.store.dispatch(new actions_2.DeleteMachine(machineId));
+    };
+    MachineComponent.prototype.linkMachine = function (machineId, personId) {
+        this.store.dispatch(new actions_2.LinkMachine({ machineId: machineId, personId: personId }));
+    };
+    MachineComponent.prototype.unlinkMachine = function (machineId) {
+        this.store.dispatch(new actions_2.UnlinkMachine(machineId));
     };
     return MachineComponent;
 }());
@@ -13728,6 +13938,69 @@ var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
                 return rxjs_1.of(new fromMachine.MachineErrors(err));
             }));
         }));
+        this.loadMachines$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.LoadMachines), operators_1.mergeMap(function () {
+            return _this.machineService.getMachines()
+                .pipe(operators_1.map(function (machines) { return new fromMachine.LoadedMachines(machines); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.createMachine$ = this.actions$
+            .pipe(effects_1.ofType(fromMachine.ActionTypes.CreateMachine), operators_1.withLatestFrom(this.store.select(selectors_1.selectMachinesData)), operators_1.switchMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], machines = _b[1];
+            return _this.machineService.createMachine(action.payload)
+                .pipe(operators_1.map(function (machine) {
+                var isUpdated = machines.find(function (item) { return item.id === machine.id; });
+                if (isUpdated) {
+                    var message = { user: toastr_1.ToastrUsersType.MACHINE, type: toastr_1.ToastrMessageType.UPDATE };
+                    machines = machines.map(function (item) {
+                        return item.id === machine.id ? machine : item;
+                    });
+                    _this.messageService.showToastrSuccess(message);
+                }
+                else {
+                    var message = { user: toastr_1.ToastrUsersType.MACHINE, type: toastr_1.ToastrMessageType.CREATE };
+                    machines.push(machine);
+                    _this.messageService.showToastrSuccess(message);
+                }
+                return new fromMachine.LoadedMachines(machines);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.deleteMachine$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.DeleteMachine), operators_1.withLatestFrom(this.store.pipe(store_1.select(selectors_1.selectMachinesData))), operators_1.mergeMap(function (_a) {
+            var _b = __read(_a, 2), action = _b[0], machines = _b[1];
+            return _this.machineService.deleteMachine(action.payload)
+                .pipe(operators_1.map(function () {
+                var message = { user: toastr_1.ToastrUsersType.MACHINE, type: toastr_1.ToastrMessageType.REMOVE };
+                _this.messageService.showToastrSuccess(message);
+                machines = machines.filter(function (item) { return item.id !== action.payload; });
+                return new fromMachine.LoadedMachines(machines);
+            }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.linkCommunication$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.LinkMachine), operators_1.mergeMap(function (action) {
+            var _a = action.payload, machineId = _a.machineId, personId = _a.personId;
+            return _this.machineService.linkMachine(machineId, personId).pipe(operators_1.map(function () { return new fromMachine.LoadMachines(); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
+        this.unlinkCommunication$ = this.actions$.pipe(effects_1.ofType(fromMachine.ActionTypes.UnlinkMachine), operators_1.mergeMap(function (action) {
+            return _this.machineService.unlinkMachine(action.payload)
+                .pipe(operators_1.map(function () { return new fromMachine.LoadMachines(); }), operators_1.catchError(function (err) {
+                _this.messageService.showPushNotification(err);
+                _this.messageService.showToastrError(err);
+                return rxjs_1.of(new fromMachine.MachineErrors(err));
+            }));
+        }));
     }
     __decorate([
         effects_1.Effect(),
@@ -13745,6 +14018,26 @@ var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
         effects_1.Effect(),
         __metadata("design:type", Object)
     ], MachineEffects.prototype, "deleteMachineType$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "loadMachines$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "createMachine$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "deleteMachine$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "linkCommunication$", void 0);
+    __decorate([
+        effects_1.Effect(),
+        __metadata("design:type", Object)
+    ], MachineEffects.prototype, "unlinkCommunication$", void 0);
     return MachineEffects;
 }());
 exports.MachineEffects = MachineEffects;
@@ -13845,7 +14138,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
 exports.initialState = {
-    MachineTypes: undefined,
+    machineTypes: undefined,
+    machines: undefined,
     errors: undefined
 };
 function reducer(state, action) {
@@ -13854,7 +14148,9 @@ function reducer(state, action) {
     }
     switch (action.type) {
         case actions_1.ActionTypes.LoadedMachineTypes:
-            return __assign({}, state, { MachineTypes: action.payload });
+            return __assign({}, state, { machineTypes: action.payload });
+        case actions_1.ActionTypes.LoadedMachines:
+            return __assign({}, state, { machines: action.payload });
         case actions_1.ActionTypes.MachineErrors:
             return __assign({}, state, { errors: action.payload });
         default:
@@ -13879,12 +14175,15 @@ exports.reducer = reducer;
 Object.defineProperty(exports, "__esModule", { value: true });
 var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 exports.selectMachines = store_1.createFeatureSelector('machine');
-var ɵ0 = function (state) { return state.MachineTypes; };
+var ɵ0 = function (state) { return state.machineTypes; };
 exports.ɵ0 = ɵ0;
 exports.selectMachineTypes = store_1.createSelector(exports.selectMachines, ɵ0);
-var ɵ1 = function (state) { return state.errors; };
+var ɵ1 = function (state) { return state.machines; };
 exports.ɵ1 = ɵ1;
-exports.selectMachineErrors = store_1.createSelector(exports.selectMachines, ɵ1);
+exports.selectMachinesData = store_1.createSelector(exports.selectMachines, ɵ1);
+var ɵ2 = function (state) { return state.errors; };
+exports.ɵ2 = ɵ2;
+exports.selectMachineErrors = store_1.createSelector(exports.selectMachines, ɵ2);
 
 
 
@@ -13900,15 +14199,17 @@ exports.selectMachineErrors = store_1.createSelector(exports.selectMachines, ɵ1
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var environment_1 = __webpack_require__(/*! @environments/environment */ "./src/environments/environment.ts");
 var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var environment_1 = __webpack_require__(/*! @environments/environment */ "./src/environments/environment.ts");
+var communication_mapper_1 = __webpack_require__(/*! @mappers/communication.mapper */ "./src/app/common/mappers/communication.mapper.ts");
 var i0 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var i1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var MachineService = /** @class */ /*@__PURE__*/ (function () {
     function MachineService(http) {
         this.http = http;
         this.baseUrl = environment_1.environment.BASE_URL + '/api/vehicletype/' + environment_1.environment.version;
+        this.machineUrl = environment_1.environment.BASE_URL + '/api/vehicle/' + environment_1.environment.version;
     }
     MachineService.prototype.getMachineTypes = function () {
         return this.http.get(this.baseUrl + "/get/all")
@@ -13925,6 +14226,27 @@ var MachineService = /** @class */ /*@__PURE__*/ (function () {
     MachineService.prototype.deleteMachineType = function (typeId) {
         return this.http.delete(this.baseUrl + "/delete/" + typeId)
             .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.prototype.getMachines = function () {
+        return this.http.get(this.machineUrl + "/all")
+            .pipe(operators_1.map(function (response) { return response.map(function (item) { return communication_mapper_1.machineMapperFromServer(item); }); }));
+    };
+    MachineService.prototype.createMachine = function (machine) {
+        var mappedBody = communication_mapper_1.machineMapperToServer(machine);
+        return this.http.post(this.machineUrl + "/create", mappedBody)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.machineMapperFromServer(response); }));
+    };
+    MachineService.prototype.deleteMachine = function (machineId) {
+        return this.http.delete(this.machineUrl + "/delete/" + machineId)
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
+    MachineService.prototype.linkMachine = function (machineId, personId) {
+        return this.http.post(this.machineUrl + "/" + machineId + "/" + personId, null)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.machineMapperFromServer(response); }));
+    };
+    MachineService.prototype.unlinkMachine = function (machineId) {
+        return this.http.post(this.machineUrl + "/" + machineId + "/remove", null)
+            .pipe(operators_1.map(function (response) { return communication_mapper_1.machineMapperFromServer(response); }));
     };
     MachineService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function MachineService_Factory() { return new MachineService(i0.ɵɵinject(i1.HttpClient)); }, token: MachineService, providedIn: "root" });
     return MachineService;
@@ -14896,7 +15218,7 @@ var styles_WeaponModalComponent = [i0.styles];
 var RenderType_WeaponModalComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_WeaponModalComponent, data: {} });
 exports.RenderType_WeaponModalComponent = RenderType_WeaponModalComponent;
 function View_WeaponModalComponent_0(_l) {
-    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 6, "div", [], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "div", [["class", "modal-header"]], null, null, null, null, null)), (_l()(), i1.ɵted(2, null, ["", ""])), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(4, 0, null, null, 2, "div", [["class", "modal-body"]], null, null, null, null, null)), (_l()(), i1.ɵeld(5, 0, null, null, 1, "app-base-form", [], null, [[null, "cancel"], [null, "save"]], function (_v, en, $event) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 7, "div", [], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 3, "div", [["class", "modal-header"]], null, null, null, null, null)), (_l()(), i1.ɵted(2, null, ["", ""])), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(5, 0, null, null, 2, "div", [["class", "modal-body"]], null, null, null, null, null)), (_l()(), i1.ɵeld(6, 0, null, null, 1, "app-base-form", [], null, [[null, "cancel"], [null, "save"]], function (_v, en, $event) {
             var ad = true;
             var _co = _v.component;
             if (("cancel" === en)) {
@@ -14908,12 +15230,12 @@ function View_WeaponModalComponent_0(_l) {
                 ad = (pd_1 && ad);
             }
             return ad;
-        }, i3.View_BaseFormComponent_0, i3.RenderType_BaseFormComponent)), i1.ɵdid(6, 245760, null, 0, i4.BaseFormComponent, [i5.FormsService, i2.TranslateService, i6.Store, i7.DialogsService, i8.SharedService], { object: [0, "object"] }, { save: "save", cancel: "cancel" })], function (_ck, _v) { var _co = _v.component; var currVal_1 = _co.object; _ck(_v, 6, 0, currVal_1); }, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 2, 0, i1.ɵnov(_v, 3).transform("addShoots")); _ck(_v, 2, 0, currVal_0); });
+        }, i3.View_BaseFormComponent_0, i3.RenderType_BaseFormComponent)), i1.ɵdid(7, 245760, null, 0, i4.BaseFormComponent, [i5.FormsService, i2.TranslateService, i6.Store, i7.DialogsService, i8.SharedService], { object: [0, "object"] }, { save: "save", cancel: "cancel" })], function (_ck, _v) { var _co = _v.component; var currVal_1 = _co.object; _ck(_v, 7, 0, currVal_1); }, function (_ck, _v) { var _co = _v.component; var currVal_0 = (_co.isLink ? i1.ɵunv(_v, 2, 0, i1.ɵnov(_v, 3).transform("tie")) : i1.ɵunv(_v, 2, 0, i1.ɵnov(_v, 4).transform("addShoots"))); _ck(_v, 2, 0, currVal_0); });
 }
 exports.View_WeaponModalComponent_0 = View_WeaponModalComponent_0;
 function View_WeaponModalComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-weapon-modal", [], null, null, null, View_WeaponModalComponent_0, RenderType_WeaponModalComponent)), i1.ɵdid(1, 114688, null, 0, i9.WeaponModalComponent, [i10.NgbActiveModal], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_WeaponModalComponent_Host_0 = View_WeaponModalComponent_Host_0;
-var WeaponModalComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-weapon-modal", i9.WeaponModalComponent, View_WeaponModalComponent_Host_0, { object: "object" }, {}, []);
+var WeaponModalComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-weapon-modal", i9.WeaponModalComponent, View_WeaponModalComponent_Host_0, { object: "object", isLink: "isLink" }, {}, []);
 exports.WeaponModalComponentNgFactory = WeaponModalComponentNgFactory;
 
 
@@ -21017,6 +21339,8 @@ var SharedService = /** @class */ /*@__PURE__*/ (function () {
             { name: 'weaponType', path: '/weapon-types', children: [] },
             { name: 'communicationTypes', path: '/communication-type', children: [] },
             { name: 'communications', path: '/communication', children: [] },
+            { name: 'machineTypes', path: '/machine-type', children: [] },
+            { name: 'machines', path: '/machine', children: [] },
             {
                 name: 'divisionList', path: '/checkin', children: [
                     {
@@ -22469,7 +22793,7 @@ function View_BaseTableComponent_24(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(
 function View_BaseTableComponent_25(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value)); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_26(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_v.parent.parent.context.$implicit.value.substring(2))); _ck(_v, 1, 0, currVal_0); }); }
 function View_BaseTableComponent_27(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "]))], null, function (_ck, _v) { var currVal_0 = _v.parent.parent.context.$implicit.value; _ck(_v, 1, 0, currVal_0); }); }
-function View_BaseTableComponent_13(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 29, "td", [["class", "text-center align-middle"]], null, null, null, null, null)), i1.ɵdid(1, 16384, null, 0, i8.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_14)), i1.ɵdid(3, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_15)), i1.ɵdid(5, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_16)), i1.ɵdid(7, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_17)), i1.ɵdid(9, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_18)), i1.ɵdid(11, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_19)), i1.ɵdid(13, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_20)), i1.ɵdid(15, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_21)), i1.ɵdid(17, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_22)), i1.ɵdid(19, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_23)), i1.ɵdid(21, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_24)), i1.ɵdid(23, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_25)), i1.ɵdid(25, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_26)), i1.ɵdid(27, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_27)), i1.ɵdid(29, 16384, null, 0, i8.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = true; _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.parent.context.$implicit.key === _co.fields.CATEGORY); _ck(_v, 3, 0, currVal_1); var currVal_2 = (_v.parent.context.$implicit.key === _co.fields.PERSON); _ck(_v, 5, 0, currVal_2); var currVal_3 = (((_v.parent.context.$implicit.key === _co.fields.UNITS) || (_v.parent.context.$implicit.key === _co.fields.WEAPON_NAME)) || (_v.parent.context.$implicit.key === _co.fields.COMMUNICATION_TYPE)); _ck(_v, 7, 0, currVal_3); var currVal_4 = (_v.parent.context.$implicit.key === _co.fields.OWNER); _ck(_v, 9, 0, currVal_4); var currVal_5 = (_v.parent.context.$implicit.key === _co.fields.TYPE); _ck(_v, 11, 0, currVal_5); var currVal_6 = (((_v.parent.context.$implicit.key === _co.fields.EVENT_DATE) || (_v.parent.context.$implicit.key === _co.fields.BIRTH_DATE)) || (_v.parent.context.$implicit.key === _co.fields.DATE)); _ck(_v, 13, 0, currVal_6); var currVal_7 = (((_v.parent.context.$implicit.key === _co.fields.EXCELLENT_TIME) || (_v.parent.context.$implicit.key === _co.fields.GOOD_TIME)) || (_v.parent.context.$implicit.key === _co.fields.SAT_TIME)); _ck(_v, 15, 0, currVal_7); var currVal_8 = (_v.parent.context.$implicit.key === _co.fields.TIME_OF_EXERCISE); _ck(_v, 17, 0, currVal_8); var currVal_9 = _co.switcherCase(_v.parent.context.$implicit.key); _ck(_v, 19, 0, currVal_9); var currVal_10 = (_v.parent.context.$implicit.key === _co.fields.NOT_COUNTED); _ck(_v, 21, 0, currVal_10); var currVal_11 = (_v.parent.context.$implicit.key === _co.fields.RANK); _ck(_v, 23, 0, currVal_11); var currVal_12 = (_v.parent.context.$implicit.key === _co.fields.STATUS); _ck(_v, 25, 0, currVal_12); var currVal_13 = (_v.parent.context.$implicit.key === _co.fields.DISQUALIFICATION_REASON); _ck(_v, 27, 0, currVal_13); }, null); }
+function View_BaseTableComponent_13(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 29, "td", [["class", "text-center align-middle"]], null, null, null, null, null)), i1.ɵdid(1, 16384, null, 0, i8.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_14)), i1.ɵdid(3, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_15)), i1.ɵdid(5, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_16)), i1.ɵdid(7, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_17)), i1.ɵdid(9, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_18)), i1.ɵdid(11, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_19)), i1.ɵdid(13, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_20)), i1.ɵdid(15, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_21)), i1.ɵdid(17, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_22)), i1.ɵdid(19, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_23)), i1.ɵdid(21, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_24)), i1.ɵdid(23, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_25)), i1.ɵdid(25, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_26)), i1.ɵdid(27, 278528, null, 0, i8.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_27)), i1.ɵdid(29, 16384, null, 0, i8.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i8.NgSwitch], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = true; _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.parent.context.$implicit.key === _co.fields.CATEGORY); _ck(_v, 3, 0, currVal_1); var currVal_2 = (_v.parent.context.$implicit.key === _co.fields.PERSON); _ck(_v, 5, 0, currVal_2); var currVal_3 = ((((_v.parent.context.$implicit.key === _co.fields.UNITS) || (_v.parent.context.$implicit.key === _co.fields.WEAPON_NAME)) || (_v.parent.context.$implicit.key === _co.fields.COMMUNICATION_TYPE)) || (_v.parent.context.$implicit.key === _co.fields.MACHINE_TYPE)); _ck(_v, 7, 0, currVal_3); var currVal_4 = (_v.parent.context.$implicit.key === _co.fields.OWNER); _ck(_v, 9, 0, currVal_4); var currVal_5 = (_v.parent.context.$implicit.key === _co.fields.TYPE); _ck(_v, 11, 0, currVal_5); var currVal_6 = (((_v.parent.context.$implicit.key === _co.fields.EVENT_DATE) || (_v.parent.context.$implicit.key === _co.fields.BIRTH_DATE)) || (_v.parent.context.$implicit.key === _co.fields.DATE)); _ck(_v, 13, 0, currVal_6); var currVal_7 = (((_v.parent.context.$implicit.key === _co.fields.EXCELLENT_TIME) || (_v.parent.context.$implicit.key === _co.fields.GOOD_TIME)) || (_v.parent.context.$implicit.key === _co.fields.SAT_TIME)); _ck(_v, 15, 0, currVal_7); var currVal_8 = (_v.parent.context.$implicit.key === _co.fields.TIME_OF_EXERCISE); _ck(_v, 17, 0, currVal_8); var currVal_9 = _co.switcherCase(_v.parent.context.$implicit.key); _ck(_v, 19, 0, currVal_9); var currVal_10 = (_v.parent.context.$implicit.key === _co.fields.NOT_COUNTED); _ck(_v, 21, 0, currVal_10); var currVal_11 = (_v.parent.context.$implicit.key === _co.fields.RANK); _ck(_v, 23, 0, currVal_11); var currVal_12 = (_v.parent.context.$implicit.key === _co.fields.STATUS); _ck(_v, 25, 0, currVal_12); var currVal_13 = (_v.parent.context.$implicit.key === _co.fields.DISQUALIFICATION_REASON); _ck(_v, 27, 0, currVal_13); }, null); }
 function View_BaseTableComponent_12(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseTableComponent_13)), i1.ɵdid(2, 16384, null, 0, i8.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(0, null, null, 0))], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.displayedCells.includes(_v.context.$implicit.key); _ck(_v, 2, 0, currVal_0); }, null); }
 function View_BaseTableComponent_28(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 3, "td", [["class", "text-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 2, "button", [], [[8, "className", 0], [8, "disabled", 0]], [[null, "click"]], function (_v, en, $event) {
@@ -24844,9 +25168,9 @@ var WeaponListComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             case actions_1.Actions.UNTIE:
                 return this.unlinkWeapon(event.item.id);
             case actions_1.Actions.TIE:
-                return this.openShootsModal(event.item.id, { owner: undefined });
+                return this.openShootsModal(event.item.id, { owner: undefined }, true);
             case actions_1.Actions.ADD_SHOOTS:
-                return this.openShootsModal(event.item.id, { count: event.item.count });
+                return this.openShootsModal(event.item.id, { count: event.item.count }, false);
         }
     };
     WeaponListComponent.prototype.add = function () {
@@ -24867,9 +25191,9 @@ var WeaponListComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             }
         });
     };
-    WeaponListComponent.prototype.openShootsModal = function (weaponId, object) {
+    WeaponListComponent.prototype.openShootsModal = function (weaponId, object, isLink) {
         var _this = this;
-        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object }, function (res) {
+        this.modalService.openModal(weapon_modal_component_1.WeaponModalComponent, { centered: true }, { object: object, isLink: isLink }, function (res) {
             if (res) {
                 if (res.hasOwnProperty('count')) {
                     _this.addShoots(weaponId, res.count);
