@@ -104,13 +104,13 @@ public class PersonRepositoryTest {
 		assertNotEquals(list, anotherList);
 	}
 	
-	@Test
-	public void checkFindByDivisionIdRecursive () {
-		List<Division> list = personRepository.findByDivisionIdRecursive(root.getId());
-		assertEquals(4, list.size());
-		list = personRepository.findByDivisionIdRecursive(childDivision.getId());
-		assertEquals(1, list.size());
-	}
+//	@Test
+//	public void checkFindByDivisionIdRecursive () {
+//		List<Division> list = personRepository.findByDivisionIdRecursive(root.getId());
+//		assertEquals(4, list.size());
+//		list = personRepository.findByDivisionIdRecursive(childDivision.getId());
+//		assertEquals(1, list.size());
+//	}
 	
 	@Test
 	public void checkFindByCall() {
