@@ -130,4 +130,8 @@ public class ValidationConstants {
 	public static final String ANIMAL_TYPE_NAME_MESSAGE = "Animal type name must be not blank";
 
 	public static final String AMMO_TYPE_NAME_MESSAGE = "Ammunition type name must be not blank";
+	
+	public static final String AMMO_TYPE_WEAPON_TYPE_MESSAGE = "Ammunition weapon type name must not be null";
+	
+	public static final String AMMO_TYPE_COUNT_MESSAGE = "Must be 0 or greater";
 }

@@ -29,7 +29,7 @@ EXPOSE 8080
 
 # RUN chmod 755 /usr/share/servers/ipsc/service.sh
 
-#VOLUME /usr/share/servers/ipsc/logs
+VOLUME /usr/share/servers/ipsc/logs
 #ENTRYPOINT ["sh", "service.sh"]
 
 WORKDIR /usr/share/servers/ipsc

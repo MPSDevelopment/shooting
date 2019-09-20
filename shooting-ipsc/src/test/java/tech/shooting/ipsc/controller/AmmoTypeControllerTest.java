@@ -25,7 +25,9 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.AmmoTypeBean;
 import tech.shooting.ipsc.bean.VehicleTypeBean;
+import tech.shooting.ipsc.bean.WeaponTypeBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -36,9 +38,11 @@ import tech.shooting.ipsc.pojo.AmmoType;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.pojo.VehicleType;
+import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.repository.AmmoTypeRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.repository.VehicleTypeRepository;
+import tech.shooting.ipsc.repository.WeaponTypeRepository;
 import tech.shooting.ipsc.service.AmmoTypeService;
 
 import java.util.ArrayList;
@@ -59,6 +63,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, AmmoTypeController.class, AmmoTypeService.class })
 class AmmoTypeControllerTest {
 
+	private static final String WEAPON_TYPE_ID = "Test";
+	
+	private static final String AMMO_TYPE_ID = "Test";
+
 	@Autowired
 	private TokenUtils tokenUtils;
 
@@ -67,6 +75,9 @@ class AmmoTypeControllerTest {
 
 	@Autowired
 	private AmmoTypeRepository typeRepository;
+	
+	@Autowired
+	private WeaponTypeRepository weaponTypeRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -86,6 +97,10 @@ class AmmoTypeControllerTest {
 	@BeforeEach
 	void setUp() {
 		typeRepository.deleteAll();
+		weaponTypeRepository.deleteAll();
+	
+		weaponTypeRepository.save(new WeaponType().setName(WEAPON_TYPE_ID));
+		
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
 				.setPerson(new Person().setName("fgdgfgd"))) : user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -98,7 +113,7 @@ class AmmoTypeControllerTest {
 	@Test
 	void checkGetAllTypes() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		createFewVehicleType();
+		createFewTypes();
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.AMMO_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
@@ -117,7 +132,7 @@ class AmmoTypeControllerTest {
 		assertEquals(typeRepository.findAll().size(), listFromJson.size());
 	}
 
-	private void createFewVehicleType() {
+	private void createFewTypes() {
 		List<AmmoType> types = new ArrayList<>();
 		types.add(new AmmoType().setName("AKM"));
 		types.add(new AmmoType().setName("AK-47"));
@@ -129,7 +144,7 @@ class AmmoTypeControllerTest {
 	@Test
 	void checkGetTypeById() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		createFewVehicleType();
+		createFewTypes();
 		AmmoType type = typeRepository.findAll().get(0);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.AMMO_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString())))
@@ -155,7 +170,7 @@ class AmmoTypeControllerTest {
 	@Test
 	void checkPostType() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		VehicleTypeBean bean = new VehicleTypeBean().setName("Test");
+		AmmoTypeBean bean = new AmmoTypeBean().setName(AMMO_TYPE_ID).setCount(20).setWeaponTypeId(weaponTypeRepository.findByName(WEAPON_TYPE_ID).getId());
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AMMO_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
@@ -172,15 +187,17 @@ class AmmoTypeControllerTest {
 		// try access with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AMMO_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		VehicleType typeFromDB = JacksonUtils.fromJson(VehicleType.class, contentAsString);
+		AmmoType typeFromDB = JacksonUtils.fromJson(AmmoType.class, contentAsString);
 		assertEquals(1, typeRepository.findAll().size());
 		assertEquals(bean.getName(), typeFromDB.getName());
+		assertEquals(bean.getWeaponTypeId(), typeFromDB.getWeaponType().getId());
+		assertEquals(bean.getCount(), typeFromDB.getCount());
 	}
 
 	@Test
 	void checkDeleteType() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		AmmoType bean = new AmmoType().setName("Test");
+		AmmoType bean = new AmmoType().setName(AMMO_TYPE_ID);
 		bean = typeRepository.save(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(

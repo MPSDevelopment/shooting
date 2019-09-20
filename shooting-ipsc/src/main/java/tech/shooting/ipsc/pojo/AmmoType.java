@@ -10,6 +10,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Document(collection = "ammotype")
 @TypeAlias("ammotype")
@@ -21,4 +23,14 @@ public class AmmoType extends BaseDocument {
     @ApiModelProperty(value = "Ammunition type name", required = true)
     @NotBlank(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
     private String name;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Weapon type", required = true)
+    @NotNull(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
+    private WeaponType weaponType;
+    
+    @JsonProperty
+    @ApiModelProperty(value = "Weapon type's ammo usual count")
+    @PositiveOrZero(message = ValidationConstants.AMMO_TYPE_COUNT_MESSAGE)
+    private Integer count;
 }

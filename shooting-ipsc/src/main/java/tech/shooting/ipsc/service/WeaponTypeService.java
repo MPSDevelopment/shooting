@@ -35,7 +35,7 @@ public class WeaponTypeService  {
     }
 
     private WeaponType checkWeaponTypeExist(WeaponTypeBean bean) {
-        WeaponType byName = repository.findByName(bean);
+        WeaponType byName = repository.findByName(bean.getName());
         if (byName==null){
             return new WeaponType().setName(bean.getName()).setAmmoCount(bean.getAmmoCount());
         }else{

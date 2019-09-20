@@ -51,7 +51,7 @@ public class AmmoTypeController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_POST_TYPE)
 	@ApiOperation(value = "Return created type", notes = "Return created name ")
-	public ResponseEntity<AmmoType> postType(@RequestBody @Valid AmmoTypeBean bean) {
+	public ResponseEntity<AmmoType> postType(@RequestBody @Valid AmmoTypeBean bean) throws BadRequestException {
 		return new ResponseEntity<>(service.postType(bean), HttpStatus.OK);
 	}
 
