@@ -57,6 +57,6 @@ public class AmmoTypeService {
 	}
 
 	public AmmoType updateType(long typeId, AmmoTypeBean bean) throws BadRequestException {
-		return repository.save(checkType(typeId).setName(bean.getName()));
+		return repository.save(checkType(typeId).setName(bean.getName()).setWeaponType(checkWeaponType(bean.getWeaponTypeId())).setCount(bean.getCount()));
 	}
 }
