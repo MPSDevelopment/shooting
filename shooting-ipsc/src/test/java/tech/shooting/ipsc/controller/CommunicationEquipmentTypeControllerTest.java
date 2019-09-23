@@ -25,7 +25,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
+import tech.shooting.ipsc.bean.CommunicationEquipmentTypeBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -155,7 +155,7 @@ class CommunicationEquipmentTypeControllerTest {
 	@Test
 	void checkPostTypeOfWeapon() throws Exception {
 		assertEquals(Collections.emptyList(), commEquipmentTypeRepository.findAll());
-		CommEquipmentTypeBean bean = new CommEquipmentTypeBean().setName("Test").setType(CommunicationEquipmentEnum.ULRTA_SHORT_WAVE);
+		CommunicationEquipmentTypeBean bean = new CommunicationEquipmentTypeBean().setName("Test").setType(CommunicationEquipmentEnum.ULRTA_SHORT_WAVE);
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))

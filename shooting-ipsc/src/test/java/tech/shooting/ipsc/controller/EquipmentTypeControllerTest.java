@@ -25,7 +25,6 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
 import tech.shooting.ipsc.bean.EquipmentTypeBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -98,7 +97,7 @@ class EquipmentTypeControllerTest {
 	@Test
 	void checkGetAllTypeOfWeapon() throws Exception {
 		assertEquals(Collections.emptyList(), equipmentTypeRepository.findAll());
-		createFewCommEquipmentType();
+		createFewEquipmentType();
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_TYPE_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
@@ -117,7 +116,7 @@ class EquipmentTypeControllerTest {
 		assertEquals(equipmentTypeRepository.findAll().size(), listFromJson.size());
 	}
 
-	private void createFewCommEquipmentType() {
+	private void createFewEquipmentType() {
 		List<EquipmentType> types = new ArrayList<>();
 		types.add(new EquipmentType().setName("DNC"));
 		types.add(new EquipmentType().setName("ATC"));
@@ -129,7 +128,7 @@ class EquipmentTypeControllerTest {
 	@Test
 	void checkGetTypeOfWeaponById() throws Exception {
 		assertEquals(Collections.emptyList(), equipmentTypeRepository.findAll());
-		createFewCommEquipmentType();
+		createFewEquipmentType();
 		EquipmentType type = equipmentTypeRepository.findAll().get(0);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.EQUIPMENT_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_TYPE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_TYPE_ID, type.getId().toString())))
@@ -179,7 +178,7 @@ class EquipmentTypeControllerTest {
 	}
 
 	@Test
-	void checkDeleteCommEquipmentType() throws Exception {
+	void checkDeleteEquipmentType() throws Exception {
 		assertEquals(Collections.emptyList(), equipmentTypeRepository.findAll());
 		EquipmentType bean = new EquipmentType().setName("Test");
 		bean = equipmentTypeRepository.save(bean);

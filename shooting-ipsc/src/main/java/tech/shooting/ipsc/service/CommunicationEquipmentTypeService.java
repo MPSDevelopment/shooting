@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
-import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
+import tech.shooting.ipsc.bean.CommunicationEquipmentTypeBean;
 import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
 import tech.shooting.ipsc.repository.CommunicationEquipmentTypeRepository;
 
@@ -29,12 +29,12 @@ public class CommunicationEquipmentTypeService {
 		return repository.findById(typeId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect communication equipment type id, check id is %s", typeId)));
 	}
 
-	public CommunicationEquipmentType postType(CommEquipmentTypeBean bean) {
+	public CommunicationEquipmentType postType(CommunicationEquipmentTypeBean bean) {
 		CommunicationEquipmentType save = repository.save(checkWeaponTypeExist(bean));
 		return save;
 	}
 
-	private CommunicationEquipmentType checkWeaponTypeExist(CommEquipmentTypeBean bean) {
+	private CommunicationEquipmentType checkWeaponTypeExist(CommunicationEquipmentTypeBean bean) {
 		CommunicationEquipmentType byName = repository.findByName(bean);
 		if (byName == null) {
 			return new CommunicationEquipmentType().setName(bean.getName()).setType(bean.getType());
@@ -48,7 +48,7 @@ public class CommunicationEquipmentTypeService {
 		repository.delete(checkType(weaponTypeId));
 	}
 
-	public CommunicationEquipmentType updateType(long weaponTypeId, CommEquipmentTypeBean bean) throws BadRequestException {
+	public CommunicationEquipmentType updateType(long weaponTypeId, CommunicationEquipmentTypeBean bean) throws BadRequestException {
 		return repository.save(checkType(weaponTypeId).setName(bean.getName()));
 	}
 }

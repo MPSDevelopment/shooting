@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
-import tech.shooting.ipsc.bean.CommEquipmentTypeBean;
+import tech.shooting.ipsc.bean.CommunicationEquipmentTypeBean;
 import tech.shooting.ipsc.enums.CommunicationEquipmentEnum;
 import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
 import tech.shooting.ipsc.service.CommunicationEquipmentTypeService;
@@ -52,13 +52,13 @@ public class CommunicationEquipmentTypeController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_POST_TYPE)
 	@ApiOperation(value = "Return created type", notes = "Return created name ")
-	public ResponseEntity<CommunicationEquipmentType> postType(@RequestBody @Valid CommEquipmentTypeBean bean) {
+	public ResponseEntity<CommunicationEquipmentType> postType(@RequestBody @Valid CommunicationEquipmentTypeBean bean) {
 		return new ResponseEntity<>(service.postType(bean), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE)
 	@ApiOperation(value = "Return created type updated", notes = "Return created name  Updated")
-	public ResponseEntity<CommunicationEquipmentType> postTypeOfWeapon(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long weaponTypeId, @RequestBody @Valid CommEquipmentTypeBean bean) throws BadRequestException {
+	public ResponseEntity<CommunicationEquipmentType> postTypeOfWeapon(@PathVariable(value = ControllerAPI.PATH_VARIABLE_TYPE_ID) long weaponTypeId, @RequestBody @Valid CommunicationEquipmentTypeBean bean) throws BadRequestException {
 		return new ResponseEntity<>(service.updateType(weaponTypeId, bean), HttpStatus.OK);
 	}
 

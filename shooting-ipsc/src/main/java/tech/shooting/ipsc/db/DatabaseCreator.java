@@ -22,7 +22,7 @@ import tech.shooting.ipsc.repository.SubjectRepository;
 @Component
 @Slf4j
 public class DatabaseCreator {
-	
+
 	public static final String PRIVATE = "Рядовой";
 
 	public static final String ADMIN_PASSWORD = "test";
@@ -45,21 +45,21 @@ public class DatabaseCreator {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
-	
+
 	@Autowired
 	private RankRepository rankRepository;
-	
+
 	@Autowired
 	private DivisionRepository divisionRepository;
-	
+
 	@Autowired
 	private AnimalTypeRepository animalTypeRepository;
 
-	public DatabaseCreator () {
+	public DatabaseCreator() {
 	}
 
 	@PostConstruct
-	public void init () {
+	public void init() {
 		databaseCreator.createDatabase();
 	}
 
@@ -84,21 +84,31 @@ public class DatabaseCreator {
 		
 		
 		rankRepository.createIfNotExists(List.of(
-				new Rank().setRus(PRIVATE).setKz("Рядовой"),
+				new Rank().setRus(PRIVATE).setKz("Қатардағы жауынгер"),
 				new Rank().setRus("Ефрейтор").setKz("Ефрейтор"),
-				new Rank().setRus("Младший сержант").setKz("Младший сержант"),
+				
+				new Rank().setRus("Младший сержант").setKz("Кiшi сержант"),
 				new Rank().setRus("Сержант").setKz("Сержант"),
-				new Rank().setRus("Cтарший сержант").setKz("Старший сержант"),
-				new Rank().setRus("Старшина").setKz("Старшина"),
-				new Rank().setRus("Прапорщик").setKz("Прапорщик"),
-				new Rank().setRus("Старший прапорщик").setKz("Старший прапорщик"),
-				new Rank().setRus("Младший лейтенант").setKz("Младший лейтенант").setOfficer(true),
+				new Rank().setRus("Cтарший сержант").setKz("Аға сержант"),
+				
+				new Rank().setRus("Сержант третьего класса").setKz("Үшiншi сыныпты сержант"),
+				new Rank().setRus("Сержант второго класса").setKz("Екiншi сыныпты сержант"),
+				new Rank().setRus("Сержант первого класса").setKz("Бiрiншi сыныпты сержант"),
+				
+				new Rank().setRus("Штаб-сержант").setKz("Штаб-сержант"),
+				new Rank().setRus("Мастер-сержант").setKz("Шебер-\r\n"),
+				
 				new Rank().setRus("Лейтенант").setKz("Лейтенант").setOfficer(true),
-				new Rank().setRus("Старший лейтенант").setKz("Старший лейтенант").setOfficer(true),
+				new Rank().setRus("Старший лейтенант").setKz("Аға лейтенант").setOfficer(true),
 				new Rank().setRus("Капитан").setKz("Капитан").setOfficer(true),
+				
 				new Rank().setRus("Майор").setKz("Майор").setOfficer(true),
 				new Rank().setRus("Подполковник").setKz("Подполковник").setOfficer(true),
-				new Rank().setRus("Полковник").setKz("Полковник").setOfficer(true)));
+				new Rank().setRus("Полковник").setKz("Полковник").setOfficer(true), 
+		
+				new Rank().setRus("Генерал-майор").setKz("Генерал-майор").setOfficer(true),
+				new Rank().setRus("Генерал-лейтенант").setKz("Генерал-лейтенант").setOfficer(true),
+				new Rank().setRus("Генерал-полковник").setKz("Генерал-полковник").setOfficer(true)));
 		
 		long count = divisionRepository.count();
 		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));

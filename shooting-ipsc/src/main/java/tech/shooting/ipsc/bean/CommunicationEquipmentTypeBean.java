@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Accessors(chain = true)
-public class CommEquipmentTypeBean {
+public class CommunicationEquipmentTypeBean {
 	
     @JsonProperty
     @ApiModelProperty(value = "Communication equipment type name", required = true)
