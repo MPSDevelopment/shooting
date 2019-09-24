@@ -107,13 +107,14 @@ spring:
     mongodb:
       #      host: ipsc-mongodb
       host: docker.for.win.localhost
+#      host: 192.168.31.63
       port: 27017
       database: shooting
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
-  address: 192.168.0.10
+  address: 0.0.0.0
   port: 9901
   compression:
     enabled: true
