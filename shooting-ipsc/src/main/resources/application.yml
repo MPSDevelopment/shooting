@@ -38,7 +38,7 @@ spring:
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
   address: 127.0.0.1
-  port: 9900
+  port: 80
   http2:
     enabled: true
   compression:
@@ -113,7 +113,7 @@ spring:
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
-  address: 0.0.0.0
+  address: 192.168.0.10
   port: 9901
   compression:
     enabled: true

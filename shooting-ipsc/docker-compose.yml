@@ -5,20 +5,7 @@ services:
     image: shooting.azurecr.io/ipsc:0.2-latest
     restart: always
     volumes:
-      - ./data/logs/ipsc:/usr/share/servers/logs
+      - ./logs:/usr/share/servers/ipsc/logs
     ports:
       - 80:9901
       - 8880:8880
-  coredns:
-    image: coredns/coredns:1.1.4 
-    container_name: coredns
-    restart: always
-    command: -conf /etc/coredns/dns
-    expose:
-      - '53'
-      - '53/udp'
-    ports:
-      - '53:53'
-      - '53:53/udp'
-    volumes:
-      - './:/etc/coredns'
