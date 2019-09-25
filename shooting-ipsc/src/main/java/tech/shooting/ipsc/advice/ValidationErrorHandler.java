@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -95,6 +96,13 @@ public class ValidationErrorHandler {
 	public ErrorMessage processForbiddenException(ForbiddenException ex, HttpServletRequest request) {
 		log.error("Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		return new ErrorMessage(DEFAULR_FIELD, "Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorMessage processForbiddenException(AccessDeniedException ex, HttpServletRequest request) {
+		log.error("Access denied exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, "Access denied in request %s with error %s", request.getRequestURL(), ex.getMessage());
 	}
 
 	@ExceptionHandler(NotAcceptableException.class)
