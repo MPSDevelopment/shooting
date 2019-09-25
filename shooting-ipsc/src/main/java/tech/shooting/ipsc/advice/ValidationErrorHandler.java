@@ -120,9 +120,9 @@ public class ValidationErrorHandler {
 
 	@ExceptionHandler(InternalServerErrorException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ErrorMessage processInternalServerErrorException(InternalServerErrorException e) {
-		log.error("Internal server error %s", e.getErrorMessage());
-		return e.getErrorMessage();
+	public ErrorMessage processInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request) {
+		log.error("Internal server error in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
+		return new ErrorMessage(DEFAULR_FIELD, "Internal server error for request %s", request.getRequestURL());
 	}
 
 	private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {
