@@ -1,11 +1,17 @@
 package tech.shooting.ipsc.mqtt.event;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import tech.shooting.commons.eventbus.Event;
+import tech.shooting.ipsc.enums.EventTypeEnum;
 import tech.shooting.ipsc.pojo.Workspace;
 
 @Data
 public class TestStartedEvent extends Event {
+	
+	@JsonProperty
+	private EventTypeEnum type = EventTypeEnum.TEST_STARTED_EVENT;
 
 	private Workspace worspace;
 

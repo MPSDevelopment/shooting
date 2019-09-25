@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import tech.shooting.commons.eventbus.Event;
+import tech.shooting.ipsc.enums.EventTypeEnum;
 
 @Data
 public class CompetitionUpdatedEvent extends Event {
+	
+	@JsonProperty
+	private EventTypeEnum type = EventTypeEnum.COMPETITION_UPDATED;
 
 	@JsonProperty
 	private Long id;
