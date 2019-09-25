@@ -8031,7 +8031,7 @@ function View_DashboardComponent_2(_l) {
             return ad;
         }, null, null)), (_l()(), i1.ɵted(11, null, ["", ""])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform("answers")); _ck(_v, 3, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 7, 0, i1.ɵnov(_v, 8).transform("divisionList")); _ck(_v, 7, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("workspace")); _ck(_v, 11, 0, currVal_2); });
 }
-function View_DashboardComponent_3(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 1, "div", [["class", "col-12 text-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 0, "img", [["alt", "logo"], ["src", "assets/images/ipsc.svg"]], null, null, null, null, null))], null, null); }
+function View_DashboardComponent_3(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 0, "div", [["class", "col-12 text-center"]], null, null, null, null, null))], null, null); }
 function View_DashboardComponent_4(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 0, "hr", [], null, null, null, null, null))], null, null); }
 function View_DashboardComponent_5(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 8, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 3, "div", [["class", "col-4 mb-2"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "button", [["class", "btn btn-primary btn__big "]], null, [[null, "click"]], function (_v, en, $event) {

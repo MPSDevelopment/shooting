@@ -56,6 +56,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.createCompetition(competitionBean), HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_PUT_COMPETITION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update competition", notes = "Return update competition object")
 	public ResponseEntity<Competition> updateCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id, @RequestBody @Valid CompetitionBean competition) throws BadRequestException {
