@@ -11,7 +11,7 @@ import tech.shooting.ipsc.pojo.Workspace;
 public class TestStartedEvent extends Event {
 	
 	@JsonProperty
-	private EventTypeEnum type = EventTypeEnum.TEST_STARTED_EVENT;
+	private EventTypeEnum type = EventTypeEnum.TEST_STARTED;
 
 	private Workspace worspace;
 
