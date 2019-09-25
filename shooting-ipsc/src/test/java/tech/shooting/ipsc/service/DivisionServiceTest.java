@@ -45,7 +45,7 @@ class DivisionServiceTest {
 	@Test
 	void createDivision() {
 
-		var root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
+		Division root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
 		// try create division
 		DivisionBean divisionBean = new DivisionBean().setName("Все").setParent(root.getId());
 		DivisionBean division = divisionService.createDivision(divisionBean, root.getId());

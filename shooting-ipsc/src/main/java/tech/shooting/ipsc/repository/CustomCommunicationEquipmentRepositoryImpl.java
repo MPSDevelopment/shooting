@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import tech.shooting.ipsc.pojo.CommunicationEquipment;
+import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
 
@@ -26,7 +27,7 @@ public class CustomCommunicationEquipmentRepositoryImpl implements CustomCommuni
 		
 		Query personQuery = new Query();
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-		var persons = mongoTemplate.find(personQuery, Person.class);
+		List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
 		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, CommunicationEquipment.class);

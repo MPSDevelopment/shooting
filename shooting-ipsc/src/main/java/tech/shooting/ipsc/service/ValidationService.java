@@ -12,6 +12,7 @@ import tech.shooting.ipsc.utils.ValidationUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -19,11 +20,11 @@ public class ValidationService {
 
 	@Cacheable(value = CachingConfig.IPSC_CACHE, unless = "#result == null")
 	public Map<String, Map<String, ValidationBean>> getConstraintsForPackage(String... packageNames) {
-		var result = new HashMap<String, Map<String, ValidationBean>>();
-		var classes = ReflectionUtils.getClasses(packageNames);
+		HashMap<String, Map<String, ValidationBean>> result = new HashMap<String, Map<String, ValidationBean>>();
+		Set<Class<? extends Object>> classes = ReflectionUtils.getClasses(packageNames);
 		classes.forEach(clazz -> {
 			log.debug("Class is %s", clazz);
-			var constraints = getConstraints(clazz);
+			Map<String, ValidationBean> constraints = getConstraints(clazz);
 			if (!constraints.isEmpty()) {
 				result.put(clazz.getSimpleName(), constraints);
 			}

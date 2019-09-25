@@ -99,7 +99,7 @@ public class PersonRepositoryTest {
 		list = personRepository.findByDivisionId(division.getId());
 		assertEquals(1, list.size());
 		personRepository.save(anotherPerson.setDivision(anotherDivision));
-		var anotherList = personRepository.findByDivisionId(anotherDivision.getId());
+		List<Person> anotherList = personRepository.findByDivisionId(anotherDivision.getId());
 		assertEquals(1, anotherList.size());
 		assertNotEquals(list, anotherList);
 	}

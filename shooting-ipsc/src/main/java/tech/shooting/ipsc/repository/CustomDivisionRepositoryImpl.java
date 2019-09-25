@@ -40,7 +40,7 @@ class CustomDivisionRepositoryImpl implements CustomDivisionRepository {
 	}
 
 	public Division createIfNotExists(Division division) {
-		var value = mongoTemplate.findOne(Query.query(Criteria.where("name").is(division.getName()).andOperator(Criteria.where("parent").is(division.getParent()))), Division.class);
+		Division value = mongoTemplate.findOne(Query.query(Criteria.where("name").is(division.getName()).andOperator(Criteria.where("parent").is(division.getParent()))), Division.class);
 		if (value == null) {
 			return mongoTemplate.save(division);
 		}

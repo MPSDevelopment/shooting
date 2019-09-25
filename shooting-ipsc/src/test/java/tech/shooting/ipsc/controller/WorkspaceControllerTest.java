@@ -166,7 +166,7 @@ public class WorkspaceControllerTest {
 		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		List<Workspace> list = JacksonUtils.getListFromJson(Workspace[].class, content);
 
 		assertEquals(0, list.size());
 
@@ -198,11 +198,11 @@ public class WorkspaceControllerTest {
 		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		List<Workspace> list = JacksonUtils.getListFromJson(Workspace[].class, content);
 
 		assertEquals(0, list.size());
 
-		var workspace = workspaceService.createWorkspace("test", "127.0.0.1");
+		Workspace workspace = workspaceService.createWorkspace("test", "127.0.0.1");
 
 		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
@@ -232,11 +232,11 @@ public class WorkspaceControllerTest {
 		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-		var list = JacksonUtils.getListFromJson(Workspace[].class, content);
+		List<Workspace> list = JacksonUtils.getListFromJson(Workspace[].class, content);
 
 		assertEquals(0, list.size());
 
-		var workspace = workspaceService.createWorkspace("test", "127.0.0.1");
+		Workspace workspace = workspaceService.createWorkspace("test", "127.0.0.1");
 		workspace.setUseInTest(false);
 		workspace.setPersonId(testingPerson.getId());
 		workspace.setQuizId(testQuiz.getId());
@@ -271,10 +271,10 @@ public class WorkspaceControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.8")))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 
-		var content = mockMvc
+		String content = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.10")))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var workspace = JacksonUtils.fromJson(Workspace.class, content);
+		Workspace workspace = JacksonUtils.fromJson(Workspace.class, content);
 		assertNotNull(workspace);
 	}
 

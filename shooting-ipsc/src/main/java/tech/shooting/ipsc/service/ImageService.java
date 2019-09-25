@@ -41,7 +41,7 @@ public class ImageService {
 
 	public int getCount() {
 		int count = 0;
-		for (var item : gridFsTemplate.find(new Query())) {
+		for (GridFSFile item : gridFsTemplate.find(new Query())) {
 			count++;
 		}
 		return count;

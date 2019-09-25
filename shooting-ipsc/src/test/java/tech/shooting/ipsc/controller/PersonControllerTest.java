@@ -391,7 +391,7 @@ public class PersonControllerTest {
 
 	private void createUsers(int count) {
 		for (int i = 0; i < count; i++) {
-			var user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			if (i % 2 == 0) {
 				user.setDivision(root);
 			}

@@ -44,16 +44,16 @@ public class PersonService {
 	}
 
 	public List<Person> getAllPersonsByDivision(Long divisionId) {
-		var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
-		var divisions = division.getAllChildren();
+		Division division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+		List<Division> divisions = division.getAllChildren();
 		return personRepository.findByDivisionIn(divisions);
 	}
 
 	public Page<Person> getAllPersonsByDivisionPaging(Long divisionId, Integer page, Integer size) {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (divisionId != null) {
-			var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
-			var divisions = division.getAllChildren();
+			Division division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+			List<Division> divisions = division.getAllChildren();
 			return personRepository.findByDivisionIn(divisions, pageable);
 		}
 		return personRepository.findAll(pageable);
@@ -123,7 +123,7 @@ public class PersonService {
 		page = Math.max(1, page);
 		page--;
 		size = Math.min(Math.max(10, size), 20);
-		var pageOfUsers = getAllPersonsByDivisionPaging(rootId, page, size);
+		Page<Person> pageOfUsers = getAllPersonsByDivisionPaging(rootId, page, size);
 		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 

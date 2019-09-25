@@ -81,7 +81,7 @@ public class CompetitionServiceTest {
 	}
 
 	private void addPerson(Competition competition, Long id) {
-		var person = new Person();
+		Person person = new Person();
 		person.setId(id);
 		competition.getCompetitors().add(new Competitor().setPerson(person));
 	}

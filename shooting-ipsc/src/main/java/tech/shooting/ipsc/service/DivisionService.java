@@ -73,7 +73,7 @@ public class DivisionService {
 	}
 
 	public Division removeDivision(Long id) throws BadRequestException {
-		var division = checkDivision(id);
+		Division division = checkDivision(id);
 		Division parent = division.getParent();
 		if (parent != null) {
 			parent.getChildren().remove(division);

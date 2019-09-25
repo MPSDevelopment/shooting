@@ -138,7 +138,7 @@ public class MqttService {
 		connOpts.setUserName(userName);
 		connOpts.setPassword(password.toCharArray());
 
-		var publisher = new MqttClient(url, MqttClient.generateClientId());
+		MqttClient publisher = new MqttClient(url, MqttClient.generateClientId());
 		publisher.connect(connOpts);
 		return publisher;
 	}
@@ -154,7 +154,7 @@ public class MqttService {
 		connOpts.setUserName(userName);
 		connOpts.setPassword(password.toCharArray());
 
-		var subscriber = new MqttClient(url, MqttClient.generateClientId());
+		MqttClient subscriber = new MqttClient(url, MqttClient.generateClientId());
 		subscriber.setCallback(callback);
 		subscriber.connect(connOpts);
 		Arrays.asList(topicNames).forEach(topicName -> {
@@ -173,7 +173,7 @@ public class MqttService {
 	}
 
 	public ClientDescriptor getSubscriberByClientId(String clientId) {
-		for (var subscriber : getSubscribers()) {
+		for (ClientDescriptor subscriber : getSubscribers()) {
 			if (subscriber.getClientID().equals(clientId)) {
 				return subscriber;
 			}
@@ -188,7 +188,7 @@ public class MqttService {
 
 		ClientDescriptor subscriber = getSubscriberByClientId(event.getClientId());
 
-		var workSpace = workspaceService.createWorkspace(event.getClientId(), subscriber == null ? null : subscriber.getAddress());
+		Workspace workSpace = workspaceService.createWorkspace(event.getClientId(), subscriber == null ? null : subscriber.getAddress());
 
 		MqttMessage message = createJsonMessage(workSpace);
 		try {
@@ -203,7 +203,7 @@ public class MqttService {
 		log.info("Connection lost detected. List of clients:", event);
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 
-		var workSpace = workspaceService.removeWorkspace(event.getClientId());
+		Workspace workSpace = workspaceService.removeWorkspace(event.getClientId());
 
 		MqttMessage message = createJsonMessage(workSpace);
 		try {
@@ -219,7 +219,7 @@ public class MqttService {
 		log.info("Disonnect detected. List of clients:");
 		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
 
-		var workSpace = workspaceService.removeWorkspace(event.getClientId());
+		Workspace workSpace = workspaceService.removeWorkspace(event.getClientId());
 
 		MqttMessage message = createJsonMessage(workSpace);
 		try {

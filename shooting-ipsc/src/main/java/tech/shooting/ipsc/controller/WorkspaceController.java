@@ -48,14 +48,14 @@ public class WorkspaceController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_CHECK)
 	@ApiOperation(value = "Check workspaces")
 	public ResponseEntity<List<Workspace>> checkWorkspace(@RequestBody @Valid List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
-		var result = workSpaceService.checkWorkspaces(list);
+		List<Workspace> result = workSpaceService.checkWorkspaces(list);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START)
 	@ApiOperation(value = "Start workspace tests")
 	public ResponseEntity<List<Workspace>> startWorkspace(@RequestBody @Valid List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
-		var result = workSpaceService.startWorkspaces(list);
+		List<Workspace> result = workSpaceService.startWorkspaces(list);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

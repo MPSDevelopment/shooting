@@ -1,6 +1,7 @@
 package tech.shooting.ipsc.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +26,15 @@ public class ValidationUtils {
 	public static Map<String, ValidationBean> getConstraints(Class clazz) {
 		BeanDescriptor descriptor = validator.getConstraintsForClass(clazz);
 		log.debug("Descriptor is %s", descriptor);
-		var validationBeans = new HashMap<String, ValidationBean>();
+		HashMap<String, ValidationBean> validationBeans = new HashMap<String, ValidationBean>();
 		descriptor.getConstrainedProperties().forEach(property -> {
 			String propertyName = property.getPropertyName();
 			String propertyJsonName = property.getPropertyName();
 			String propertyType = property.getElementClass().getSimpleName();
 
 			try {
-				var field = clazz.getDeclaredField(propertyName);
-				var annotation = field.getAnnotation(JsonProperty.class);
+				Field field = clazz.getDeclaredField(propertyName);
+				JsonProperty annotation = field.getAnnotation(JsonProperty.class);
 				if (annotation == null) {
 					log.warn("Field '%s' of %s without annotation JsonProperty", propertyName, clazz.getCanonicalName());
 				} else if (StringUtils.isNotBlank(annotation.value())) {
@@ -46,7 +47,7 @@ public class ValidationUtils {
 				e.printStackTrace();
 			}
 
-			var validationBean = new ValidationBean();
+			ValidationBean validationBean = new ValidationBean();
 
 			PropertyDescriptor constraints = descriptor.getConstraintsForProperty(propertyName);
 			constraints.getConstraintDescriptors().forEach(constraint -> {

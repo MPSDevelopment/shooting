@@ -20,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class JacksonUtilsTest {
 	@BeforeAll
-	public static void before () {
+	public static void before() {
 		new File("data").mkdirs();
 	}
 
 	@Test
-	public void checkGetJson () throws IOException {
+	public void checkGetJson() throws IOException {
 		User user = new User().setName("Thor").setSurname("Viking").setCount(5000).setSalary(2000L);
 		String userJson = JacksonUtils.getJson(user);
 		String prettyUserJson = JacksonUtils.getPrettyJson(user);
@@ -65,7 +65,7 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
-	public void checkFile () throws IOException {
+	public void checkFile() throws IOException {
 		User user = new User().setName("Thor").setSurname("Viking").setCount(5000).setSalary(2000L);
 		JacksonUtils.getJson(user, new File("data/user.json"));
 		User userfromFile = JacksonUtils.fromJson(User.class, new File("data/user.json"));
@@ -73,7 +73,7 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
-	public void checkLong () throws IOException {
+	public void checkLong() throws IOException {
 		User user = new User().setName("Thor").setSurname("Viking").setCount(5000).setSalary(Long.MAX_VALUE);
 		String json = JacksonUtils.getJson(user);
 		log.info("Json is %s", json);
@@ -81,7 +81,7 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
-	public void checkDate () throws IOException {
+	public void checkDate() throws IOException {
 		User user = new User().setName("Thor").setSurname("Viking").setCount(5000).setDate(DateUtils.createDate(2018, 0, 01));
 		String json = JacksonUtils.getJson(user);
 		log.info("Json date is %s", json);
@@ -89,7 +89,7 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
-	public void checkList () throws IOException {
+	public void checkList() throws IOException {
 		List<User> list = new ArrayList<>();
 		list.add(new User().setName("Thor").setSurname("Viking").setCount(5000).setSalary(Long.MAX_VALUE));
 		list.add(new User().setName("Frey").setSurname("Viking").setCount(5000).setSalary(Long.MAX_VALUE));
@@ -102,29 +102,28 @@ public class JacksonUtilsTest {
 	}
 
 	@Test
-	public void checkMap () throws IOException {
+	public void checkMap() throws IOException {
 		String json = "{\"1\":{\"name\" : \"Thor\"}}";
 		Map<String, User> map = JacksonUtils.getMapFromJson(User.class, json);
 		log.info("Map is %s", map);
 	}
 
 	@Test
-	public void checkComplexList () {
-		List<List<List<Double>>> list =
-			Collections.singletonList(Arrays.asList(Arrays.asList(-103.0, 47.5), Arrays.asList(-103.0, 48.0), Arrays.asList(-102.5, 48.0), Arrays.asList(-102.5, 47.5), Arrays.asList(-103.0, 47.5)));
+	public void checkComplexList() {
+		List<List<List<Double>>> list = Collections.singletonList(Arrays.asList(Arrays.asList(-103.0, 47.5), Arrays.asList(-103.0, 48.0), Arrays.asList(-102.5, 48.0), Arrays.asList(-102.5, 47.5), Arrays.asList(-103.0, 47.5)));
 		log.info("Json list is %s", JacksonUtils.getJson(list));
 	}
-	
+
 	@Test
 	public void checkErrorMessage() {
-		var json = JacksonUtils.getJson(new ErrorMessage("Some issue %s", "Here"));
+		String json = JacksonUtils.getJson(new ErrorMessage("Some issue %s", "Here"));
 		log.info("Map is %s", json);
 		assertEquals("{\"error\":{\"message\":\"Some issue Here\"}}", json);
 	}
-	
+
 	@Test
 	public void checkSuccessMessage() {
-		var json = JacksonUtils.getJson(new SuccessfulMessage("Some success %s", "Here"));
+		String json = JacksonUtils.getJson(new SuccessfulMessage("Some success %s", "Here"));
 		log.info("Map is %s", json);
 		assertEquals("{\"success\":{\"message\":\"Some success Here\"}}", json);
 	}

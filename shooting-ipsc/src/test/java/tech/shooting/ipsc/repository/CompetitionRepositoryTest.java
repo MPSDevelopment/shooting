@@ -63,7 +63,7 @@ public class CompetitionRepositoryTest {
 
 	@Test
 	public void checkGetByStageId () {
-		var dbCompetition = competitionRepository.getByStageId(stage.getId());
+		Competition dbCompetition = competitionRepository.getByStageId(stage.getId());
 		assertNotNull(dbCompetition);
 		assertEquals(competition, dbCompetition);
 		dbCompetition = competitionRepository.getByStageId(1L);
@@ -73,7 +73,7 @@ public class CompetitionRepositoryTest {
 	@Test
 	public void checkGetStageById () {
 		// var dbStage = competitionRepository.findByStageId(stage.getId());
-		var dbStage = competitionRepository.getStageById(stage.getId());
+		Stage dbStage = competitionRepository.getStageById(stage.getId());
 		assertNotNull(dbStage);
 		log.info("Got a stage %s", dbStage);
 		assertEquals(stage.getId(), dbStage.getId());

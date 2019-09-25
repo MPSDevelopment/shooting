@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.util.Arrays;
 
@@ -92,7 +93,7 @@ class ScoreRepositoryTest {
 		save = scoreRepository.save(score);
 		assertEquals(2, scoreRepository.count());
 
-		var stages = new ArrayList<Long>();
+		List<Long> stages = new ArrayList<Long>();
 		stages.add(FIRST_STAGE_ID);
 		assertEquals(1, scoreRepository.findByStageIdIn(stages).size());
 		stages.add(SECOND_STAGE_ID);

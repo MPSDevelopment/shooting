@@ -373,12 +373,12 @@ class StandardControllerTest {
 		standardScoreRepository.save(score);
 
 		// try access with user role
-		var content = mockMvc.perform(MockMvcRequestBuilders
+		String content = mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.STANDARD_CONTROLLER_GET_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_ID, testingPerson.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
-		var gotScore = JacksonUtils.fromJson(StandardScore.class, content);
+		StandardScore gotScore = JacksonUtils.fromJson(StandardScore.class, content);
 
 		assertEquals(4, gotScore.getScore());
 	}

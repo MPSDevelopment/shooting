@@ -34,7 +34,7 @@ public class Pageable {
 		}
 
 		long t1 = System.currentTimeMillis();
-		var list = personRepository.findAll(pageable);
+		Page<? extends BaseDocument> list = personRepository.findAll(pageable);
 		long t2 = System.currentTimeMillis();
 
 		log.info("Page list took %d ms", t2 - t1);

@@ -108,7 +108,7 @@ public class CompetitionService {
 
 	public Competition createCompetition(CompetitionBean competitionBean) throws BadRequestException {
 		Competition competition = useBeanUtilsWithOutJudges(competitionBean, new Competition());
-		var competiton = createCompetition(competition);
+		Competition competiton = createCompetition(competition);
 		EventBus.publishEvent(new CompetitionUpdatedEvent(competiton.getId(), "Competition %s created", competiton.getName()));
 		log.info("Competition %s created", competiton.getName());
 		return competition;
@@ -178,13 +178,13 @@ public class CompetitionService {
 	}
 
 	public Stage getStage(Long competitionId, Long stageId) throws BadRequestException {
-		var stage = checkStage(checkCompetition(competitionId), stageId);
+		Stage stage = checkStage(checkCompetition(competitionId), stageId);
 		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
 		return stage;
 	}
 
 	private Stage checkStage(Competition competition, Long stageId) throws BadRequestException {
-		var stage = competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
+		Stage stage = competition.getStages().stream().filter((i) -> i.getId().equals(stageId)).findFirst().orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect stageId %s", stageId)));
 		stage.setAllTargets(stage.getTargets() + stage.getPopper() + stage.getNoShoots());
 		return stage;
 	}
@@ -230,7 +230,7 @@ public class CompetitionService {
 	}
 
 	public void deleteCompetitor(Long id, Long competitorId) throws BadRequestException {
-		var competition = checkCompetition(id);
+		Competition competition = checkCompetition(id);
 		competitionRepository.pullCompetitorFromCompetition(id, competitorId);
 
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s competitor deleted", competition.getId()));
@@ -337,7 +337,7 @@ public class CompetitionService {
 	}
 
 	private void checkIfMarkOccupied(Competition competition, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
-		for (var competitor : competition.getCompetitors()) {
+		for (Competitor competitor : competition.getCompetitors()) {
 			if (!competitor.getId().equals(competitorId)) {
 				if (competitorMark.getType().equals(TypeMarkEnum.RFID)) {
 					if (competitor.getRfidCode() != null && competitor.getRfidCode().equalsIgnoreCase(competitorMark.getMark())) {
@@ -477,23 +477,23 @@ public class CompetitionService {
 	}
 
 	public List<Score> getScoreList(Long competitionId) throws BadRequestException {
-		var competition = checkCompetition(competitionId);
+		Competition competition = checkCompetition(competitionId);
 		// my fault score save stageId not DBref, because don't save to DB
 		return scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 	}
 
 	public List<RatingBean> getRating(Long competitionId) throws BadRequestException {
-		var competition = checkCompetition(competitionId);
+		Competition competition = checkCompetition(competitionId);
 		// my fault score save stageId not DBref, because don't save to DB
-		var scores = scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
+		List<Score> scores = scoreRepository.findByStageIdIn(competition.getStages().stream().map(item -> item.getId()).collect(Collectors.toList()));
 
 		return convertScoresToRating(competition, filterScores(scores));
 	}
 
 	public List<Score> filterScores(List<Score> scores) {
 		// need to replace this code
-		var result = new ArrayList<Score>();
-		for (var score : scores) {
+		ArrayList<Score> result = new ArrayList<Score>();
+		for (Score score : scores) {
 			if (!result.contains(score)) {
 				result.add(score);
 			}
@@ -502,15 +502,15 @@ public class CompetitionService {
 	}
 
 	public List<RatingBean> convertScoresToRating(Competition competition, List<Score> scores) {
-		var result = new ArrayList<RatingBean>();
+		List<RatingBean> result = new ArrayList<RatingBean>();
 
 		Map<Long, List<Score>> map = scores.stream().collect(Collectors.groupingBy(Score::getPersonId, Collectors.toList()));
 
 		double maxRating = 0;
 
-		for (var personId : map.keySet()) {
+		for (Long personId : map.keySet()) {
 			
-			var personScores = map.get(personId);
+			List<Score> personScores = map.get(personId);
 			
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
@@ -530,7 +530,7 @@ public class CompetitionService {
 
 			personScores.removeIf(item -> StringUtils.isBlank(item.getDisqualificationReason()));
 
-			var disqualifications = personScores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
+			List<String> disqualifications = personScores.stream().map(item -> item.getDisqualificationReason()).collect(Collectors.toList());
 
 			if (CollectionUtils.isNotEmpty(disqualifications)) {
 				personalRating.setDisqualification(String.valueOf(disqualifications.size()) + " " + StringUtils.join(disqualifications, ",") + "");
@@ -541,7 +541,7 @@ public class CompetitionService {
 
 		// add empty scores for rating
 
-		for (var competitor : competition.getCompetitors()) {
+		for (Competitor competitor : competition.getCompetitors()) {
 			if (!map.keySet().contains(competitor.getPerson().getId())) {
 				RatingBean personalRating = new RatingBean();
 				personalRating.setPersonId(competitor.getPerson().getId());
@@ -552,7 +552,7 @@ public class CompetitionService {
 			}
 		}
 
-		for (var item : result) {
+		for (RatingBean item : result) {
 			item.setPercentage(maxRating == 0 ? 0 : 100 * item.getHitFactor() / maxRating);
 		}
 
@@ -566,7 +566,7 @@ public class CompetitionService {
 	}
 
 	public Competition startCompetition(Long id) throws BadRequestException {
-		var competiton = checkCompetition(id);
+		Competition competiton = checkCompetition(id);
 		competiton.setStarted(true);
 		competitionRepository.save(competiton);
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s started", competiton.getName()));
@@ -575,7 +575,7 @@ public class CompetitionService {
 	}
 
 	public Competition stopCompetition(Long id) throws BadRequestException {
-		var competiton = checkCompetition(id);
+		Competition competiton = checkCompetition(id);
 		competiton.setStarted(false).setActive(false);
 		competitionRepository.save(competiton);
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stopped", competiton.getName()));

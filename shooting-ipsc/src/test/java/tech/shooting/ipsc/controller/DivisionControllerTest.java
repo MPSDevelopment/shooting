@@ -278,7 +278,7 @@ class DivisionControllerTest {
 
 	private void createDivisions(int count) {
 		for (int i = 0; i < count; i++) {
-			var division = new DivisionBean().setActive(true).setName("test + " + i).setParent(getRootDivision());
+			DivisionBean division = new DivisionBean().setActive(true).setName("test + " + i).setParent(getRootDivision());
 			divisionService.createDivision(division, division.getParent());
 			log.info("Division %s has been created", division.getName());
 		}

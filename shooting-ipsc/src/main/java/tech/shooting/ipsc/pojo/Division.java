@@ -65,9 +65,9 @@ public class Division extends BaseDocument {
 
 	@JsonIgnore
 	public List<Division> getAllChildren() {
-		var list = new ArrayList<Division>();
+		List<Division> list = new ArrayList<Division>();
 		list.add(this);
-		for (var child : children) {
+		for (Division child : children) {
 			list.add(child);
 			list.addAll(child.getAllChildren());
 		}

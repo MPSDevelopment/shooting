@@ -92,7 +92,7 @@ class CheckinRepositoryTest {
 	void checkAggregation() {
 		// prepare
 		for (int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
 			personRepository.save(person);
 		}
@@ -123,7 +123,7 @@ class CheckinRepositoryTest {
 	private void addDataToDB() {
 		// prepare
 		for (int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
 			personRepository.save(person);
 		}
@@ -152,7 +152,7 @@ class CheckinRepositoryTest {
 	private void addDataToDBSingl() {
 		// prepare
 		for (int i = 0; i < 10; i++) {
-			var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			person.setDivision(root);
 			personRepository.save(person);
 		}
@@ -186,7 +186,7 @@ class CheckinRepositoryTest {
 	@Test
 	void checkFindAllByCreatedDateAndOfficer() {
 		// prepare
-		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 		person.setDivision(root);
 		Person save = personRepository.save(person);
 		CheckIn saveCheckIn = checkinRepository.save(new CheckIn().setDivisionId(root.getId()).setStatus(TypeOfPresence.PRESENT).setPerson(save).setOfficer(officer));
@@ -236,7 +236,7 @@ class CheckinRepositoryTest {
 		// added subDivision to root list children
 		divisionRepository.save(root);
 		// create person in subdivision
-		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 		person.setDivision(subroot);
 		Person save = personRepository.save(person);
 		// save checkin for subdivision
@@ -262,7 +262,7 @@ class CheckinRepositoryTest {
 		// added subDivision to root list children
 		divisionRepository.save(root);
 		// create person in subdivision
-		var person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+		Person person = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 		person.setDivision(subroot);
 		Person save = personRepository.save(person);
 		// save checkin for subdivision

@@ -259,7 +259,7 @@ private static final String IP_ADRESS = "127.0.0.9";
 		subscriber = createSubscriber(MqttConstants.TEST_TOPIC + "/" + IP_ADRESS);
 		json = JacksonUtils.getJson(bean.setClientId(subscriber.getClientId()).setUseInTest(true));
 		
-		var workspace = new Workspace();
+		Workspace workspace = new Workspace();
 		BeanUtils.copyProperties(bean, workspace);
 		workspace.setIp(IP_ADRESS);
 		

@@ -86,7 +86,7 @@ public class WorkspaceService {
 	}
 
 	public Workspace getWorkspaceByIp(String ip) throws NotFoundException {
-		for (var workspace : map.values()) {
+		for (Workspace workspace : map.values()) {
 			if (workspace.getIp().equals(ip)) {
 				return workspace;
 			}
@@ -108,8 +108,8 @@ public class WorkspaceService {
 	public List<Workspace> checkWorkspaces(List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
 
-		var result = new ArrayList<Workspace>();
-		for (var bean : list) {
+		List<Workspace> result = new ArrayList<Workspace>();
+		for (WorkspaceBean bean : list) {
 			result.add(startWorkspace(bean.setCheck(true)));
 		}
 		return result;
@@ -118,15 +118,15 @@ public class WorkspaceService {
 	public List<Workspace> startWorkspaces(List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
 		// return list.stream().map(item -> startWorkspace(item)).collect(Collectors.toList());
 
-		var result = new ArrayList<Workspace>();
-		for (var bean : list) {
+		List<Workspace> result = new ArrayList<Workspace>();
+		for (WorkspaceBean bean : list) {
 			result.add(startWorkspace(bean.setCheck(false)));
 		}
 		return result;
 	}
 
 	public Workspace startWorkspace(WorkspaceBean bean) throws BadRequestException, MqttPersistenceException, MqttException {
-		var workspace = updateWorkspace(bean);
+		Workspace workspace = updateWorkspace(bean);
 
 		if (workspace == null) {
 			log.error("Cannot start workspace unknown workspace %s, existing list:", bean);
@@ -199,7 +199,7 @@ public class WorkspaceService {
 	}
 
 	public void putWorkspace(WorkspaceBean bean) {
-		var workspace = new Workspace();
+		Workspace workspace = new Workspace();
 		BeanUtils.copyProperties(bean, workspace);
 		map.put(workspace.getClientId(), workspace);
 	}

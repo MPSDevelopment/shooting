@@ -28,7 +28,7 @@ public class CustomWeaponRepositoryImpl implements CustomWeaponRepository {
 		
 		Query personQuery = new Query();
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-		var persons = mongoTemplate.find(personQuery, Person.class);
+		List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
 		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, Weapon.class);

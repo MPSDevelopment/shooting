@@ -140,7 +140,7 @@ class VehicleControllerTest {
 		// try access with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
+		List<Vehicle> listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
 	}
 
@@ -149,7 +149,7 @@ class VehicleControllerTest {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 10;
 		createRows(count);
-		var vehicle = vehicleRepository.findAll().get(0);
+		Vehicle vehicle = vehicleRepository.findAll().get(0);
 		// try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_VEHICLE_ID, vehicle.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -163,7 +163,7 @@ class VehicleControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_VEHICLE_ID, vehicle.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var weaponFromDB = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		Vehicle weaponFromDB = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(vehicle, weaponFromDB);
 	}
 
@@ -192,7 +192,7 @@ class VehicleControllerTest {
 				MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()))
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
+		List<Vehicle> listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
 	}
 
@@ -221,7 +221,7 @@ class VehicleControllerTest {
 				.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.VEHICLE_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
+		List<Vehicle> listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
 	}
 
@@ -251,7 +251,7 @@ class VehicleControllerTest {
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
+		List<Vehicle> listFromJson = JacksonUtils.getListFromJson(Vehicle[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
 	}
 
@@ -284,7 +284,7 @@ class VehicleControllerTest {
 	void deleteWeapon() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 0;
-		var save = vehicleRepository.save(testVehicle);
+		Vehicle save = vehicleRepository.save(testVehicle);
 		assertEquals(count + 1, vehicleRepository.findAll().size());
 		// try access with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_VEHICLE_ID, save.getId().toString())))
@@ -306,7 +306,7 @@ class VehicleControllerTest {
 	void postWeaponAddOwner() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 
-		var save = vehicleRepository.save(testVehicle.setOwner(null));
+		Vehicle save = vehicleRepository.save(testVehicle.setOwner(null));
 
 		assertEquals(1, vehicleRepository.findAll().size());
 
@@ -329,7 +329,7 @@ class VehicleControllerTest {
 				.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.VEHICLE_CONTROLLER_POST_ADD_OWNER.replace(ControllerAPI.REQUEST_VEHICLE_ID, save.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		Vehicle weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(1, vehicleRepository.findAll().size());
 		assertEquals(testPerson.getId(), weapon.getOwner().getId());
 	}
@@ -338,7 +338,7 @@ class VehicleControllerTest {
 	void postWeaponRemoveOwner() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 
-		var save = vehicleRepository.save(testVehicle.setOwner(testPerson));
+		Vehicle save = vehicleRepository.save(testVehicle.setOwner(testPerson));
 
 		assertEquals(1, vehicleRepository.findAll().size());
 
@@ -356,7 +356,7 @@ class VehicleControllerTest {
 				.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_VEHICLE_ID, save.getId().toString()))
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		Vehicle weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(1, vehicleRepository.findAll().size());
 		assertEquals(null, weapon.getOwner());
 	}
@@ -365,7 +365,7 @@ class VehicleControllerTest {
 	void postWeaponAddShootings() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 
-		var save = vehicleRepository.save(testVehicle.setCount(0));
+		Vehicle save = vehicleRepository.save(testVehicle.setCount(0));
 		Integer fireCount = 50;
 
 		assertEquals(1, vehicleRepository.findAll().size());
@@ -389,14 +389,14 @@ class VehicleControllerTest {
 				.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.VEHICLE_CONTROLLER_POST_ADD_COUNT.replace(ControllerAPI.REQUEST_VEHICLE_ID, save.getId().toString()).replace(ControllerAPI.REQUEST_FIRED_COUNT, fireCount.toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		Vehicle weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(1, vehicleRepository.findAll().size());
 		assertEquals(fireCount, weapon.getCount());
 	}
 
 	@Test
 	void postWeaponAddShootingsIncorrectFireCount() throws Exception {
-		var save = vehicleRepository.save(testVehicle.setCount(100));
+		Vehicle save = vehicleRepository.save(testVehicle.setCount(100));
 		Integer fireCount = 50;
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0

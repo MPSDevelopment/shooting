@@ -1,14 +1,13 @@
 package tech.shooting.ipsc.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Set;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.constraints.IpscConstants;
-import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.utils.ReflectionUtils;
 
 @Slf4j
@@ -17,7 +16,7 @@ public class ReflectionUtilsTest {
 
 	@Test
 	public void checkReflections() {
-		var classes = ReflectionUtils.getClasses("tech.shooting.ipsc.pojo");
+		Set<Class<? extends Object>> classes = ReflectionUtils.getClasses("tech.shooting.ipsc.pojo");
 		log.info("There is %s classes", classes.size());
 		classes.forEach(clazz -> {
 			log.info("Class is %s", clazz);

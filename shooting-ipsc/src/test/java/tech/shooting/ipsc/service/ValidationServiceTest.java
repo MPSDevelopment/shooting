@@ -17,6 +17,8 @@ import tech.shooting.ipsc.config.CachingConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Map;
+
 @ExtendWith(SpringExtension.class)
 //@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class, WebMvcAutoConfiguration.class})
 //@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration")
@@ -44,7 +46,7 @@ public class ValidationServiceTest {
 
 	@Test
 	public void checkConstraintsForPackage() {
-		var result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean");
+		Map<String, Map<String, ValidationBean>> result = validationService.getConstraintsForPackage("tech.shooting.ipsc.bean");
 		log.info("Constraints size is %s", result.size(), JacksonUtils.getPrettyJson(result));
 		assertTrue(result.size() > 15);
 		

@@ -25,9 +25,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import io.moquette.broker.ClientDescriptor;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class })
@@ -98,19 +101,19 @@ class MqttServiceTest {
 
 		// subscriber
 
-		var subscriber1 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName1);
-		var subscriber2 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
-		var subscriber3 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
+		MqttClient subscriber1 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName1);
+		MqttClient subscriber2 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
+		MqttClient subscriber3 = mqttService.createSubscriber(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword(), topicName2);
 
 		assertThrows(MqttSecurityException.class, () -> {
 			mqttService.createSubscriber(mqttServerUrl, TEST_LOGIN, TEST_PASSWORD, topicName2);
 		});
 
-		var subscriberAll = mqttService.createSubscriber(mqttServerUrl, settings.getAdminLogin(), settings.getAdminPassword(), "command/#");
+		MqttClient subscriberAll = mqttService.createSubscriber(mqttServerUrl, settings.getAdminLogin(), settings.getAdminPassword(), "command/#");
 
 		// publisher
 
-		var publisher = mqttService.createPublisher(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword());
+		MqttClient publisher = mqttService.createPublisher(mqttServerUrl, settings.getGuestLogin(), settings.getGuestPassword());
 
 		assertThrows(MqttException.class, () -> {
 			mqttService.createPublisher(mqttServerUrl, TEST_LOGIN, TEST_PASSWORD);
@@ -123,7 +126,7 @@ class MqttServiceTest {
 		publisher.getTopic(topicName1).publish(message);
 		publisher.getTopic(topicName2).publish(message);
 
-		var subscribers = mqttService.getSubscribers();
+		Collection<ClientDescriptor> subscribers = mqttService.getSubscribers();
 		subscribers.forEach(item -> {
 			log.info("Item = %s", item);
 		});
@@ -147,7 +150,7 @@ class MqttServiceTest {
 //	@Test
 	public void checkRemoteConnection() throws MqttException, InterruptedException {
 
-		var subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
+		MqttClient subscriber = mqttService.createSubscriber(MQTT_REMOTE_URL, settings.getGuestLogin(), settings.getGuestPassword(), new MqttCallback() {
 
 			@Override
 			public void connectionLost(Throwable cause) {

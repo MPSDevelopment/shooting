@@ -79,7 +79,7 @@ public class CourseService {
 	}
 
 	public List<Course> getCourseByDivision(Long divisionId) throws BadRequestException {
-		var division = checkDivision(divisionId);
+		Division division = checkDivision(divisionId);
 		return courseRepository.findByPersonDivisionIn(division);
 	}
 
@@ -90,7 +90,7 @@ public class CourseService {
 	public Page<Course> getAllCoursesByPersonPaging(Long personId, Integer page, Integer size) {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (personId != null) {
-			var person = personRepository.findById(personId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Person with id %s does not exist", personId));
+			Person person = personRepository.findById(personId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Person with id %s does not exist", personId));
 			return courseRepository.findByPersonIn(Arrays.asList(person), pageable);
 		}
 		return courseRepository.findAll(pageable);
@@ -100,7 +100,7 @@ public class CourseService {
 		page = Math.max(1, page);
 		page--;
 		size = Math.min(Math.max(10, size), 20);
-		var pageOfUsers = getAllCoursesByPersonPaging(divisionId, page, size);
+		Page<Course> pageOfUsers = getAllCoursesByPersonPaging(divisionId, page, size);
 		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 
 	}
@@ -108,7 +108,7 @@ public class CourseService {
 	public Page<Course> getAllCoursesByDivisionPaging(Long divisionId, Integer page, Integer size) {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (divisionId != null) {
-			var division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+			Division division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
 			return courseRepository.findByPersonDivisionIn(division, pageable);
 		}
 		return courseRepository.findAll(pageable);
@@ -118,7 +118,7 @@ public class CourseService {
 		page = Math.max(1, page);
 		page--;
 		size = Math.min(Math.max(10, size), 20);
-		var pageOfUsers = getAllCoursesByDivisionPaging(divisionId, page, size);
+		Page<Course> pageOfUsers = getAllCoursesByDivisionPaging(divisionId, page, size);
 		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 
 	}

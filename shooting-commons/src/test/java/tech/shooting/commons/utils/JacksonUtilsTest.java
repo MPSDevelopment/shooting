@@ -133,7 +133,7 @@ public class JacksonUtilsTest {
 	
 	@Test
 	public void checkNulls() throws IOException {
-		var user = new User().setName("Thor");
+		User user = new User().setName("Thor");
 		String json = JacksonUtils.getJson(user);
 //		assertFalse(json.contains("drakkar"));
 //		user.setDrakkar("Epic");

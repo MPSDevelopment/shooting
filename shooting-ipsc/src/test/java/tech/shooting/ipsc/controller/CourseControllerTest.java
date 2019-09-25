@@ -268,7 +268,7 @@ class CourseControllerTest {
 								.replace(ControllerAPI.REQUEST_PAGE_SIZE, "10"))
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse();
-		var list = JacksonUtils.getListFromJson(Course[].class, response.getContentAsString());
+		List<Course> list = JacksonUtils.getListFromJson(Course[].class, response.getContentAsString());
 
 		assertEquals(3, list.size());
 
@@ -293,7 +293,7 @@ class CourseControllerTest {
 								.replace(ControllerAPI.REQUEST_PAGE_SIZE, "10"))
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var list = JacksonUtils.getListFromJson(Course[].class, contentAsString);
+		List<Course> list = JacksonUtils.getListFromJson(Course[].class, contentAsString);
 
 		assertEquals(1, list.size());
 	}

@@ -80,16 +80,16 @@ public class CompetitionController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_START, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Start a competition")
 	public ResponseEntity<IdBean> startCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
-		var competition = competitionService.startCompetition(id);
-		return new ResponseEntity<>(new IdBean(competition.getId()), HttpStatus.OK);
+		Competition competition = competitionService.startCompetition(id);
+		return new ResponseEntity<IdBean>(new IdBean(competition.getId()), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_COMPETITION_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Stop a competition")
 	public ResponseEntity<IdBean> stopCompetition (@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long id) throws BadRequestException {
-		var competition = competitionService.stopCompetition(id);
-		return new ResponseEntity<>(new IdBean(competition.getId()), HttpStatus.OK);
+		Competition competition = competitionService.stopCompetition(id);
+		return new ResponseEntity<IdBean>(new IdBean(competition.getId()), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")

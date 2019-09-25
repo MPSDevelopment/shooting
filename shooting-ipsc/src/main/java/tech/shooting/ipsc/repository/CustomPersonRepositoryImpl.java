@@ -57,7 +57,7 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 		
 		Aggregation aggregation = Aggregation.newAggregation(graphLookupOperation);
 
-		var results = mongoTemplate.aggregate(aggregation, "division", Division.class).getMappedResults();
+		List<Division> results = mongoTemplate.aggregate(aggregation, "division", Division.class).getMappedResults();
 
 		return results;
 	}

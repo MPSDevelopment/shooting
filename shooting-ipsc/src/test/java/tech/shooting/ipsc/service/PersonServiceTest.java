@@ -56,10 +56,10 @@ class PersonServiceTest {
 
 		
 		
-		var root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));		
-		var first = divisionService.createDivisionWithCheck(new DivisionBean().setName("first"), root.getId());
-		var second = divisionService.createDivisionWithCheck(new DivisionBean().setName("second"), root.getId());
-		var third = divisionService.createDivisionWithCheck(new DivisionBean().setName("third"), second.getId());
+		Division root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));		
+		Division first = divisionService.createDivisionWithCheck(new DivisionBean().setName("first"), root.getId());
+		Division second = divisionService.createDivisionWithCheck(new DivisionBean().setName("second"), root.getId());
+		Division third = divisionService.createDivisionWithCheck(new DivisionBean().setName("third"), second.getId());
 		
 		personRepository.save(new Person().setName("1").setDivision(root));
 		personRepository.save(new Person().setName("2").setDivision(first));

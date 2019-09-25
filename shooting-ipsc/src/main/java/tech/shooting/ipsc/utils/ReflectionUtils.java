@@ -13,7 +13,7 @@ public class ReflectionUtils {
 
 	public static Set<Class<? extends Object>> getClasses(String... packageNames) {
 		Reflections reflections = new Reflections(packageNames, new SubTypesScanner(false));
-		var classes = reflections.getSubTypesOf(Object.class);
+		Set<Class<? extends Object>> classes = reflections.getSubTypesOf(Object.class);
 		classes.addAll(new Reflections(packageNames).getSubTypesOf(BaseDocument.class));
 		log.info("There is %s classes", classes.size());
 		return classes;

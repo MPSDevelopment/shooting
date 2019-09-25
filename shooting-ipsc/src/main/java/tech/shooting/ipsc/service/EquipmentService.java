@@ -47,7 +47,7 @@ public class EquipmentService {
 	public Equipment post(EquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
 		Equipment bySerialNumber = repository.findBySerialNumber(bean.getSerialNumber());
-		var type = checkType(bean.getType());
+		EquipmentType type = checkType(bean.getType());
 		if (bySerialNumber == null) {
 			bySerialNumber = new Equipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 		} else {
@@ -73,7 +73,7 @@ public class EquipmentService {
 	}
 
 	public Equipment addOwner(Long weaponId, Long personId) throws BadRequestException {
-		var vehicle = checkVehicle(weaponId);
+		Equipment vehicle = checkVehicle(weaponId);
 		if (personId == null) {
 			vehicle.setOwner(null);
 		} else {

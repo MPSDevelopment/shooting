@@ -227,7 +227,7 @@ public class CompetitionControllerTest {
 				.delete(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_DELETE_COMPETITION.replace(ControllerAPI.REQUEST_COMPETITION_ID, testingCompetition.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 
-		var competition = competitionRepository.findById(testingCompetition.getId()).orElse(null);
+		Competition competition = competitionRepository.findById(testingCompetition.getId()).orElse(null);
 		assertTrue(competition.isActive());
 
 		// try access to deleteCompetitionById with authorized admin
@@ -419,7 +419,7 @@ public class CompetitionControllerTest {
 
 	private void createCompetition(int count) {
 		for (int i = 0; i < count; i++) {
-			var competition = new Competition().setName("Test firstname" + i);
+			Competition competition = new Competition().setName("Test firstname" + i);
 			competitionRepository.save(competition);
 			log.info("Competition %s has been created", competition.getName());
 		}
@@ -567,13 +567,13 @@ public class CompetitionControllerTest {
 						+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to putStage with admin role
-		var content = mockMvc
+		String content = mockMvc
 				.perform(MockMvcRequestBuilders
 						.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0
 								+ ControllerAPI.COMPETITION_CONTROLLER_PUT_STAGE.replace(ControllerAPI.REQUEST_STAGE_ID, saveStage.getId().toString()).replace(ControllerAPI.REQUEST_COMPETITION_ID, save.getId().toString()))
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(saveStage))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var stage = JacksonUtils.fromJson(Stage.class, content);
+		Stage stage = JacksonUtils.fromJson(Stage.class, content);
 		assertEquals("updated name", stage.getName());
 		assertEquals(42, stage.getAllTargets());
 
@@ -738,7 +738,7 @@ public class CompetitionControllerTest {
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		var listFromJson = JacksonUtils.getListFromJson(WeaponTypeEnum[].class, contentAsString);
+		List<WeaponTypeEnum> listFromJson = JacksonUtils.getListFromJson(WeaponTypeEnum[].class, contentAsString);
 		assertEquals(WeaponTypeEnum.values().length, listFromJson.size());
 	}
 
@@ -798,8 +798,8 @@ public class CompetitionControllerTest {
 		assertTrue(response.contains(competitorMark.getMark()));
 
 		// save the same mark with different competitor
-		var anotherPerson = personRepository.save(new Person().setName("Another person"));
-		var anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
+		Person anotherPerson = personRepository.save(new Person().setName("Another person"));
+		Competitor anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
 		competitorMark = new CompetitorMark().setName("beta").setActive(true).setType(TypeMarkEnum.RFID).setMark(testingCompetitor.getRfidCode());
 		competition.getCompetitors().add(anotherCompetitor);
 		competition = competitionRepository.save(competition);
@@ -854,8 +854,8 @@ public class CompetitionControllerTest {
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		// save the same mark with different competitor
-		var anotherPerson = personRepository.save(new Person().setName("Another person"));
-		var anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
+		Person anotherPerson = personRepository.save(new Person().setName("Another person"));
+		Competitor anotherCompetitor = new Competitor().setName("Another competitor").setRfidCode("1234567890").setPerson(anotherPerson);
 		competitorMark = new CompetitorMark().setName("beta").setActive(true).setType(TypeMarkEnum.RFID).setMark(testingCompetitor.getRfidCode());
 		competition.getCompetitors().add(anotherCompetitor);
 		competition = competitionRepository.save(competition);
@@ -944,7 +944,7 @@ public class CompetitionControllerTest {
 	private List<Long> createPersons(int count) {
 		List<Long> result = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
-			var user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
+			Person user = new Person().setName(RandomStringUtils.randomAlphanumeric(10));
 			Person save = personRepository.save(user);
 			result.add(save.getId());
 			log.info("Person %s has been created", user.getName());
