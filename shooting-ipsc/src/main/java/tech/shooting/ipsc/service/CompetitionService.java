@@ -387,7 +387,7 @@ public class CompetitionService {
 
 	private void checkCompetitionActive(Competition competition) throws BadRequestException {
 		if (!competition.isActive()) {
-			throw new BadRequestException(new ErrorMessage("Cannot modify an archived competition, active = %s", competition.isActive()));
+			throw new BadRequestException(new ErrorMessage("Cannot modify an archived competition %s, active = %s", competition.getName(), competition.isActive()));
 		}
 	}
 
