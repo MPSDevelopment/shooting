@@ -23,19 +23,25 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>shooting-commons</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>${spring.boot.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>io.micrometer</groupId>
-					<artifactId>micrometer-core</artifactId>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-actuator</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-starter-actuator</artifactId> -->
+		<!-- <version>${spring.boot.version}</version> -->
+		<!-- <exclusions> -->
+		<!-- <exclusion> -->
+		<!-- <groupId>io.micrometer</groupId> -->
+		<!-- <artifactId>micrometer-core</artifactId> -->
+		<!-- </exclusion> -->
+		<!-- </exclusions> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -67,11 +73,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 			<version>${spring.boot.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-starter-thymeleaf</artifactId> -->
+		<!-- <version>${spring.boot.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -115,11 +121,11 @@
 		<!-- <version>${octane.version}</version> -->
 		<!-- </dependency> -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>OctaneSDKJava</groupId> -->
-<!-- 			<artifactId>OctaneSDKJava</artifactId> -->
-<!-- 			<version>${octane.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>OctaneSDKJava</groupId> -->
+		<!-- <artifactId>OctaneSDKJava</artifactId> -->
+		<!-- <version>${octane.version}</version> -->
+		<!-- </dependency> -->
 
 		<!-- <dependency> -->
 		<!-- <groupId>org.llrp</groupId> -->
@@ -252,6 +258,27 @@
 							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>copy</id> -->
+<!-- 						<phase>prepare-package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>unpack</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<artifactItems> -->
+<!-- 								<artifactItem> -->
+<!-- 									<groupId>oracle</groupId> -->
+<!-- 									<artifactId>jre-win32</artifactId> -->
+<!-- 									<version>${jre.version}</version> -->
+<!-- 									<type>zip</type> -->
+<!-- 									<overWrite>false</overWrite> -->
+<!-- 									<outputDirectory>${project.build.directory}/jre</outputDirectory> -->
+<!-- 								</artifactItem> -->
+<!-- 							</artifactItems> -->
+<!-- 							<overWriteReleases>false</overWriteReleases> -->
+<!-- 							<overWriteSnapshots>true</overWriteSnapshots> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 				</executions>
 			</plugin>
 			<plugin>
@@ -316,6 +343,107 @@
 			</build>
 		</profile>
 		<profile>
+			<id>jar2exe</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${maven.antrun.plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<configuration>
+									<target>
+										<copy file="build/app.j2e" tofile="${project.build.directory}/app.bat" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>${exec.maven.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>app</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<workingDirectory>${project.build.directory}</workingDirectory>
+									<executable>${project.build.directory}/app.bat</executable>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>excelsior</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.excelsiorjet</groupId>
+						<artifactId>excelsior-jet-maven-plugin</artifactId>
+						<version>${excelsiorjet.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>tech.shooting.ipsc.IpscApplication</mainClass>
+							<jetOutputDir>${jet.output.directory}</jetOutputDir>
+							<!-- <packaging>excelsior-installer</packaging> -->
+							<icon>${project.basedir}/ipsc.ico</icon>
+							<!-- <installerSplash>${project.basedir}/build/splash.bmp</installerSplash> -->
+							<hideConsole>true</hideConsole>
+							<!-- <globalOptimizer>true</globalOptimizer> -->
+
+							<!-- <packageFilesDir>${jet.output.directory}/temp</packageFilesDir> -->
+
+							<jvmArgs>
+								<jvmArg>-Djava.net.preferIPv4Stack=true</jvmArg>
+								<jvmArg>-Dspring.profiles.active=excelsior</jvmArg>
+								<jvmArg>-Xmx2g</jvmArg>
+							</jvmArgs>
+
+							<jetHome>${jet32.home}</jetHome>
+
+							<inlineExpansion>low</inlineExpansion>
+							<protectData>true</protectData>
+
+							<outputName>IpscApplication</outputName>
+							<product></product>
+							<vendor>${jet.vendor}</vendor>
+							<version>${jet.version}</version>
+
+							<dependencies>
+								<dependency>
+									<groupId>io.netty</groupId>
+									<protect>all</protect>
+									<optimize>all</optimize>
+									<pack>all</pack>
+								</dependency>
+							</dependencies>
+
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>docker</id>
 			<build>
 				<plugins>
@@ -353,42 +481,6 @@
 							</dependency>
 						</dependencies>
 					</plugin>
-					<!-- <plugin> -->
-					<!-- <groupId>org.apache.maven.plugins</groupId> -->
-					<!-- <artifactId>maven-antrun-plugin</artifactId> -->
-					<!-- <version>${maven.antrun.plugin.version}</version> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <phase>package</phase> -->
-					<!-- <configuration> -->
-					<!-- <target> -->
-					<!-- <copy file="build/app.j2e" tofile="${project.build.directory}/app.bat" /> -->
-					<!-- </target> -->
-					<!-- </configuration> -->
-					<!-- <goals> -->
-					<!-- <goal>run</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- </plugin> -->
-					<!-- <plugin> -->
-					<!-- <groupId>org.codehaus.mojo</groupId> -->
-					<!-- <artifactId>exec-maven-plugin</artifactId> -->
-					<!-- <version>${exec.maven.plugin.version}</version> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <id>app</id> -->
-					<!-- <phase>package</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>exec</goal> -->
-					<!-- </goals> -->
-					<!-- <configuration> -->
-					<!-- <workingDirectory>${project.build.directory}</workingDirectory> -->
-					<!-- <executable>${project.build.directory}/app.bat</executable> -->
-					<!-- </configuration> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- </plugin> -->
 				</plugins>
 			</build>
 		</profile>

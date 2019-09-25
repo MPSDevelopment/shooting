@@ -46,10 +46,20 @@
 		<docker.image.name>ipsc</docker.image.name>
 		<docker.image.version>0.2</docker.image.version>
 		<jdk.version>1.8</jdk.version>
+		<jre.version>1.8.0.74</jre.version>
 
 		<lib.property>lib</lib.property>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<jet.output.directory>target/jet</jet.output.directory>
+		<jet.version>0.2</jet.version>
+		<jet.vendor>Development</jet.vendor>
+		<jet32.home>c:\Program Files (x86)\ExcelsiorJet</jet32.home>
+		<jet64.home>c:\Program Files\ExcelsiorJet</jet64.home>
+		<jet.expire.message>Program has stopped working. Contact an administrator</jet.expire.message>
+		<excelsiorjet.plugin.version>1.3.3</excelsiorjet.plugin.version>
+		<excelsiorjet.winserviceapi.version>1.0.0</excelsiorjet.winserviceapi.version>
 
 		<resources.plugin.version>3.1.0</resources.plugin.version>
 		<compiler.plugin.version>3.8.0</compiler.plugin.version>
