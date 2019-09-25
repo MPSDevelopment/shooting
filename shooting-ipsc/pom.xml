@@ -115,30 +115,30 @@
 		<!-- <version>${octane.version}</version> -->
 		<!-- </dependency> -->
 
-		<dependency>
-			<groupId>OctaneSDKJava</groupId>
-			<artifactId>OctaneSDKJava</artifactId>
-			<version>${octane.version}</version>
-		</dependency>
-
 <!-- 		<dependency> -->
-<!-- 			<groupId>org.llrp</groupId> -->
-<!-- 			<artifactId>ltkjava</artifactId> -->
-<!-- 			<version>1.0.0.7</version> -->
+<!-- 			<groupId>OctaneSDKJava</groupId> -->
+<!-- 			<artifactId>OctaneSDKJava</artifactId> -->
+<!-- 			<version>${octane.version}</version> -->
 <!-- 		</dependency> -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.mina</groupId> -->
-<!-- 			<artifactId>mina-core</artifactId> -->
-<!-- 			<version>2.0.9</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.llrp</groupId> -->
+		<!-- <artifactId>ltkjava</artifactId> -->
+		<!-- <version>1.0.0.7</version> -->
+		<!-- </dependency> -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.jcraft</groupId> -->
-<!-- 			<artifactId>jzlib</artifactId> -->
-<!-- 			<version>1.0.7</version> -->
-<!-- 			<optional>true</optional> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.mina</groupId> -->
+		<!-- <artifactId>mina-core</artifactId> -->
+		<!-- <version>2.0.9</version> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>com.jcraft</groupId> -->
+		<!-- <artifactId>jzlib</artifactId> -->
+		<!-- <version>1.0.7</version> -->
+		<!-- <optional>true</optional> -->
+		<!-- </dependency> -->
 
 
 
@@ -185,13 +185,6 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>config</directory>
-			</resource>
-			<resource>
-				<directory>keys</directory>
-				<targetPath>${project.build.directory}/keys</targetPath>
 			</resource>
 			<resource>
 				<directory></directory>
@@ -339,19 +332,6 @@
 								</goals>
 							</execution>
 						</executions>
-						<!-- <configuration> -->
-						<!-- <repository>shooting.azurecr.io</repository> -->
-						<!-- <contextDirectory>target</contextDirectory> -->
-						<!-- <tag>${docker.image.version}-latest</tag> -->
-						<!-- <dockerfile>target\DockerfileNginx</dockerfile> -->
-						<!-- <repository>shooting.azurecr.io/ipsc-nginx</repository> -->
-						<!-- <useMavenSettingsForAuth>true</useMavenSettingsForAuth> -->
-						<!-- <verbose>true</verbose> -->
-						<!-- <forceCreation>true</forceCreation> -->
-						<!-- <buildArgs> -->
-						<!-- <JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
-						<!-- </buildArgs> -->
-						<!-- </configuration> -->
 						<configuration>
 							<repository>shooting.azurecr.io</repository>
 							<contextDirectory>target</contextDirectory>
@@ -366,7 +346,6 @@
 							</buildArgs>
 						</configuration>
 						<dependencies>
-							<!-- To make this work on JDK 9+ -->
 							<dependency>
 								<groupId>javax.activation</groupId>
 								<artifactId>javax.activation-api</artifactId>
@@ -374,6 +353,42 @@
 							</dependency>
 						</dependencies>
 					</plugin>
+					<!-- <plugin> -->
+					<!-- <groupId>org.apache.maven.plugins</groupId> -->
+					<!-- <artifactId>maven-antrun-plugin</artifactId> -->
+					<!-- <version>${maven.antrun.plugin.version}</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <configuration> -->
+					<!-- <target> -->
+					<!-- <copy file="build/app.j2e" tofile="${project.build.directory}/app.bat" /> -->
+					<!-- </target> -->
+					<!-- </configuration> -->
+					<!-- <goals> -->
+					<!-- <goal>run</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
+					<!-- <plugin> -->
+					<!-- <groupId>org.codehaus.mojo</groupId> -->
+					<!-- <artifactId>exec-maven-plugin</artifactId> -->
+					<!-- <version>${exec.maven.plugin.version}</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <id>app</id> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>exec</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <workingDirectory>${project.build.directory}</workingDirectory> -->
+					<!-- <executable>${project.build.directory}/app.bat</executable> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
 				</plugins>
 			</build>
 		</profile>
