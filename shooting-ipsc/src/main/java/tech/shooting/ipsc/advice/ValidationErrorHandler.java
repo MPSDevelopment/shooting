@@ -102,14 +102,14 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ErrorMessage processForbiddenException(AccessDeniedException ex, HttpServletRequest request) {
 		log.error("Access denied exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, "Access denied in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		return new ErrorMessage(DEFAULR_FIELD, "Access denied in request %s", request.getRequestURL());
 	}
 
 	@ExceptionHandler(NotAcceptableException.class)
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-	public ErrorMessage processNotAcceptableException(NotAcceptableException e) {
-		log.error("Not acceptable %s", e.getErrorMessage());
-		return e.getErrorMessage();
+	public ErrorMessage processNotAcceptableException(NotAcceptableException e, HttpServletRequest request) {
+		log.error("Not acceptable in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
+		return new ErrorMessage(DEFAULR_FIELD, "Not acceptable request %s", request.getRequestURL());
 	}
 
 	@ExceptionHandler(NotModifiedException.class)
