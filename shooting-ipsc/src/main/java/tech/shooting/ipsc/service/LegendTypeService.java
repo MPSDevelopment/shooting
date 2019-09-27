@@ -42,9 +42,9 @@ public class LegendTypeService {
 	private LegendType checkTypeExist(LegendTypeBean bean) throws BadRequestException {
 		LegendType byName = repository.findByName(bean.getName());
 		if (byName == null) {
-			return new LegendType().setName(bean.getName());
+			return new LegendType().setName(bean.getName()).setType(bean.getType());
 		} else {
-			return byName.setName(bean.getName());
+			return byName.setName(bean.getName()).setType(bean.getType());
 		}
 	}
 
@@ -53,6 +53,6 @@ public class LegendTypeService {
 	}
 
 	public LegendType updateType(long typeId, LegendTypeBean bean) throws BadRequestException {
-		return repository.save(checkType(typeId).setName(bean.getName()));
+		return repository.save(checkType(typeId).setName(bean.getName())).setType(bean.getType());
 	}
 }

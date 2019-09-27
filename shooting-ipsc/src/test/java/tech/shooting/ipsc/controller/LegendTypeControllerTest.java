@@ -33,6 +33,7 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.LegendTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.LegendType;
 import tech.shooting.ipsc.pojo.Person;
@@ -170,7 +171,7 @@ class LegendTypeControllerTest {
 	@Test
 	void checkPostType() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		LegendTypeBean bean = new LegendTypeBean().setName(LEGEND_TYPE_ID);
+		LegendTypeBean bean = new LegendTypeBean().setName(LEGEND_TYPE_ID).setType(LegendTypeEnum.COMBAT);
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.LEGEND_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.LEGEND_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
@@ -190,6 +191,7 @@ class LegendTypeControllerTest {
 		LegendType typeFromDB = JacksonUtils.fromJson(LegendType.class, contentAsString);
 		assertEquals(1, typeRepository.findAll().size());
 		assertEquals(bean.getName(), typeFromDB.getName());
+		assertEquals(bean.getType(), typeFromDB.getType());
 	}
 
 	@Test
