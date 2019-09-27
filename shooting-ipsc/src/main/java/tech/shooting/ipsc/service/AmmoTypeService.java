@@ -44,7 +44,7 @@ public class AmmoTypeService {
 	}
 
 	private AmmoType checkTypeExist(AmmoTypeBean bean) throws BadRequestException {
-		AmmoType byName = repository.findByName(bean);
+		AmmoType byName = repository.findByName(bean.getName());
 		if (byName == null) {
 			return new AmmoType().setName(bean.getName()).setWeaponType(checkWeaponType(bean.getWeaponTypeId())).setCount(bean.getCount());
 		} else {

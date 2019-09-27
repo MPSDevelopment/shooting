@@ -134,4 +134,8 @@ public class ValidationConstants {
 	public static final String AMMO_TYPE_WEAPON_TYPE_MESSAGE = "Ammunition weapon type name must not be null";
 	
 	public static final String AMMO_TYPE_COUNT_MESSAGE = "Must be 0 or greater";
+	
+	public static final String LEGEND_TYPE_NAME_MESSAGE = "Legend type name must be not blank";
+
+	public static final String LEGEND_TYPE_MESSAGE = "Legend type must be not null";
 }
