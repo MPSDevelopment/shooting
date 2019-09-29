@@ -283,7 +283,7 @@ public class ControllerAPI {
 	public static final String AMMO_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 	
 	// legend type section
-	public static final String LEGEND_TYPE_CONTROLLER = "/api/ammo";
+	public static final String LEGEND_TYPE_CONTROLLER = "/api/legend";
 	public static final String LEGEND_TYPE_CONTROLLER_GET_ALL = "/get/all";
 	public static final String LEGEND_TYPE_CONTROLLER_GET_BY_ID = "/" + REQUEST_TYPE_ID;
 	public static final String LEGEND_TYPE_CONTROLLER_POST_TYPE = "/create";
