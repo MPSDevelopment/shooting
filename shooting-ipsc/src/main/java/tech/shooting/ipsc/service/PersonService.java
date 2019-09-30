@@ -13,6 +13,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.PersonBean;
+import tech.shooting.ipsc.bean.NumberBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
@@ -84,15 +85,15 @@ public class PersonService {
 	public Person getPersonByIdIfExist(Long personId) throws BadRequestException {
 		return personRepository.findById(personId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s", personId)));
 	}
-	
+
 	public Person getPersonByRfidCode(String code) throws BadRequestException {
 		return personRepository.findByRfidCode(code).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person rfid code %s", code)));
 	}
-	
+
 	public Person getPersonByNumber(String number) throws BadRequestException {
 		return personRepository.findByNumber(number).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person number %s", number)));
 	}
-	
+
 	public Person getPersonByCall(String call) throws BadRequestException {
 		return personRepository.findByCall(call).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person call %s", call)));
 	}
@@ -133,5 +134,21 @@ public class PersonService {
 
 	public List<TypePresent> getTypePresent() {
 		return TypeOfPresence.getList();
+	}
+
+	public NumberBean getFreeRfid() {
+		Integer rfidCode = 1000;
+		while (personRepository.findByRfidCode(String.valueOf(rfidCode)).orElse(null) != null) {
+			rfidCode++;
+		}
+		return new NumberBean(String.valueOf(rfidCode));
+	}
+	
+	public NumberBean getFreeNumber() {
+		Integer number = 1;
+		while (personRepository.findByNumber(String.valueOf(number)).orElse(null) != null) {
+			number++;
+		}
+		return new NumberBean(String.valueOf(number));
 	}
 }

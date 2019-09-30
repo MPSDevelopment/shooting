@@ -219,6 +219,50 @@ public class PersonControllerTest {
 	}
 	
 	@Test
+	public void checkGetFreeRfid() throws Exception {
+		
+		personRepository.save(new Person().setName("testing1").setQualifierRank(ClassificationBreaks.D).setRfidCode("1000"));
+		personRepository.save(new Person().setName("testing2").setQualifierRank(ClassificationBreaks.D).setRfidCode("1001"));
+		personRepository.save(new Person().setName("testing3").setQualifierRank(ClassificationBreaks.D).setRfidCode("1002"));
+		personRepository.save(new Person().setName("testing4").setQualifierRank(ClassificationBreaks.D).setRfidCode("1003"));
+		
+		// try to access getPerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_RFID))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getPerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_RFID)
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_RFID)
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_RFID)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.number").value("1004"));
+	}
+	
+	@Test
+	public void checkGetFreeNumber() throws Exception {
+		
+		personRepository.save(new Person().setName("testing1").setQualifierRank(ClassificationBreaks.D).setNumber("1"));
+		personRepository.save(new Person().setName("testing2").setQualifierRank(ClassificationBreaks.D).setNumber("2"));
+		personRepository.save(new Person().setName("testing3").setQualifierRank(ClassificationBreaks.D).setNumber("3"));
+		personRepository.save(new Person().setName("testing4").setQualifierRank(ClassificationBreaks.D).setNumber("4"));
+		
+		// try to access getPerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_NUMBER))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access getPerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_NUMBER)
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_NUMBER)
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access getPerson() with admin role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_NUMBER)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.number").value("5"));
+	}
+	
+	@Test
 	public void checkGetPersonByCall() throws Exception {
 		// try to access getPerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_CALL.replace(ControllerAPI.REQUEST_PERSON_ID, TEST_CALL)))

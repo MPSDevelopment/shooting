@@ -76,7 +76,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //@Tag(IpscConstants.UNIT_TEST_TAG)
 public class MqttLogicTest {
 
-private static final String IP_ADRESS = "127.0.0.9";
+	private static final String IP_ADRESS = "127.0.0.9";
 
 //	@RegisterExtension
 //	private MqttExtension mqttExtension = new MqttExtension();
@@ -88,7 +88,7 @@ private static final String IP_ADRESS = "127.0.0.9";
 
 	@Autowired
 	private MqttService mqttService;
-	
+
 	@Autowired
 	private WorkspaceService workspaceService;
 
@@ -97,7 +97,7 @@ private static final String IP_ADRESS = "127.0.0.9";
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private PersonRepository personRepository;
 
@@ -145,7 +145,7 @@ private static final String IP_ADRESS = "127.0.0.9";
 				: userRepository.findByLogin(DatabaseCreator.JUDGE_LOGIN);
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		
+
 		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
 		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
 
@@ -251,27 +251,27 @@ private static final String IP_ADRESS = "127.0.0.9";
 		assertEquals(3, messageCount);
 
 		closeSubscriber(subscriberObserver);
-		
+
 		// start test
-		
+
 		latch = new CountDownLatch(1);
-		
+
 		subscriber = createSubscriber(MqttConstants.TEST_TOPIC + "/" + IP_ADRESS);
 		json = JacksonUtils.getJson(bean.setClientId(subscriber.getClientId()).setUseInTest(true));
-		
+
 		Workspace workspace = new Workspace();
 		BeanUtils.copyProperties(bean, workspace);
 		workspace.setIp(IP_ADRESS);
-		
+
 		workspaceService.putWorkspace(workspace);
 
 		json = JacksonUtils.getJson(Arrays.asList(bean.setClientId(subscriber.getClientId()).setUseInTest(true)));
 
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_START).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken).with(remoteHost(IP_ADRESS)).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk());
-		
+
 		latch.await(5, TimeUnit.SECONDS);
-		
+
 		assertEquals(4, messageCount);
 
 		closeSubscriber(subscriber);
@@ -297,7 +297,7 @@ private static final String IP_ADRESS = "127.0.0.9";
 			}
 		}, topic);
 	}
-	
+
 	private static RequestPostProcessor remoteHost(final String remoteHost) {
 		return request -> {
 			request.setRemoteAddr(remoteHost);

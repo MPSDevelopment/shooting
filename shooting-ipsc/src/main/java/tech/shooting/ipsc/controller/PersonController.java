@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.ipsc.bean.PersonBean;
+import tech.shooting.ipsc.bean.NumberBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.TypePresent;
@@ -61,6 +62,20 @@ public class PersonController {
 	@ApiOperation(value = "Get person by number", notes = "Return person object")
 	public ResponseEntity<Person> getPersonByCall(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) String call) throws BadRequestException {
 		return new ResponseEntity<>(personService.getPersonByCall(call), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_RFID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get free rfid for person")
+	public ResponseEntity<NumberBean> getFreeRfid() throws BadRequestException {
+		return new ResponseEntity<>(personService.getFreeRfid(), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_FREE_NUMBER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get free rfid for person")
+	public ResponseEntity<NumberBean> getFreeNumber() throws BadRequestException {
+		return new ResponseEntity<>(personService.getFreeNumber(), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

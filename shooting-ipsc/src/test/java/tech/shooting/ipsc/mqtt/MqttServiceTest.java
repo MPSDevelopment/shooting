@@ -6,10 +6,13 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.spring.ApplicationContextWrapper;
 import tech.shooting.commons.utils.TokenUtils;
+import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.mqtt.event.MqttSimpleEvent;
+import tech.shooting.ipsc.repository.CompetitionRepository;
+import tech.shooting.ipsc.service.WorkspaceService;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.junit.jupiter.api.AfterEach;
@@ -18,8 +21,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,13 +38,15 @@ import java.io.IOException;
 import java.util.Collection;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class })
+@EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
+@ContextConfiguration(classes = { TokenUtils.class, IpscMqttSettings.class, MqttService.class, WorkspaceService.class, JsonMqttCallBack.class, ApplicationContextWrapper.class, IpscMongoConfig.class })
 @EnableConfigurationProperties
+@EnableAutoConfiguration
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
-@Tag(IpscConstants.UNIT_TEST_TAG)
-@ActiveProfiles("simple")
+//@Tag(IpscConstants.UNIT_TEST_TAG)
+//@ActiveProfiles("simple")
 //@TestMethodOrder(OrderAnnotation.class)
 class MqttServiceTest {
 
