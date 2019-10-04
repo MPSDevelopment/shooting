@@ -121,8 +121,8 @@ public class ControllerAPI {
 
 	public static final String PERSON_CONTROLLER = "/api/persons";
 	public static final String PERSON_CONTROLLER_GET_PERSON = "/" + REQUEST_PERSON_ID;
-	public static final String PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE = "/rfid/" + REQUEST_PERSON_ID;
-	public static final String PERSON_CONTROLLER_GET_PERSON_BY_NUMBER = "/number/" + REQUEST_PERSON_ID;
+	public static final String PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE = "/rfid/" + REQUEST_MARK;
+	public static final String PERSON_CONTROLLER_GET_PERSON_BY_NUMBER = "/number/" + REQUEST_MARK;
 	public static final String PERSON_CONTROLLER_GET_PERSON_BY_CALL = "/call/" + REQUEST_PERSON_ID;
 	public static final String PERSON_CONTROLLER_GET_FREE_RFID = "/freerfid";
 	public static final String PERSON_CONTROLLER_GET_FREE_NUMBER = "/freenumber";

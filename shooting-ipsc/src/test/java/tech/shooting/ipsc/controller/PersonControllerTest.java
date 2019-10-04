@@ -189,32 +189,32 @@ public class PersonControllerTest {
 	@Test
 	public void checkGetPersonByRfid() throws Exception {
 		// try to access getPerson() with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_RFID_CODE)))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_MARK, TEST_RFID_CODE)))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access getPerson() with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_RFID_CODE))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_MARK, TEST_RFID_CODE))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getPerson() with judge user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_RFID_CODE))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_MARK, TEST_RFID_CODE))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getPerson() with admin role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_RFID_CODE))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_RFID_CODE.replace(ControllerAPI.REQUEST_MARK, TEST_RFID_CODE))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
 	}
 	
 	@Test
 	public void checkGetPersonByNumber() throws Exception {
 		// try to access getPerson() with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_NUMBER)))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_MARK, TEST_NUMBER)))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try to access getPerson() with authorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_NUMBER))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_MARK, TEST_NUMBER))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getPerson() with judge user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_NUMBER))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_MARK, TEST_NUMBER))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try to access getPerson() with admin role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.PATH_VARIABLE_MARK, TEST_NUMBER))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PERSON_BY_NUMBER.replace(ControllerAPI.REQUEST_MARK, TEST_NUMBER))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testing.getId()));
 	}
 	
