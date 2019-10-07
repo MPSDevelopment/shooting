@@ -152,7 +152,7 @@ class EquipmentTypeControllerTest {
 	}
 
 	@Test
-	void checkPostTypeOfWeapon() throws Exception {
+	void checkPostType() throws Exception {
 		assertEquals(Collections.emptyList(), equipmentTypeRepository.findAll());
 		EquipmentTypeBean bean = new EquipmentTypeBean().setName("Test").setType(EquipmentTypeEnum.SAFETY);
 		String json = JacksonUtils.getJson(bean);
