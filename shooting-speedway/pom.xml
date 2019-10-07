@@ -25,29 +25,10 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>shooting-commons</artifactId>
-			<version>${project.version}</version>
+			<groupId>com.mpsdevelopment.plasticine</groupId>
+			<artifactId>plasticine-commons</artifactId>
+			<version>${plasticine.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>${spring.boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>io.micrometer</groupId>
-					<artifactId>micrometer-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 
 		<dependency>
 			<groupId>OctaneSDKJava</groupId>
