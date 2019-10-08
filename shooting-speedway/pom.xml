@@ -24,16 +24,40 @@
 
 	<dependencies>
 
+		<!-- <dependency> -->
+		<!-- <groupId>com.mpsdevelopment.plasticine</groupId> -->
+		<!-- <artifactId>plasticine-commons</artifactId> -->
+		<!-- <version>${plasticine.version}</version> -->
+		<!-- </dependency> -->
+
 		<dependency>
-			<groupId>com.mpsdevelopment.plasticine</groupId>
-			<artifactId>plasticine-commons</artifactId>
-			<version>${plasticine.version}</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>shooting-commons</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-actuator</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>OctaneSDKJava</groupId>
 			<artifactId>OctaneSDKJava-full</artifactId>
 			<version>${octane.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Dependency for TEST -->
