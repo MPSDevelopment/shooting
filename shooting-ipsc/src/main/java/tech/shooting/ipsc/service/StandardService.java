@@ -130,7 +130,11 @@ public class StandardService {
 		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 	}
 	
-	public List<StandardScore> getScoreList(Long standardId) {
+	public List<StandardScore> getScoreStandardList(Long standardId) {
 		return standardScoreRepository.findAllByStandardId(standardId);
+	}
+	
+	public List<StandardScore> getScorePersonList(Long personId) {
+		return standardScoreRepository.findAllByPersonId(personId);
 	}
 }

@@ -409,22 +409,47 @@ class StandardControllerTest {
 
 	@Test
 	void checkGetScoreStandardList() throws Exception {
-
-		Standard standard = standardRepository.save(testStandard);
-
+		
+		testStandard = standardRepository.save(testStandard);
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
 		String content = mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, testStandard.getId().toString()))
 						.header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
 
 		assertEquals(3, list.size());
+	}
+
+	@Test
+	void checkGetScorePersonList() throws Exception {
+		
+		testStandard = standardRepository.save(testStandard);
+		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+
+		// try access with user role
+		String content = mockMvc.perform(
+				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST.replace(ControllerAPI.REQUEST_PERSON_ID, testingPerson.getId().toString()))
+						.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+		assertEquals(2, list.size());
+
+		content = mockMvc.perform(
+				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST.replace(ControllerAPI.REQUEST_PERSON_ID, anotherPerson.getId().toString()))
+						.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+		assertEquals(1, list.size());
 	}
 
 	@Test
