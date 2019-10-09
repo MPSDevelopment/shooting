@@ -106,6 +106,7 @@ class StandardControllerTest {
 	private Standard testStandard;
 
 	private Person testingPerson;
+	private Person anotherPerson;
 
 	@BeforeEach
 	public void before() {
@@ -117,7 +118,8 @@ class StandardControllerTest {
 		testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false)
 				.setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz(
 						"Возраст. Спортсмен может получить определенный разряд только при условии достижения им определенного возраста: с 10 лет — 1-3 юношеские разряды и взрослые разряды, с 14 лет — КМС, с 15 лет — МС, а с 16 лет — МСМК."));
-		testingPerson = personRepository.save(new Person().setName("testing testingPerson for competitor"));
+		testingPerson = personRepository.save(new Person().setName("testing person"));
+		anotherPerson = personRepository.save(new Person().setName("another person"));
 
 		String password = RandomStringUtils.randomAscii(14);
 		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
@@ -249,7 +251,8 @@ class StandardControllerTest {
 		List<CategoriesBean> categoriesBeans = new ArrayList<>();
 		for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
 			CategoriesAndTime categoriesAndTime = testStandard.getCategoriesList().get(i);
-			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime()).setSatisfactoryTime(categoriesAndTime.getSatisfactoryTime()));
+			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime())
+					.setSatisfactoryTime(categoriesAndTime.getSatisfactoryTime()));
 		}
 		bean.setCategoriesList(categoriesBeans);
 		return bean;
@@ -382,7 +385,7 @@ class StandardControllerTest {
 
 		assertEquals(4, gotScore.getScore());
 	}
-	
+
 	@Test
 	void checkGetScoreList() throws Exception {
 
@@ -390,7 +393,7 @@ class StandardControllerTest {
 
 		StandardScore score = new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23);
 		standardScoreRepository.save(score);
-		
+
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
@@ -403,7 +406,27 @@ class StandardControllerTest {
 
 		assertEquals(2, list.size());
 	}
-	
+
+	@Test
+	void checkGetScoreStandardList() throws Exception {
+
+		Standard standard = standardRepository.save(testStandard);
+
+		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+
+		// try access with user role
+		String content = mockMvc.perform(
+				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+						.header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+
+		assertEquals(3, list.size());
+	}
+
 	@Test
 	public void checkGetEnum() throws Exception {
 		// try access to getEnum from admin user

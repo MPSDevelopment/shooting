@@ -129,4 +129,8 @@ public class StandardService {
 	public List<StandardScore> getScoreList(Long standardId, Long personId) {
 		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 	}
+	
+	public List<StandardScore> getScoreList(Long standardId) {
+		return standardScoreRepository.findAllByStandardId(standardId);
+	}
 }
