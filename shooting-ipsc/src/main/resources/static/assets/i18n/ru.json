@@ -297,6 +297,8 @@
   "type": "Тип",
   "SHORT_WAVE": "КВ",
   "ULRTA_SHORT_WAVE": "УКВ",
+  "SAFETY": "СИЗ",
+  "DEFENSE": "СИБ и АО",
   "battlePreparing": "Учет боевой подготовки",
   "communication": "Средство связи",
   "addcommunication": "Добавить средство связи",
@@ -308,5 +310,10 @@
   "addMachine": "Добавить технику",
   "editMachine": "Изменить технику",
   "fuelCount": "Топливо",
-  "machine": "Техник{{ending}}"
+  "machine": "Техник{{ending}}",
+  "deleteActiveTournamentError": "Нельзя удалить активный турнир",
+  "equipmentType": "Тип оборудования",
+  "equipmentTypes": "Типы оборудования",
+  "equipment": "Оборудование",
+  "addequipmentTypes": "Добавить тип оборудования"
 }
