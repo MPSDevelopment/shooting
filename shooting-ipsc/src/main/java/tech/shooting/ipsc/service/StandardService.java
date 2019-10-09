@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.service;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,11 @@ public class StandardService {
 	}
 
 	public StandardScore getScore(Long standardId, Long personId) {
+		var list = standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
+		return CollectionUtils.isEmpty(list) ? null : list.get(0);
+	}
+	
+	public List<StandardScore> getScoreList(Long standardId, Long personId) {
 		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 	}
 }

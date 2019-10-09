@@ -384,6 +384,27 @@ class StandardControllerTest {
 	}
 	
 	@Test
+	void checkGetScoreList() throws Exception {
+
+		Standard standard = standardRepository.save(testStandard);
+
+		StandardScore score = new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23);
+		standardScoreRepository.save(score);
+		
+		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+
+		// try access with user role
+		String content = mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_ID, testingPerson.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+
+		assertEquals(2, list.size());
+	}
+	
+	@Test
 	public void checkGetEnum() throws Exception {
 		// try access to getEnum from admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM).header(Token.TOKEN_HEADER, adminToken))

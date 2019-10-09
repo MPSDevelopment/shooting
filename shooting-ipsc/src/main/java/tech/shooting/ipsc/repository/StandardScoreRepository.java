@@ -15,5 +15,5 @@ public interface StandardScoreRepository extends MongoRepository<StandardScore, 
 
 	List<StandardScore> findByStandardIdIn(List<Long> list);
 
-	StandardScore findByPersonIdAndStandardId(Long personId, Long standardId);
+	List<StandardScore> findByPersonIdAndStandardId(Long personId, Long standardId);
 }
