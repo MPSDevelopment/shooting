@@ -13,7 +13,7 @@ import tech.shooting.ipsc.repository.CommonConditionsRepository;
 import java.util.List;
 
 @Service
-public class CommonConditionsService {
+public class StandardCommonConditionsService {
 
 	@Autowired
 	private CommonConditionsRepository conditionsRepository;

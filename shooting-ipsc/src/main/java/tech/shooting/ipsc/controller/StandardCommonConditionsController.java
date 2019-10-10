@@ -11,9 +11,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.StandardCommonConditionsBean;
 import tech.shooting.ipsc.pojo.StandardCommonConditions;
-import tech.shooting.ipsc.service.CommonConditionsService;
+import tech.shooting.ipsc.service.StandardCommonConditionsService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -27,8 +28,7 @@ import java.util.List;
 public class StandardCommonConditionsController {
 
     @Autowired
-    private CommonConditionsService conditionsService;
-
+    private StandardCommonConditionsService conditionsService;
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
     @ApiOperation(value = "Get list all common conditions")
@@ -38,9 +38,9 @@ public class StandardCommonConditionsController {
 
     @DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_DELETE_BY_ID)
     @ApiOperation(value = "Get status is ok, when row are removed")
-    public ResponseEntity deleteCommonConditionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMMON_CONDITION_ID) @NotNull Long commonConditionId) throws BadRequestException {
-        conditionsService.deleteConditionById(commonConditionId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<SuccessfulMessage> deleteCommonConditionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMMON_CONDITION_ID) @NotNull Long id) throws BadRequestException {
+        conditionsService.deleteConditionById(id);
+        return new ResponseEntity<>(new SuccessfulMessage("Condition %s has been successfully deleted", id), HttpStatus.OK);
     }
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID)

@@ -35,7 +35,7 @@ import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CommonConditionsRepository;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.service.CommonConditionsService;
+import tech.shooting.ipsc.service.StandardCommonConditionsService;
 
 import java.util.Date;
 import java.util.List;
@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, StandardCommonConditionsController.class, CommonConditionsService.class})
+@ContextConfiguration(classes = {ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, StandardCommonConditionsController.class, StandardCommonConditionsService.class})
 class StandardCommonConditionsControllerTest {
     @Autowired
     private CommonConditionsRepository commonConditionsRepository;

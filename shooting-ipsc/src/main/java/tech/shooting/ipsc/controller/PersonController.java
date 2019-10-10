@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.NumberBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
@@ -86,9 +87,9 @@ public class PersonController {
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
-	public ResponseEntity<Void> deletePerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> deletePerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		personService.removePersonIfExist(personId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(new SuccessfulMessage("Person %s has been successfully deleted", personId), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'JUDGE', 'GUEST')")
