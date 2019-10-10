@@ -10,8 +10,9 @@ services:
 #      nginx-proxy:
 #        ipv4_address: "192.168.31.63"
     ports:
-      - 0.0.0.0:80:9901
-      - 0.0.0.0:8808:8808
+      - 80:9901
+      - 8808:8808
+      - 1885:1885
 #networks:
 #  nginx-proxy:
 #    ipam:
