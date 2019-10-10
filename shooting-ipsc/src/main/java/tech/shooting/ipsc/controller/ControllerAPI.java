@@ -371,18 +371,11 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_GET_UNIT_ENUM = "/enum/unit";
 
 	public static final String STANDARD_COMMON_CONDITION_CONTROLLER = "/api/common/condition";
-	public static final String COMMON_CONDITION_CONTROLLER_GET_ALL = "/get/all";
-	public static final String COMMON_CONDITION_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_COMMON_CONDITION_ID;
-	public static final String COMMON_CONDITION_CONTROLLER_GET_BY_ID = "/get/common/condition/" + REQUEST_COMMON_CONDITION_ID;
-	public static final String COMMON_CONDITION_CONTROLLER_POST_CONDITION = "/post/common/condition";
-	public static final String COMMON_CONDITION_CONTROLLER_PUT_CONDITION = "/put/common/condition/" + REQUEST_COMMON_CONDITION_ID;
-
-	public static final String CATEGORY_CONTROLLER = "/api/category";
-	public static final String CATEGORY_CONTROLLER_GET_ALL_CATEGORIES = "/get/all/categories";
-	public static final String CATEGORY_CONTROLLER_GET_CATEGORY_BY_ID = "/get/category/" + REQUEST_CATEGORY_ID;
-	public static final String CATEGORY_CONTROLLER_POST_CATEGORY = "/post/category";
-	public static final String CATEGORY_CONTROLLER_PUT_CATEGORY = "/put/category/" + REQUEST_CATEGORY_ID;
-	public static final String CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID = "/delete/category/" + REQUEST_CATEGORY_ID;
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER_GET_ALL = "/get/all";
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_COMMON_CONDITION_ID;
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER_GET_BY_ID = "/get/common/condition/" + REQUEST_COMMON_CONDITION_ID;
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER_POST_CONDITION = "/post/common/condition";
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER_PUT_CONDITION = "/put/common/condition/" + REQUEST_COMMON_CONDITION_ID;
 
 	public static final String COURSE_CONTROLLER = "/api/course";
 	public static final String COURSE_CONTROLLER_GET_ALL_COURSES = "/get/all/course";
