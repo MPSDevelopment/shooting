@@ -11,8 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
-import tech.shooting.ipsc.bean.CommonConditionsBean;
-import tech.shooting.ipsc.pojo.CommonConditions;
+import tech.shooting.ipsc.bean.StandardCommonConditionsBean;
+import tech.shooting.ipsc.pojo.StandardCommonConditions;
 import tech.shooting.ipsc.service.CommonConditionsService;
 
 import javax.validation.Valid;
@@ -20,11 +20,11 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = ControllerAPI.COMMON_CONDITION_CONTROLLER)
-@Api(value = ControllerAPI.COMMON_CONDITION_CONTROLLER)
+@RequestMapping(value = ControllerAPI.STANDARD_COMMON_CONDITION_CONTROLLER)
+@Api(value = ControllerAPI.STANDARD_COMMON_CONDITION_CONTROLLER)
 @Slf4j
 @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-public class CommonConditionsController {
+public class StandardCommonConditionsController {
 
     @Autowired
     private CommonConditionsService conditionsService;
@@ -32,7 +32,7 @@ public class CommonConditionsController {
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_ALL)
     @ApiOperation(value = "Get list all common conditions")
-    public ResponseEntity<List<CommonConditions>> getAllCommonConditions() {
+    public ResponseEntity<List<StandardCommonConditions>> getAllCommonConditions() {
         return new ResponseEntity<>(conditionsService.getAllCommonConditions(), HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class CommonConditionsController {
 
     @GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_GET_BY_ID)
     @ApiOperation(value = "Get common condition by id")
-    public ResponseEntity<CommonConditions> getCommonConditionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMMON_CONDITION_ID) Long commonConditionId) throws BadRequestException {
+    public ResponseEntity<StandardCommonConditions> getCommonConditionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMMON_CONDITION_ID) Long commonConditionId) throws BadRequestException {
         return new ResponseEntity<>(conditionsService.getConditionById(commonConditionId), HttpStatus.OK);
     }
 
@@ -53,7 +53,7 @@ public class CommonConditionsController {
             value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_POST_CONDITION,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Post common condition")
-    public ResponseEntity<CommonConditions> postCommonCondition(@RequestBody @Valid CommonConditionsBean bean) throws BadRequestException {
+    public ResponseEntity<StandardCommonConditions> postCommonCondition(@RequestBody @Valid StandardCommonConditionsBean bean) throws BadRequestException {
         return new ResponseEntity<>(conditionsService.postCommonCondition(bean), HttpStatus.CREATED);
     }
 
@@ -61,9 +61,9 @@ public class CommonConditionsController {
             value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMON_CONDITION_CONTROLLER_PUT_CONDITION,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get updated common condition")
-    public ResponseEntity<CommonConditions> putCommonCondition(
+    public ResponseEntity<StandardCommonConditions> putCommonCondition(
             @PathVariable(value = ControllerAPI.PATH_VARIABLE_COMMON_CONDITION_ID) Long commonConditionId,
-            @RequestBody @Valid CommonConditionsBean bean) throws BadRequestException {
+            @RequestBody @Valid StandardCommonConditionsBean bean) throws BadRequestException {
         return new ResponseEntity<>(conditionsService.putCommonCondition(commonConditionId, bean), HttpStatus.OK);
     }
 

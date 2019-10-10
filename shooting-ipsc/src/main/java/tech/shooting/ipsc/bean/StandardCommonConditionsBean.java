@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.enums.UnitEnum;
 
 @Data
 @Accessors(chain = true)
-public class CommonConditionsBean {
+public class StandardCommonConditionsBean {
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
     private String conditionsRus;
@@ -22,13 +23,5 @@ public class CommonConditionsBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Unit id", required = true)
-    private Long units;
-
-    @JsonProperty
-    @ApiModelProperty(value = "Condition min value")
-    private Double minValue;
-
-    @JsonProperty
-    @ApiModelProperty(value = "Condition max value")
-    private Double maxValue;
+    private UnitEnum units;
 }

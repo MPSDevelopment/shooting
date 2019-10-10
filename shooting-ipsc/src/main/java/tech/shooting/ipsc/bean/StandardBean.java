@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import tech.shooting.ipsc.pojo.Fails;
+import tech.shooting.ipsc.pojo.StandardFails;
 import tech.shooting.ipsc.pojo.Info;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class StandardBean {
 
     @JsonProperty
     @ApiModelProperty(value = "List fails")
-    private List<Fails> failsList;
+    private List<StandardFails> failsList;
 
     @JsonProperty
     @ApiModelProperty(value = "List conditions")

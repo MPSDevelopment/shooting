@@ -34,6 +34,7 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.StandardPassEnum;
+import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.*;
 import tech.shooting.ipsc.service.StandardService;
@@ -68,12 +69,6 @@ class StandardControllerTest {
 	private StandardScoreRepository standardScoreRepository;
 
 	@Autowired
-	private UnitsRepository unitsRepository;
-
-	@Autowired
-	private CategoriesRepository categoriesRepository;
-
-	@Autowired
 	private SubjectRepository subjectRepository;
 
 	@Autowired
@@ -97,9 +92,7 @@ class StandardControllerTest {
 
 	private String userToken;
 
-	private Units testUnit;
-
-	private Categories testCategory;
+	private Category testCategory;
 
 	private Subject testSubject;
 
@@ -112,8 +105,7 @@ class StandardControllerTest {
 	public void before() {
 		standardRepository.deleteAll();
 
-		testUnit = testUnit == null ? unitsRepository.save(new Units().setUnits("testUnits")) : testUnit;
-		testCategory = testCategory == null ? categoriesRepository.save(new Categories().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training")) : testCategory;
+		testCategory = new Category().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training");
 		testSubject = testSubject == null ? subjectRepository.save(new Subject().setRus("LitrBooool").setKz("Physical training")) : testSubject;
 		testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false)
 				.setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz(
@@ -245,13 +237,13 @@ class StandardControllerTest {
 	private StandardBean createStandardBean() {
 		StandardBean bean = new StandardBean();
 		bean.setInfo(testStandard.getInfo()).setSubject(testStandard.getSubject().getId()).setGroups(testStandard.isGroups()).setActive(testStandard.isActive());
-		List<CategoriesAndTime> res = new ArrayList<>();
-		res.add(new CategoriesAndTime().setCategory(testCategory).setExcellentTime(10F).setGoodTime(12F).setSatisfactoryTime(14F));
+		List<CategoryByTime> res = new ArrayList<>();
+		res.add(new CategoryByTime().setCategory(testCategory).setExcellentTime(10F).setGoodTime(12F).setSatisfactoryTime(14F));
 		testStandard.setCategoriesList(res);
 		List<CategoriesBean> categoriesBeans = new ArrayList<>();
 		for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
-			CategoriesAndTime categoriesAndTime = testStandard.getCategoriesList().get(i);
-			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory().getId()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime())
+			CategoryByTime categoriesAndTime = testStandard.getCategoriesList().get(i);
+			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime())
 					.setSatisfactoryTime(categoriesAndTime.getSatisfactoryTime()));
 		}
 		bean.setCategoriesList(categoriesBeans);
@@ -409,17 +401,16 @@ class StandardControllerTest {
 
 	@Test
 	void checkGetScoreStandardList() throws Exception {
-		
+
 		testStandard = standardRepository.save(testStandard);
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
-		String content = mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, testStandard.getId().toString()))
-						.header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String content = mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST.replace(ControllerAPI.REQUEST_STANDARD_ID, testStandard.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
 
@@ -428,7 +419,7 @@ class StandardControllerTest {
 
 	@Test
 	void checkGetScorePersonList() throws Exception {
-		
+
 		testStandard = standardRepository.save(testStandard);
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
@@ -453,11 +444,20 @@ class StandardControllerTest {
 	}
 
 	@Test
-	public void checkGetEnum() throws Exception {
+	public void checkGetPassEnum() throws Exception {
 		// try access to getEnum from admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<StandardPassEnum> listFromJson = JacksonUtils.getListFromJson(StandardPassEnum[].class, contentAsString);
 		assertEquals(3, listFromJson.size());
+	}
+
+	@Test
+	public void checkGetUnitEnum() throws Exception {
+		// try access to getEnum from admin user
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_UNIT_ENUM).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		List<UnitEnum> listFromJson = JacksonUtils.getListFromJson(UnitEnum[].class, contentAsString);
+		assertEquals(6, listFromJson.size());
 	}
 }

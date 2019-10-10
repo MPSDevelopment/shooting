@@ -15,6 +15,7 @@ import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.StandardPassEnum;
+import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.service.StandardService;
@@ -102,6 +103,12 @@ public class StandardController {
 	@ApiOperation(value = "List of standard pass values")
 	public ResponseEntity<StandardPassEnum[]> getPasses() {
 		return new ResponseEntity<>(StandardPassEnum.values(), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_UNIT_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "List of standard unit values")
+	public ResponseEntity<UnitEnum[]> getUnits() {
+		return new ResponseEntity<>(UnitEnum.values(), HttpStatus.OK);
 	}
 
 }

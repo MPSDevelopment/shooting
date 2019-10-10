@@ -115,6 +115,7 @@ public class ControllerAPI {
 	public static final String USER_CONTROLLER_POST_JUDGE = "/create";
 	public static final String USER_CONTROLLER_POST_USER = "/createUser";
 	public static final String USER_CONTROLLER_GET_JUDGES = "/all/judge";
+	public static final String USER_CONTROLLER_GET_USER_ROLE = "/all/user";
 	/*
 	 * person controller
 	 */
@@ -134,6 +135,10 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_USERS_BY_DIVISION_BY_PAGE = "/all/" + REQUEST_DIVISION_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String PERSON_CONTROLLER_GET_COUNT = "/count";
 	public static final String PERSON_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
+	public static final String PERSON_CONTROLLER_GET_PRESENT_ENUM = "/enum/present";
+	public static final String PERSON_CONTROLLER_GET_TYPE_MARK_ENUM = "/enum/mark";
+	public static final String PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM = "/enum/disqualification";
+	public static final String PERSON_CONTROLLER_GET_TYPE_CLASS_ENUM = "/enum/class";
 	/*
 	 * competition controller
 	 */
@@ -149,6 +154,7 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COMPETITION_CONTROLLER_POST_SCORE = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score";
 	public static final String COMPETITION_CONTROLLER_POST_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
+	public static final String COMPETITION_CONTROLLER_DELETE_ALL_COMPETITION = "/competition/delete/all";
 
 	/*
 	 * competition stage
@@ -195,11 +201,6 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM = "/enum";
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_WEAPON = "/enum/weapon";
 	public static final String COMPETITION_CONTROLLER_GET_CONST_ENUM_LEVEL = "/enum/level";
-	public static final String PERSON_CONTROLLER_GET_PRESENT_ENUM = "/enum/present";
-	public static final String PERSON_CONTROLLER_GET_TYPE_MARK_ENUM = "/enum/mark";
-	public static final String PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM = "/enum/disqualification";
-	public static final String PERSON_CONTROLLER_GET_TYPE_CLASS_ENUM = "/enum/class";
-	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 
 	// quiz section
 
@@ -218,6 +219,7 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ = "/report/create";
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/list";
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK = "/quiz/" + REQUEST_QUIZ_ID + "/list/check";
+	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 
 	// checkin section
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";
@@ -366,8 +368,9 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST = "/scorelist/standard/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST = "/scorelist/person/" + REQUEST_PERSON_ID;
 	public static final String STANDARD_CONTROLLER_GET_PASS_ENUM = "/enum/pass";
+	public static final String STANDARD_CONTROLLER_GET_UNIT_ENUM = "/enum/unit";
 
-	public static final String COMMON_CONDITION_CONTROLLER = "/api/common/condition";
+	public static final String STANDARD_COMMON_CONDITION_CONTROLLER = "/api/common/condition";
 	public static final String COMMON_CONDITION_CONTROLLER_GET_ALL = "/get/all";
 	public static final String COMMON_CONDITION_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_COMMON_CONDITION_ID;
 	public static final String COMMON_CONDITION_CONTROLLER_GET_BY_ID = "/get/common/condition/" + REQUEST_COMMON_CONDITION_ID;
@@ -380,14 +383,6 @@ public class ControllerAPI {
 	public static final String CATEGORY_CONTROLLER_POST_CATEGORY = "/post/category";
 	public static final String CATEGORY_CONTROLLER_PUT_CATEGORY = "/put/category/" + REQUEST_CATEGORY_ID;
 	public static final String CATEGORY_CONTROLLER_DELETE_CATEGORY_BY_ID = "/delete/category/" + REQUEST_CATEGORY_ID;
-
-	public static final String UNITS_CONTROLLER = "/api/name";
-	public static final String UNITS_CONTROLLER_GET_ALL_UNITS = "/get/name";
-	public static final String UNITS_CONTROLLER_GET_UNIT = "/get/unit/" + REQUEST_UNIT_ID;
-	public static final String UNITS_CONTROLLER_DELETE_UNIT = "/delete/unit/" + REQUEST_UNIT_ID;
-	public static final String UNITS_CONTROLLER_POST_UNIT = "/post/unit";
-	public static final String USER_CONTROLLER_GET_USER_ROLE = "/all/user";
-	public static final String COMPETITION_CONTROLLER_DELETE_ALL_COMPETITION = "/competition/delete/all";
 
 	public static final String COURSE_CONTROLLER = "/api/course";
 	public static final String COURSE_CONTROLLER_GET_ALL_COURSES = "/get/all/course";

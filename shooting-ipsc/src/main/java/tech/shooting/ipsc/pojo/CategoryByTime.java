@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Positive;
@@ -13,12 +12,12 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class CategoriesAndTime {
+public class CategoryByTime {
 
-    @DBRef
+//    @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Standard category", required = true)
-    private Categories category;
+    private Category category;
     
     @JsonProperty
     @ApiModelProperty(value = "Excellent execute time for this category", required = true)

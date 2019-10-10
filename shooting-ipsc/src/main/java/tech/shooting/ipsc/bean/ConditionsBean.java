@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.enums.UnitEnum;
+
 import org.springframework.data.mongodb.core.mapping.DBRef;
 @Data
 @Accessors(chain = true)
@@ -25,5 +27,5 @@ public class ConditionsBean {
     @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Units id", required = true)
-    private Long units;
+    private UnitEnum units;
 }

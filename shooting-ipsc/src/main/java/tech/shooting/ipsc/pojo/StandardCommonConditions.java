@@ -5,14 +5,20 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.enums.UnitEnum;
 
 @Data
 @Accessors(chain = true)
+@Document(collection = "standardCommonConditions")
+@TypeAlias("standardCommonConditions")
 @ToString(callSuper = true)
-public class Conditions {
-public static final String UNIT = "name";
-
+public class StandardCommonConditions  extends BaseDocument {
+	
+    public static final String COMMON_CONDITION_UNITS = "name";
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
     private String conditionsRus;
@@ -23,10 +29,9 @@ public static final String UNIT = "name";
 
     @JsonProperty
     @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
-    private Long coefficient;
+    private Double coefficient;
 
-    @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Standard name", required = true)
-    private Units units;
+    @ApiModelProperty(value = "Standard units", required = true)
+    private UnitEnum units;
 }

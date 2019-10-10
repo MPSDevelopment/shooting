@@ -37,15 +37,19 @@ public class Standard extends BaseDocument {
 	private boolean groups;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List categories", required = true)
-	private List<CategoriesAndTime> categoriesList;
+	@ApiModelProperty(value = "List categories by time", required = true)
+	private List<CategoryByTime> categoriesList;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "List categories by points", required = true)
+	private List<CategoryByPoints> categoryList;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List fails")
-	private List<Fails> failsList;
+	private List<StandardFails> failsList;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List conditions")
-	private List<Conditions> conditionsList;
+	private List<StandardConditions> conditionsList;
 
 }

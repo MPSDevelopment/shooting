@@ -1,11 +1,10 @@
-package tech.shooting.ipsc.bean;
+package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import tech.shooting.ipsc.pojo.Category;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Positive;
@@ -13,24 +12,25 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class CategoriesBean {
+public class CategoryByPoints {
 
+//    @DBRef
     @JsonProperty
-    @ApiModelProperty(value = "Category id", required = true)
+    @ApiModelProperty(value = "Standard category", required = true)
     private Category category;
     
     @JsonProperty
-    @ApiModelProperty(value = "Excellent execute time for this category", required = true)
+    @ApiModelProperty(value = "Excellent points(hits) for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float excellentTime;
+    private Integer excellentTime;
     
     @JsonProperty
-    @ApiModelProperty(value = "Good execute time for this category", required = true)
+    @ApiModelProperty(value = "Good points(hits) for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float goodTime;
+    private Integer goodTime;
     
     @JsonProperty("satTime")
-    @ApiModelProperty(value = "Standard execute time for this category", required = true)
+    @ApiModelProperty(value = "Standard points(hits) for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float satisfactoryTime;
+    private Integer satisfactoryTime;
 }

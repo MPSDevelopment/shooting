@@ -8,6 +8,7 @@ import tech.shooting.ipsc.pojo.Subject;
 import java.util.List;
 
 @Repository
-public interface StandardRepository extends MongoRepository<Standard,Long> {
-    List<Standard> findAllBySubject(Subject subject);
+public interface StandardRepository extends MongoRepository<Standard, Long> {
+
+	List<Standard> findAllBySubject(Subject subject);
 }
