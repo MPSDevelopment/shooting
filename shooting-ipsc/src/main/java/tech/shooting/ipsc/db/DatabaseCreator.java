@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
 import tech.shooting.ipsc.pojo.AnimalType;
+import tech.shooting.ipsc.pojo.Settings;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Rank;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.AnimalTypeRepository;
+import tech.shooting.ipsc.repository.SettingsRepository;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
@@ -22,6 +24,8 @@ import tech.shooting.ipsc.repository.SubjectRepository;
 @Component
 @Slf4j
 public class DatabaseCreator {
+
+	public static final String DEFAULT_SETTINGS_NAME = "Default";
 
 	public static final String PRIVATE = "Рядовой";
 
@@ -55,6 +59,9 @@ public class DatabaseCreator {
 	@Autowired
 	private AnimalTypeRepository animalTypeRepository;
 
+	@Autowired
+	private SettingsRepository appSettingsRepository;
+
 	public DatabaseCreator() {
 	}
 
@@ -67,6 +74,7 @@ public class DatabaseCreator {
 		userDao.createIfNotExists(new User().setLogin(ADMIN_LOGIN).setPassword(ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
 		userDao.createIfNotExists(new User().setLogin(JUDGE_LOGIN).setPassword(JUDGE_PASSWORD).setRoleName(RoleName.JUDGE).setActive(true).setName("Judge"));
 		userDao.createIfNotExists(new User().setLogin(GUEST_LOGIN).setPassword(GUEST_PASSWORD).setRoleName(RoleName.GUEST).setActive(true).setName("Guest"));
+
 		//create subject
 		subjectRepository.createIfNotExists(List.of(
 			new Subject().setRus("Огневая подготовка").setKz("Fire training"),
@@ -96,7 +104,7 @@ public class DatabaseCreator {
 				new Rank().setRus("Сержант первого класса").setKz("Бiрiншi сыныпты сержант"),
 				
 				new Rank().setRus("Штаб-сержант").setKz("Штаб-сержант"),
-				new Rank().setRus("Мастер-сержант").setKz("Шебер-\r\n"),
+				new Rank().setRus("Мастер-сержант").setKz("Шебер-сержант"),
 				
 				new Rank().setRus("Лейтенант").setKz("Лейтенант").setOfficer(true),
 				new Rank().setRus("Старший лейтенант").setKz("Аға лейтенант").setOfficer(true),
@@ -116,6 +124,10 @@ public class DatabaseCreator {
 		
 		
 		animalTypeRepository.createIfNotExists(new AnimalType().setName("Собака"));
+
+		if (appSettingsRepository.findByName(DEFAULT_SETTINGS_NAME) == null) {
+			appSettingsRepository.save(new Settings().setName(DEFAULT_SETTINGS_NAME).setTagServiceIp("127.0.0.1"));
+		}
 		
 	}
 }

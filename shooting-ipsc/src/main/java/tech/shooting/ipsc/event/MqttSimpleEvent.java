@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.mqtt.event;
+package tech.shooting.ipsc.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,10 @@ import tech.shooting.commons.eventbus.Event;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MqttOnConnectionLostEvent extends Event {
+public class MqttSimpleEvent extends Event {
 
-	private String clientId;
+    private String topicName;
+
+    private String json;
+
 }

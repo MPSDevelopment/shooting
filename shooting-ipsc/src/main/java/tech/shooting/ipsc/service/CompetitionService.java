@@ -32,7 +32,7 @@ import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
-import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
+import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
 import tech.shooting.ipsc.pojo.LevelBean;
@@ -438,16 +438,16 @@ public class CompetitionService {
 		if (StringUtils.isNotBlank(score.getDisqualificationReason())) {
 			switch (score.getDisqualificationReason()) {
 			case "DISQUALIFICATION":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.getType());
+				scoreResult.setDisqualificationReason(DisqualificationEnum.DISQUALIFICATION.toString());
 				break;
 			case "ABSENT":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.getType());
+				scoreResult.setDisqualificationReason(DisqualificationEnum.ABSENT.toString());
 				break;
 			case "INJURED":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.getType());
+				scoreResult.setDisqualificationReason(DisqualificationEnum.INJURED.toString());
 				break;
 			case "BROKEN_RULE":
-				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.getType());
+				scoreResult.setDisqualificationReason(DisqualificationEnum.BROKEN_RULE.toString());
 				break;
 			default:
 				scoreResult.setDisqualificationReason(score.getDisqualificationReason());

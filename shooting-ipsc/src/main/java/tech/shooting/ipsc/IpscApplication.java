@@ -2,6 +2,8 @@ package tech.shooting.ipsc;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.mqtt.MqttService;
+import tech.shooting.ipsc.service.TagService;
+
 import java.io.IOException;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -18,6 +20,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.impinj.octane.OctaneSdkException;
+
 @SpringBootApplication
 @EnableWebMvc
 @EnableMongoRepositories
@@ -29,6 +33,9 @@ public class IpscApplication {
 
 	@Autowired
 	public MqttService mqttService;
+
+	@Autowired
+	public TagService tagService;
 
 	public static void main(String[] args) throws IOException {
 		log.info("Starting IpscApplication");
@@ -42,13 +49,20 @@ public class IpscApplication {
 		return args -> {
 			mqttService.startBroker(null);
 
+				tagService.start();
+
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
 				public void run() {
 					try {
 						mqttService.stopBroker();
 					} catch (MqttException e) {
-						e.printStackTrace();
+						log.error("Cannot stop Mqtt broker : %s", e.getMessage());
+					}
+					try {
+						tagService.stop();
+					} catch (OctaneSdkException e) {
+						log.error("Cannot stop Tag service : %s", e.getMessage());
 					}
 				}
 			});

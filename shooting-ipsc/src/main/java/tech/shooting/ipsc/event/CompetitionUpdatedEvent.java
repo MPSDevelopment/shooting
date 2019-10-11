@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.mqtt.event;
+package tech.shooting.ipsc.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

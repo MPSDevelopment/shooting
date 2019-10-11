@@ -37,7 +37,7 @@ spring:
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
 server:
-  address: 192.168.1.139
+  address: 127.0.0.1
   port: 80
   http2:
     enabled: true

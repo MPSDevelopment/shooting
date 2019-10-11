@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.mqtt.event;
+package tech.shooting.ipsc.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,10 +8,7 @@ import tech.shooting.commons.eventbus.Event;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MqttSimpleEvent extends Event {
+public class MqttOnDisconnectEvent extends Event {
 
-    private String topicName;
-
-    private String json;
-
+	private String clientId;
 }

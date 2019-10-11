@@ -20,7 +20,7 @@ spring:
       database: test
   mongodb:
     embedded:
-      version: 4.0.6
+      version: 4.0.12
       features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
       storage.database-dir: data/embeddedmongo
 logging:
@@ -55,7 +55,7 @@ spring:
       database: test
   mongodb:
     embedded:
-      version: 4.0.6
+      version: 4.0.12
       features: NO_HTTP_INTERFACE_ARG, ONLY_WITH_SSL, ONLY_WINDOWS_2008_SERVER
       storage.database-dir: data/embeddedmongo
 server:
@@ -89,5 +89,4 @@ ipsc:
     adminLogin: ipsc
     adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-
 

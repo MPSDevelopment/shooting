@@ -302,6 +302,7 @@ public class ControllerAPI {
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_CHECK = "/check";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST = "/useintest";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_NOT_USE_IN_TEST = "/notuseintest";
+	public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
 
 	// weapon section
 	public static final String WEAPON_CONTROLLER = "/api/weapon";
@@ -389,7 +390,7 @@ public class ControllerAPI {
 	public static final String COURSE_CONTROLLER_GET_COURCES_BY_PERSON_BY_PAGE = "/person/" + REQUEST_PERSON_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COURSE_CONTROLLER_GET_COUNT = "/count";
 	
-	
-	
-	public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
+	public static final String SETTINGS_CONTROLLER = "/api/settings";
+	public static final String SETTINGS_CONTROLLER_GET_SETTINGS = "/";
+	public static final String SETTINGS_CONTROLLER_PUT_SETTINGS = "/";
 }

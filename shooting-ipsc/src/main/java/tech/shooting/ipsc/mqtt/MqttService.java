@@ -5,10 +5,10 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
-import tech.shooting.ipsc.mqtt.event.CompetitionUpdatedEvent;
-import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
-import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
-import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
+import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
+import tech.shooting.ipsc.event.MqttOnConnectEvent;
+import tech.shooting.ipsc.event.MqttOnConnectionLostEvent;
+import tech.shooting.ipsc.event.MqttOnDisconnectEvent;
 import tech.shooting.ipsc.pojo.Workspace;
 import tech.shooting.ipsc.service.WorkspaceService;
 

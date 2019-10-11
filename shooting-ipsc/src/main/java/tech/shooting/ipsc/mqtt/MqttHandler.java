@@ -10,9 +10,9 @@ import io.moquette.interception.messages.InterceptSubscribeMessage;
 import io.moquette.interception.messages.InterceptUnsubscribeMessage;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.ipsc.mqtt.event.MqttOnConnectEvent;
-import tech.shooting.ipsc.mqtt.event.MqttOnConnectionLostEvent;
-import tech.shooting.ipsc.mqtt.event.MqttOnDisconnectEvent;
+import tech.shooting.ipsc.event.MqttOnConnectEvent;
+import tech.shooting.ipsc.event.MqttOnConnectionLostEvent;
+import tech.shooting.ipsc.event.MqttOnDisconnectEvent;
 
 @Slf4j
 public class MqttHandler implements InterceptHandler {
