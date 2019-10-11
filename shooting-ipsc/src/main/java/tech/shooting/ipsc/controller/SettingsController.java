@@ -41,7 +41,7 @@ public class SettingsController {
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SETTINGS_CONTROLLER_GET_SETTINGS)
 	@ApiOperation(value = "Return default settings")
 	public ResponseEntity<Settings> getSettings() {
-		return new ResponseEntity<>(service.getSettingsByName(), HttpStatus.OK);
+		return new ResponseEntity<>(service.getSettings(), HttpStatus.OK);
 	}
 
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SETTINGS_CONTROLLER_PUT_SETTINGS)

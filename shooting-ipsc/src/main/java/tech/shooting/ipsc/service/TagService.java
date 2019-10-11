@@ -1,9 +1,8 @@
 package tech.shooting.ipsc.service;
 
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.impinj.octane.ImpinjReader;
@@ -14,7 +13,9 @@ import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
 
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.event.TagDetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
 
 @Service
@@ -23,12 +24,18 @@ public class TagService {
 
 	private ImpinjReader impinjReader;
 
+	@Autowired
+	private SettingsService settingsService;
+
 	public void start() throws OctaneSdkException {
 
 		impinjReader = new ImpinjReader();
 
+		var serverSettings = settingsService.getSettings();
+
 		try {
-			impinjReader.connect("192.168.31.212");
+			// "192.168.31.212"
+			impinjReader.connect(serverSettings.getTagServiceIp());
 		} catch (OctaneSdkException e) {
 			log.error("Cannot start Tag service : %s", e.getMessage());
 			return;
@@ -67,9 +74,12 @@ public class TagService {
 
 				log.info("On tag report %s", report.getTags().stream().map(item -> {
 					Tag tag = new Tag();
-					tag.setCrc(item.getCrc());
+					tag.setCode(String.valueOf(item.getCrc()));
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+
+					EventBus.publishEvent(new TagDetectedEvent(tag.getCode()));
+
 					return JacksonUtils.getJson(tag);
 				}).collect(Collectors.joining(", ")));
 			}

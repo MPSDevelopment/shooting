@@ -8,7 +8,7 @@ import lombok.Data;
 public class Tag {
 
 	@JsonProperty
-	private short crc;
+	private String code;
 
 	@JsonProperty
 	private long firstSeenTime;

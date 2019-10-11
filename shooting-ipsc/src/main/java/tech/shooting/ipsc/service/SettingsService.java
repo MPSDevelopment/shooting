@@ -14,12 +14,12 @@ public class SettingsService {
 	@Autowired
 	private SettingsRepository repository;
 
-	public Settings getSettingsByName() {
+	public Settings getSettings() {
 		return repository.findByName(DatabaseCreator.DEFAULT_SETTINGS_NAME);
 	}
 
 	public Settings putSettings(Settings settings) {
-		var result = getSettingsByName();
+		var result = getSettings();
 		if (result == null) {
 			return repository.save(settings.setName(DatabaseCreator.DEFAULT_SETTINGS_NAME));
 		}
