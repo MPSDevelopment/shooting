@@ -11,7 +11,7 @@ public class RunningData {
 	
 	private long firstTime;
 	
-	private long time;
+	private long lastTime;
 	
 	private int laps = 0;
 }

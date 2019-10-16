@@ -29,6 +29,10 @@ public class RunningService {
 		EventBus.subscribe(this);
 	}
 
+	public RunningData getPersonData(Person person) {
+		return map.get(person);
+	}
+
 	@Handler
 	public void handle(TagDetectedEvent event) {
 		log.info("Tag with code %s have appeared a first time");
@@ -39,9 +43,9 @@ public class RunningService {
 		}
 		RunningData runningData = map.get(person);
 		if (runningData == null) {
-			map.put(person, new RunningData().setLaps(0).setPerson(person).setTime(event.getTime()).setFirstTime(event.getTime()));
+			map.put(person, new RunningData().setLaps(0).setPerson(person).setLastTime(event.getTime()).setFirstTime(event.getTime()));
 		} else {
-			map.put(person, runningData.setLaps(runningData.getLaps() + 1).setTime(event.getTime()));
+			map.put(person, runningData.setLaps(runningData.getLaps() + 1).setLastTime(event.getTime()));
 		}
 	}
 
