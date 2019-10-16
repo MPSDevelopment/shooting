@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
+import tech.shooting.ipsc.event.RunningUpdatedEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Person;
@@ -43,10 +44,13 @@ public class RunningService {
 		}
 		RunningData runningData = map.get(person);
 		if (runningData == null) {
-			map.put(person, new RunningData().setLaps(0).setPerson(person).setLastTime(event.getTime()).setFirstTime(event.getTime()));
+			runningData = new RunningData().setLaps(0).setPerson(person).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
-			map.put(person, runningData.setLaps(runningData.getLaps() + 1).setLastTime(event.getTime()));
+			runningData = runningData.setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
 		}
+		map.put(person, runningData);
+		
+		EventBus.publishEvent(new RunningUpdatedEvent().setPersonId(person.getId()).setData(runningData));
 	}
 
 	@Handler
