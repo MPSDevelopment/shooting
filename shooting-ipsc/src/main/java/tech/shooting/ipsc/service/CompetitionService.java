@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,6 @@ import tech.shooting.ipsc.pojo.Score;
 import tech.shooting.ipsc.pojo.Stage;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
-import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.ScoreRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 
@@ -59,9 +57,6 @@ public class CompetitionService {
 
 	@Autowired
 	private ScoreRepository scoreRepository;
-
-	@Autowired
-	private RankRepository rankRepository;
 
 	private Competition useBeanUtilsWithOutJudges(CompetitionBean competitionBean, Competition competition) throws BadRequestException {
 		BeanUtils.copyProperties(competitionBean, competition, Competition.MATCH_DIRECTOR_FIELD, Competition.RANGE_MASTER_FIELD, Competition.STATS_OFFICER_FIELD, Competition.COMPETITORS_FIELD, Competition.STAGES_FIELD);

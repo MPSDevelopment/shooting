@@ -10,8 +10,8 @@ import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscMqttSettings;
 import tech.shooting.ipsc.event.MqttSimpleEvent;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
-import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.repository.CompetitionRepository;
+import tech.shooting.ipsc.service.MqttService;
 import tech.shooting.ipsc.service.WorkspaceService;
 
 import org.eclipse.paho.client.mqttv3.*;

@@ -22,7 +22,6 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.mqtt.MqttConstants;
-import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Subject;

@@ -46,7 +46,6 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.*;
 import tech.shooting.ipsc.mqtt.MqttConstants;
-import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.CompetitionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -54,6 +53,7 @@ import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.CompetitionService;
+import tech.shooting.ipsc.service.MqttService;
 import tech.shooting.ipsc.service.WorkspaceService;
 
 import java.util.Arrays;

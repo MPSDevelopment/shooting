@@ -1,17 +1,14 @@
 package tech.shooting.commons.mongo;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +19,6 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode()
 public class BaseDocument implements ShootingDocument {
 
 	public static final String ID_FIELD = "id";

@@ -39,7 +39,6 @@ import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
-import tech.shooting.ipsc.mqtt.MqttService;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
@@ -51,6 +50,7 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.repository.WorkSpaceRepository;
+import tech.shooting.ipsc.service.MqttService;
 import tech.shooting.ipsc.service.WorkspaceService;
 
 import static org.junit.jupiter.api.Assertions.*;

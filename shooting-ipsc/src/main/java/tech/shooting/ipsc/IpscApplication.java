@@ -1,7 +1,7 @@
 package tech.shooting.ipsc;
 
 import lombok.extern.slf4j.Slf4j;
-import tech.shooting.ipsc.mqtt.MqttService;
+import tech.shooting.ipsc.service.MqttService;
 import tech.shooting.ipsc.service.TagService;
 
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class IpscApplication {
 		return args -> {
 			mqttService.startBroker(null);
 
-				tagService.start();
+			tagService.start();
 
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override

@@ -1,5 +1,9 @@
 package tech.shooting.ipsc.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +17,11 @@ import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
 
 import lombok.extern.slf4j.Slf4j;
+import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.event.TagDetectedEvent;
+import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
 
 @Service
@@ -23,6 +29,8 @@ import tech.shooting.ipsc.pojo.Tag;
 public class TagService {
 
 	private ImpinjReader impinjReader;
+
+	private Map<String, Tag> map = new HashMap<>();
 
 	@Autowired
 	private SettingsService settingsService;
@@ -57,6 +65,8 @@ public class TagService {
 
 		log.info("Reader has been started");
 
+		EventBus.subscribe(this);
+
 		impinjReader.setTagOpCompleteListener(new TagOpCompleteListener() {
 
 			@Override
@@ -72,18 +82,44 @@ public class TagService {
 //					log.info("Tag report %s", report.getTags().stream().map(item-> item.getCrc()).collect(Collectors.toList()));
 //					log.info("On tag report %s", report.getTags().stream().map(item-> JacksonUtils.getFullJson(item)).collect(Collectors.joining(", ")));
 
-				log.info("On tag report %s", report.getTags().stream().map(item -> {
+				var list = new ArrayList<>();
+
+				report.getTags().forEach(item -> {
+					list.add(String.valueOf(item.getCrc()));
+
 					Tag tag = new Tag();
 					tag.setCode(String.valueOf(item.getCrc()));
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 
-					EventBus.publishEvent(new TagDetectedEvent(tag.getCode()));
+					if (map.get(tag.getCode()) == null) {
+						EventBus.publishEvent(new TagDetectedEvent(tag.getCode()).setTime(tag.getFirstSeenTime()));
+						map.put(tag.getCode(), tag);
+					}
+				});
 
+				// remove tag from map if it is not in tagReport
+				map.forEach((code, item) -> {
+					if (!list.contains(code)) {
+						EventBus.publishEvent(new TagUndetectedEvent(code));
+						map.remove(code);
+					}
+				});
+
+				log.info("On tag report %s", report.getTags().stream().map(item -> {
+					Tag tag = new Tag();
+					tag.setCode(String.valueOf(item.getCrc()));
+					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 					return JacksonUtils.getJson(tag);
 				}).collect(Collectors.joining(", ")));
 			}
 		});
+	}
+
+	@Handler
+	public void handle(TagDetectedEvent event) {
+
 	}
 
 	public void stop() throws OctaneSdkException {

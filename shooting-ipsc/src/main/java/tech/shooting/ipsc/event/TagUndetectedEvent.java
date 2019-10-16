@@ -9,18 +9,15 @@ import tech.shooting.ipsc.enums.EventTypeEnum;
 
 @Data
 @Accessors(chain = true)
-public class TagDetectedEvent extends Event {
+public class TagUndetectedEvent extends Event {
 
 	@JsonProperty
-	private EventTypeEnum type = EventTypeEnum.TAG_DETECTED;
+	private EventTypeEnum type = EventTypeEnum.TAG_UNDETECTED;
 
 	@JsonProperty
 	private String code;
-	
-	@JsonProperty
-	private long time;
 
-	public TagDetectedEvent(String code) {
+	public TagUndetectedEvent(String code) {
 		this.code = code;
 	}
 }
