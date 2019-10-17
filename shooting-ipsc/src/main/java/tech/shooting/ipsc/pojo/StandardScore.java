@@ -3,8 +3,6 @@ package tech.shooting.ipsc.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.EqualsAndHashCode.Include;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,7 +33,7 @@ public class StandardScore extends BaseDocument {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Score's datetime")
-	private OffsetDateTime datetime;
+	private OffsetDateTime datetime = OffsetDateTime.now();
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person score of this standard", required = true)

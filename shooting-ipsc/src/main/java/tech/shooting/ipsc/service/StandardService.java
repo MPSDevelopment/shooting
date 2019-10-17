@@ -9,8 +9,10 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CategoriesBean;
 import tech.shooting.ipsc.bean.ConditionsBean;
 import tech.shooting.ipsc.bean.StandardBean;
+import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.*;
+import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.StandardRepository;
 import tech.shooting.ipsc.repository.StandardScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
@@ -30,6 +32,9 @@ public class StandardService {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
+	
+	@Autowired
+	private PersonRepository personRepository;
 
 	public List<Standard> getAllStandards() {
 		return standardRepository.findAll();
@@ -49,6 +54,10 @@ public class StandardService {
 
 	private Standard checkStandard(Long standardId) throws BadRequestException {
 		return standardRepository.findById(standardId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect standard id %s ", standardId)));
+	}
+	
+	private Person checkPerson(Long id) throws BadRequestException {
+		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s ", id)));
 	}
 
 	public Standard postStandard(StandardBean bean) throws BadRequestException {
@@ -77,7 +86,6 @@ public class StandardService {
 		}
 		return res;
 	}
-
 
 	private List<CategoryByTime> checkCategoriesAndTime(List<CategoriesBean> categoriesList) throws BadRequestException {
 		List<CategoryByTime> res = new ArrayList<>();
@@ -113,16 +121,26 @@ public class StandardService {
 		var list = standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 		return CollectionUtils.isEmpty(list) ? null : list.get(0);
 	}
-	
+
 	public List<StandardScore> getScoreList(Long standardId, Long personId) {
 		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
 	}
-	
+
 	public List<StandardScore> getScoreStandardList(Long standardId) {
 		return standardScoreRepository.findAllByStandardId(standardId);
 	}
-	
+
 	public List<StandardScore> getScorePersonList(Long personId) {
 		return standardScoreRepository.findAllByPersonId(personId);
+	}
+
+	public List<StandardScore> getScoreList(StandardScoreRequest query) throws BadRequestException {
+		Standard standard = query.getStandardId() == null ? null : checkStandard(query.getStandardId());
+		Subject subject = query.getSubjectId() == null ? null : checkSubject(query.getSubjectId());
+		Person person = query.getPersonId() == null ? null : checkPerson(query.getPersonId());
+		
+		
+		
+		return new ArrayList<>();
 	}
 }

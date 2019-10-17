@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.StandardBean;
+import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.enums.UnitEnum;
@@ -97,6 +98,12 @@ public class StandardController {
 	@ApiOperation(value = "Get a score list", notes = "Return score list")
 	public ResponseEntity<List<StandardScore>> getScorePersonList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScorePersonList(personId), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get a score list for a query", notes = "Return score list")
+	public ResponseEntity<List<StandardScore>> getScoreQueryList(@RequestBody StandardScoreRequest query) throws BadRequestException {
+		return new ResponseEntity<>(standardService.getScoreList(query), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

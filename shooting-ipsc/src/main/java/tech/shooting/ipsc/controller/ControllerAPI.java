@@ -368,6 +368,7 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_GET_SCORE_LIST = "/scorelist/" + REQUEST_STANDARD_ID + "/" + REQUEST_PERSON_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST = "/scorelist/standard/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST = "/scorelist/person/" + REQUEST_PERSON_ID;
+	public static final String STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST = "/scorelist/query";
 	public static final String STANDARD_CONTROLLER_GET_PASS_ENUM = "/enum/pass";
 	public static final String STANDARD_CONTROLLER_GET_UNIT_ENUM = "/enum/unit";
 
