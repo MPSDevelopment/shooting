@@ -2,13 +2,14 @@ package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.impinj.octane.ConnectionCloseEvent;
+import com.impinj.octane.ConnectionCloseListener;
 import com.impinj.octane.ImpinjReader;
 import com.impinj.octane.OctaneSdkException;
 import com.impinj.octane.TagOpCompleteListener;
@@ -20,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.event.RunningOnConnectEvent;
+import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
@@ -66,6 +69,8 @@ public class TagService {
 		log.info("Reader has been started");
 
 		EventBus.subscribe(this);
+		
+		EventBus.publishEvent(new RunningOnConnectEvent());
 
 		impinjReader.setTagOpCompleteListener(new TagOpCompleteListener() {
 
@@ -115,6 +120,15 @@ public class TagService {
 				}).collect(Collectors.joining(", ")));
 			}
 		});
+		
+		impinjReader.setConnectionCloseListener(new ConnectionCloseListener() {
+			
+			@Override
+			public void onConnectionClose(ImpinjReader arg0, ConnectionCloseEvent arg1) {
+				log.info("Reader connection has been closed");
+				EventBus.publishEvent(new RunningOnDisconnectEvent());
+			}
+		});
 	}
 
 	@Handler
@@ -131,6 +145,8 @@ public class TagService {
 			impinjReader.disconnect();
 
 			log.info("Reader has been disconnected");
+			
+			EventBus.publishEvent(new RunningOnDisconnectEvent());
 		}
 	}
 
