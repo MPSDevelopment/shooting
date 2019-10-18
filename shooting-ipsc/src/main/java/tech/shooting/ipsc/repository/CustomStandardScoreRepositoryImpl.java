@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import java.util.List;
@@ -18,6 +19,9 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private DivisionRepository divisionRepository;
+
 	@Override
 	public List<StandardScore> getScoreList(StandardScoreRequest request) {
 
@@ -25,6 +29,22 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 		if (request.getPersonId() != null) {
 			query.addCriteria(Criteria.where(StandardScore.PERSON_FIELD).is(request.getPersonId()));
 		}
+
+		if (request.getDivisionId() != null) {
+
+			var division = divisionRepository.findById(request.getDivisionId()).orElse(null);
+
+			Query personQuery = new Query();
+			personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+			List<Person> persons = mongoTemplate.find(personQuery, Person.class);
+			
+			log.info("There is %d persons for a division %s", persons.size(), division);
+
+			query.addCriteria(Criteria.where(StandardScore.PERSON_FIELD).in(persons.stream().map(item -> {
+				return item.getId();
+			}).collect(Collectors.toList())));
+		}
+
 		if (request.getStandardId() != null) {
 			query.addCriteria(Criteria.where(StandardScore.STANDARD_FIELD).is(request.getStandardId()));
 		}

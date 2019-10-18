@@ -27,6 +27,10 @@ public class StandardScoreRequest {
 	private Long personId;
 	
 	@JsonProperty
+	@ApiModelProperty(value = "Division id")
+	private Long divisionId;
+	
+	@JsonProperty
 	@ApiModelProperty(value = "Start date")
 	private OffsetDateTime startDate;
 	

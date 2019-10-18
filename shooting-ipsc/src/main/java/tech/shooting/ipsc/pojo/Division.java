@@ -59,6 +59,7 @@ public class Division extends BaseDocument {
 		parentId = parent == null ? null : parent.getId();
 		if (parent != null) {
 			parent.getChildrenId().add(getId());
+			parent.getChildren().add(this);
 		}
 		return this;
 	}

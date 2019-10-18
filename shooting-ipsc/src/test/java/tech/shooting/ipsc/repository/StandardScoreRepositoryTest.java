@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Score;
@@ -49,6 +50,9 @@ class StandardScoreRepositoryTest {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
+	
+	@Autowired
+	private DivisionRepository divisionRepository;
 
 	private Standard testStandard;
 
@@ -64,6 +68,14 @@ class StandardScoreRepositoryTest {
 
 	private OffsetDateTime now;
 
+	private Division root;
+
+	private Division division;
+
+	private Division childDivision;
+
+	private Division anotherDivision;
+
 	@BeforeEach
 	public void before() {
 		scoreRepository.deleteAll();
@@ -75,9 +87,17 @@ class StandardScoreRepositoryTest {
 
 		testStandard = standardRepository.save(new Standard().setActive(true).setSubject(testSubject).setGroups(false));
 		anotherStandard = standardRepository.save(new Standard().setActive(true).setSubject(anotherSubject).setGroups(false));
+		
+		root = divisionRepository.save(new Division().setName("Root").setParent(null));
+		division = divisionRepository.save(new Division().setName("Division").setParent(root));
+		childDivision = divisionRepository.save(new Division().setName("Child").setParent(division));
+		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
+		
+		divisionRepository.save(root);
+		divisionRepository.save(division);
 
-		testingPerson = personRepository.save(new Person().setName("testing person"));
-		anotherPerson = personRepository.save(new Person().setName("another person"));
+		testingPerson = personRepository.save(new Person().setName("testing person").setDivision(childDivision));
+		anotherPerson = personRepository.save(new Person().setName("another person").setDivision(anotherDivision));
 
 		scoreRepository.save(new StandardScore().setDatetime(now).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
 		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(2)).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
@@ -94,6 +114,11 @@ class StandardScoreRepositoryTest {
 		// only person
 		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setPersonId(testingPerson.getId())).size());
 		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setPersonId(anotherPerson.getId())).size());
+		
+		// only division
+		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setDivisionId(childDivision.getId())).size());
+		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setDivisionId(anotherDivision.getId())).size());
+		assertEquals(4, scoreRepository.getScoreList(new StandardScoreRequest().setDivisionId(root.getId())).size());
 
 		// only standard
 		assertEquals(3, scoreRepository.getScoreList(new StandardScoreRequest().setStandardId(testStandard.getId())).size());
