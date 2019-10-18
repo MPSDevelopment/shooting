@@ -81,25 +81,26 @@ public class StandardController {
 	public ResponseEntity<StandardScore> getScore(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScore(standardId, personId), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get a score list", notes = "Return score list")
-	public ResponseEntity<List<StandardScore>> getScoreList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
+	public ResponseEntity<List<StandardScore>> getScoreList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId)
+			throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScoreList(standardId, personId), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get a score list", notes = "Return score list")
 	public ResponseEntity<List<StandardScore>> getScoreStandardList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScoreStandardList(standardId), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get a score list", notes = "Return score list")
 	public ResponseEntity<List<StandardScore>> getScorePersonList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScorePersonList(personId), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get a score list for a query", notes = "Return score list")
 	public ResponseEntity<List<StandardScore>> getScoreQueryList(@RequestBody StandardScoreRequest query) throws BadRequestException {
@@ -111,7 +112,7 @@ public class StandardController {
 	public ResponseEntity<StandardPassEnum[]> getPasses() {
 		return new ResponseEntity<>(StandardPassEnum.values(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_UNIT_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "List of standard unit values")
 	public ResponseEntity<UnitEnum[]> getUnits() {

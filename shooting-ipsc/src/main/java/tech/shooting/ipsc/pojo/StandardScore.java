@@ -20,7 +20,13 @@ import javax.validation.constraints.Positive;
 @Data
 @Accessors(chain = true)
 public class StandardScore extends BaseDocument {
-
+	
+	public static final String STANDARD_FIELD = "standardId";
+	
+	public static final String PERSON_FIELD = "personId";
+	
+	public static final String TIME_FIELD = "datetime";
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Standard id", required = true)
 	@NotNull(message = ValidationConstants.STANDARD_ID)

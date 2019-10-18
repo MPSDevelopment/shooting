@@ -451,21 +451,21 @@ class StandardControllerTest {
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
 		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
-		
+
 		var query = new StandardScoreRequest();
 		query.setPersonId(testingPerson.getId());
 
 		// try access with user role
-		String content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
 		assertEquals(2, list.size());
-		
+
 		query.setPersonId(anotherPerson.getId());
 
-		content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
 		list = JacksonUtils.getListFromJson(StandardScore[].class, content);
 		assertEquals(1, list.size());

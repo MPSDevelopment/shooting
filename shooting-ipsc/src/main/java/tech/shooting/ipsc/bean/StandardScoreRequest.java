@@ -26,12 +26,12 @@ public class StandardScoreRequest {
 	@ApiModelProperty(value = "Person id")
 	private Long personId;
 	
-//	@JsonProperty
-//	@ApiModelProperty(value = "Start date")
-//	private OffsetDateTime startDate;
-//	
-//	@JsonProperty
-//	@ApiModelProperty(value = "End date")
-//	private OffsetDateTime endDate;
+	@JsonProperty
+	@ApiModelProperty(value = "Start date")
+	private OffsetDateTime startDate;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "End date")
+	private OffsetDateTime endDate;
 
 }

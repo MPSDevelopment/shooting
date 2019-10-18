@@ -7,7 +7,7 @@ import tech.shooting.ipsc.pojo.StandardScore;
 import java.util.List;
 
 @Repository
-public interface StandardScoreRepository extends MongoRepository<StandardScore, Long> {
+public interface StandardScoreRepository extends MongoRepository<StandardScore, Long>, CustomStandardScoreRepository {
 
 	List<StandardScore> findAllByPersonId(Long personId);
 

@@ -17,6 +17,7 @@ import tech.shooting.ipsc.repository.StandardRepository;
 import tech.shooting.ipsc.repository.StandardScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
+import java.net.StandardSocketOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,7 @@ public class StandardService {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
-	
+
 	@Autowired
 	private PersonRepository personRepository;
 
@@ -55,7 +56,7 @@ public class StandardService {
 	private Standard checkStandard(Long standardId) throws BadRequestException {
 		return standardRepository.findById(standardId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect standard id %s ", standardId)));
 	}
-	
+
 	private Person checkPerson(Long id) throws BadRequestException {
 		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id %s ", id)));
 	}
@@ -135,12 +136,16 @@ public class StandardService {
 	}
 
 	public List<StandardScore> getScoreList(StandardScoreRequest query) throws BadRequestException {
-		Standard standard = query.getStandardId() == null ? null : checkStandard(query.getStandardId());
-		Subject subject = query.getSubjectId() == null ? null : checkSubject(query.getSubjectId());
-		Person person = query.getPersonId() == null ? null : checkPerson(query.getPersonId());
-		
-		
-		
-		return new ArrayList<>();
+		if (query.getStandardId() != null) {
+			checkStandard(query.getStandardId());
+		}
+		if (query.getSubjectId() != null) {
+			checkSubject(query.getSubjectId());
+		}
+		if (query.getPersonId() != null) {
+			checkPerson(query.getPersonId());
+		}
+
+		return standardScoreRepository.getScoreList(query);
 	}
 }
