@@ -289,7 +289,7 @@ class DivisionControllerTest {
 		DivisionBean division = divisionService.createDivision(divisionBean, null);
 		divisionService.createDivision(new DivisionBean().setName("fdfdfd").setParent(division.getId()), division.getId());
 		DivisionBean qyqy = divisionService.updateDivision(division.getId(), "qyqy");
-		assertEquals(qyqy.getChildren().size(), 1);
+		assertEquals(2, qyqy.getChildren().size());
 	}
 
 	@Test
