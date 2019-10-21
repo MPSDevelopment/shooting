@@ -109,8 +109,8 @@ class StandardControllerTest {
 		testCategory = new Category().setNameCategoryRus("Vodka").setNameCategoryKz("Weapon Training");
 		testSubject = testSubject == null ? subjectRepository.save(new Subject().setRus("LitrBooool").setKz("Physical training")) : testSubject;
 		testStandard = new Standard().setActive(true).setSubject(testSubject).setGroups(false)
-				.setInfo(new Info().setNamedRus("Бег с припятствиями за водкой").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz(
-						"Возраст. Спортсмен может получить определенный разряд только при условии достижения им определенного возраста: с 10 лет — 1-3 юношеские разряды и взрослые разряды, с 14 лет — КМС, с 15 лет — МС, а с 16 лет — МСМК."));
+				.setInfo(new Info().setNamedRus("Running").setNamedKz("Running with obstacles").setDescriptionRus("Бла бла бла бла бла").setDescriptionKz(
+						"Running"));
 		testingPerson = personRepository.save(new Person().setName("testing person"));
 		anotherPerson = personRepository.save(new Person().setName("another person"));
 
@@ -172,7 +172,7 @@ class StandardControllerTest {
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Standard standard = JacksonUtils.fromJson(Standard.class, contentAsString);
-		assertEquals(save, standard);
+		assertEquals(save.getId(), standard.getId());
 
 	}
 
@@ -205,7 +205,7 @@ class StandardControllerTest {
 				.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT.replace(ControllerAPI.REQUEST_SUBJECT_ID, save.getSubject().getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Standard> standard = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
-		assertEquals(save, standard.get(0));
+		assertEquals(save.getId(), standard.get(0).getId());
 	}
 
 	@Test

@@ -23,7 +23,8 @@ public class CustomRankRepositoryImpl implements CustomRankRepository {
 			Query query = Query.query(Criteria.where(Rank.KZ).is(ranks.get(i).getKz()));
 			query.addCriteria(Criteria.where(Rank.RUS).is(ranks.get(i).getRus()));
 			if(mongoTemplate.find(query, Rank.class).size() == 0 || mongoTemplate.find(query, Rank.class) == null) {
-				res.add(mongoTemplate.save(ranks.get(i)));
+				mongoTemplate.save(ranks.get(i));
+				res.add(ranks.get(i));
 			}
 		}
 		return res;

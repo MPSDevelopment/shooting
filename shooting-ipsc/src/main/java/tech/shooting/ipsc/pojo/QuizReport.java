@@ -15,7 +15,7 @@ import tech.shooting.ipsc.serialization.PersonFromIdDeserializer;
 
 import java.util.List;
 
-@Document("quizreport")
+@Document(collection = "quizreport")
 @TypeAlias("quizreport")
 @Data
 @Accessors(chain = true)

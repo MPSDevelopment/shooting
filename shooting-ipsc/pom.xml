@@ -238,27 +238,27 @@
 							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
-<!-- 					<execution> -->
-<!-- 						<id>copy</id> -->
-<!-- 						<phase>prepare-package</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>unpack</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<artifactItems> -->
-<!-- 								<artifactItem> -->
-<!-- 									<groupId>oracle</groupId> -->
-<!-- 									<artifactId>jre-win32</artifactId> -->
-<!-- 									<version>${jre.version}</version> -->
-<!-- 									<type>zip</type> -->
-<!-- 									<overWrite>false</overWrite> -->
-<!-- 									<outputDirectory>${project.build.directory}/jre</outputDirectory> -->
-<!-- 								</artifactItem> -->
-<!-- 							</artifactItems> -->
-<!-- 							<overWriteReleases>false</overWriteReleases> -->
-<!-- 							<overWriteSnapshots>true</overWriteSnapshots> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
+					<!-- <execution> -->
+					<!-- <id>copy</id> -->
+					<!-- <phase>prepare-package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>unpack</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <artifactItems> -->
+					<!-- <artifactItem> -->
+					<!-- <groupId>oracle</groupId> -->
+					<!-- <artifactId>jre-win32</artifactId> -->
+					<!-- <version>${jre.version}</version> -->
+					<!-- <type>zip</type> -->
+					<!-- <overWrite>false</overWrite> -->
+					<!-- <outputDirectory>${project.build.directory}/jre</outputDirectory> -->
+					<!-- </artifactItem> -->
+					<!-- </artifactItems> -->
+					<!-- <overWriteReleases>false</overWriteReleases> -->
+					<!-- <overWriteSnapshots>true</overWriteSnapshots> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
 				</executions>
 			</plugin>
 			<plugin>

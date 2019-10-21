@@ -276,7 +276,7 @@ class DivisionControllerTest {
 		assertEquals(division, JacksonUtils.fromJson(DivisionBean.class, contentAsString));
 	}
 
-	private void createDivisions(int count) {
+	private void createDivisions(int count) { 
 		for (int i = 0; i < count; i++) {
 			DivisionBean division = new DivisionBean().setActive(true).setName("test + " + i).setParent(getRootDivision());
 			divisionService.createDivision(division, division.getParent());

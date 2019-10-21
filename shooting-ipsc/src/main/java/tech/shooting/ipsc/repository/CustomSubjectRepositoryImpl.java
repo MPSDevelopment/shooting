@@ -20,7 +20,8 @@ public class CustomSubjectRepositoryImpl implements CustomSubjectRepository {
 			Query query = Query.query(Criteria.where(Subject.KZ).is(subjects.get(i).getKz()));
 			query.addCriteria(Criteria.where(Subject.RUS).is(subjects.get(i).getRus()));
 			if(mongoTemplate.find(query, Subject.class).size() == 0 || mongoTemplate.find(query, Subject.class) == null) {
-				res.add(mongoTemplate.save(subjects.get(i)));
+				mongoTemplate.save(subjects.get(i));
+				res.add(subjects.get(i));
 			}
 		}
 		return res;

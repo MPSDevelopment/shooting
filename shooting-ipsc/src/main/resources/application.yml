@@ -36,6 +36,7 @@ spring:
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
 server:
   address: 127.0.0.1
   port: 80
@@ -75,6 +76,7 @@ spring:
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
 server:
   address: 10.0.0.5
   port: 9901
@@ -113,6 +115,7 @@ spring:
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
 server:
   address: 0.0.0.0
   port: 9901
@@ -144,6 +147,7 @@ spring:
       authentication-database: admin
       username: ipsc
       password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
 server:
   address: 127.0.0.1
   port: 9901

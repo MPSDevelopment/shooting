@@ -18,6 +18,7 @@ spring:
       host: localhost
       port: 12345
       database: test
+      auto-index-creation: true
   mongodb:
     embedded:
       version: 4.0.12
@@ -53,6 +54,7 @@ spring:
       host: localhost
       port: 12345
       database: test
+      auto-index-creation: true
   mongodb:
     embedded:
       version: 4.0.12

@@ -79,6 +79,7 @@ public class PersonController {
 		return new ResponseEntity<>(personService.getFreeNumber(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Update person", notes = "Return update person object")
 	public ResponseEntity<Person> updatePerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {

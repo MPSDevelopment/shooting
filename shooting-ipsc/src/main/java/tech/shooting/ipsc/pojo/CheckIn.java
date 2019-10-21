@@ -13,7 +13,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.TypeOfPresence;
 import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
 
-@Document("checkin")
+@Document(collection = "checkin")
 @TypeAlias("checkin")
 @Data
 @Accessors(chain = true)
