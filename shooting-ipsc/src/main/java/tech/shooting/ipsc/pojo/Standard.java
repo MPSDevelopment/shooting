@@ -3,6 +3,8 @@ package tech.shooting.ipsc.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
@@ -12,7 +14,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
 @Document(collection = "standard")
 @TypeAlias("standard")

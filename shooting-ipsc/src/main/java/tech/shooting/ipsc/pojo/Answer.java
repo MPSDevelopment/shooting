@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Max;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Accessors(chain = true)
-public class Answer {
+public class Answer extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Answer number", required = true)
@@ -31,7 +32,7 @@ public class Answer {
 	@ApiModelProperty(value = "Answer in kz", required = true)
 	@NotBlank
 	private String kz;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Question image path", required = true)
 	private String imagePath;

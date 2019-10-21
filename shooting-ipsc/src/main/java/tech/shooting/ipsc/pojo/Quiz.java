@@ -3,6 +3,8 @@ package tech.shooting.ipsc.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,9 +17,10 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Document(collection = "quiz")
 @TypeAlias("quiz")
-@Data
 @Accessors(chain = true)
 public class Quiz extends BaseDocument {
 	

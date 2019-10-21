@@ -119,7 +119,7 @@ class QuizControllerTest {
 		guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		quizBean = new QuizBean().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject.getId()).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L);
 		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
-		testQuestion = new Question().setQuestion(new Ask().setRus(" аврраоврылоарвларвлоыарвлыора").setKz("What is you name")).setRandom(false)
+		testQuestion = new Question().setQuestion(new Ask().setRus("What is your name").setKz("What is you name")).setRandom(false)
 				.setAnswers(List.of(new Answer().setRus("бояра").setKz("Tom"), new Answer().setRus("водяра").setKz("Mike"), new Answer().setRus("даун").setKz("Steven"), new Answer().setRus("полный ноль").setKz("Undefined"))).setRight(3);
 	}
 
@@ -128,20 +128,20 @@ class QuizControllerTest {
 		// prepare
 		json = JacksonUtils.getJson(quizBean);
 		// try access to createQuiz with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createQuiz with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
 				userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createQuiz with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
 				judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createQuiz with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
 				guestToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		long count = quizRepository.count();
 		// try access to createQuiz with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Quiz quiz = JacksonUtils.fromJson(Quiz.class, contentAsString);
 		assertEquals(count + 1, quizRepository.findAll().size());
@@ -256,20 +256,20 @@ class QuizControllerTest {
 		// try access to update quiz
 		// with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+				.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// with user role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isOk());
+				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isOk());
 		// with guest role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.header(Token.TOKEN_HEADER, guestToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isOk());
+				.header(Token.TOKEN_HEADER, guestToken).contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isOk());
 		// with judge role
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(json))).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// with admin role
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_PUT_QUIZ.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-						.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(json)).header(Token.TOKEN_HEADER, adminToken))
+						.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(json)).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		assertEquals(testQuiz, JacksonUtils.fromJson(Quiz.class, contentAsString));
 	}
@@ -296,17 +296,17 @@ class QuizControllerTest {
 		// try access to added question to exist quiz
 		// unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+				.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion)))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// judge role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// admin role
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()))
-						.contentType(MediaType.APPLICATION_JSON_UTF8).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, adminToken))
+						.contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(JacksonUtils.getJson(testQuestion))).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		checkQuestion(testQuestion, JacksonUtils.fromJson(Question.class, contentAsString));
 	}
@@ -395,29 +395,29 @@ class QuizControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(question))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// user role
 		mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// judge role
 		mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// guest role
 		mockMvc.perform(MockMvcRequestBuilders
 				.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
+				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		
 		// admin role
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders
 						.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 								+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
-						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, adminToken))
+						.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		checkQuestion(question, JacksonUtils.fromJson(Question.class, contentAsString));
 	}
@@ -459,7 +459,7 @@ class QuizControllerTest {
 		List<ReportBean> reportBeans = new ArrayList<>();
 		reportBeans.add(reportBean);
 		String json = JacksonUtils.getJson(reportBeans);
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ).contentType(MediaType.APPLICATION_JSON_UTF8)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ).contentType(MediaType.APPLICATION_JSON)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		System.out.println(contentAsString);
 		List<QuizReportBean> listFromJson = JacksonUtils.getListFromJson(QuizReportBean[].class, contentAsString);

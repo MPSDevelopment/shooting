@@ -1,32 +1,32 @@
 package tech.shooting.commons.mongo;
 
-import com.mongodb.*;
-import com.mpsdevelopment.plasticine.commons.IdGenerator;
-import lombok.extern.slf4j.Slf4j;
-import tech.shooting.commons.mongo.converter.DateToOffsetDateTimeConverter;
-import tech.shooting.commons.mongo.converter.OffsetDateTimeToDateConverter;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
-import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.data.util.TypeInformation;
 import org.springframework.lang.Nullable;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.DBRef;
+import com.mongodb.MongoClientOptions;
+import com.mpsdevelopment.plasticine.commons.IdGenerator;
+
+import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.mongo.converter.DateToOffsetDateTimeConverter;
+import tech.shooting.commons.mongo.converter.OffsetDateTimeToDateConverter;
 
 @Slf4j
 public class MongoConfig {
