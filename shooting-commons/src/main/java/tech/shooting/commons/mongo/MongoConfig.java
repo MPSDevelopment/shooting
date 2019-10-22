@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.data.util.TypeInformation;
@@ -83,7 +83,7 @@ public class MongoConfig {
 
 		};
 
-		mongoConverter.setCustomConversions(new CustomConversions(customConversions()));
+		mongoConverter.setCustomConversions(new MongoCustomConversions(customConversions()));
 
 		return mongoConverter;
 	}
@@ -94,8 +94,6 @@ public class MongoConfig {
 		converterList.add(new OffsetDateTimeToDateConverter());
 		return converterList;
 	}
-
-	;
 
 	@Bean
 	public SaveWithIdMongoEventListener saveWithIdMongoEventListener() {
