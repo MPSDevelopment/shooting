@@ -28,20 +28,20 @@ public class SpecialityController {
 	private SpecialityService specialityService;
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_ALL_SPECIALITY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get  list speciality")
 	public ResponseEntity<List<Speciality>> getAllSpeciality() {
 		return new ResponseEntity<>(specialityService.getAll(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_GET_SPECIALITY_BY_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get speciality by id or throws BadRequestException")
 	public ResponseEntity<Speciality> getSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
 		return new ResponseEntity<>(specialityService.speciality(specialityId), HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.SPECIALITY_CONTROLLER_DELETE_SPECIALITY_BY_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete speciality by id or throws BadRequestException if not exist")
 	public ResponseEntity deleteSpecialityById(@PathVariable (value = ControllerAPI.PATH_VARIABLE_SPECIALITY_ID)Long specialityId) throws BadRequestException {
 		specialityService.deleteSpeciality(specialityId);

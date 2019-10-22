@@ -39,37 +39,37 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.createQuiz(quiz), HttpStatus.CREATED);
 	}
 
-	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECTS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list of subjects", notes = "Return list of subjects")
 	public ResponseEntity<List<Subject>> getEnumSubjects() {
 		return new ResponseEntity<>(quizService.getEnum(), HttpStatus.OK);
 	}
 
-	@GetMapping(ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SUBJECT_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list quiz from subject", notes = "Return list of quiz")
 	public ResponseEntity<List<Quiz>> getQuizFromSubject(@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT_ID) Long subject) {
 		return new ResponseEntity<>(quizService.getQuizFromSubject(subject), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_ALL_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all quiz from db", notes = "Return list of exist quiz")
 	public ResponseEntity<List<Quiz>> getAll() {
 		return new ResponseEntity<>(quizService.getAllQuiz(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get quiz from db by id", notes = "Return quiz")
 	public ResponseEntity<Quiz> getQuiz(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuiz(id), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get quiz from db by id and return List Question", notes = "Return list question")
 	public ResponseEntity<List<Question>> getQuizByIdAndReturnListQuestion(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuiz(id).getQuestionList(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get question list to check", notes = "Return list question")
 	public ResponseEntity<List<QuestionBean>> getQuizToCheck(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuestionList(id), HttpStatus.OK);
@@ -82,7 +82,7 @@ public class QuizController {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete quiz from db by id", notes = "Return status")
 	public ResponseEntity<SuccessfulMessage> deleteQuiz(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id) throws BadRequestException {
 		quizService.removeQuiz(id);
@@ -96,14 +96,14 @@ public class QuizController {
 		return new ResponseEntity<>(quizService.addQuestion(id, question), HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get question", notes = "Return question object")
 	public ResponseEntity<Question> getQuestion(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getQuestion(id, questionId), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUESTION)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_DELETE_QUESTION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete  question", notes = "Return status")
 	public ResponseEntity<SuccessfulMessage> deleteQuestion(@PathVariable(value = ControllerAPI.PATH_VARIABLE_QUIZ_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_QUESTION_ID) Long questionId) throws BadRequestException {
 		quizService.deleteQuestion(id, questionId);
