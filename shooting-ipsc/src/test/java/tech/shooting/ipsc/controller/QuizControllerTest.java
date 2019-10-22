@@ -37,6 +37,7 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
+import tech.shooting.ipsc.repository.QuizScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.QuizService;
@@ -57,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 class QuizControllerTest {
+	
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -71,6 +73,9 @@ class QuizControllerTest {
 
 	@Autowired
 	private QuizRepository quizRepository;
+	
+	@Autowired
+	private QuizScoreRepository quizScoreRepository;
 
 	@Autowired
 	private SubjectRepository subjectRepository;
@@ -103,6 +108,10 @@ class QuizControllerTest {
 
 	private String guestToken;
 
+	private Person anotherPerson;
+
+	private Person testingPerson;
+
 	@BeforeEach
 	void setUp() {
 		quizRepository.deleteAll();
@@ -121,6 +130,10 @@ class QuizControllerTest {
 		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
 		testQuestion = new Question().setQuestion(new Ask().setRus("What is your name").setKz("What is you name")).setRandom(false)
 				.setAnswers(List.of(new Answer().setRus("бояра").setKz("Tom"), new Answer().setRus("водяра").setKz("Mike"), new Answer().setRus("даун").setKz("Steven"), new Answer().setRus("полный ноль").setKz("Undefined"))).setRight(3);
+		
+		testingPerson = personRepository.save(new Person().setName("testing person"));
+		anotherPerson = personRepository.save(new Person().setName("another person"));
+		
 	}
 
 	@Test
@@ -423,7 +436,7 @@ class QuizControllerTest {
 	}
 
 	@Test
-	void checkCreateReport() throws Exception {
+	void checkPostScore() throws Exception {
 		// get person who pass test
 		List<Person> all = personRepository.findAll();
 		log.info("Person list size is %s", all.size());
@@ -450,13 +463,13 @@ class QuizControllerTest {
 			log.info("Question %s is %s", i, questionList1.get(i));
 		}
 		// create ReportBean
-		ReportBean reportBean = new ReportBean().setPerson(testPerson.getId()).setQuizId(save.getId());
+		QuizScoreBean reportBean = new QuizScoreBean().setPerson(testPerson.getId()).setQuizId(save.getId());
 		List<RowBean> rowBeans = new ArrayList<>();
 		rowBeans.add(new RowBean().setAnswer((long) 3).setQuestionId(questionList1.get(0).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 2).setQuestionId(questionList1.get(1).getId()));
 		rowBeans.add(new RowBean().setAnswer((long) 0).setQuestionId(questionList1.get(3).getId()));
 		reportBean.setList(rowBeans);
-		List<ReportBean> reportBeans = new ArrayList<>();
+		List<QuizScoreBean> reportBeans = new ArrayList<>();
 		reportBeans.add(reportBean);
 		String json = JacksonUtils.getJson(reportBeans);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ).contentType(MediaType.APPLICATION_JSON)
@@ -600,6 +613,33 @@ class QuizControllerTest {
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGES), String.valueOf(countPages));
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(page));
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(sizeAllUser));
+	}
+	
+	@Test
+	void checkGetScoreQueryList() throws Exception {
+
+		testQuiz = quizRepository.save(testQuiz);
+		quizScoreRepository.save(new QuizScore().setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(4));
+		quizScoreRepository.save(new QuizScore().setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
+		quizScoreRepository.save(new QuizScore().setPersonId(anotherPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
+
+		var query = new QuizScoreRequest();
+		query.setPersonId(testingPerson.getId());
+
+		// try access with user role
+		String content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(QuizScore[].class, content);
+		assertEquals(2, list.size());
+
+		query.setPersonId(anotherPerson.getId());
+
+		content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		list = JacksonUtils.getListFromJson(QuizScore[].class, content);
+		assertEquals(1, list.size());
 	}
 
 	private void createQuiz(int count) {

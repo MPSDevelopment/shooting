@@ -220,6 +220,7 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION = "/quiz/" + REQUEST_QUIZ_ID + "/list";
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK = "/quiz/" + REQUEST_QUIZ_ID + "/list/check";
 	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
+	public static final String QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST = "/scorelist/query";
 
 	// checkin section
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";

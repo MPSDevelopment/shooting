@@ -13,10 +13,13 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
-import tech.shooting.ipsc.bean.ReportBean;
+import tech.shooting.ipsc.bean.QuizScoreBean;
+import tech.shooting.ipsc.bean.QuizScoreRequest;
+import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
-import tech.shooting.ipsc.pojo.QuizReport;
+import tech.shooting.ipsc.pojo.QuizScore;
+import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.service.QuizService;
 
@@ -128,8 +131,14 @@ public class QuizController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Create row report's", notes = "Return list of reports")
-	public ResponseEntity<List<QuizReport>> createReport(@RequestBody @Valid List<ReportBean> listResult) throws BadRequestException {
-		return new ResponseEntity<>(quizService.createReport(listResult), HttpStatus.CREATED);
+	public ResponseEntity<List<QuizScore>> postScore(@RequestBody @Valid List<QuizScoreBean> listResult) throws BadRequestException {
+		return new ResponseEntity<>(quizService.postScore(listResult), HttpStatus.CREATED);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get a score list for a query", notes = "Return score list")
+	public ResponseEntity<List<QuizScore>> getScoreQueryList(@RequestBody QuizScoreRequest query) throws BadRequestException {
+		return new ResponseEntity<>(quizService.getScoreList(query), HttpStatus.OK);
 	}
 
 }

@@ -9,13 +9,15 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
-import tech.shooting.ipsc.bean.ReportBean;
+import tech.shooting.ipsc.bean.QuizScoreBean;
+import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.RowBean;
+import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
-import tech.shooting.ipsc.repository.ReportRepository;
+import tech.shooting.ipsc.repository.QuizScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
 import java.util.ArrayList;
@@ -25,8 +27,12 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class QuizService {
+	
 	@Autowired
 	private QuizRepository quizRepository;
+	
+	@Autowired
+	private QuizScoreRepository quizScoreRepository;
 
 	@Autowired
 	private SubjectRepository subjectRepository;
@@ -35,7 +41,7 @@ public class QuizService {
 	private PersonRepository personRepository;
 
 	@Autowired
-	private ReportRepository reportRepository;
+	private QuizScoreRepository reportRepository;
 
 	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
@@ -107,15 +113,15 @@ public class QuizService {
 		return Pageable.getPage(page, size, quizRepository);
 	}
 
-	public List<QuizReport> createReport (List<ReportBean> listResult) throws BadRequestException {
-		List<QuizReport> reports = new ArrayList<>();
+	public List<QuizScore> postScore (List<QuizScoreBean> listResult) throws BadRequestException {
+		List<QuizScore> reports = new ArrayList<>();
 		for(int i = 0; i < listResult.size(); i++) {
-			reports.add(checkReport(listResult.get(i)));
+			reports.add(checkScore(listResult.get(i)));
 		}
 		return reports;
 	}
 
-	private QuizReport checkReport (ReportBean reportBean) throws BadRequestException {
+	private QuizScore checkScore (QuizScoreBean reportBean) throws BadRequestException {
 		//check quiz and person exist
 		Quiz quiz = checkQuiz(reportBean.getQuizId());
 		Person person = checkPerson(reportBean.getPerson());
@@ -141,17 +147,17 @@ public class QuizService {
 			skip.add(collect.get(i).getQuestion());
 		}
 		double mark = calculatePercentage(rightAnswer, countQuestion);
-		int grade;
+		int score;
 		if(mark >= quiz.getGreat()) {
-			grade = 5;
+			score = 5;
 		} else if(mark >= quiz.getGood()) {
-			grade = 4;
+			score = 4;
 		} else if(mark >= quiz.getSatisfactorily()) {
-			grade = 3;
+			score = 3;
 		} else {
-			grade = 2;
+			score = 2;
 		}
-		return reportRepository.save(new QuizReport().setQuiz(quiz).setPerson(person).setIncorrect(incorrect).setSkip(skip).setMark(grade));
+		return reportRepository.save(new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setIncorrect(incorrect).setSkip(skip).setScore(score));
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {
@@ -176,5 +182,19 @@ public class QuizService {
 			res.add(bean);
 		}
 		return res;
+	}
+	
+	public List<QuizScore> getScoreList(QuizScoreRequest query) throws BadRequestException {
+		if (query.getQuizId() != null) {
+			checkQuiz(query.getQuizId());
+		}
+		if (query.getSubjectId() != null) {
+			checkSubject(query.getSubjectId());
+		}
+		if (query.getPersonId() != null) {
+			checkPerson(query.getPersonId());
+		}
+
+		return quizScoreRepository.getScoreList(query);
 	}
 }

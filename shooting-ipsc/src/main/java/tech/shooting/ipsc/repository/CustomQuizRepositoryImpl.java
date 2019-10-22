@@ -10,6 +10,7 @@ import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 
 public class CustomQuizRepositoryImpl implements CustomQuizRepository {
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 

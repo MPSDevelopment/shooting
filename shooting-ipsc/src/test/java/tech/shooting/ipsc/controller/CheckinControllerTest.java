@@ -35,7 +35,6 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.TypeOfInterval;
 import tech.shooting.ipsc.enums.TypeOfPresence;
-import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.*;
 import tech.shooting.ipsc.service.CheckinService;

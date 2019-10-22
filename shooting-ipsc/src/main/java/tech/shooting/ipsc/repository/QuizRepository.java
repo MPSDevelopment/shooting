@@ -7,6 +7,7 @@ import tech.shooting.ipsc.pojo.Subject;
 import java.util.List;
 
 public interface QuizRepository extends MongoRepository<Quiz, Long>, CustomQuizRepository {
+	
 	List<Quiz> findBySubject (Subject subject);
 
 	List<Quiz> findBySubject (Long subject);
