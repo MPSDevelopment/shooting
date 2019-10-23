@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -73,9 +72,10 @@ public class WorkspaceService {
 		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);
-		map.put(clientId, workspace);
-
+		
 		log.info("Create workspace %s in the map", workspace);
+		
+		putWorkspace(workspace);
 
 		return workspace;
 	}
@@ -206,6 +206,9 @@ public class WorkspaceService {
 	public void putWorkspace(Workspace workspace) {
 		log.info("Put workspace %s to the map", workspace);
 		map.put(workspace.getClientId(), workspace);
+		map.values().forEach(item -> {
+			log.info("Workspace is %s %s %s", workspace.getId(), workspace.getIp(), workspace.getPersonId());
+		});
 	}
 
 	public void clear() {
