@@ -72,9 +72,9 @@ public class WorkspaceService {
 		workspace.setStatus(WorkspaceStatusEnum.CONNECTED);
 		workspace.setClientId(clientId);
 		workspace.setIp(ip);
-		
+
 		log.info("Create workspace %s in the map", workspace);
-		
+
 		putWorkspace(workspace);
 
 		return workspace;
@@ -149,7 +149,6 @@ public class WorkspaceService {
 			checkQuiz(bean.getQuizId());
 			BeanUtils.copyProperties(bean, workspace);
 			putWorkspace(workspace);
-			log.info("Updated workspace %s in the map. Size is %s", bean, map.size());
 		}
 		return workspace;
 	}
@@ -157,19 +156,6 @@ public class WorkspaceService {
 	public void createTopicForAdmin() {
 		// mqttService.createPublisher() //needed explain parameters
 	}
-
-//    public void updateWorkSpaceDataAndStartTest(List<WorkSpaceBean> beans) throws BadRequestException {
-//        for (WorkSpaceBean bean : beans) {
-//            WorkSpace save = workSpaceRepository.save(checkAllDependOn(bean));
-//        }
-//    }
-
-//    private WorkSpace checkAllDependOn(WorkSpaceBean bean) throws BadRequestException {
-//        WorkSpace workSpace = checkWorkspace(bean.getId());
-//        Person person = checkPerson(bean.getPerson());
-//        Quiz quiz = checkQuiz(bean.getTest());
-//        return workSpace.setPerson(person).setTest(quiz);
-//    }
 
 	private Person checkPerson(long person) throws BadRequestException {
 		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect PersonId id, check id is %s", person)));
@@ -198,7 +184,7 @@ public class WorkspaceService {
 	public void putWorkspace(WorkspaceBean bean) {
 		Workspace workspace = new Workspace();
 		BeanUtils.copyProperties(bean, workspace);
-		map.put(workspace.getClientId(), workspace);
+		putWorkspace(workspace);
 	}
 
 	public void putWorkspace(Workspace workspace) {

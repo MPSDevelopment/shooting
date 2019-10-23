@@ -91,6 +91,7 @@ public class WorkspaceController {
 	public ResponseEntity<Workspace> setWorkspaceForNotUseInTest(HttpServletRequest request) throws BadRequestException, NotFoundException {
 
 		log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
+		
 		String remoteIp = Optional.ofNullable(request.getHeader("X-Forwarded-For")).orElse(request.getRemoteAddr());
 
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
