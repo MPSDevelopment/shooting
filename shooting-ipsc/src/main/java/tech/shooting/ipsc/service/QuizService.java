@@ -161,7 +161,7 @@ public class QuizService {
 			score = 2;
 		}
 		
-		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score).setIncorrect(incorrectAnswers).setSkip(skippedAnswers).setTotal(questionCount);
+		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score).setCorrect(rightAnswers).setIncorrect(incorrectAnswers).setSkip(skippedAnswers).setTotal(questionCount);
 		
 		log.info("Quiz score is %s ", report);
 		

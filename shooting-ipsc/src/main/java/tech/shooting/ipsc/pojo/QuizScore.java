@@ -39,6 +39,10 @@ public class QuizScore extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Mark")
 	private int score;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "correct answers")
+	private int correct;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Incorrect answers")
