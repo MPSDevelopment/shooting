@@ -126,8 +126,10 @@ public class QuizService {
 		Person person = checkPerson(reportBean.getPerson());
 		//get list question from quiz where status is active
 		List<Question> collect = quiz.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
-		double questionCount = collect.size();
-		double rightAnswers = 0;
+		int questionCount = collect.size();
+		int rightAnswers = 0;
+		int incorrectAnswers = 0;
+		int skippedAnswers = 0;
 //		List<Row> incorrect = new ArrayList<>();
 //		List<Ask> skip = new ArrayList<>();
 		List<RowBean> list = reportBean.getList();
@@ -139,11 +141,13 @@ public class QuizService {
 //				Row row = new Row();
 //				row.setAsk(question.getQuestion()).setAnswer(question.getAnswers().get(Math.toIntExact(list.get(i).getAnswer())));
 //				incorrect.add(row);
+				incorrectAnswers++;
 			}
 			collect.remove(question);
 		}
 		for(int i = 0; i < collect.size(); i++) {
 //			skip.add(collect.get(i).getQuestion());
+			skippedAnswers++;
 		}
 		double percentage = calculatePercentage(rightAnswers, questionCount);
 		int score;
@@ -157,7 +161,7 @@ public class QuizService {
 			score = 2;
 		}
 		
-		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score); // .setIncorrect(incorrect).setSkip(skip);
+		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score).setIncorrect(incorrectAnswers).setSkip(skippedAnswers).setTotal(questionCount);
 		
 		log.info("Quiz score is %s ", report);
 		

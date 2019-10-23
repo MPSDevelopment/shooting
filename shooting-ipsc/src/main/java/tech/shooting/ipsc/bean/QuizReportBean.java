@@ -22,13 +22,13 @@ public class QuizReportBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Mark")
-	private int mark;
+	private int score;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Incorrect answer")
-	private List<Row> incorrect;
+	private int incorrect;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Skip answer")
-	private List<Ask> skip;
+	private int skip;
 }

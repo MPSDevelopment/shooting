@@ -41,12 +41,16 @@ public class QuizScore extends BaseDocument {
 	private int score;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Incorrect answer")
-	private List<Row> incorrect;
+	@ApiModelProperty(value = "Incorrect answers")
+	private int incorrect;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Skip answer")
-	private List<Ask> skip;
+	@ApiModelProperty(value = "Skip answers")
+	private int skip;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Total questions")
+	private int total;
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Score's datetime")

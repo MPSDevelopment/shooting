@@ -477,8 +477,8 @@ class QuizControllerTest {
 		System.out.println(contentAsString);
 		List<QuizReportBean> listFromJson = JacksonUtils.getListFromJson(QuizReportBean[].class, contentAsString);
 		log.info("List is %s", listFromJson);
-		log.info("Incorrect size is %s", listFromJson.get(0).getIncorrect().size());
-		log.info("Skip size is %s", listFromJson.get(0).getSkip().size());
+		log.info("Incorrect size is %s", listFromJson.get(0).getIncorrect());
+		log.info("Skip size is %s", listFromJson.get(0).getSkip());
 	}
 
 	@Test
