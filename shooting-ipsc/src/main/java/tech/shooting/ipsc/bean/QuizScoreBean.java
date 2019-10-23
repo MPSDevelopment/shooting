@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class QuizScoreBean {
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz id")
 	@NotNull(message = ValidationConstants.QUIZ_ID_MESSAGE)

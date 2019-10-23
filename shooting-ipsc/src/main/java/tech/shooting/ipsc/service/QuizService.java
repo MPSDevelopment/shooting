@@ -5,6 +5,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuestionBean;
@@ -12,8 +14,8 @@ import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.QuizScoreBean;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.RowBean;
-import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
+import tech.shooting.ipsc.event.TestFinishedEvent;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.QuizRepository;
@@ -39,9 +41,6 @@ public class QuizService {
 
 	@Autowired
 	private PersonRepository personRepository;
-
-	@Autowired
-	private QuizScoreRepository reportRepository;
 
 	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
@@ -127,37 +126,42 @@ public class QuizService {
 		Person person = checkPerson(reportBean.getPerson());
 		//get list question from quiz where status is active
 		List<Question> collect = quiz.getQuestionList().stream().filter(Question :: isActive).collect(Collectors.toList());
-		double countQuestion = collect.size();
-		double rightAnswer = 0;
-		List<Row> incorrect = new ArrayList<>();
-		List<Ask> skip = new ArrayList<>();
+		double questionCount = collect.size();
+		double rightAnswers = 0;
+//		List<Row> incorrect = new ArrayList<>();
+//		List<Ask> skip = new ArrayList<>();
 		List<RowBean> list = reportBean.getList();
 		for(int i = 0; i < list.size(); i++) {
 			Question question = checkQuestion(quiz, list.get(i).getQuestionId());
 			if(question.getRight() == list.get(i).getAnswer()) {
-				rightAnswer++;
+				rightAnswers++;
 			} else {
-				Row row = new Row();
-				row.setAsk(question.getQuestion()).setAnswer(question.getAnswers().get(Math.toIntExact(list.get(i).getAnswer())));
-				incorrect.add(row);
+//				Row row = new Row();
+//				row.setAsk(question.getQuestion()).setAnswer(question.getAnswers().get(Math.toIntExact(list.get(i).getAnswer())));
+//				incorrect.add(row);
 			}
 			collect.remove(question);
 		}
 		for(int i = 0; i < collect.size(); i++) {
-			skip.add(collect.get(i).getQuestion());
+//			skip.add(collect.get(i).getQuestion());
 		}
-		double mark = calculatePercentage(rightAnswer, countQuestion);
+		double percentage = calculatePercentage(rightAnswers, questionCount);
 		int score;
-		if(mark >= quiz.getGreat()) {
+		if(percentage >= quiz.getGreat()) {
 			score = 5;
-		} else if(mark >= quiz.getGood()) {
+		} else if(percentage >= quiz.getGood()) {
 			score = 4;
-		} else if(mark >= quiz.getSatisfactorily()) {
+		} else if(percentage >= quiz.getSatisfactorily()) {
 			score = 3;
 		} else {
 			score = 2;
 		}
-		return reportRepository.save(new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setIncorrect(incorrect).setSkip(skip).setScore(score));
+		
+		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score); // .setIncorrect(incorrect).setSkip(skip);
+		
+		log.info("Quiz score is %s ", report);
+		
+		return quizScoreRepository.save(report);
 	}
 
 	private Person checkPerson (Long person) throws BadRequestException {
