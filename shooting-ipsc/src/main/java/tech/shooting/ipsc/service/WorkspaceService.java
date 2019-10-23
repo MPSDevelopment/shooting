@@ -86,7 +86,7 @@ public class WorkspaceService {
 
 	public Workspace getWorkspaceByIp(String ip) throws NotFoundException {
 		for (Workspace workspace : map.values()) {
-			if (workspace.getIp().equals(ip)) {
+			if (workspace.getIp() != null && workspace.getIp().equals(ip)) {
 				return workspace;
 			}
 		}
