@@ -28,6 +28,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
+import tech.shooting.ipsc.bean.ChangeRfidCodeBean;
 import tech.shooting.ipsc.bean.PersonBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.config.IpscMongoConfig;
@@ -48,7 +49,7 @@ import tech.shooting.ipsc.service.PersonService;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
@@ -283,10 +284,7 @@ public class PersonControllerTest {
 		// prepare
 		UpdatePerson updatePerson = new UpdatePerson();
 		BeanUtils.copyProperties(testing, updatePerson);
-//		List<WeaponIpscCode> codes = updatePerson.getCodes();
-//		codes.add(shotgun);
-//		codes.add(rifle);
-//		updatePerson.setCodes(codes);
+		
 		// try to access updatePerson() with unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(testing.getId())))
 				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(testing))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -315,6 +313,32 @@ public class PersonControllerTest {
 		// try to access updatePerson() with admin but without context
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON.replace(ControllerAPI.REQUEST_PERSON_ID, String.valueOf(updatePerson.getId())))
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
+	
+	@Test
+	public void checkUpdateRfidCode() throws Exception {
+		// prepare
+		var updatePerson = new ChangeRfidCodeBean();
+		updatePerson.setId(testing.getId());
+		updatePerson.setRfidCode("1234");
+		
+		assertNotEquals(updatePerson.getRfidCode(), testing.getRfidCode());
+		// try to access updatePerson() with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON_RFID)
+				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try to access updatePerson() with authorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON_RFID)
+				.header(Token.TOKEN_HEADER, userToken).contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isOk());
+		// try to access updatePerson() with judge user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON_RFID)
+				.header(Token.TOKEN_HEADER, judgeToken).contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson))).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try to access updatePerson() with admin
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.put(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON_RFID)
+						.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(updatePerson)))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Person person = JacksonUtils.fromJson(Person.class, contentAsString);
+		assertEquals(updatePerson.getRfidCode(), person.getRfidCode());
 	}
 
 	@Test

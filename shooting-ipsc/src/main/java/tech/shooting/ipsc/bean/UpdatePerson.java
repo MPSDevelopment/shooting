@@ -41,10 +41,6 @@ public class UpdatePerson {
 	@JsonProperty
 	@ApiModelProperty(value = "Person's team")
 	private String team;
-
-	@JsonProperty("name")
-	@ApiModelProperty(value = "Person's type weapon", required = true)
-	private WeaponTypeEnum typeWeapon;
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Person's division")
@@ -60,7 +56,6 @@ public class UpdatePerson {
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
-	@NotNull(message = ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
 	
 	@JsonProperty

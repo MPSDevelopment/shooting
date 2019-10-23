@@ -35,14 +35,14 @@ public class DivisionController {
 		return new ResponseEntity<>(divisionService.createDivision(divisionBean, divisionBean.getParent()), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION)
+	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_DELETE_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Remove division by id", notes = "Return status ok if removed successfully")
 	public ResponseEntity<Division> removeDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.removeDivision(id), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all division", notes = "Return list divisions")
 	public ResponseEntity<List<DivisionDropList>> getAllDivision() {
 		return new ResponseEntity<>(divisionService.findAllDivisions(), HttpStatus.OK);
@@ -59,7 +59,7 @@ public class DivisionController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_GET_DIVISION_BY_ID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get division by id", notes = "Return division object")
 	public ResponseEntity<DivisionBean> getDivisionById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(divisionService.getDivision(id), HttpStatus.OK);

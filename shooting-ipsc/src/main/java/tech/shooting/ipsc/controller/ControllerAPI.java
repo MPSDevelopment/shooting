@@ -129,6 +129,7 @@ public class ControllerAPI {
 	public static final String PERSON_CONTROLLER_GET_FREE_NUMBER = "/freenumber";
 	public static final String PERSON_CONTROLLER_POST_PERSON = "/create";
 	public static final String PERSON_CONTROLLER_PUT_PERSON = "/" + REQUEST_PERSON_ID;
+	public static final String PERSON_CONTROLLER_PUT_PERSON_RFID = "/rfid";
 	public static final String PERSON_CONTROLLER_DELETE_PERSON = "/" + REQUEST_PERSON_ID;
 	public static final String PERSON_CONTROLLER_GET_PERSONS = "/all";
 	public static final String PERSON_CONTROLLER_GET_USERS_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;

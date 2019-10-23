@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.PersonBean;
+import tech.shooting.ipsc.bean.ChangeRfidCodeBean;
 import tech.shooting.ipsc.bean.NumberBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.pojo.Person;
@@ -85,6 +86,13 @@ public class PersonController {
 	public ResponseEntity<Person> updatePerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId, @RequestBody @Valid UpdatePerson personBean) throws BadRequestException {
 		return new ResponseEntity<>(personService.updatePerson(personId, personBean), HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_PUT_PERSON_RFID, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update person's rfid", notes = "Return update person object")
+	public ResponseEntity<Person> updateRfidCode(@RequestBody @Valid ChangeRfidCodeBean personBean) throws BadRequestException {
+		return new ResponseEntity<>(personService.updatePerson(personBean), HttpStatus.OK);
+	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_DELETE_PERSON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Delete person", notes = "Return removed person object")
@@ -135,7 +143,7 @@ public class PersonController {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'JUDGE')")
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_PRESENT_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get all form's of present type", notes = "Return list TypePresent object")
 	public ResponseEntity<List<TypePresent>> getTypePresent() {
 		return new ResponseEntity<>(personService.getTypePresent(), HttpStatus.OK);

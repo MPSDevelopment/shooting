@@ -13,6 +13,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.PersonBean;
+import tech.shooting.ipsc.bean.ChangeRfidCodeBean;
 import tech.shooting.ipsc.bean.NumberBean;
 import tech.shooting.ipsc.bean.UpdatePerson;
 import tech.shooting.ipsc.controller.Pageable;
@@ -27,6 +28,8 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.RankRepository;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Service
@@ -115,6 +118,12 @@ public class PersonService {
 		return dbPerson;
 	}
 
+	public Person updatePerson(@Valid ChangeRfidCodeBean personBean) throws BadRequestException {
+		Person dbPerson = getPersonByIdIfExist(personBean.getId());
+		dbPerson.setRfidCode(personBean.getRfidCode());
+		return personRepository.save(dbPerson);
+	}
+
 	public void removePersonIfExist(Long personId) throws BadRequestException {
 		Person person = getPersonByIdIfExist(personId);
 		personRepository.deleteById(person.getId());
@@ -143,7 +152,7 @@ public class PersonService {
 		}
 		return new NumberBean(String.valueOf(rfidCode));
 	}
-	
+
 	public NumberBean getFreeNumber() {
 		Integer number = 1;
 		while (personRepository.findByNumber(String.valueOf(number)).orElse(null) != null) {

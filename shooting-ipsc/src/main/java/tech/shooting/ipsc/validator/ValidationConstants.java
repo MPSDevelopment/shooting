@@ -138,4 +138,6 @@ public class ValidationConstants {
 	public static final String LEGEND_TYPE_NAME_MESSAGE = "Legend type name must be not blank";
 
 	public static final String LEGEND_TYPE_MESSAGE = "Legend type must be not null";
+
+	public static final String RFID_CODE_MEASSAGE = "Rfid code must be not null";
 }
