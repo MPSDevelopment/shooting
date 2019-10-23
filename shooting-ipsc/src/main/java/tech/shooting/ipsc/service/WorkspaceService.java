@@ -209,7 +209,7 @@ public class WorkspaceService {
 
 	private void logWorkspaces() {
 		map.values().forEach(item -> {
-			log.info("Workspace is %s %s %s", item.getId(), item.getIp(), item.getPersonId());
+			log.info("Workspace is %s %s %s %s", item.isUseInTest(), item.getId(), item.getIp(), item.getPersonId());
 		});
 	}
 
