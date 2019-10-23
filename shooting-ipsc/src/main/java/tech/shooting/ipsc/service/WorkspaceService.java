@@ -178,6 +178,10 @@ public class WorkspaceService {
 	}
 
 	public Collection<Workspace> getAllWorkspacesForTest() {
+		
+		log.info("Trying to get all workspaces for test: ");
+		logWorkspaces();
+		
 		return map.values().stream().filter(item -> item.isUseInTest()).collect(Collectors.toList());
 	}
 
