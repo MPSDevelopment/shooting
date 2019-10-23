@@ -158,11 +158,11 @@ public class WorkspaceService {
 	}
 
 	private Person checkPerson(long person) throws BadRequestException {
-		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect PersonId id, check id is %s", person)));
+		return personRepository.findById(person).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect person id, check id is %s", person)));
 	}
 
 	private Quiz checkQuiz(long quiz) throws BadRequestException {
-		return quizRepository.findById(quiz).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect Quiz id, check id is %s", quiz)));
+		return quizRepository.findById(quiz).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect quiz id, check id is %s", quiz)));
 	}
 
 	private Subject checkSubject(long subject) throws BadRequestException {
@@ -170,7 +170,7 @@ public class WorkspaceService {
 	}
 
 	private Workspace checkWorkspace(long worksSpaceId) throws BadRequestException {
-		return workSpaceRepository.findById(worksSpaceId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect work space id, check id is %s", worksSpaceId)));
+		return workSpaceRepository.findById(worksSpaceId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect workspace id, check id is %s", worksSpaceId)));
 	}
 
 	public Collection<Workspace> getAllWorkspaces() {
