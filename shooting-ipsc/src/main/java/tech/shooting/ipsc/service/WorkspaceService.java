@@ -145,10 +145,8 @@ public class WorkspaceService {
 
 		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
 		if (workspace != null) {
-
 			checkPerson(bean.getPersonId());
 			checkQuiz(bean.getQuizId());
-//			checkSubject(bean.getSubjectId());
 			BeanUtils.copyProperties(bean, workspace);
 			putWorkspace(workspace);
 			log.info("Updated workspace %s in the map. Size is %s", bean, map.size());
@@ -204,10 +202,14 @@ public class WorkspaceService {
 	}
 
 	public void putWorkspace(Workspace workspace) {
-		log.info("Put workspace %s to the map", workspace);
+		log.info("Put workspace %s to the map, size is %s", workspace, map.size());
 		map.put(workspace.getClientId(), workspace);
+		logWorkspaces();
+	}
+
+	private void logWorkspaces() {
 		map.values().forEach(item -> {
-			log.info("Workspace is %s %s %s", workspace.getId(), workspace.getIp(), workspace.getPersonId());
+			log.info("Workspace is %s %s %s", item.getId(), item.getIp(), item.getPersonId());
 		});
 	}
 
