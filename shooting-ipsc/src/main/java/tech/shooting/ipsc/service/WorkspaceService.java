@@ -131,9 +131,9 @@ public class WorkspaceService {
 			log.error("Cannot start workspace unknown workspace %s, existing list:", bean);
 			getAllWorkspaces().forEach(item -> log.info("Workspace %s", item));
 			return workspace;
-		} else {
-			log.error("Cannot start not existing workspace %s", bean);
-		}
+		} 
+			
+		log.error("Starting the workspace %s", bean);
 
 		String topic = MqttConstants.TEST_TOPIC + "/" + workspace.getIp();
 		log.info("Sending test start to the topic %s", topic);

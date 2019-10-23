@@ -22,6 +22,10 @@ public class WorkspaceBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Workspace name", required = true)
 	private String name;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Subject id")
+	private Long subjectId;
 
     @JsonProperty
     @ApiModelProperty(value = "Quiz id", required = true)

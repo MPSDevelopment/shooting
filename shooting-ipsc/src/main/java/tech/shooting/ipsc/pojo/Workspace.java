@@ -31,15 +31,17 @@ public class Workspace extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Ip address", required = true)
 	private String ip;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Subject id")
+	private Long subjectId;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Quiz id")
-	@DBRef
 	private Long quizId;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person id")
-	@DBRef
 	private Long personId;
 
     @JsonProperty
