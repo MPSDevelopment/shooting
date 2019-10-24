@@ -41,6 +41,7 @@ import tech.shooting.ipsc.repository.QuizScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.QuizService;
+import tech.shooting.ipsc.service.WorkspaceService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = QuizRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, QuizController.class, QuizService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, QuizController.class, QuizService.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest

@@ -42,8 +42,8 @@ public class QuizService {
 	@Autowired
 	private PersonRepository personRepository;
 	
-	@Autowired
-	private WorkspaceService workspaceService;
+//	@Autowired
+//	private WorkspaceService workspaceService;
 
 	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
