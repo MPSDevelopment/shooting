@@ -35,7 +35,7 @@ public class StandardScore extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Person id", required = true)
 	@NotNull(message = ValidationConstants.PERSON_ID)
-	private Long personId;
+	private Person person;
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Score's datetime")

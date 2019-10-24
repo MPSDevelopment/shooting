@@ -344,7 +344,7 @@ class StandardControllerTest {
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 		StandardScore score = new StandardScore();
-		score.setPersonId(testingPerson.getId());
+		score.setPerson(testingPerson);
 		score.setStandardId(testStandard.getId());
 		score.setScore(4);
 		score.setTimeOfExercise(23);
@@ -361,7 +361,7 @@ class StandardControllerTest {
 		Standard standard = standardRepository.save(testStandard);
 
 		StandardScore score = new StandardScore();
-		score.setPersonId(testingPerson.getId());
+		score.setPerson(testingPerson);
 		score.setStandardId(testStandard.getId());
 		score.setScore(4);
 		score.setTimeOfExercise(23);
@@ -384,10 +384,10 @@ class StandardControllerTest {
 
 		Standard standard = standardRepository.save(testStandard);
 
-		StandardScore score = new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23);
+		StandardScore score = new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23);
 		standardScoreRepository.save(score);
 
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
 		String content = mockMvc.perform(MockMvcRequestBuilders
@@ -404,9 +404,9 @@ class StandardControllerTest {
 	void checkGetScoreStandardList() throws Exception {
 
 		testStandard = standardRepository.save(testStandard);
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
-		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(anotherPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
 		String content = mockMvc.perform(MockMvcRequestBuilders
@@ -422,9 +422,9 @@ class StandardControllerTest {
 	void checkGetScorePersonList() throws Exception {
 
 		testStandard = standardRepository.save(testStandard);
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
-		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(anotherPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		// try access with user role
 		String content = mockMvc.perform(
@@ -448,9 +448,9 @@ class StandardControllerTest {
 	void checkGetScoreQueryList() throws Exception {
 
 		testStandard = standardRepository.save(testStandard);
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
-		standardScoreRepository.save(new StandardScore().setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
-		standardScoreRepository.save(new StandardScore().setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		standardScoreRepository.save(new StandardScore().setPerson(anotherPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
 		var query = new StandardScoreRequest();
 		query.setPersonId(testingPerson.getId());

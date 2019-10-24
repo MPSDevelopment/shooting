@@ -16,9 +16,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Division;
-import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.Score;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.pojo.Subject;
@@ -26,8 +24,6 @@ import tech.shooting.ipsc.pojo.Subject;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
@@ -99,11 +95,11 @@ class StandardScoreRepositoryTest {
 		testingPerson = personRepository.save(new Person().setName("testing person").setDivision(childDivision));
 		anotherPerson = personRepository.save(new Person().setName("another person").setDivision(anotherDivision));
 
-		scoreRepository.save(new StandardScore().setDatetime(now).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
-		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(2)).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
-		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(4)).setPersonId(anotherPerson.getId()).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		scoreRepository.save(new StandardScore().setDatetime(now).setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(2)).setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(4)).setPerson(anotherPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
 
-		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(6)).setPersonId(anotherPerson.getId()).setStandardId(anotherStandard.getId()).setScore(3).setTimeOfExercise(27));
+		scoreRepository.save(new StandardScore().setDatetime(now.plusMinutes(6)).setPerson(anotherPerson).setStandardId(anotherStandard.getId()).setScore(3).setTimeOfExercise(27));
 	}
 
 	@Test
