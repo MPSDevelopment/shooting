@@ -466,17 +466,17 @@ class QuizControllerTest {
 		// create ReportBean
 		QuizScoreBean reportBean = new QuizScoreBean().setPerson(testPerson.getId()).setQuizId(save.getId());
 		List<RowBean> rowBeans = new ArrayList<>();
-		rowBeans.add(new RowBean().setAnswer((long) 3).setQuestionId(questionList1.get(0).getId()));
-		rowBeans.add(new RowBean().setAnswer((long) 2).setQuestionId(questionList1.get(1).getId()));
-		rowBeans.add(new RowBean().setAnswer((long) 0).setQuestionId(questionList1.get(3).getId()));
+		rowBeans.add(new RowBean().setAnswer(3L).setQuestionId(questionList1.get(0).getId()));
+		rowBeans.add(new RowBean().setAnswer(2L).setQuestionId(questionList1.get(1).getId()));
+		rowBeans.add(new RowBean().setAnswer(0L).setQuestionId(questionList1.get(3).getId()));
 		reportBean.setList(rowBeans);
 		List<QuizScoreBean> reportBeans = new ArrayList<>();
 		reportBeans.add(reportBean);
 		String json = JacksonUtils.getJson(reportBeans);
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_ANSWER_TO_QUIZ).contentType(MediaType.APPLICATION_JSON)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-		System.out.println(contentAsString);
-		List<QuizReportBean> listFromJson = JacksonUtils.getListFromJson(QuizReportBean[].class, contentAsString);
+		log.info("Content is %s", contentAsString);
+		List<QuizScore> listFromJson = JacksonUtils.getListFromJson(QuizScore[].class, contentAsString);
 		log.info("List is %s", listFromJson);
 		log.info("Incorrect size is %s", listFromJson.get(0).getIncorrect());
 		log.info("Skip size is %s", listFromJson.get(0).getSkip());
@@ -620,9 +620,9 @@ class QuizControllerTest {
 	void checkGetScoreQueryList() throws Exception {
 
 		testQuiz = quizRepository.save(testQuiz);
-		quizScoreRepository.save(new QuizScore().setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(4));
-		quizScoreRepository.save(new QuizScore().setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
-		quizScoreRepository.save(new QuizScore().setPersonId(anotherPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
+		quizScoreRepository.save(new QuizScore().setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(4));
+		quizScoreRepository.save(new QuizScore().setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(3));
+		quizScoreRepository.save(new QuizScore().setPerson(anotherPerson).setQuizId(testQuiz.getId()).setScore(3));
 
 		var query = new QuizScoreRequest();
 		query.setPersonId(testingPerson.getId());

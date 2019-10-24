@@ -95,11 +95,11 @@ class QuizScoreRepositoryTest {
 		testingPerson = personRepository.save(new Person().setName("testing person").setDivision(childDivision));
 		anotherPerson = personRepository.save(new Person().setName("another person").setDivision(anotherDivision));
 
-		scoreRepository.save(new QuizScore().setDatetime(now).setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(4));
-		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(2)).setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
-		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(4)).setPersonId(anotherPerson.getId()).setQuizId(testQuiz.getId()).setScore(3));
+		scoreRepository.save(new QuizScore().setDatetime(now).setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(4));
+		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(2)).setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(3));
+		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(4)).setPerson(anotherPerson).setQuizId(testQuiz.getId()).setScore(3));
 
-		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(6)).setPersonId(anotherPerson.getId()).setQuizId(anotherQuiz.getId()).setScore(3));
+		scoreRepository.save(new QuizScore().setDatetime(now.plusMinutes(6)).setPerson(anotherPerson).setQuizId(anotherQuiz.getId()).setScore(3));
 	}
 
 	@Test

@@ -1,15 +1,19 @@
 package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
+import tech.shooting.ipsc.serialization.BaseDocumentIdSerializer;
+import tech.shooting.ipsc.serialization.PersonFromIdDeserializer;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Document(collection = "quizscore")
 @TypeAlias("quizscore")
@@ -28,7 +32,7 @@ public class QuizScore extends BaseDocument {
 	@ApiModelProperty(value = "Person")
 //	@JsonSerialize(using = BaseDocumentIdSerializer.class)
 //	@JsonDeserialize(using = PersonFromIdDeserializer.class)
-	private Long personId;
+	private Person person;
 
 //	@DBRef
 	@JsonProperty

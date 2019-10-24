@@ -238,7 +238,13 @@ public class MqttService {
 				log.error("Cannot send test finished event without score");
 				return;
 			}
-			Workspace workspace = workspaceService.getWorkspaceByQuizIdAndPersonId(event.getScore().getQuizId(), event.getScore().getPersonId());
+
+			if (event.getScore().getPerson() == null) {
+				log.error("Cannot send test finished event without person");
+				return;
+			}
+
+			Workspace workspace = workspaceService.getWorkspaceByQuizIdAndPersonId(event.getScore().getQuizId(), event.getScore().getPerson().getId());
 
 			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(event.setWorspace(workspace)));
 		} catch (MqttException e) {
