@@ -84,6 +84,15 @@ public class WorkspaceService {
 		return map.get(clientId);
 	}
 
+	public Workspace getWorkspaceByQuizIdAndPersonId(long quizId, long personId) {
+		for (var item : map.values()) {
+			if (item.getPersonId() == personId && item.getQuizId() == quizId) {
+				return item;
+			}
+		}
+		return null;
+	}
+
 	public Workspace getWorkspaceByIp(String ip) throws NotFoundException {
 		for (Workspace workspace : map.values()) {
 			if (workspace.getIp() != null && workspace.getIp().equals(ip)) {
@@ -131,8 +140,8 @@ public class WorkspaceService {
 			log.error("Cannot start workspace unknown workspace %s, existing list:", bean);
 			getAllWorkspaces().forEach(item -> log.info("Workspace %s", item));
 			return workspace;
-		} 
-			
+		}
+
 		log.error("Starting the workspace %s", bean);
 
 		String topic = MqttConstants.TEST_TOPIC + "/" + workspace.getIp();
@@ -178,10 +187,10 @@ public class WorkspaceService {
 	}
 
 	public Collection<Workspace> getAllWorkspacesForTest() {
-		
+
 		log.info("Trying to get all workspaces for test: ");
 		logWorkspaces();
-		
+
 		return map.values().stream().filter(item -> item.isUseInTest()).collect(Collectors.toList());
 	}
 

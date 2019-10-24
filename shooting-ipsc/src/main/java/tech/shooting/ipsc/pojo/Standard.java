@@ -28,16 +28,20 @@ public class Standard extends BaseDocument {
 
 	@DBRef
 	@JsonProperty
-	@ApiModelProperty(value = "Subject standard", required = true)
+	@ApiModelProperty(value = "Subject", required = true)
 	private Subject subject;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Is active", required = true)
+	@ApiModelProperty(value = "Is active standard", required = true)
 	private boolean active;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Is groups", required = true)
+	@ApiModelProperty(value = "Is group standard", required = true)
 	private boolean groups;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Is running standard", required = true)
+	private boolean running;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List categories by time", required = true)

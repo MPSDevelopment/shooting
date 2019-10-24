@@ -41,6 +41,9 @@ public class QuizService {
 
 	@Autowired
 	private PersonRepository personRepository;
+	
+	@Autowired
+	private WorkspaceService workspaceService;
 
 	public Quiz createQuiz (QuizBean quiz) throws BadRequestException {
 		Quiz quizToDB = new Quiz();
@@ -164,6 +167,8 @@ public class QuizService {
 		QuizScore report = new QuizScore().setQuizId(quiz.getId()).setPersonId(person.getId()).setScore(score).setCorrect(rightAnswers).setIncorrect(incorrectAnswers).setSkip(skippedAnswers).setTotal(questionCount);
 		
 		log.info("Quiz score is %s ", report);
+		
+//		EventBus.publishEvent(new TestFinishedEvent(workspace, score));
 		
 		return quizScoreRepository.save(report);
 	}
