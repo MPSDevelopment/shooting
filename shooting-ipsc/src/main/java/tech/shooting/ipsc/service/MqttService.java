@@ -12,6 +12,7 @@ import tech.shooting.ipsc.event.MqttOnDisconnectEvent;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
+import tech.shooting.ipsc.event.TestFinishedEvent;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttHandler;
@@ -230,6 +231,22 @@ public class MqttService {
 	}
 
 	@Handler
+	public void handle(TestFinishedEvent event) {
+		try {
+
+			if (event.getScore() == null) {
+				log.error("Cannot send test finished event without score");
+				return;
+			}
+			Workspace workspace = workspaceService.getWorkspaceByQuizIdAndPersonId(event.getScore().getQuizId(), event.getScore().getPersonId());
+
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(event.setWorspace(workspace)));
+		} catch (MqttException e) {
+			log.error("Cannot send a mqtt message %s", event);
+		}
+	}
+
+	@Handler
 	public void handle(CompetitionUpdatedEvent event) {
 		try {
 			getPublisher().publish(MqttConstants.COMPETITION_TOPIC, createJsonMessage(event));
@@ -246,7 +263,7 @@ public class MqttService {
 			log.error("Cannot send a mqtt message %s", event);
 		}
 	}
-	
+
 	@Handler
 	public void handle(RunningOnConnectEvent event) {
 		try {
@@ -255,7 +272,7 @@ public class MqttService {
 			log.error("Cannot send a mqtt message %s", event);
 		}
 	}
-	
+
 	@Handler
 	public void handle(RunningOnDisconnectEvent event) {
 		try {

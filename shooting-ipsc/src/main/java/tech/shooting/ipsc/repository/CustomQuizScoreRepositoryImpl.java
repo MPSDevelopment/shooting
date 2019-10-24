@@ -28,38 +28,35 @@ public class CustomQuizScoreRepositoryImpl implements CustomQuizScoreRepository 
 		Query query = new Query();
 		if (request.getPersonId() != null) {
 			query.addCriteria(Criteria.where(QuizScore.PERSON_FIELD).is(request.getPersonId()));
-		} else {
-			if (request.getDivisionId() != null) {
+		} else if (request.getDivisionId() != null) {
 
-				var division = divisionRepository.findById(request.getDivisionId()).orElse(null);
+			var division = divisionRepository.findById(request.getDivisionId()).orElse(null);
 
-				Query personQuery = new Query();
-				personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
-				List<Person> persons = mongoTemplate.find(personQuery, Person.class);
+			Query personQuery = new Query();
+			personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
+			List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
-				log.info("There is %d persons for a division %s", persons.size(), division);
+			log.info("There is %d persons for a division %s", persons.size(), division);
 
-				query.addCriteria(Criteria.where(QuizScore.PERSON_FIELD).in(persons.stream().map(item -> {
-					return item.getId();
-				}).collect(Collectors.toList())));
-			}
+			query.addCriteria(Criteria.where(QuizScore.PERSON_FIELD).in(persons.stream().map(item -> {
+				return item.getId();
+			}).collect(Collectors.toList())));
 		}
 
 		if (request.getQuizId() != null) {
 			query.addCriteria(Criteria.where(QuizScore.QUIZ_FIELD).is(request.getQuizId()));
-		} else {
+		} else
 
-			if (request.getSubjectId() != null && request.getQuizId() == null) {
-				Query quizQuery = new Query();
-				quizQuery.addCriteria(Criteria.where("subject.id").is(request.getSubjectId()));
-				List<Quiz> quizs = mongoTemplate.find(quizQuery, Quiz.class);
+		if (request.getSubjectId() != null && request.getQuizId() == null) {
+			Query quizQuery = new Query();
+			quizQuery.addCriteria(Criteria.where("subject.id").is(request.getSubjectId()));
+			List<Quiz> quizs = mongoTemplate.find(quizQuery, Quiz.class);
 
-				log.info("There is %d quizs for a subject %s", quizs.size(), request.getSubjectId());
+			log.info("There is %d quizs for a subject %s", quizs.size(), request.getSubjectId());
 
-				query.addCriteria(Criteria.where(QuizScore.QUIZ_FIELD).in(quizs.stream().map(item -> {
-					return item.getId();
-				}).collect(Collectors.toList())));
-			}
+			query.addCriteria(Criteria.where(QuizScore.QUIZ_FIELD).in(quizs.stream().map(item -> {
+				return item.getId();
+			}).collect(Collectors.toList())));
 		}
 
 		if (request.getEndDate() != null && request.getStartDate() != null) {

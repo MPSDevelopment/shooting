@@ -28,16 +28,14 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 		Query query = new Query();
 		if (request.getPersonId() != null) {
 			query.addCriteria(Criteria.where(StandardScore.PERSON_FIELD).is(request.getPersonId()));
-		}
-
-		if (request.getDivisionId() != null) {
+		} else if (request.getDivisionId() != null) {
 
 			var division = divisionRepository.findById(request.getDivisionId()).orElse(null);
 
 			Query personQuery = new Query();
 			personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 			List<Person> persons = mongoTemplate.find(personQuery, Person.class);
-			
+
 			log.info("There is %d persons for a division %s", persons.size(), division);
 
 			query.addCriteria(Criteria.where(StandardScore.PERSON_FIELD).in(persons.stream().map(item -> {
@@ -47,9 +45,7 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 
 		if (request.getStandardId() != null) {
 			query.addCriteria(Criteria.where(StandardScore.STANDARD_FIELD).is(request.getStandardId()));
-		}
-
-		if (request.getSubjectId() != null && request.getStandardId() == null) {
+		} else if (request.getSubjectId() != null && request.getStandardId() == null) {
 			Query standardQuery = new Query();
 			standardQuery.addCriteria(Criteria.where("subject.id").is(request.getSubjectId()));
 			List<Standard> standards = mongoTemplate.find(standardQuery, Standard.class);
