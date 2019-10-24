@@ -309,5 +309,12 @@
 	"equipmentType": "Жабдық түрі",
 	"equipmentTypes": "Жабдық түрлері",
 	"equipment": "Құрал-жабдықтар",
-	"addequipmentTypes": "Жабдық түрін қосыңыз"
+	"addequipmentTypes": "Жабдық түрін қосыңыз",
+	"mqttConnectionError": "Mqtt серверімен байланыс жоқ",
+	"scanTag": "Тегті сканерлеу",
+	"setTag": "Белгі",
+	"wrongMark": "Бұл тег үшін деректер жоқ",
+	"attention": "Назар аудару",
+	"next": "Келесі",
+	"fullName": "Аты-жөні"
 }
