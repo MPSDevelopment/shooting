@@ -24,14 +24,14 @@ import java.util.Map;
 @Slf4j
 public class ValidationErrorHandler {
 
-	private static final String DEFAULR_FIELD = "message";
+	private static final String DEFAULT_FIELD = "message";
 	
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage processValidationError(NotFoundException ex, HttpServletRequest request) {
 		log.error("Not found error in request %s", request.getRequestURL());
 		Map<String, String> validationErrors = new HashMap<>();
-		validationErrors.put(DEFAULR_FIELD, ex.getMessage());
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
 		return new ErrorMessage(validationErrors);
 	}
 
@@ -50,7 +50,7 @@ public class ValidationErrorHandler {
 	public ErrorMessage processValidationException(HttpMessageNotReadableException ex, HttpServletRequest request) {
 		log.error("Validation exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
-		validationErrors.put(DEFAULR_FIELD, ex.getMessage());
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
 		return new ErrorMessage(validationErrors);
 	}
 
@@ -67,21 +67,23 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processUnexpectedType(UnexpectedTypeException ex, HttpServletRequest request) {
 		log.error("Validation Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
+		return new ErrorMessage(DEFAULT_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processUnexpectedType(IllegalArgumentException ex, HttpServletRequest request) {
 		log.error("IllegalArgument Error in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(InvalidFormatException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processInvalidFormatException(InvalidFormatException ex, HttpServletRequest request) {
 		log.error("Invalid Format Exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, ex.getMessage());
+		return new ErrorMessage(DEFAULT_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(BadRequestException.class)
@@ -95,21 +97,21 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ErrorMessage processForbiddenException(ForbiddenException ex, HttpServletRequest request) {
 		log.error("Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, "Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		return new ErrorMessage(DEFAULT_FIELD, "Forbidden exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 	}
 	
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ErrorMessage processForbiddenException(AccessDeniedException ex, HttpServletRequest request) {
 		log.error("Access denied exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULR_FIELD, "Access denied in request %s", request.getRequestURL());
+		return new ErrorMessage(DEFAULT_FIELD, "Access denied in request %s", request.getRequestURL());
 	}
 
 	@ExceptionHandler(NotAcceptableException.class)
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	public ErrorMessage processNotAcceptableException(NotAcceptableException e, HttpServletRequest request) {
 		log.error("Not acceptable in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
-		return new ErrorMessage(DEFAULR_FIELD, "Not acceptable request %s", request.getRequestURL());
+		return new ErrorMessage(DEFAULT_FIELD, "Not acceptable request %s", request.getRequestURL());
 	}
 
 	@ExceptionHandler(NotModifiedException.class)
@@ -122,7 +124,7 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorMessage processInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request) {
 		log.error("Internal server error in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
-		return new ErrorMessage(DEFAULR_FIELD, "Internal server error for request %s", request.getRequestURL());
+		return new ErrorMessage(DEFAULT_FIELD, "Internal server error for request %s", request.getRequestURL());
 	}
 
 	private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {
