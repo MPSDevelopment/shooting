@@ -195,6 +195,7 @@ public class MqttService {
 
 		MqttMessage message = createJsonMessage(workSpace);
 		try {
+			log.info("Sending workspace on connect");
 			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
 		} catch (MqttException e) {
 			log.error("Cannot send a message %s", message);
