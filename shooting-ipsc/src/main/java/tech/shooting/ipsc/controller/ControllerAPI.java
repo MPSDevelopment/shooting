@@ -222,6 +222,7 @@ public class ControllerAPI {
 	public static final String QUIZ_CONTROLLER_GET_QUIZ_LIST_QUESTION_TO_CHECK = "/quiz/" + REQUEST_QUIZ_ID + "/list/check";
 	public static final String QUIZ_CONTROLLER_GET_SUBJECTS_ENUM = "/enum/subjects";
 	public static final String QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST = "/scorelist/query";
+	public static final String QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE = "/scorelist/query/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 
 	// checkin section
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";
@@ -371,6 +372,7 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_GET_SCORE_STANDARD_LIST = "/scorelist/standard/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE_PERSON_LIST = "/scorelist/person/" + REQUEST_PERSON_ID;
 	public static final String STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST = "/scorelist/query";
+	public static final String STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE = "/scorelist/query/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String STANDARD_CONTROLLER_GET_PASS_ENUM = "/enum/pass";
 	public static final String STANDARD_CONTROLLER_GET_UNIT_ENUM = "/enum/unit";
 

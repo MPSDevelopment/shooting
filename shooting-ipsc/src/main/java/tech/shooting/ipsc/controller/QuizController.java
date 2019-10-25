@@ -16,6 +16,7 @@ import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.QuizScoreBean;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.QuizScore;
@@ -139,6 +140,15 @@ public class QuizController {
 	@ApiOperation(value = "Get a score list for a query", notes = "Return score list")
 	public ResponseEntity<List<QuizScore>> getScoreQueryList(@RequestBody QuizScoreRequest query) throws BadRequestException {
 		return new ResponseEntity<>(quizService.getScoreList(query), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get quiz scores by page")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_TOTAL, description = "Total records in database", response = String.class),
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGES, description = "Total pages in database", response = String.class) }) })
+	public ResponseEntity<List<QuizScore>> getScoreQueryListByPage(@RequestBody QuizScoreRequest query, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
+		return quizService.getScoreList(query, page, size);
 	}
 
 }

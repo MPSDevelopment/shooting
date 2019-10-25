@@ -1,9 +1,12 @@
 package tech.shooting.ipsc.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
@@ -24,7 +27,15 @@ public class CustomQuizScoreRepositoryImpl implements CustomQuizScoreRepository 
 
 	@Override
 	public List<QuizScore> getScoreList(QuizScoreRequest request) {
+		Query query = getQuery(request);
+		return mongoTemplate.find(query, QuizScore.class);
+	}
 
+	public Page<QuizScore> getScoreList(QuizScoreRequest request, PageRequest pageable) {
+		return PageableExecutionUtils.getPage(mongoTemplate.find(getQuery(request).with(pageable), QuizScore.class), pageable, () -> mongoTemplate.count(getQuery(request), QuizScore.class));
+	}
+
+	private Query getQuery(QuizScoreRequest request) {
 		Query query = new Query();
 		if (request.getPersonId() != null) {
 			query.addCriteria(Criteria.where(QuizScore.PERSON_FIELD).is(request.getPersonId()));
@@ -45,9 +56,7 @@ public class CustomQuizScoreRepositoryImpl implements CustomQuizScoreRepository 
 
 		if (request.getQuizId() != null) {
 			query.addCriteria(Criteria.where(QuizScore.QUIZ_FIELD).is(request.getQuizId()));
-		} else
-
-		if (request.getSubjectId() != null && request.getQuizId() == null) {
+		} else if (request.getSubjectId() != null && request.getQuizId() == null) {
 			Query quizQuery = new Query();
 			quizQuery.addCriteria(Criteria.where("subject.id").is(request.getSubjectId()));
 			List<Quiz> quizs = mongoTemplate.find(quizQuery, Quiz.class);
@@ -70,7 +79,6 @@ public class CustomQuizScoreRepositoryImpl implements CustomQuizScoreRepository 
 				query.addCriteria(Criteria.where(QuizScore.TIME_FIELD).gte(request.getStartDate()));
 			}
 		}
-
-		return mongoTemplate.find(query, QuizScore.class);
+		return query;
 	}
 }

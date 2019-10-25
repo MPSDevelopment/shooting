@@ -3,13 +3,19 @@ package tech.shooting.ipsc.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CategoriesBean;
 import tech.shooting.ipsc.bean.ConditionsBean;
+import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -147,5 +153,14 @@ public class StandardService {
 		}
 
 		return standardScoreRepository.getScoreList(query);
+	}
+	
+	public ResponseEntity<List<StandardScore>> getScoreList(StandardScoreRequest query, Integer page, Integer size) {
+		page = Math.max(1, page);
+		page--;
+		size = Math.min(Math.max(10, size), 20);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, QuizScore.TIME_FIELD);
+		var list =  standardScoreRepository.getScoreList(query, pageable);
+		return new ResponseEntity<>(list.getContent(), Pageable.setHeaders(page, list.getTotalElements(), list.getTotalPages()), HttpStatus.OK);
 	}
 }

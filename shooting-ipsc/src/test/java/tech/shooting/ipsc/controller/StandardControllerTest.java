@@ -472,6 +472,43 @@ class StandardControllerTest {
 	}
 
 	@Test
+	void checkGetScoreQueryListByPage() throws Exception {
+
+		testStandard = standardRepository.save(testStandard);
+		for (int i = 0; i < 40; i++) {
+			standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+			standardScoreRepository.save(new StandardScore().setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+			standardScoreRepository.save(new StandardScore().setPerson(anotherPerson).setStandardId(testStandard.getId()).setScore(3).setTimeOfExercise(27));
+		}
+
+		var query = new StandardScoreRequest();
+		query.setPersonId(testingPerson.getId());
+
+		// try access with user role
+		String content = mockMvc
+				.perform(MockMvcRequestBuilders
+						.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0
+								+ ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(10)))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+		assertEquals(10, list.size());
+
+		query.setPersonId(anotherPerson.getId());
+
+		content = mockMvc
+				.perform(MockMvcRequestBuilders
+						.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0
+								+ ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(30)))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		list = JacksonUtils.getListFromJson(StandardScore[].class, content);
+		assertEquals(20, list.size());
+	}
+
+	@Test
 	public void checkGetPassEnum() throws Exception {
 		// try access to getEnum from admin user
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM).header(Token.TOKEN_HEADER, adminToken))

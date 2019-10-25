@@ -8,6 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -46,7 +49,7 @@ class QuizScoreRepositoryTest {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
-	
+
 	@Autowired
 	private DivisionRepository divisionRepository;
 
@@ -83,12 +86,12 @@ class QuizScoreRepositoryTest {
 
 		testQuiz = quizRepository.save(new Quiz().setActive(true).setSubject(testSubject));
 		anotherQuiz = quizRepository.save(new Quiz().setActive(true).setSubject(anotherSubject));
-		
+
 		root = divisionRepository.save(new Division().setName("Root").setParent(null));
 		division = divisionRepository.save(new Division().setName("Division").setParent(root));
 		childDivision = divisionRepository.save(new Division().setName("Child").setParent(division));
 		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
-		
+
 		divisionRepository.save(root);
 		divisionRepository.save(division);
 
@@ -110,7 +113,7 @@ class QuizScoreRepositoryTest {
 		// only person
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setPersonId(testingPerson.getId())).size());
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setPersonId(anotherPerson.getId())).size());
-		
+
 		// only division
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setDivisionId(childDivision.getId())).size());
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setDivisionId(anotherDivision.getId())).size());
@@ -128,9 +131,23 @@ class QuizScoreRepositoryTest {
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId())).size());
 		assertEquals(1, scoreRepository.getScoreList(new QuizScoreRequest().setPersonId(anotherPerson.getId()).setQuizId(testQuiz.getId())).size());
 
-		// person and standard and time 
+		// person and standard and time
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(10)).setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId())).size());
 		assertEquals(1, scoreRepository.getScoreList(new QuizScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(1)).setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId())).size());
 		assertEquals(2, scoreRepository.getScoreList(new QuizScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(3)).setPersonId(testingPerson.getId()).setQuizId(testQuiz.getId())).size());
+	}
+
+	@Test
+	public void checkGetScoreListPaging() {
+		for (int i = 0; i < 40; i++) {
+			scoreRepository.save(new QuizScore().setDatetime(now.plusHours(1)).setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(i / 10 + 1));
+		}
+		PageRequest pageable = PageRequest.of(1, 10, Sort.Direction.ASC, QuizScore.TIME_FIELD);
+		Page<QuizScore> page = scoreRepository.getScoreList(new QuizScoreRequest(), pageable);
+
+		assertEquals(1, page.getNumber());
+		assertEquals(10, page.getNumberOfElements());
+		assertEquals(scoreRepository.count(), page.getTotalElements());
+		assertEquals(5, page.getTotalPages());
 	}
 }

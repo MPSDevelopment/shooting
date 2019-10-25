@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = QuizRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, QuizController.class, QuizService.class})
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, QuizController.class, QuizService.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -59,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 class QuizControllerTest {
-	
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -74,7 +74,7 @@ class QuizControllerTest {
 
 	@Autowired
 	private QuizRepository quizRepository;
-	
+
 	@Autowired
 	private QuizScoreRepository quizScoreRepository;
 
@@ -131,10 +131,10 @@ class QuizControllerTest {
 		testQuiz = quizRepository.save(new Quiz().setName(new QuizName().setKz("Examination of weapon handling").setRus("балалайка мишка пляс ... ")).setSubject(subject).setGreat(90).setGood(70).setSatisfactorily(40).setTime(8000000L));
 		testQuestion = new Question().setQuestion(new Ask().setRus("What is your name").setKz("What is you name")).setRandom(false)
 				.setAnswers(List.of(new Answer().setRus("бояра").setKz("Tom"), new Answer().setRus("водяра").setKz("Mike"), new Answer().setRus("даун").setKz("Steven"), new Answer().setRus("полный ноль").setKz("Undefined"))).setRight(3);
-		
+
 		testingPerson = personRepository.save(new Person().setName("testing person"));
 		anotherPerson = personRepository.save(new Person().setName("another person"));
-		
+
 	}
 
 	@Test
@@ -145,18 +145,22 @@ class QuizControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to createQuiz with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
-				userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createQuiz with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
-				judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access to createQuiz with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER,
-				guestToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER, guestToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		long count = quizRepository.count();
 		// try access to createQuiz with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json)
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.QUIZ_CONTROLLER_POST_QUIZ).contentType(MediaType.APPLICATION_JSON).content(json).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Quiz quiz = JacksonUtils.fromJson(Quiz.class, contentAsString);
 		assertEquals(count + 1, quizRepository.findAll().size());
 		checkQuiz(quizBean, quiz);
@@ -425,7 +429,7 @@ class QuizControllerTest {
 				.put(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.QUIZ_CONTROLLER_PUT_QUESTION.replace(ControllerAPI.REQUEST_QUIZ_ID, testQuiz.getId().toString()).replace(ControllerAPI.REQUEST_QUESTION_ID, question.getId().toString()))
 				.contentType(MediaType.APPLICATION_JSON).content(JacksonUtils.getJson(question)).header(Token.TOKEN_HEADER, guestToken)).andExpect(MockMvcResultMatchers.status().isOk());
-		
+
 		// admin role
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders
@@ -615,7 +619,7 @@ class QuizControllerTest {
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_PAGE), String.valueOf(page));
 		assertEquals(response.getHeader(ControllerAPI.HEADER_VARIABLE_TOTAL), String.valueOf(sizeAllUser));
 	}
-	
+
 	@Test
 	void checkGetScoreQueryList() throws Exception {
 
@@ -642,6 +646,45 @@ class QuizControllerTest {
 		list = JacksonUtils.getListFromJson(QuizScore[].class, content);
 		assertEquals(1, list.size());
 	}
+
+	@Test
+	void checkGetScoreQueryListByPage() throws Exception {
+
+		testQuiz = quizRepository.save(testQuiz);
+		for (int i = 0; i < 40; i++) {
+			quizScoreRepository.save(new QuizScore().setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(4));
+			quizScoreRepository.save(new QuizScore().setPerson(testingPerson).setQuizId(testQuiz.getId()).setScore(3));
+			quizScoreRepository.save(new QuizScore().setPerson(anotherPerson).setQuizId(testQuiz.getId()).setScore(3));
+		}
+
+		var query = new QuizScoreRequest();
+		query.setPersonId(testingPerson.getId());
+
+		// try access with user role
+		String content = mockMvc
+				.perform(MockMvcRequestBuilders
+						.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
+								+ ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(10)))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		var list = JacksonUtils.getListFromJson(QuizScore[].class, content);
+		assertEquals(10, list.size());
+
+		query.setPersonId(anotherPerson.getId());
+
+		content = mockMvc
+				.perform(MockMvcRequestBuilders
+						.post(ControllerAPI.QUIZ_CONTROLLER + ControllerAPI.VERSION_1_0
+								+ ControllerAPI.QUIZ_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE.replace(ControllerAPI.REQUEST_PAGE_NUMBER, String.valueOf(1)).replace(ControllerAPI.REQUEST_PAGE_SIZE, String.valueOf(30)))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(query)).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		list = JacksonUtils.getListFromJson(QuizScore[].class, content);
+		assertEquals(20, list.size());
+	}
+
+//	
 
 	private void createQuiz(int count) {
 		for (int i = 0; i < count; i++) {

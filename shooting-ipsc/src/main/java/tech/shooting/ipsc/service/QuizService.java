@@ -3,11 +3,16 @@ package tech.shooting.ipsc.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
@@ -209,5 +214,14 @@ public class QuizService {
 		}
 
 		return quizScoreRepository.getScoreList(query);
+	}
+	
+	public ResponseEntity<List<QuizScore>> getScoreList(QuizScoreRequest query, Integer page, Integer size) {
+		page = Math.max(1, page);
+		page--;
+		size = Math.min(Math.max(10, size), 20);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, QuizScore.TIME_FIELD);
+		var list =  quizScoreRepository.getScoreList(query, pageable);
+		return new ResponseEntity<>(list.getContent(), Pageable.setHeaders(page, list.getTotalElements(), list.getTotalPages()), HttpStatus.OK);
 	}
 }

@@ -8,15 +8,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
+import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
+import tech.shooting.ipsc.pojo.QuizScore;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.pojo.Subject;
@@ -132,5 +137,19 @@ class StandardScoreRepositoryTest {
 		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(10)).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId())).size());
 		assertEquals(1, scoreRepository.getScoreList(new StandardScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(1)).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId())).size());
 		assertEquals(2, scoreRepository.getScoreList(new StandardScoreRequest().setStartDate(now.minusMinutes(1)).setEndDate(now.plusMinutes(3)).setPersonId(testingPerson.getId()).setStandardId(testStandard.getId())).size());
+	}
+	
+	@Test
+	public void checkGetScoreListPaging() {
+		for (int i = 0; i < 40; i++) {
+			scoreRepository.save(new StandardScore().setDatetime(now).setPerson(testingPerson).setStandardId(testStandard.getId()).setScore(4).setTimeOfExercise(23));
+		}
+		PageRequest pageable = PageRequest.of(1, 10, Sort.Direction.ASC, QuizScore.TIME_FIELD);
+		Page<StandardScore> page = scoreRepository.getScoreList(new StandardScoreRequest(), pageable);
+
+		assertEquals(1, page.getNumber());
+		assertEquals(10, page.getNumberOfElements());
+		assertEquals(scoreRepository.count(), page.getTotalElements());
+		assertEquals(5, page.getTotalPages());
 	}
 }

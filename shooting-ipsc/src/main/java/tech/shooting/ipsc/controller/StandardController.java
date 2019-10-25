@@ -2,6 +2,9 @@ package tech.shooting.ipsc.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
+import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.enums.CompetitionClassEnum;
 import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.enums.UnitEnum;
+import tech.shooting.ipsc.pojo.QuizScore;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.service.StandardService;
@@ -105,6 +110,15 @@ public class StandardController {
 	@ApiOperation(value = "Get a score list for a query", notes = "Return score list")
 	public ResponseEntity<List<StandardScore>> getScoreQueryList(@RequestBody StandardScoreRequest query) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getScoreList(query), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get standard scores by page")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_TOTAL, description = "Total records in database", response = String.class),
+			@ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGES, description = "Total pages in database", response = String.class) }) })
+	public ResponseEntity<List<StandardScore>> getScoreQueryListByPage(@RequestBody StandardScoreRequest query, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
+		return standardService.getScoreList(query, page, size);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

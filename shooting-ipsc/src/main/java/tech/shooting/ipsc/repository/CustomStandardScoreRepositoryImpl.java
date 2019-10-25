@@ -1,9 +1,12 @@
 package tech.shooting.ipsc.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
@@ -24,7 +27,16 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 
 	@Override
 	public List<StandardScore> getScoreList(StandardScoreRequest request) {
+		Query query = getQuery(request);
+		return mongoTemplate.find(query, StandardScore.class);
+	}
+	
+	@Override
+	public Page<StandardScore> getScoreList(StandardScoreRequest request, PageRequest pageable) {
+		return PageableExecutionUtils.getPage(mongoTemplate.find(getQuery(request).with(pageable), StandardScore.class), pageable, () -> mongoTemplate.count(getQuery(request), StandardScore.class));
+	}
 
+	private Query getQuery(StandardScoreRequest request) {
 		Query query = new Query();
 		if (request.getPersonId() != null) {
 			query.addCriteria(Criteria.where(StandardScore.PERSON_FIELD).is(request.getPersonId()));
@@ -68,7 +80,6 @@ public class CustomStandardScoreRepositoryImpl implements CustomStandardScoreRep
 				query.addCriteria(Criteria.where(StandardScore.TIME_FIELD).gte(request.getStartDate()));
 			}
 		}
-
-		return mongoTemplate.find(query, StandardScore.class);
+		return query;
 	}
 }
