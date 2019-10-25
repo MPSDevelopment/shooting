@@ -84,9 +84,9 @@ public class WorkspaceService {
 		return map.get(clientId);
 	}
 
-	public Workspace getWorkspaceByQuizIdAndPersonId(long quizId, long personId) {
+	public Workspace getWorkspaceByQuizIdAndPersonId(Long quizId, Long personId) {
 		for (var item : map.values()) {
-			if (item.getPersonId() == personId && item.getQuizId() == quizId) {
+			if (item.getPersonId().equals(personId) && item.getQuizId().equals(quizId)) {
 				return item;
 			}
 		}
