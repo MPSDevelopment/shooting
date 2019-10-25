@@ -5,6 +5,7 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.config.IpscMqttSettings;
+import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.event.MqttOnConnectionLostEvent;
@@ -13,6 +14,7 @@ import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
 import tech.shooting.ipsc.event.TestFinishedEvent;
+import tech.shooting.ipsc.event.TestStartedEvent;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttHandler;
@@ -229,6 +231,27 @@ public class MqttService {
 			log.error("Cannot send a message %s", message);
 		}
 	}
+	
+	@Handler
+	public void handle(TestStartedEvent event) {
+		
+		if (event.getWorspace() == null) {
+			log.error("Cannot send test started event without workspace");
+			return;
+		}
+		
+		try {
+			String topic = MqttConstants.TEST_TOPIC + "/" + event.getWorspace().getIp();
+			log.info("Sending test start to the topic %s", topic);
+			getPublisher().publish(topic, createJsonMessage(event.getWorspace()));
+			
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(event.getWorspace().setScore(WorkspaceStatusEnum.STARTED_TEST.toString())));
+			
+		} catch (MqttException e) {
+			log.error("Cannot send a mqtt message %s", event);
+		}
+	}
+
 
 	@Handler
 	public void handle(TestFinishedEvent event) {
@@ -245,8 +268,9 @@ public class MqttService {
 			}
 
 			Workspace workspace = workspaceService.getWorkspaceByQuizIdAndPersonId(event.getScore().getQuizId(), event.getScore().getPerson().getId());
+			workspace.setScore(String.valueOf(event.getScore().getScore()));
 
-			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(event.setWorspace(workspace)));
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workspace));
 		} catch (MqttException e) {
 			log.error("Cannot send a mqtt message %s", event);
 		}

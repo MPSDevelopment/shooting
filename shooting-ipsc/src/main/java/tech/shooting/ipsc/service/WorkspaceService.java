@@ -15,12 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
-import tech.shooting.ipsc.mqtt.MqttConstants;
+import tech.shooting.ipsc.event.TestStartedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Subject;
@@ -48,10 +49,7 @@ public class WorkspaceService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	@Autowired
-	private MqttService mqttService;
-
-	public Workspace createWorkspace(String clientId, String ip) throws MqttException {
+	public synchronized Workspace createWorkspace(String clientId, String ip) throws MqttException {
 
 		Workspace workspace;
 		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
@@ -102,7 +100,7 @@ public class WorkspaceService {
 		throw new NotFoundException(new ErrorMessage("There is no workspace for ip %s", ip));
 	}
 
-	public Workspace removeWorkspace(String clientId) {
+	public synchronized Workspace removeWorkspace(String clientId) {
 		Workspace workspace = getWorkspaceByClientId(clientId);
 		if (workspace != null) {
 			map.remove(clientId);
@@ -144,9 +142,9 @@ public class WorkspaceService {
 
 		log.error("Starting the workspace %s", bean);
 
-		String topic = MqttConstants.TEST_TOPIC + "/" + workspace.getIp();
-		log.info("Sending test start to the topic %s", topic);
-		mqttService.getPublisher().publish(topic, mqttService.createJsonMessage(workspace));
+		
+		EventBus.publishEvent(new TestStartedEvent(workspace));
+		
 		return workspace;
 	}
 

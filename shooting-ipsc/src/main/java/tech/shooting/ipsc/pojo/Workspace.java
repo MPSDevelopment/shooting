@@ -46,7 +46,7 @@ public class Workspace extends BaseDocument {
 	
 	@JsonProperty
 	@ApiModelProperty
-	private int score;
+	private String score;
 
     @JsonProperty
     @ApiModelProperty(value = "Use workspace in test", required = true)

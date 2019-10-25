@@ -1,5 +1,5 @@
 package tech.shooting.ipsc.enums;
 
 public enum WorkspaceStatusEnum {
-	CONNECTED, DISCONNECTED
+	CONNECTED, DISCONNECTED, STARTED_TEST
 }
