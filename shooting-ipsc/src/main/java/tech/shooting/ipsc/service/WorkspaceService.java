@@ -22,6 +22,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.WorkspaceBean;
 import tech.shooting.ipsc.enums.WorkspaceStatusEnum;
 import tech.shooting.ipsc.event.TestStartedEvent;
+import tech.shooting.ipsc.event.WorkspaceChangedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.Subject;
@@ -202,6 +203,7 @@ public class WorkspaceService {
 		log.info("Put workspace %s to the map, size is %s", workspace, map.size());
 		map.put(workspace.getClientId(), workspace);
 		logWorkspaces();
+		EventBus.publishEvent(new WorkspaceChangedEvent(workspace));
 	}
 
 	private void logWorkspaces() {

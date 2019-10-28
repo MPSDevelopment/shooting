@@ -10,7 +10,6 @@ import tech.shooting.ipsc.pojo.FilePointer;
 import tech.shooting.ipsc.pojo.Image;
 import tech.shooting.ipsc.service.ImageService;
 
-import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -34,8 +33,6 @@ public class ImageController {
 
 	@Autowired
 	private ImageService imageService;
-
-	private Tika tika = new Tika();
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

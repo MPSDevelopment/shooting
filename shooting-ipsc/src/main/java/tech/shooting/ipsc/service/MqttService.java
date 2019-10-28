@@ -15,6 +15,7 @@ import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
 import tech.shooting.ipsc.event.TestFinishedEvent;
 import tech.shooting.ipsc.event.TestStartedEvent;
+import tech.shooting.ipsc.event.WorkspaceChangedEvent;
 import tech.shooting.ipsc.mqtt.JsonMqttCallBack;
 import tech.shooting.ipsc.mqtt.MqttConstants;
 import tech.shooting.ipsc.mqtt.MqttHandler;
@@ -226,6 +227,19 @@ public class MqttService {
 		Workspace workSpace = workspaceService.removeWorkspace(event.getClientId());
 
 		MqttMessage message = createJsonMessage(workSpace);
+		try {
+			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
+		} catch (MqttException e) {
+			log.error("Cannot send a message %s", message);
+		}
+	}
+	
+	@Handler
+	public void handle(WorkspaceChangedEvent event) {
+		log.info("Workspace changed detected. List of clients:");
+		getSubscribers().forEach(item -> log.info("Subscriber id %s ip %s", item.getClientID(), item.getAddress()));
+
+		MqttMessage message = createJsonMessage(event.getWorspace());
 		try {
 			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, message);
 		} catch (MqttException e) {
