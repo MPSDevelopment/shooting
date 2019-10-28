@@ -112,7 +112,7 @@ class WeaponControllerTest {
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
 		testPerson = testPerson == null ? personRepository.save(new Person().setDivision(testDivision).setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testWeaponType = testWeaponType == null ? weaponTypeRepository.save(new WeaponType().setName("Test-AK")) : testWeaponType;
-		testWeaponBean = new WeaponBean().setWeaponType(testWeaponType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
+		testWeaponBean = new WeaponBean().setId(testWeapon.getId()).setWeaponType(testWeaponType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
 				.setPerson(new Person().setName("fgdgfgd"))) : user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -268,11 +268,17 @@ class WeaponControllerTest {
 		// try access with judge role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		
+		 mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
+					.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		 
+		json = JacksonUtils.getJson(testWeaponBean.setSerialNumber(testWeaponBean.getSerialNumber() + "1"));
+		
 		// try access with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Weapon weapon = JacksonUtils.fromJson(Weapon.class, contentAsString);
-		assertEquals(count + 1, weaponRepository.findAll().size());
+		assertEquals(count + 2, weaponRepository.findAll().size());
 		assertEquals(testWeaponBean.getCount(), weapon.getCount());
 		assertEquals(testWeaponBean.getOwner(), weapon.getOwner().getId());
 		assertEquals(testWeaponBean.getSerialNumber(), weapon.getSerialNumber());

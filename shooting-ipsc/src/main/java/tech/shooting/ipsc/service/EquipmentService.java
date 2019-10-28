@@ -46,7 +46,7 @@ public class EquipmentService {
 
 	public Equipment post(EquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		Equipment equipment = repository.findById(bean.getId()).orElse(null);
+		Equipment equipment = bean.getId() == null ? null : repository.findById(bean.getId()).orElse(null);
 		EquipmentType type = checkType(bean.getType());
 		if (equipment == null) {
 			equipment = new Equipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);

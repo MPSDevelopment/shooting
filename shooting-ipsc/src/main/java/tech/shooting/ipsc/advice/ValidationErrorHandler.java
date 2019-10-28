@@ -1,6 +1,8 @@
 package tech.shooting.ipsc.advice;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.mongodb.MongoWriteException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -91,6 +93,15 @@ public class ValidationErrorHandler {
 	public ErrorMessage processBadRequestException(BadRequestException e) {
 		log.error("Bad request %s", e.getErrorMessage());
 		return e.getErrorMessage();
+	}
+	
+	@ExceptionHandler(MongoWriteException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage processValidationException(MongoWriteException ex, HttpServletRequest request) {
+		log.error("Database exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(ForbiddenException.class)

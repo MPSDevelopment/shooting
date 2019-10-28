@@ -56,7 +56,7 @@ public class CommunicationEquipmentService {
 
 	public CommunicationEquipment post(CommunicationEquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		CommunicationEquipment equipment = vehicleRepository.findById(bean.getId()).orElse(null);
+		CommunicationEquipment equipment = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
 		CommunicationEquipmentType type = checkType(bean.getType());
 		if (equipment == null) {
 			equipment = new CommunicationEquipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);

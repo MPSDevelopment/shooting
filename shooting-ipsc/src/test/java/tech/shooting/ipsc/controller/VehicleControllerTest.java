@@ -113,7 +113,7 @@ class VehicleControllerTest {
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
 		testPerson = testPerson == null ? personRepository.save(new Person().setDivision(testDivision).setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testType = testType == null ? vehicleTypeRepository.save(new VehicleType().setName("Test-AK")) : testType;
-		testVehicleBean = new VehicleBean().setType(testType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
+		testVehicleBean = new VehicleBean().setId(testVehicle.getId()).setType(testType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
 				.setPerson(new Person().setName("fgdgfgd"))) : user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -270,10 +270,17 @@ class VehicleControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		
+		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1"));
+		
+		// try access with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		
 		Vehicle weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
-		assertEquals(count + 1, vehicleRepository.findAll().size());
+		assertEquals(count + 2, vehicleRepository.findAll().size());
 		assertEquals(testVehicleBean.getCount(), weapon.getCount());
 		assertEquals(testVehicleBean.getOwner(), weapon.getOwner().getId());
 		assertEquals(testVehicleBean.getSerialNumber(), weapon.getSerialNumber());

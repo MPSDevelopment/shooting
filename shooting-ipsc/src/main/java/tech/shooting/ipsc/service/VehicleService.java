@@ -51,7 +51,7 @@ public class VehicleService {
 
 	public Vehicle post(VehicleBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		Vehicle vehicle = vehicleRepository.findById(bean.getId()).orElse(null);
+		Vehicle vehicle = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
 		VehicleType type = checkType(bean.getType());
 		if (vehicle == null) {
 			vehicle = new Vehicle().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setPassportNumber(bean.getPassportNumber()).setCount(bean.getCount()).setType(type);

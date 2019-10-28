@@ -16,7 +16,6 @@ import org.springframework.data.annotation.Id;
 @Accessors(chain = true)
 public class WeaponBean {
 	
-	@Id
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	protected Long id;

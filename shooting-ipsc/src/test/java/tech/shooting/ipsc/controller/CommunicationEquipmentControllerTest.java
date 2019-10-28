@@ -60,7 +60,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CommunicationEquipmentController.class, CommunicationEquipmentService.class })
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, CommunicationEquipmentController.class,
+		CommunicationEquipmentService.class })
 class CommunicationEquipmentControllerTest {
 
 	@Autowired
@@ -130,7 +131,8 @@ class CommunicationEquipmentControllerTest {
 		int count = 10;
 		createRows(count);
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL)).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
@@ -138,7 +140,8 @@ class CommunicationEquipmentControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<CommunicationEquipment> listFromJson = JacksonUtils.getListFromJson(CommunicationEquipment[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
@@ -151,18 +154,21 @@ class CommunicationEquipmentControllerTest {
 		createRows(count);
 		CommunicationEquipment vehicle = repository.findAll().get(0);
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, vehicle.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		CommunicationEquipment weaponFromDB = JacksonUtils.fromJson(CommunicationEquipment.class, contentAsString);
 		assertEquals(vehicle, weaponFromDB);
 	}
@@ -174,23 +180,20 @@ class CommunicationEquipmentControllerTest {
 		createRows(count);
 		assertEquals(count, repository.findAll().size());
 		// try access with unauthorized user
-		mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString())))
-				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+				+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()))
-						.header(Token.TOKEN_HEADER, userToken))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+				+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString())).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()))
-						.header(Token.TOKEN_HEADER, judgeToken))
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+				+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString())).header(Token.TOKEN_HEADER, judgeToken))
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		String contentAsString = mockMvc.perform(
-				MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()))
-						.header(Token.TOKEN_HEADER, adminToken))
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<CommunicationEquipment> listFromJson = JacksonUtils.getListFromJson(CommunicationEquipment[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
@@ -203,24 +206,25 @@ class CommunicationEquipmentControllerTest {
 		createRows(count);
 		assertEquals(count, repository.findAll().size());
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
-				+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName())))
-				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID
+				.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))).andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
-						+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID
+				.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName())).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
-						+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))
-				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID
+				.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName())).header(Token.TOKEN_HEADER, judgeToken))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
-						+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString()).replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc
+				.perform(
+						MockMvcRequestBuilders
+								.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+										+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID.replace(ControllerAPI.REQUEST_DIVISION_ID, testDivision.getId().toString())
+												.replace(ControllerAPI.REQUEST_PERSON_NAME, testPerson.getName()))
+								.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<CommunicationEquipment> listFromJson = JacksonUtils.getListFromJson(CommunicationEquipment[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
 	}
@@ -238,18 +242,21 @@ class CommunicationEquipmentControllerTest {
 		createRows(count);
 		assertEquals(count, repository.findAll().size());
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders.get(
+				ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.get(
+				ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders.get(
+				ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
 		String contentAsString = mockMvc
-				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString()))
-						.header(Token.TOKEN_HEADER, adminToken))
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID.replace(ControllerAPI.REQUEST_PERSON_ID, testPerson.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<CommunicationEquipment> listFromJson = JacksonUtils.getListFromJson(CommunicationEquipment[].class, contentAsString);
 		assertEquals(count, listFromJson.size());
@@ -261,19 +268,28 @@ class CommunicationEquipmentControllerTest {
 		int count = repository.findAll().size();
 		String json = JacksonUtils.getJson(testEquipmentBean);
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		json = JacksonUtils.getJson(testEquipmentBean.setSerialNumber(testEquipmentBean.getSerialNumber() + "1"));
+
+		// try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
 		CommunicationEquipment weapon = JacksonUtils.fromJson(CommunicationEquipment.class, contentAsString);
-		assertEquals(count + 1, repository.findAll().size());
+		assertEquals(count + 2, repository.findAll().size());
 //		assertEquals(testEquipmentBean.getCount(), weapon.getCount());
 		assertEquals(testEquipmentBean.getOwner(), weapon.getOwner().getId());
 		assertEquals(testEquipmentBean.getSerialNumber(), weapon.getSerialNumber());
@@ -287,16 +303,20 @@ class CommunicationEquipmentControllerTest {
 		CommunicationEquipment save = repository.save(testEquipment);
 		assertEquals(count + 1, repository.findAll().size());
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		mockMvc.perform(MockMvcRequestBuilders.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertEquals(count, repository.findAll().size());
@@ -343,19 +363,21 @@ class CommunicationEquipmentControllerTest {
 		assertEquals(1, repository.findAll().size());
 
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString())))
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+		mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		String contentAsString = mockMvc
-				.perform(MockMvcRequestBuilders.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
-						.header(Token.TOKEN_HEADER, adminToken))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
+				.post(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER.replace(ControllerAPI.REQUEST_EQUIPMENT_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		CommunicationEquipment weapon = JacksonUtils.fromJson(CommunicationEquipment.class, contentAsString);
 		assertEquals(1, repository.findAll().size());
 		assertEquals(null, weapon.getOwner());
