@@ -115,7 +115,9 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ErrorMessage processForbiddenException(AccessDeniedException ex, HttpServletRequest request) {
 		log.error("Access denied exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULT_FIELD, "Access denied in request %s", request.getRequestURL());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, String.format("Access denied in request %s", request.getRequestURL()));
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(NotAcceptableException.class)
