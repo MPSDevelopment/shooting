@@ -73,10 +73,10 @@ public class StandardService {
 
 	private Standard getStandardFromBean(StandardBean bean) throws BadRequestException {
 		Subject subject = checkSubject(bean.getSubject());
-		List<CategoryByTime> categories = checkCategoriesAndTime(bean.getCategoriesList());
+		List<CategoryByTime> categories = checkCategoriesAndTime(bean.getCategoryByTimeList());
 		List<StandardConditions> conditions = checkConditionList(bean.getConditionsList());
 		List<StandardFails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList()) ? new ArrayList<>() : bean.getFailsList();
-		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setInfo(bean.getInfo()).setCategoriesList(categories).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
+		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setInfo(bean.getInfo()).setCategoryByTimeList(bean.getCategoryByTimeList()).setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
 	}
 
 	private List<StandardConditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {
@@ -94,10 +94,10 @@ public class StandardService {
 		return res;
 	}
 
-	private List<CategoryByTime> checkCategoriesAndTime(List<CategoriesBean> categoriesList) throws BadRequestException {
+	private List<CategoryByTime> checkCategoriesAndTime(List<CategoryByTime> categoriesList) throws BadRequestException {
 		List<CategoryByTime> res = new ArrayList<>();
 		for (int i = 0; i < categoriesList.size(); i++) {
-			CategoriesBean bean = categoriesList.get(i);
+			CategoryByTime bean = categoriesList.get(i);
 			Category categories = bean.getCategory();
 			res.add(new CategoryByTime().setCategory(categories).setExcellentTime(bean.getExcellentTime()).setGoodTime(bean.getGoodTime()).setSatisfactoryTime(bean.getSatisfactoryTime()));
 		}
@@ -111,7 +111,7 @@ public class StandardService {
 	public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		Standard standardFromBean = getStandardFromBean(bean);
-		standard.setCategoriesList(standardFromBean.getCategoriesList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList()).setConditionsList(standardFromBean.getConditionsList())
+		standard.setCategoryByTimeList(standardFromBean.getCategoryByTimeList()).setCategoryByPointsList(standardFromBean.getCategoryByPointsList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList()).setConditionsList(standardFromBean.getConditionsList())
 				.setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setActive(standardFromBean.isActive());
 		return standardRepository.save(standard);
 	}

@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,18 +39,18 @@ public class Standard extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Is group standard", required = true)
 	private boolean groups;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Is running standard", required = true)
 	private boolean running;
 
 	@JsonProperty
-	@ApiModelProperty(value = "List categories by time", required = true)
-	private List<CategoryByTime> categoriesList;
-	
+	@ApiModelProperty(value = "List categories by time")
+	private List<CategoryByTime> categoryByTimeList = new ArrayList<>();
+
 	@JsonProperty
-	@ApiModelProperty(value = "List categories by points", required = true)
-	private List<CategoryByPoints> categoryList;
+	@ApiModelProperty(value = "List categories by points")
+	private List<CategoryByPoints> categoryByPointsList = new ArrayList<>();
 
 	@JsonProperty
 	@ApiModelProperty(value = "List fails")

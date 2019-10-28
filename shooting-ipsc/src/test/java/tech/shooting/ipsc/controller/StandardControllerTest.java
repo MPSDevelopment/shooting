@@ -240,14 +240,21 @@ class StandardControllerTest {
 		bean.setInfo(testStandard.getInfo()).setSubject(testStandard.getSubject().getId()).setGroups(testStandard.isGroups()).setActive(testStandard.isActive());
 		List<CategoryByTime> res = new ArrayList<>();
 		res.add(new CategoryByTime().setCategory(testCategory).setExcellentTime(10F).setGoodTime(12F).setSatisfactoryTime(14F));
-		testStandard.setCategoriesList(res);
-		List<CategoriesBean> categoriesBeans = new ArrayList<>();
-		for (int i = 0; i < testStandard.getCategoriesList().size(); i++) {
-			CategoryByTime categoriesAndTime = testStandard.getCategoriesList().get(i);
-			categoriesBeans.add(new CategoriesBean().setCategory(categoriesAndTime.getCategory()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime())
+		testStandard.setCategoryByTimeList(res);
+		List<CategoryByTime> categoriesBeans = new ArrayList<>();
+		for (int i = 0; i < testStandard.getCategoryByTimeList().size(); i++) {
+			CategoryByTime categoriesAndTime = testStandard.getCategoryByTimeList().get(i);
+			categoriesBeans.add(new CategoryByTime().setCategory(categoriesAndTime.getCategory()).setExcellentTime(categoriesAndTime.getExcellentTime()).setGoodTime(categoriesAndTime.getGoodTime())
 					.setSatisfactoryTime(categoriesAndTime.getSatisfactoryTime()));
 		}
-		bean.setCategoriesList(categoriesBeans);
+		bean.setCategoryByTimeList(categoriesBeans);
+		List<CategoryByPoints> categoryByPoints = new ArrayList<>();
+		for (int i = 0; i < testStandard.getCategoryByPointsList().size(); i++) {
+			CategoryByPoints categoriesAndTime = testStandard.getCategoryByPointsList().get(i);
+			categoryByPoints.add(new CategoryByPoints().setCategory(categoriesAndTime.getCategory()).setExcellentPoints(categoriesAndTime.getExcellentPoints()).setGoodPoints(categoriesAndTime.getGoodPoints())
+					.setSatisfactoryPoints(categoriesAndTime.getSatisfactoryPoints()));
+		}
+		bean.setCategoryByPointsList(categoryByPoints);
 		return bean;
 	}
 
@@ -280,7 +287,7 @@ class StandardControllerTest {
 		assertEquals(count + 1, standardRepository.findAll().size());
 		Standard standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
 		assertEquals(standard.getId(), standard1.getId());
-		assertEquals(standard.getCategoriesList(), standard1.getCategoriesList());
+		assertEquals(standard.getCategoryByTimeList(), standard1.getCategoryByTimeList());
 		assertEquals(standard.getConditionsList(), standard1.getConditionsList());
 		assertEquals(standard.getFailsList(), standard1.getFailsList());
 		assertEquals(standard.getInfo(), standard1.getInfo());
