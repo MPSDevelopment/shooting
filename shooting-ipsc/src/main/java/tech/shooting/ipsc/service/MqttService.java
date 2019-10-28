@@ -33,6 +33,7 @@ import io.moquette.broker.config.IConfig;
 import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -173,6 +174,9 @@ public class MqttService {
 	}
 
 	public Collection<ClientDescriptor> getSubscribers() {
+		if (mqttBroker == null) {
+			return new ArrayList<>();
+		}
 		return mqttBroker.listConnectedClients();
 	}
 
@@ -233,7 +237,7 @@ public class MqttService {
 			log.error("Cannot send a message %s", message);
 		}
 	}
-	
+
 	@Handler
 	public void handle(WorkspaceChangedEvent event) {
 		log.info("Workspace changed detected. List of clients:");
@@ -246,27 +250,26 @@ public class MqttService {
 			log.error("Cannot send a message %s", message);
 		}
 	}
-	
+
 	@Handler
 	public void handle(TestStartedEvent event) {
-		
+
 		if (event.getWorspace() == null) {
 			log.error("Cannot send test started event without workspace");
 			return;
 		}
-		
+
 		try {
 			String topic = MqttConstants.TEST_TOPIC + "/" + event.getWorspace().getIp();
 			log.info("Sending test start to the topic %s", topic);
 			getPublisher().publish(topic, createJsonMessage(event.getWorspace()));
-			
+
 			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(event.getWorspace().setScore(WorkspaceStatusEnum.STARTED_TEST.toString())));
-			
+
 		} catch (MqttException e) {
 			log.error("Cannot send a mqtt message %s", event);
 		}
 	}
-
 
 	@Handler
 	public void handle(TestFinishedEvent event) {

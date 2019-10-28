@@ -53,9 +53,12 @@ public class WorkspaceService {
 	public synchronized Workspace createWorkspace(String clientId, String ip) throws MqttException {
 
 		Workspace workspace;
-		if ((workspace = getWorkspaceByClientId(clientId)) != null) {
-			log.error("Workspace with clientid %s already exists", clientId);
-			return workspace;
+		try {
+			if ((workspace = getWorkspaceByClientId(clientId)) != null) {
+				log.error("Workspace with clientid %s already exists", clientId);
+				return workspace;
+			}
+		} catch (NotFoundException e) {
 		}
 		try {
 			workspace = getWorkspaceByIp(ip);
@@ -79,8 +82,12 @@ public class WorkspaceService {
 		return workspace;
 	}
 
-	public Workspace getWorkspaceByClientId(String clientId) {
-		return map.get(clientId);
+	public Workspace getWorkspaceByClientId(String clientId) throws NotFoundException {
+		Workspace workspace = map.get(clientId);
+		if (workspace != null) {
+			return workspace;
+		}
+		throw new NotFoundException(new ErrorMessage("There is no workspace for clientid %s", clientId));
 	}
 
 	public Workspace getWorkspaceByQuizIdAndPersonId(Long quizId, Long personId) {
@@ -102,7 +109,11 @@ public class WorkspaceService {
 	}
 
 	public synchronized Workspace removeWorkspace(String clientId) {
-		Workspace workspace = getWorkspaceByClientId(clientId);
+		Workspace workspace = null;
+		try {
+			workspace = getWorkspaceByClientId(clientId);
+		} catch (NotFoundException e) {
+		}
 		if (workspace != null) {
 			map.remove(clientId);
 			workspace.setStatus(WorkspaceStatusEnum.DISCONNECTED);
@@ -143,15 +154,20 @@ public class WorkspaceService {
 
 		log.error("Starting the workspace %s", bean);
 
-		
 		EventBus.publishEvent(new TestStartedEvent(workspace));
-		
+
 		return workspace;
 	}
 
 	public Workspace updateWorkspace(WorkspaceBean bean) throws BadRequestException {
 
-		Workspace workspace = getWorkspaceByClientId(bean.getClientId());
+		Workspace workspace = null;
+		;
+		try {
+			workspace = getWorkspaceByClientId(bean.getClientId());
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 		if (workspace != null) {
 			checkPerson(bean.getPersonId());
 			checkQuiz(bean.getQuizId());

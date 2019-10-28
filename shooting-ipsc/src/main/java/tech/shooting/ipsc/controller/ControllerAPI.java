@@ -254,7 +254,7 @@ public class ControllerAPI {
 	public static final String WEAPON_TYPE_CONTROLLER_POST_TYPE = "/create/weapontype";
 	public static final String WEAPON_TYPE_CONTROLLER_PUT_TYPE = "/update/weapontype/" + REQUEST_TYPE_ID;
 	public static final String WEAPON_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/weapontype/" + REQUEST_TYPE_ID;
-	
+
 	// communication equipment type section
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER = "/api/commequipmenttype";
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_GET_ALL = "/get/all";
@@ -263,7 +263,7 @@ public class ControllerAPI {
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM = "/enum/type";
-	
+
 	// communication equipment type section
 	public static final String EQUIPMENT_TYPE_CONTROLLER = "/api/equipmenttype";
 	public static final String EQUIPMENT_TYPE_CONTROLLER_GET_ALL = "/get/all";
@@ -272,7 +272,7 @@ public class ControllerAPI {
 	public static final String EQUIPMENT_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String EQUIPMENT_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
 	public static final String EQUIPMENT_TYPE_CONTROLLER_TYPE_ENUM = "/enum/type";
-	
+
 	// vehicle type section
 	public static final String VEHICLE_TYPE_CONTROLLER = "/api/vehicletype";
 	public static final String VEHICLE_TYPE_CONTROLLER_GET_ALL = "/get/all";
@@ -280,7 +280,7 @@ public class ControllerAPI {
 	public static final String VEHICLE_TYPE_CONTROLLER_POST_TYPE = "/create";
 	public static final String VEHICLE_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String VEHICLE_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
-	
+
 	// ammunition type section
 	public static final String AMMO_TYPE_CONTROLLER = "/api/ammo";
 	public static final String AMMO_TYPE_CONTROLLER_GET_ALL = "/get/all";
@@ -288,7 +288,7 @@ public class ControllerAPI {
 	public static final String AMMO_TYPE_CONTROLLER_POST_TYPE = "/create";
 	public static final String AMMO_TYPE_CONTROLLER_PUT_TYPE = "/update/" + REQUEST_TYPE_ID;
 	public static final String AMMO_TYPE_CONTROLLER_DELETE_TYPE_BY_ID = "/delete/" + REQUEST_TYPE_ID;
-	
+
 	// legend type section
 	public static final String LEGEND_TYPE_CONTROLLER = "/api/legend";
 	public static final String LEGEND_TYPE_CONTROLLER_GET_ALL = "/get/all";
@@ -303,6 +303,7 @@ public class ControllerAPI {
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST = "/allfortest";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_START = "/start";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_CHECK = "/check";
+	public static final String WORKSPACE_CONTROLLER_CONTROLLER_GET_BY_CLIENT_ID = "/client/" + REQUEST_ID;
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST = "/useintest";
 	public static final String WORKSPACE_CONTROLLER_CONTROLLER_NOT_USE_IN_TEST = "/notuseintest";
 	public static final String WORKSPACE_CONTROLLER_GET_TOPIC = "/get/topic";
@@ -319,7 +320,7 @@ public class ControllerAPI {
 	public static final String WEAPON_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String WEAPON_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String WEAPON_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
-	
+
 	// communication equipment section
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER = "/api/communicationequipment";
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL = "/all";
@@ -332,7 +333,7 @@ public class ControllerAPI {
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
-	
+
 	// vehicle section
 	public static final String VEHICLE_CONTROLLER = "/api/vehicle";
 	public static final String VEHICLE_CONTROLLER_GET_ALL = "/all";
@@ -345,8 +346,8 @@ public class ControllerAPI {
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String VEHICLE_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
-	
-	//  equipment section
+
+	// equipment section
 	public static final String EQUIPMENT_CONTROLLER = "/api/equipment";
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL = "/all";
 	public static final String EQUIPMENT_CONTROLLER_GET_BY_ID = "/" + REQUEST_EQUIPMENT_ID;
@@ -394,7 +395,7 @@ public class ControllerAPI {
 	public static final String COURSE_CONTROLLER_GET_COURCES_BY_DIVISION_BY_PAGE = "/division/" + REQUEST_DIVISION_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COURSE_CONTROLLER_GET_COURCES_BY_PERSON_BY_PAGE = "/person/" + REQUEST_PERSON_ID + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COURSE_CONTROLLER_GET_COUNT = "/count";
-	
+
 	public static final String SETTINGS_CONTROLLER = "/api/settings";
 	public static final String SETTINGS_CONTROLLER_GET_SETTINGS = "/";
 	public static final String SETTINGS_CONTROLLER_PUT_SETTINGS = "/";

@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +45,7 @@ public class WorkspaceController {
 		Workspace workspace = workSpaceService.updateWorkspace(bean);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_CHECK)
 	@ApiOperation(value = "Check workspaces")
 	public ResponseEntity<List<Workspace>> checkWorkspace(@RequestBody @Valid List<WorkspaceBean> list) throws BadRequestException, MqttPersistenceException, MqttException {
@@ -70,7 +71,15 @@ public class WorkspaceController {
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
-	
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_BY_CLIENT_ID)
+	@ApiOperation(value = "Get a workspace")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
+	public ResponseEntity<Workspace> getWorkspaceByClientId(@PathVariable(value = ControllerAPI.PATH_VARIABLE_ID) String clientId) throws BadRequestException, NotFoundException {
+		Workspace workspace = workSpaceService.getWorkspaceByClientId(clientId);
+		return new ResponseEntity<>(workspace, HttpStatus.OK);
+	}
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST)
 	@ApiOperation(value = "Set a workspace to use in test")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
@@ -84,14 +93,14 @@ public class WorkspaceController {
 		workSpaceService.putWorkspace(workspace);
 		return new ResponseEntity<>(workspace, HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_NOT_USE_IN_TEST)
 	@ApiOperation(value = "Set a workspace to use in test")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER', 'GUEST')")
 	public ResponseEntity<Workspace> setWorkspaceForNotUseInTest(HttpServletRequest request) throws BadRequestException, NotFoundException {
 
 		log.info("Connection from -> Remote  X-Forwarded-For = %s  ipAddress =  %s ", request.getHeader("X-Forwarded-For"), request.getRemoteAddr());
-		
+
 		String remoteIp = Optional.ofNullable(request.getHeader("X-Forwarded-For")).orElse(request.getRemoteAddr());
 
 		Workspace workspace = workSpaceService.getWorkspaceByIp(remoteIp);

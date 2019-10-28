@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = CompetitionRepository.class)
-@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class, WorkspaceService.class,
+@ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMqttSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, WorkspaceController.class, WorkspaceService.class,
 		IpscMqttSettings.class, MqttService.class, JsonMqttCallBack.class })
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
@@ -132,7 +132,7 @@ public class WorkspaceControllerTest {
 		guestToken = tokenUtils.createToken(guest.getId(), Token.TokenType.USER, guest.getLogin(), RoleName.GUEST, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		adminToken = tokenUtils.createToken(admin.getId(), Token.TokenType.USER, admin.getLogin(), RoleName.ADMIN, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
 		judgeToken = tokenUtils.createToken(judge.getId(), Token.TokenType.USER, judge.getLogin(), RoleName.JUDGE, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
-		
+
 		workspaceService.clear();
 	}
 
@@ -249,10 +249,10 @@ public class WorkspaceControllerTest {
 		list = JacksonUtils.getListFromJson(Workspace[].class, content);
 
 		assertEquals(0, list.size());
-		
+
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_USE_IN_TEST).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		
+
 		content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_ALL_FOR_TEST).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 
@@ -274,6 +274,22 @@ public class WorkspaceControllerTest {
 		String content = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0).contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken).with(remoteHost("127.0.0.10")))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		Workspace workspace = JacksonUtils.fromJson(Workspace.class, content);
+		assertNotNull(workspace);
+	}
+
+	@Test
+	void getWorkspaceByClientId() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_BY_CLIENT_ID.replace(ControllerAPI.REQUEST_ID, "test1")).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+		workspaceService.createWorkspace("test3", "127.0.0.10");
+
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_BY_CLIENT_ID.replace(ControllerAPI.REQUEST_ID, "test2")).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+		String content = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.WORKSPACE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WORKSPACE_CONTROLLER_CONTROLLER_GET_BY_CLIENT_ID.replace(ControllerAPI.REQUEST_ID, "test3"))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Workspace workspace = JacksonUtils.fromJson(Workspace.class, content);
 		assertNotNull(workspace);
 	}
