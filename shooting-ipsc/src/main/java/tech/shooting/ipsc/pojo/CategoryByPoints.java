@@ -29,7 +29,7 @@ public class CategoryByPoints {
     @Positive(message = ValidationConstants.TIME_MESSAGE)
     private Integer goodPoints;
     
-    @JsonProperty("satTime")
+    @JsonProperty("satPoints")
     @ApiModelProperty(value = "Standard points(hits) for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
     private Integer satisfactoryPoints;
