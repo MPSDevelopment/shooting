@@ -46,14 +46,14 @@ public class EquipmentService {
 
 	public Equipment post(EquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		Equipment bySerialNumber = repository.findBySerialNumber(bean.getSerialNumber());
+		Equipment equipment = repository.findById(bean.getId()).orElse(null);
 		EquipmentType type = checkType(bean.getType());
-		if (bySerialNumber == null) {
-			bySerialNumber = new Equipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+		if (equipment == null) {
+			equipment = new Equipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 		} else {
-			bySerialNumber.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+			equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 		}
-		return repository.save(bySerialNumber);
+		return repository.save(equipment);
 	}
 
 	private EquipmentType checkType(Long type) throws BadRequestException {

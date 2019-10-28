@@ -56,14 +56,14 @@ public class CommunicationEquipmentService {
 
 	public CommunicationEquipment post(CommunicationEquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		CommunicationEquipment bySerialNumber = vehicleRepository.findBySerialNumber(bean.getSerialNumber());
+		CommunicationEquipment equipment = vehicleRepository.findById(bean.getId()).orElse(null);
 		CommunicationEquipmentType type = checkType(bean.getType());
-		if (bySerialNumber == null) {
-			bySerialNumber = new CommunicationEquipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+		if (equipment == null) {
+			equipment = new CommunicationEquipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 		} else {
-			bySerialNumber.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+			equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 		}
-		return vehicleRepository.save(bySerialNumber);
+		return vehicleRepository.save(equipment);
 	}
 
 	private CommunicationEquipmentType checkType(Long type) throws BadRequestException {

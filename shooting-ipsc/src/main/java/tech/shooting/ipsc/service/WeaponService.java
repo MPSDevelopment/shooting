@@ -46,14 +46,14 @@ public class WeaponService {
 
     public Weapon postWeapon(WeaponBean bean) throws BadRequestException {
         Person owner = checkPerson(bean.getOwner());
-        Weapon bySerialNumber = weaponRepository.findBySerialNumber(bean.getSerialNumber());
+        Weapon weapon = weaponRepository.findById(bean.getId()).orElse(null);
         WeaponType weaponType = checkWeaponType(bean.getWeaponType());
-        if (bySerialNumber == null){
-            bySerialNumber = new Weapon().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+        if (weapon == null){
+            weapon = new Weapon().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
         }else{
-            bySerialNumber.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+            weapon.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
         }
-        return weaponRepository.save(bySerialNumber);
+        return weaponRepository.save(weapon);
     }
 
     private WeaponType checkWeaponType(Long weaponType) throws BadRequestException {

@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,11 +11,17 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 @Data
 @Accessors(chain = true)
 public class VehicleBean {
+	
+	@Id
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	protected Long id;
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of vehicle", required = true)
