@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
-import tech.shooting.ipsc.bean.CategoriesBean;
 import tech.shooting.ipsc.bean.ConditionsBean;
-import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
@@ -23,7 +21,6 @@ import tech.shooting.ipsc.repository.StandardRepository;
 import tech.shooting.ipsc.repository.StandardScoreRepository;
 import tech.shooting.ipsc.repository.SubjectRepository;
 
-import java.net.StandardSocketOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +70,6 @@ public class StandardService {
 
 	private Standard getStandardFromBean(StandardBean bean) throws BadRequestException {
 		Subject subject = checkSubject(bean.getSubject());
-		List<CategoryByTime> categories = checkCategoriesAndTime(bean.getCategoryByTimeList());
 		List<StandardConditions> conditions = checkConditionList(bean.getConditionsList());
 		List<StandardFails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList()) ? new ArrayList<>() : bean.getFailsList();
 		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setInfo(bean.getInfo()).setCategoryByTimeList(bean.getCategoryByTimeList()).setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
@@ -94,15 +90,15 @@ public class StandardService {
 		return res;
 	}
 
-	private List<CategoryByTime> checkCategoriesAndTime(List<CategoryByTime> categoriesList) throws BadRequestException {
-		List<CategoryByTime> res = new ArrayList<>();
-		for (int i = 0; i < categoriesList.size(); i++) {
-			CategoryByTime bean = categoriesList.get(i);
-			Category categories = bean.getCategory();
-			res.add(new CategoryByTime().setCategory(categories).setExcellentTime(bean.getExcellentTime()).setGoodTime(bean.getGoodTime()).setSatisfactoryTime(bean.getSatisfactoryTime()));
-		}
-		return res;
-	}
+//	private List<CategoryByTime> checkCategoriesAndTime(List<CategoryByTime> categoriesList) throws BadRequestException {
+//		List<CategoryByTime> res = new ArrayList<>();
+//		for (int i = 0; i < categoriesList.size(); i++) {
+//			CategoryByTime bean = categoriesList.get(i);
+//			Category categories = bean.getCategory();
+//			res.add(new CategoryByTime().setCategory(categories).setExcellentTime(bean.getExcellentTime()).setGoodTime(bean.getGoodTime()).setSatisfactoryTime(bean.getSatisfactoryTime()));
+//		}
+//		return res;
+//	}
 
 //	private Category checkCategory(Long categoriesBean) throws BadRequestException {
 //		return categoriesRepository.findById(categoriesBean).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect category id %s", categoriesBean)));
