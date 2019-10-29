@@ -14,8 +14,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 @ToString(callSuper = true)
 public class StandardConditions {
 
-	public static final String UNIT = "name";
-
 	@JsonProperty
 	@ApiModelProperty(value = "Name conditions by rus", required = true)
 	private String conditionsRus;
@@ -25,8 +23,8 @@ public class StandardConditions {
 	private String conditionsKz;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
-	private Float coefficient;
+	@ApiModelProperty(value = "Standard coefficient", required = true)
+	private Double coefficient;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Standard units", required = true)

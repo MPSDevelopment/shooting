@@ -22,7 +22,7 @@ public class ConditionsBean {
     private String conditionsKz;
 
     @JsonProperty
-    @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
+    @ApiModelProperty(value = "Standard coefficient", required = true)
     private Double coefficient;
 
     @JsonProperty

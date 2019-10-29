@@ -82,9 +82,7 @@ public class StandardService {
 		List<StandardConditions> res = new ArrayList<>();
 		for (int i = 0; i < conditionsList.size(); i++) {
 			StandardConditions condition = new StandardConditions();
-			UnitEnum unit = conditionsList.get(i).getUnits();
-			BeanUtils.copyProperties(conditionsList.get(i), condition, StandardConditions.UNIT);
-			condition.setUnits(unit);
+			BeanUtils.copyProperties(conditionsList.get(i), condition);
 			res.add(condition);
 		}
 		return res;
