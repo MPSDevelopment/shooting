@@ -28,7 +28,6 @@ public class StandardConditions {
 	@ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
 	private Float coefficient;
 
-	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Standard units", required = true)
 	private UnitEnum units;

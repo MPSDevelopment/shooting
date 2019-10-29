@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class ConditionsBean {
+	
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
     private String conditionsRus;
@@ -24,7 +25,6 @@ public class ConditionsBean {
     @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
     private Double coefficient;
 
-    @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Units id", required = true)
     private UnitEnum units;
