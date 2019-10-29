@@ -76,7 +76,7 @@ public class StandardService {
 	}
 
 	private List<StandardConditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {
-		if (conditionsList == null || Collections.EMPTY_LIST.equals(conditionsList)) {
+		if (CollectionUtils.isEmpty(conditionsList)) {
 			return new ArrayList<>();
 		}
 		List<StandardConditions> res = new ArrayList<>();
