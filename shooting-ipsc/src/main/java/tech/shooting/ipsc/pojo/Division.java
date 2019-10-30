@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -57,7 +59,7 @@ public class Division extends BaseDocument {
 	public Division setParent(Division parent) {
 		this.parent = parent;
 		parentId = parent == null ? null : parent.getId();
-		if (parent != null) {
+		if (parent != null && !parent.getChildren().contains(this)) {
 			parent.getChildrenId().add(getId());
 			parent.getChildren().add(this);
 		}

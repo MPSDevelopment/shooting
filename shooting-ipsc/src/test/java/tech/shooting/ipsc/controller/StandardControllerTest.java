@@ -33,7 +33,6 @@ import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
-import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.StandardPassEnum;
 import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.*;

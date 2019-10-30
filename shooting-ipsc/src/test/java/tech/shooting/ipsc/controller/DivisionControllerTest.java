@@ -124,9 +124,14 @@ class DivisionControllerTest {
 		// try access admin role
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.DIVISION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.DIVISION_CONTROLLER_POST_DIVISION).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(Objects.requireNonNull(JacksonUtils.getJson(divisionBean))).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		
 		DivisionBean division = JacksonUtils.fromJson(DivisionBean.class, contentAsString);
 		assertEquals(division.getName(), divisionBean.getName());
 		assertEquals(division.getParent(), divisionBean.getParent());
+		
+		root = divisionRepository.findByParentIsNull().orElse(null);
+		
+		assertEquals(1, root.getChildren().size());
 	}
 
 	@Test
@@ -289,7 +294,7 @@ class DivisionControllerTest {
 		DivisionBean division = divisionService.createDivision(divisionBean, null);
 		divisionService.createDivision(new DivisionBean().setName("fdfdfd").setParent(division.getId()), division.getId());
 		DivisionBean qyqy = divisionService.updateDivision(division.getId(), "qyqy");
-		assertEquals(2, qyqy.getChildren().size());
+		assertEquals(1, qyqy.getChildren().size());
 	}
 
 	@Test
