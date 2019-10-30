@@ -229,9 +229,17 @@ class StandardControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try with admin role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		
 		assertEquals(count + 1, standardRepository.findAll().size());
+		Standard standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
+		
+		assertEquals(bean.getCategoryByTimeList(), standard1.getCategoryByTimeList());
+		assertEquals(bean.isActive(), standard1.isActive());
+		assertEquals(bean.isGroups(), standard1.isGroups());
+		assertEquals(bean.isRunning(), standard1.isRunning());
+	
 	}
 
 	private StandardBean createStandardBean() {
@@ -254,6 +262,7 @@ class StandardControllerTest {
 					.setSatisfactoryPoints(categoriesAndTime.getSatisfactoryPoints()));
 		}
 		bean.setCategoryByPointsList(categoryByPoints);
+		bean.setRunning(true);
 		return bean;
 	}
 
@@ -293,7 +302,7 @@ class StandardControllerTest {
 		assertEquals(standard.getSubject(), standard1.getSubject());
 		assertEquals(standard.isActive(), standard1.isActive());
 		assertNotEquals(standard.isGroups(), standard1.isGroups());
-
+		assertEquals(standard.isRunning(), standard1.isRunning());
 	}
 
 	@Test
