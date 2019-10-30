@@ -56,10 +56,10 @@ public class Division extends BaseDocument {
 	@ApiModelProperty(value = "Status division")
 	private boolean active;
 
-	public Division setParent(Division parent) {
+	public Division setParentWithChildren(Division parent) {
 		this.parent = parent;
 		parentId = parent == null ? null : parent.getId();
-		if (parent != null && !parent.getChildren().contains(this)) {
+		if (parent != null) {
 			parent.getChildrenId().add(getId());
 			parent.getChildren().add(this);
 		}

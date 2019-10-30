@@ -56,9 +56,9 @@ public class DivisionService {
 			Division divisionParent = divisionRepository.findById(parentId).get();
 			division.setParent(divisionParent);
 			division = divisionRepository.save(division);
-//			List<Division> children = divisionParent.getChildren();
-//			children.add(division);
-//			divisionParent.setChildren(children);
+			List<Division> children = divisionParent.getChildren();
+			children.add(division);
+			divisionParent.setChildren(children);
 			divisionRepository.save(divisionParent);
 		}
 		return division;

@@ -89,13 +89,15 @@ class StandardScoreRepositoryTest {
 		testStandard = standardRepository.save(new Standard().setActive(true).setSubject(testSubject).setGroups(false));
 		anotherStandard = standardRepository.save(new Standard().setActive(true).setSubject(anotherSubject).setGroups(false));
 		
-		root = divisionRepository.save(new Division().setName("Root").setParent(null));
-		division = divisionRepository.save(new Division().setName("Division").setParent(root));
-		childDivision = divisionRepository.save(new Division().setName("Child").setParent(division));
-		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
+		root = divisionRepository.save(new Division().setName("Root").setParentWithChildren(null));
+		division = divisionRepository.save(new Division().setName("Division").setParentWithChildren(root));
+		childDivision = divisionRepository.save(new Division().setName("Child").setParentWithChildren(division));
+		anotherDivision = divisionRepository.save(new Division().setName("Another").setParentWithChildren(root));
 		
 		divisionRepository.save(root);
 		divisionRepository.save(division);
+		divisionRepository.save(childDivision);
+		divisionRepository.save(anotherDivision);
 
 		testingPerson = personRepository.save(new Person().setName("testing person").setDivision(childDivision));
 		anotherPerson = personRepository.save(new Person().setName("another person").setDivision(anotherDivision));

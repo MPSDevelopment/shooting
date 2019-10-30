@@ -88,9 +88,9 @@ class QuizScoreRepositoryTest {
 		anotherQuiz = quizRepository.save(new Quiz().setActive(true).setSubject(anotherSubject));
 
 		root = divisionRepository.save(new Division().setName("Root").setParent(null));
-		division = divisionRepository.save(new Division().setName("Division").setParent(root));
-		childDivision = divisionRepository.save(new Division().setName("Child").setParent(division));
-		anotherDivision = divisionRepository.save(new Division().setName("Another").setParent(root));
+		division = divisionRepository.save(new Division().setName("Division").setParentWithChildren(root));
+		childDivision = divisionRepository.save(new Division().setName("Child").setParentWithChildren(division));
+		anotherDivision = divisionRepository.save(new Division().setName("Another").setParentWithChildren(root));
 
 		divisionRepository.save(root);
 		divisionRepository.save(division);
