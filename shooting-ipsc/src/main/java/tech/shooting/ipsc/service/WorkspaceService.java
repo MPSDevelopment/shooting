@@ -91,6 +91,7 @@ public class WorkspaceService {
 	}
 
 	public Workspace getWorkspaceByQuizIdAndPersonId(Long quizId, Long personId) {
+		log.info("Trying to get workspace by quizid %s and personid %s", quizId, personId);
 		for (var item : map.values()) {
 			if (item.getPersonId().equals(personId) && item.getQuizId().equals(quizId)) {
 				return item;
