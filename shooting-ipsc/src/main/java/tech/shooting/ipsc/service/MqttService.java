@@ -286,6 +286,12 @@ public class MqttService {
 			}
 
 			Workspace workspace = workspaceService.getWorkspaceByQuizIdAndPersonId(event.getScore().getQuizId(), event.getScore().getPerson().getId());
+
+			if (workspace == null) {
+				log.error("Cannot send test finished event without workspace by quizid %s and personId %s", event.getScore().getQuizId(), event.getScore().getPerson().getId());
+				return;
+			}
+
 			workspace.setScore(String.valueOf(event.getScore().getScore()));
 
 			getPublisher().publish(MqttConstants.WORKSPACE_TOPIC, createJsonMessage(workspace));

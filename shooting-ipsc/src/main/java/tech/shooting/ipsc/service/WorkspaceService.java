@@ -97,6 +97,10 @@ public class WorkspaceService {
 				return item;
 			}
 		}
+		log.info("Cannot find any workspace by quizid %s and personid %s. Workspaces are:", quizId, personId);
+		
+		getAllWorkspaces().forEach(item -> log.info("Workspace quizid %s and personid %s",  item.getQuizId(), item.getPersonId()));
+		
 		return null;
 	}
 
