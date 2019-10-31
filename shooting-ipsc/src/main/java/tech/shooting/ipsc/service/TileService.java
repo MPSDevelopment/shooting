@@ -17,7 +17,7 @@ public class TileService {
 
 	private static final String FOLDER_NAME = "data/tiles/";
 
-	public void createTiles(int row, int column, String filename) {
+	public void createTiles(int row, int column, int zoom, String filename) {
 		try {
 
 			new File(FOLDER_NAME).mkdirs();
@@ -43,8 +43,7 @@ public class TileService {
 					try {
 
 						String extension = FilenameUtils.getExtension(filename);
-						String filenameNoExtension = FilenameUtils.getBaseName(filename);
-						File outputfile = new File(FOLDER_NAME + filenameNoExtension + "-" + "x" + i + "y" + j + "." + extension);
+						File outputfile = getTileImage( filename, i, j, zoom);
 
 						log.info("Creating tile: " + i + " " + j + " " + filename);
 
@@ -64,5 +63,11 @@ public class TileService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
+		String extension = FilenameUtils.getExtension(filename);
+		String filenameNoExtension = FilenameUtils.getBaseName(filename);
+		return new File(FOLDER_NAME + filenameNoExtension + "-" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
 }
