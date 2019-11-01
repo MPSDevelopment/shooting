@@ -71,8 +71,10 @@ public class Division extends BaseDocument {
 		List<Division> list = new ArrayList<Division>();
 		list.add(this);
 		for (Division child : children) {
-			list.add(child);
-			list.addAll(child.getAllChildren());
+			if (child != null) {
+				list.add(child);
+				list.addAll(child.getAllChildren());
+			}
 		}
 		return list;
 	}
