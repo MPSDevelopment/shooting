@@ -96,10 +96,14 @@ public class DivisionService {
 
 	private DivisionBean convertDivisionToFront(Division division) {
 		DivisionBean divisionBean = new DivisionBean();
+		if (division == null) {
+			return divisionBean;
+		}
 		if (division.getParent() == null) {
-			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren().stream().map(item-> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
+			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren().stream().map(item -> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
 		} else {
-			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren().stream().map(item-> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
+			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren().stream().map(item -> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive())
+					.setId(division.getId());
 		}
 		if (divisionBean.getChildren().contains(null) || divisionBean.getChildren().size() == 0) {
 			divisionBean.setChildren(Collections.EMPTY_LIST);
