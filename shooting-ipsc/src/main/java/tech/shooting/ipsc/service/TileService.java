@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.service;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TileService {
 
+	private static final int TILE_SIZE = 256;
 	private static final String FOLDER_NAME = "data/tiles/";
 
 	public void createTiles(int row, int column, int zoom, String filename) {
@@ -43,7 +45,7 @@ public class TileService {
 					try {
 
 						String extension = FilenameUtils.getExtension(filename);
-						File outputfile = getTileImage( filename, i, j, zoom);
+						File outputfile = getTileImage(filename, i, j, zoom);
 
 						log.info("Creating tile: " + i + " " + j + " " + filename);
 
@@ -70,4 +72,35 @@ public class TileService {
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
 		return new File(FOLDER_NAME + filenameNoExtension + "-" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
+	
+	public File createTile(String filename, int tileX, int tileY, int zoom) throws IOException {
+		return resizeImage(filename, getTileImage(filename, tileX, tileY, zoom), TILE_SIZE, TILE_SIZE);
+	}
+
+	/**
+	 * Resizes an image to a absolute width and height (the image may not be
+	 * proportional)
+	 */
+	public File resizeImage(String filename, File outputFile, int scaledWidth, int scaledHeight) throws IOException {
+		// reads input image
+		File inputFile = new File(filename);
+		BufferedImage inputImage = ImageIO.read(inputFile);
+
+		// creates output image
+		BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, inputImage.getType());
+
+		// scales the input image to the output image
+		Graphics2D g2d = outputImage.createGraphics();
+		g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+		g2d.dispose();
+
+		// extracts extension of output file
+		String formatName = FilenameUtils.getExtension(filename);
+
+		// writes to output file
+		ImageIO.write(outputImage, formatName, outputFile);
+		
+		return outputFile;
+	}
+
 }

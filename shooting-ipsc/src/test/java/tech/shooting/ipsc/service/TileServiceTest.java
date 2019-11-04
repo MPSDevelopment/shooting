@@ -1,8 +1,10 @@
 package tech.shooting.ipsc.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,5 +32,18 @@ public class TileServiceTest {
 	public void getTile() {
 		File tileImage = service.getTileImage(FILENAME, 1, 1, 10);
 		assertEquals("Hawaii-z10x1y1.png", tileImage.getName());
+	}
+	
+	
+	@Test
+	public void resizeImage() throws IOException {
+		File tileImage = service.resizeImage(FILENAME, new File("data/SmallHawaii.png"), 256, 256);
+		assertTrue(tileImage.exists());
+	}
+	
+	@Test
+	public void createTile() throws IOException {
+		File tileImage = service.createTile(FILENAME, 7, 7, 10);
+		assertTrue(tileImage.exists());
 	}
 }
