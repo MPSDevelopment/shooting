@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
+import tech.shooting.commons.constraints.IpscConstants;
 
 @Slf4j
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class TileServiceTest {
 
 	private static final int ZOOM = 10;
