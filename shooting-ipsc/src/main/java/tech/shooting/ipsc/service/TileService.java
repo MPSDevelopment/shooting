@@ -2,6 +2,7 @@ package tech.shooting.ipsc.service;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -101,6 +102,19 @@ public class TileService {
 		ImageIO.write(outputImage, formatName, outputFile);
 		
 		return outputFile;
+	}
+	
+	
+
+	public byte[] writeImageTobyteArray(BufferedImage image) throws IOException {
+
+		ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+		ImageIO.write(image, "png", byteArrayOS);
+
+		log.info("Writing image to ByteArray (Length - %s)", byteArrayOS.size());
+
+		return byteArrayOS.toByteArray();
+
 	}
 
 }

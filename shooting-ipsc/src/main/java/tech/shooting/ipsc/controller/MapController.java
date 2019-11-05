@@ -52,10 +52,10 @@ public class MapController {
     @ResponseBody
     @ApiOperation(value = "Get Tile Image", notes = "Returns tile image by x, y and zoom")
     public ResponseEntity<byte[]> getTile(@PathVariable(value = "z") int zoom, @PathVariable(value = "x") int tileX, @PathVariable(value = "y") int tileY) {
-        return getTile(zoom, tileX, tileY, "local");
+        return getTileAsByteArray(zoom, tileX, tileY);
     }
     
-    private ResponseEntity<byte[]> getTile(int zoom, int tileX, int tileY, String tileType) {
+    private ResponseEntity<byte[]> getTileAsByteArray(int zoom, int tileX, int tileY) {
 //        try {
 //            byte[] body = FileUtils.readFileToByteArray(tileService.getTileImage(tileX, tileY, zoom));
 //            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);

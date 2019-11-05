@@ -102,6 +102,7 @@
 		<httpclient.version>3.1</httpclient.version>
 		<websocket-api.version>1.1</websocket-api.version>
 		<lombok.version>1.18.6</lombok.version>
+		<rest-assured.version>3.1.1</rest-assured.version>
 		<swagger.version>2.9.2</swagger.version>
 		<swagger.version.old>1.5.21</swagger.version.old>
 		<jackson.version>2.10.0</jackson.version>

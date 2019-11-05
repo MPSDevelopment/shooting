@@ -31,9 +31,6 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.UserService;
 import tech.shooting.ipsc.utils.UserLockUtils;
 
