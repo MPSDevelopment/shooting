@@ -64,7 +64,7 @@ public class IntergationTest {
 		long t2 = System.currentTimeMillis();
 		assertTrue(StringUtils.isNotBlank(token));
 		// token = token.replaceAll("\"", "");
-		log.info("Token taken for %s is %s", t2 - t1, token);
+		log.info("Thread : %s Token taken for %s is %s", Thread.currentThread().getName(), t2 - t1, token);
 		return token;
 	}
 }
