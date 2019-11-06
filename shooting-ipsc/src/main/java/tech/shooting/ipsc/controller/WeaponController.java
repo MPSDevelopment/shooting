@@ -76,7 +76,14 @@ public class WeaponController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_POST_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Return created weapon if exist update", notes = "Return created weapon if exist update")
 	public ResponseEntity<Weapon> postWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
-		return new ResponseEntity<>(weaponService.postWeapon(bean), HttpStatus.OK);
+		return new ResponseEntity<>(weaponService.saveWeapon(bean), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Return created weapon if exist update")
+	public ResponseEntity<Weapon> putWeapon(@RequestBody @Valid WeaponBean bean) throws BadRequestException {
+		return new ResponseEntity<>(weaponService.saveWeapon(bean), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_DELETE_WEAPON_BY_ID)

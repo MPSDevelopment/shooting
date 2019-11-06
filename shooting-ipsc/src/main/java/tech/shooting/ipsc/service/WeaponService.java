@@ -43,7 +43,7 @@ public class WeaponService {
 		return weaponRepository.findById(weaponId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Weapon with this id %s is not exist", weaponId)));
 	}
 
-	public Weapon postWeapon(WeaponBean bean) throws BadRequestException {
+	public Weapon saveWeapon(WeaponBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
 		Weapon weapon = bean.getId() == null ? null : weaponRepository.findById(bean.getId()).orElse(null);
 		WeaponType weaponType = checkWeaponType(bean.getWeaponType());

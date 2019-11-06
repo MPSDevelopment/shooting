@@ -313,6 +313,7 @@ public class ControllerAPI {
 	public static final String WEAPON_CONTROLLER_GET_ALL = "/all";
 	public static final String WEAPON_CONTROLLER_GET_BY_ID = "/" + REQUEST_WEAPON_ID;
 	public static final String WEAPON_CONTROLLER_POST_WEAPON = "/create/weapon";
+	public static final String WEAPON_CONTROLLER_PUT_WEAPON = "/edit/weapon";
 	public static final String WEAPON_CONTROLLER_DELETE_WEAPON_BY_ID = "/delete/weapon/" + REQUEST_WEAPON_ID;
 	public static final String WEAPON_CONTROLLER_POST_WEAPON_ADD_OWNER = "/" + REQUEST_WEAPON_ID + "/" + REQUEST_PERSON_ID;
 	public static final String WEAPON_CONTROLLER_POST_WEAPON_REMOVE_OWNER = "/" + REQUEST_WEAPON_ID + "/remove";

@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 public class CourseBean {
+	
     @JsonProperty
     @ApiModelProperty(value = "Person id", required = true)
     @NotNull

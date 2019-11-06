@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import tech.shooting.ipsc.pojo.StandardFails;
 import tech.shooting.ipsc.pojo.CategoryByPoints;
 import tech.shooting.ipsc.pojo.CategoryByTime;
