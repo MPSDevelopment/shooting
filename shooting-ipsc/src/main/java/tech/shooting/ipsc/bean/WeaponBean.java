@@ -9,6 +9,7 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 
@@ -22,7 +23,7 @@ public class WeaponBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of weapon", required = true)
-    @Min(value = 7, message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE)
     //example AK-74 №4405222
     private String serialNumber;
 

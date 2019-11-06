@@ -97,7 +97,7 @@ public class ValidationConstants {
 
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
 
-	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number 7 characters min";
+	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
 
 	public static final String WEAPON_TYPE_NAME_MESSAGE = "Weapon type name must be not blank";
 
