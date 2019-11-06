@@ -20,7 +20,6 @@ public class StandardBean {
     @ApiModelProperty(value = "Info from standard", required = true)
     private Info info;
 
-    @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Subject id", required = true)
     private Long subject;
