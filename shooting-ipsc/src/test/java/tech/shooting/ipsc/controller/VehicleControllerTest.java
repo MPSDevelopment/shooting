@@ -125,7 +125,7 @@ class VehicleControllerTest {
 	}
 
 	@Test
-	void getAllWeapon() throws Exception {
+	void getAllVehicle() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 10;
 		createRows(count);
@@ -145,7 +145,7 @@ class VehicleControllerTest {
 	}
 
 	@Test
-	void getWeaponById() throws Exception {
+	void getVehicleById() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 10;
 		createRows(count);
@@ -163,12 +163,12 @@ class VehicleControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_GET_BY_ID.replace(ControllerAPI.REQUEST_VEHICLE_ID, vehicle.getId().toString())).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		Vehicle weaponFromDB = JacksonUtils.fromJson(Vehicle.class, contentAsString);
-		assertEquals(vehicle, weaponFromDB);
+		Vehicle vehicleFromDB = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		assertEquals(vehicle, vehicleFromDB);
 	}
 
 	@Test
-	void getWeaponByDivision() throws Exception {
+	void getVehicleByDivision() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 10;
 		createRows(count);
@@ -197,7 +197,7 @@ class VehicleControllerTest {
 	}
 
 	@Test
-	void checkGetWeaponByPersonNameAndDivisionID() throws Exception {
+	void checkGetVehicleByPersonNameAndDivisionID() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 10;
 		createRows(count);
@@ -232,7 +232,7 @@ class VehicleControllerTest {
 	}
 
 	@Test
-	void getWeaponByPerson() throws Exception {
+	void getVehicleByPerson() throws Exception {
 		assertEquals(0, vehicleRepository.findAll().size());
 		int count = 5;
 		createRows(count);
@@ -256,7 +256,7 @@ class VehicleControllerTest {
 	}
 
 	@Test
-	void postWeapon() throws Exception {
+	void postVehicle() throws Exception {
 		assertEquals(Collections.emptyList(), vehicleRepository.findAll());
 		int count = vehicleRepository.findAll().size();
 		String json = JacksonUtils.getJson(testVehicleBean);
@@ -279,12 +279,44 @@ class VehicleControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		
-		Vehicle weapon = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		Vehicle vehicle = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(count + 2, vehicleRepository.findAll().size());
-		assertEquals(testVehicleBean.getCount(), weapon.getCount());
-		assertEquals(testVehicleBean.getOwner(), weapon.getOwner().getId());
-		assertEquals(testVehicleBean.getSerialNumber(), weapon.getSerialNumber());
-		assertEquals(testVehicleBean.getType(), weapon.getType().getId());
+		assertEquals(testVehicleBean.getCount(), vehicle.getCount());
+		assertEquals(testVehicleBean.getOwner(), vehicle.getOwner().getId());
+		assertEquals(testVehicleBean.getSerialNumber(), vehicle.getSerialNumber());
+		assertEquals(testVehicleBean.getType(), vehicle.getType().getId());
+	}
+	
+	@Test
+	void putVehicle() throws Exception {
+		assertEquals(Collections.emptyList(), vehicleRepository.findAll());
+		int count = vehicleRepository.findAll().size();
+		String json = JacksonUtils.getJson(testVehicleBean);
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		// try access with admin role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		
+		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1"));
+		
+		// try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		
+		Vehicle vehicle = JacksonUtils.fromJson(Vehicle.class, contentAsString);
+		assertEquals(count + 2, vehicleRepository.findAll().size());
+		assertEquals(testVehicleBean.getCount(), vehicle.getCount());
+		assertEquals(testVehicleBean.getOwner(), vehicle.getOwner().getId());
+		assertEquals(testVehicleBean.getSerialNumber(), vehicle.getSerialNumber());
+		assertEquals(testVehicleBean.getType(), vehicle.getType().getId());
 	}
 
 	@Test

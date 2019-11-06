@@ -340,6 +340,7 @@ public class ControllerAPI {
 	public static final String VEHICLE_CONTROLLER_GET_ALL = "/all";
 	public static final String VEHICLE_CONTROLLER_GET_BY_ID = "/" + REQUEST_VEHICLE_ID;
 	public static final String VEHICLE_CONTROLLER_POST = "/create";
+	public static final String VEHICLE_CONTROLLER_PUT = "/edit";
 	public static final String VEHICLE_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_VEHICLE_ID;
 	public static final String VEHICLE_CONTROLLER_POST_ADD_OWNER = "/" + REQUEST_VEHICLE_ID + "/" + REQUEST_PERSON_ID;
 	public static final String VEHICLE_CONTROLLER_POST_REMOVE_OWNER = "/" + REQUEST_VEHICLE_ID + "/remove";

@@ -291,22 +291,22 @@ class WeaponControllerTest {
 		int count = weaponRepository.findAll().size();
 		String json = JacksonUtils.getJson(testWeaponBean);
 		// try access with unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
+		 mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
 					.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 		 
 		json = JacksonUtils.getJson(testWeaponBean.setSerialNumber(testWeaponBean.getSerialNumber() + "1"));
 		
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.WEAPON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.WEAPON_CONTROLLER_PUT_WEAPON).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Weapon weapon = JacksonUtils.fromJson(Weapon.class, contentAsString);
 		assertEquals(count + 2, weaponRepository.findAll().size());

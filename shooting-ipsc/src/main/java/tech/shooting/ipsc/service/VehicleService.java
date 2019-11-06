@@ -49,7 +49,7 @@ public class VehicleService {
 		return vehicleRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Vehicle with this id %s is not exist", id)));
 	}
 
-	public Vehicle post(VehicleBean bean) throws BadRequestException {
+	public Vehicle save(VehicleBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
 		Vehicle vehicle = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
 		VehicleType type = checkType(bean.getType());
