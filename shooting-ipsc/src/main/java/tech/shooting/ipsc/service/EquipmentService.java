@@ -44,15 +44,15 @@ public class EquipmentService {
 		return repository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Equipment with this id %s is not exist", id)));
 	}
 
-	public Equipment post(EquipmentBean bean) throws BadRequestException {
+	public Equipment save(EquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
 		Equipment equipment = bean.getId() == null ? null : repository.findById(bean.getId()).orElse(null);
 		EquipmentType type = checkType(bean.getType());
 		if (equipment == null) {
-			equipment = new Equipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
-		} else {
-			equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+			equipment = new Equipment();
 		}
+		equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+
 		return repository.save(equipment);
 	}
 

@@ -48,10 +48,10 @@ public class WeaponService {
 		Weapon weapon = bean.getId() == null ? null : weaponRepository.findById(bean.getId()).orElse(null);
 		WeaponType weaponType = checkWeaponType(bean.getWeaponType());
 		if (weapon == null) {
-			weapon = new Weapon().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
-		} else {
-			weapon.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+			weapon = new Weapon();
 		}
+		weapon.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+
 		return weaponRepository.save(weapon);
 	}
 

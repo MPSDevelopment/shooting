@@ -236,7 +236,7 @@ class CommunicationEquipmentControllerTest {
 	}
 
 	@Test
-	void getWeaponByPerson() throws Exception {
+	void getByPerson() throws Exception {
 		assertEquals(0, repository.findAll().size());
 		int count = 5;
 		createRows(count);
@@ -263,7 +263,7 @@ class CommunicationEquipmentControllerTest {
 	}
 
 	@Test
-	void postWeapon() throws Exception {
+	void post() throws Exception {
 		assertEquals(Collections.emptyList(), repository.findAll());
 		int count = repository.findAll().size();
 		String json = JacksonUtils.getJson(testEquipmentBean);
@@ -296,6 +296,40 @@ class CommunicationEquipmentControllerTest {
 		assertEquals(testEquipmentBean.getType(), weapon.getType().getId());
 	}
 
+	@Test
+	void put() throws Exception {
+		assertEquals(Collections.emptyList(), repository.findAll());
+		int count = repository.findAll().size();
+		String json = JacksonUtils.getJson(testEquipmentBean);
+		// try access with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.put(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access with admin role
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		json = JacksonUtils.getJson(testEquipmentBean.setSerialNumber(testEquipmentBean.getSerialNumber() + "1"));
+
+		// try access with admin role
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT)
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
+		CommunicationEquipment weapon = JacksonUtils.fromJson(CommunicationEquipment.class, contentAsString);
+		assertEquals(count + 2, repository.findAll().size());
+//		assertEquals(testEquipmentBean.getCount(), weapon.getCount());
+		assertEquals(testEquipmentBean.getOwner(), weapon.getOwner().getId());
+		assertEquals(testEquipmentBean.getSerialNumber(), weapon.getSerialNumber());
+		assertEquals(testEquipmentBean.getType(), weapon.getType().getId());
+	}
+	
 	@Test
 	void deleteWeapon() throws Exception {
 		assertEquals(0, repository.findAll().size());

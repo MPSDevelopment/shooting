@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 
@@ -22,7 +23,7 @@ public class CommunicationEquipmentBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of equipment", required = true)
-    @Min(value = 7, message = ValidationConstants.COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
 
     @JsonProperty

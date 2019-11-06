@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
@@ -74,9 +75,16 @@ public class EquipmentController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Return created equipment if exist update", notes = "Return created equipment if exist update")
+	@ApiOperation(value = "Return created equipment")
 	public ResponseEntity<Equipment> post(@RequestBody @Valid EquipmentBean bean) throws BadRequestException {
-		return new ResponseEntity<>(service.post(bean), HttpStatus.OK);
+		return new ResponseEntity<>(service.save(bean), HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Return edited equipment")
+	public ResponseEntity<Equipment> put(@RequestBody @Valid EquipmentBean bean) throws BadRequestException {
+		return new ResponseEntity<>(service.save(bean), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_DELETE_BY_ID)

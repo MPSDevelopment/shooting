@@ -327,6 +327,7 @@ public class ControllerAPI {
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_ALL = "/all";
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_GET_BY_ID = "/" + REQUEST_EQUIPMENT_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_POST = "/create";
+	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_PUT = "/edit";
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_EQUIPMENT_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_POST_ADD_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/" + REQUEST_PERSON_ID;
 	public static final String COMMUNICATION_EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/remove";
@@ -354,6 +355,7 @@ public class ControllerAPI {
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL = "/all";
 	public static final String EQUIPMENT_CONTROLLER_GET_BY_ID = "/" + REQUEST_EQUIPMENT_ID;
 	public static final String EQUIPMENT_CONTROLLER_POST = "/create";
+	public static final String EQUIPMENT_CONTROLLER_PUT = "/edit";
 	public static final String EQUIPMENT_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_EQUIPMENT_ID;
 	public static final String EQUIPMENT_CONTROLLER_POST_ADD_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/" + REQUEST_PERSON_ID;
 	public static final String EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER = "/" + REQUEST_EQUIPMENT_ID + "/remove";

@@ -54,10 +54,10 @@ public class VehicleService {
 		Vehicle vehicle = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
 		VehicleType type = checkType(bean.getType());
 		if (vehicle == null) {
-			vehicle = new Vehicle().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setPassportNumber(bean.getPassportNumber()).setCount(bean.getCount()).setType(type);
-		} else {
-			vehicle.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setPassportNumber(bean.getPassportNumber()).setCount(bean.getCount()).setType(type);
+			vehicle = new Vehicle();
 		}
+		vehicle.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setPassportNumber(bean.getPassportNumber()).setCount(bean.getCount()).setType(type);
+
 		return vehicleRepository.save(vehicle);
 	}
 

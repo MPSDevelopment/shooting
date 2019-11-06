@@ -54,15 +54,15 @@ public class CommunicationEquipmentService {
 		return vehicleRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Communication equipment with this id %s is not exist", id)));
 	}
 
-	public CommunicationEquipment post(CommunicationEquipmentBean bean) throws BadRequestException {
+	public CommunicationEquipment put(CommunicationEquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
 		CommunicationEquipment equipment = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
 		CommunicationEquipmentType type = checkType(bean.getType());
 		if (equipment == null) {
-			equipment = new CommunicationEquipment().setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
-		} else {
-			equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+			equipment = new CommunicationEquipment();
 		}
+		equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
+
 		return vehicleRepository.save(equipment);
 	}
 

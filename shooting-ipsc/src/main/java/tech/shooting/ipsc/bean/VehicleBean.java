@@ -10,6 +10,7 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -25,7 +26,7 @@ public class VehicleBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of vehicle", required = true)
-    @Min(value = 7, message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
     
     @JsonProperty
