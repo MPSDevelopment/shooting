@@ -77,14 +77,14 @@ public class CommunicationEquipmentController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Return created equipment if exist update", notes = "Return created equipment if exist update")
 	public ResponseEntity<CommunicationEquipment> post(@RequestBody @Valid CommunicationEquipmentBean bean) throws BadRequestException {
-		return new ResponseEntity<>(service.put(bean), HttpStatus.OK);
+		return new ResponseEntity<>(service.save(bean), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@PutMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Return created equipment if exist update", notes = "Return created equipment if exist update")
 	public ResponseEntity<CommunicationEquipment> put(@RequestBody @Valid CommunicationEquipmentBean bean) throws BadRequestException {
-		return new ResponseEntity<>(service.put(bean), HttpStatus.OK);
+		return new ResponseEntity<>(service.save(bean), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMMUNICATION_EQUIPMENT_CONTROLLER_DELETE_BY_ID)

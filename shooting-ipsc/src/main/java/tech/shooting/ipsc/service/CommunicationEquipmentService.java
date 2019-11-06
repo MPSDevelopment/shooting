@@ -31,7 +31,7 @@ import tech.shooting.ipsc.repository.WeaponTypeRepository;
 public class CommunicationEquipmentService {
 
 	@Autowired
-	private CommunicationEquipmentRepository vehicleRepository;
+	private CommunicationEquipmentRepository equipmentRepository;
 
 	@Autowired
 	private PersonRepository personRepository;
@@ -43,7 +43,7 @@ public class CommunicationEquipmentService {
 	private CommunicationEquipmentTypeRepository typeRepository;
 
 	public List<CommunicationEquipment> getAll() {
-		return vehicleRepository.findAll();
+		return equipmentRepository.findAll();
 	}
 
 	public CommunicationEquipment getById(Long id) throws BadRequestException {
@@ -51,19 +51,19 @@ public class CommunicationEquipmentService {
 	}
 
 	private CommunicationEquipment checkVehicle(Long id) throws BadRequestException {
-		return vehicleRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Communication equipment with this id %s is not exist", id)));
+		return equipmentRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Communication equipment with this id %s is not exist", id)));
 	}
 
-	public CommunicationEquipment put(CommunicationEquipmentBean bean) throws BadRequestException {
+	public CommunicationEquipment save(CommunicationEquipmentBean bean) throws BadRequestException {
 		Person owner = checkPerson(bean.getOwner());
-		CommunicationEquipment equipment = bean.getId() == null ? null : vehicleRepository.findById(bean.getId()).orElse(null);
+		CommunicationEquipment equipment = bean.getId() == null ? null : equipmentRepository.findById(bean.getId()).orElse(null);
 		CommunicationEquipmentType type = checkType(bean.getType());
 		if (equipment == null) {
 			equipment = new CommunicationEquipment();
 		}
 		equipment.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setType(type);
 
-		return vehicleRepository.save(equipment);
+		return equipmentRepository.save(equipment);
 	}
 
 	private CommunicationEquipmentType checkType(Long type) throws BadRequestException {
@@ -79,7 +79,7 @@ public class CommunicationEquipmentService {
 	}
 
 	public void delete(long id) {
-		vehicleRepository.deleteById(id);
+		equipmentRepository.deleteById(id);
 	}
 
 	public CommunicationEquipment addOwner(Long weaponId, Long personId) throws BadRequestException {
@@ -89,15 +89,15 @@ public class CommunicationEquipmentService {
 		} else {
 			vehicle.setOwner(checkPerson(personId));
 		}
-		return vehicleRepository.save(vehicle);
+		return equipmentRepository.save(vehicle);
 	}
 
 	public List<CommunicationEquipment> getAllByDivision(Long divisionId) throws BadRequestException {
-		return vehicleRepository.findByPersonDivision(checkDivision(divisionId));
+		return equipmentRepository.findByPersonDivision(checkDivision(divisionId));
 	}
 
 	public List<CommunicationEquipment> getAllByPerson(Long personId) throws BadRequestException {
-		return vehicleRepository.findByOwner(checkPerson(personId));
+		return equipmentRepository.findByOwner(checkPerson(personId));
 	}
 
 	public List<CommunicationEquipment> getAllByPerson(String personName, long divisionId) throws BadRequestException {
