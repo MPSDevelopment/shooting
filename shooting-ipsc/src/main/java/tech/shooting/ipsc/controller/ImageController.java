@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.ipsc.bean.UploadFileBean;
 import tech.shooting.ipsc.pojo.FilePointer;
 import tech.shooting.ipsc.pojo.Image;
@@ -68,7 +69,7 @@ public class ImageController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.IMAGE_CONTROLLER_GET_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get Image Data By Filename")
-	public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException {
+	public ResponseEntity<Image> getImageData(@PathVariable("id") String filename) throws BadRequestException, NotFoundException {
 		return new ResponseEntity<>(imageService.getImageByFilename(filename), OK);
 	}
 

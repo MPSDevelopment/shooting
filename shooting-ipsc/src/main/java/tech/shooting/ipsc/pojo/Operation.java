@@ -18,7 +18,7 @@ public class Operation extends BaseDocument {
 	@ApiModelProperty(value = "Operation weather", required = true)
 	private Weather weather;
 	
-	@JsonProperty
-	@ApiModelProperty(value = "Operation combat person composition", required = true)
-	private Weather combatPersonComposition;
+    @JsonProperty
+    @ApiModelProperty(value = "Operation image path", required = true)
+    private String imagePath;
 }

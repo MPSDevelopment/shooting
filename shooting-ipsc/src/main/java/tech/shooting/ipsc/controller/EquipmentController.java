@@ -88,7 +88,7 @@ public class EquipmentController {
 	}
 
 	@DeleteMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_DELETE_BY_ID)
-	@ApiOperation(value = "Delete type return status Ok")
+	@ApiOperation(value = "Delete equipment returns status Ok")
 	public ResponseEntity<SuccessfulMessage> delete(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) long id) {
 		service.delete(id);
 		return new ResponseEntity<>(new SuccessfulMessage("Equipment %s has been deleted", id), HttpStatus.OK);

@@ -67,6 +67,8 @@ public class TileService {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
 		String extension = FilenameUtils.getExtension(filename);

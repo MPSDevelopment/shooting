@@ -15,6 +15,9 @@ public class ControllerAPI {
 	 */
 
 	public static final String PATH_VARIABLE_ID = "id";
+	public static final String PATH_VARIABLE_X = "x";
+	public static final String PATH_VARIABLE_Y = "y";
+	public static final String PATH_VARIABLE_Z = "z";
 	public static final String PATH_VARIABLE_FIRED_COUNT = "fireCount";
 	public static final String PATH_VARIABLE_COMPETITION_ID = "competitionId";
 	public static final String PATH_VARIABLE_STAGE_ID = "stageId";
@@ -52,6 +55,9 @@ public class ControllerAPI {
 	public static final String REQUEST_INTERVAL = "{" + PATH_VARIABLE_INTERVAL + "}";
 	public static final String REQUEST_DATE = "{" + PATH_VARIABLE_DATE + "}";
 	public static final String REQUEST_ID = "{" + PATH_VARIABLE_ID + "}";
+	public static final String REQUEST_X = "{" + PATH_VARIABLE_X + "}";
+	public static final String REQUEST_Y = "{" + PATH_VARIABLE_Y + "}";
+	public static final String REQUEST_Z = "{" + PATH_VARIABLE_Z + "}";
 	public static final String REQUEST_FIRED_COUNT = "{" + PATH_VARIABLE_FIRED_COUNT + "}";
 	public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
 	public static final String REQUEST_VEHICLE_ID = "{" + PATH_VARIABLE_VEHICLE_ID + "}";
@@ -405,5 +411,5 @@ public class ControllerAPI {
 	public static final String SETTINGS_CONTROLLER_PUT_SETTINGS = "/";
 	
     public static final String MAP_CONTROLLER = "/api/map";
-    public static final String MAP_CONTROLLER_GET_TILE_URL = "/{z}/{x}/{y}.png";
+    public static final String MAP_CONTROLLER_GET_TILE_URL = "{id}/{z}/{x}/{y}.png";
 }

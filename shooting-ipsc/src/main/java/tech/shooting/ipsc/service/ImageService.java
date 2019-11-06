@@ -3,6 +3,7 @@ package tech.shooting.ipsc.service;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.exception.NotFoundException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.utils.JacksonUtils;
@@ -47,10 +48,10 @@ public class ImageService {
 		return count;
 	}
 
-	public Image getImageByFilename(String filename) throws BadRequestException {
+	public Image getImageByFilename(String filename) throws BadRequestException, NotFoundException {
 		Optional.ofNullable(filename).orElseThrow(() -> new BadRequestException(new ErrorMessage("Image's filename is null")));
 		GridFSFile gridFsFile = Optional.ofNullable(gridFsTemplate.findOne(new Query(Criteria.where("filename").is(filename))))
-				.orElseThrow(() -> new BadRequestException(new ErrorMessage(String.format("Image with name %s not found", filename))));
+				.orElseThrow(() -> new NotFoundException(new ErrorMessage(String.format("Image with name %s not found", filename))));
 		return JacksonUtils.fromJson(Image.class, JacksonUtils.getJson(gridFsFile.getMetadata()).replace("_id", "id"));
 	}
 
