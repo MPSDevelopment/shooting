@@ -49,8 +49,6 @@ public class Division extends BaseDocument {
 	@DBRef
 	private List<Division> children = new ArrayList<>();
 
-	private List<Long> childrenId = new ArrayList<>();
-
 	@JsonProperty
 	@ApiModelProperty(value = "Status division")
 	private boolean active;
@@ -59,7 +57,6 @@ public class Division extends BaseDocument {
 		this.parent = parent;
 		parentId = parent == null ? null : parent.getId();
 		if (parent != null) {
-			parent.getChildrenId().add(getId());
 			parent.getChildren().add(this);
 		}
 		return this;
