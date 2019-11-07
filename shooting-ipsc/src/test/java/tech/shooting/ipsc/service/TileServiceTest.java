@@ -23,18 +23,21 @@ public class TileServiceTest {
 	private TileService service = new TileService();
 
 	@Test
-	public void createTiles() {
+	public void createTiles() throws IOException {
 		// Provide number of rows and column
 		int row = 4;
 		int column = 3;
 
 		service.createTiles(row, column, ZOOM, FILENAME);
+		
+//		service.clearTiles(FILENAME);
 	}
 
 	@Test
 	public void getTile() {
 		File tileImage = service.getTileImage(FILENAME, 1, 1, 10);
-		assertEquals("Hawaii-z10x1y1.png", tileImage.getName());
+		assertEquals("z10x1y1.png", tileImage.getName());
+		assertTrue(tileImage.getAbsolutePath().contains("\\Hawaii\\z10x1y1.png"));
 	}
 	
 	
