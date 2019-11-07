@@ -68,6 +68,10 @@ public class ImageService {
 			return Optional.empty();
 		}
 	}
+	
+	public GridFsResource findResource(String filename) {
+		return gridFsTemplate.getResource(filename);
+	}
 
 	public void deleteFile(String filename) {
 		GridFsResource resource = gridFsTemplate.getResource(filename);
