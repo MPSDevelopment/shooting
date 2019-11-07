@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.gridfs.GridFsCriteria;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -27,6 +28,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -71,6 +75,13 @@ public class ImageService {
 	
 	public GridFsResource findResource(String filename) {
 		return gridFsTemplate.getResource(filename);
+	}
+	
+	public File findResourceAsFile(String filename, String destinationFilename) throws IllegalStateException, FileNotFoundException, IOException {
+		var resource =  gridFsTemplate.getResource(filename);
+		File file = new File(destinationFilename);
+		FileCopyUtils.copy(resource.getInputStream(), new FileOutputStream(file));
+		return file;
 	}
 
 	public void deleteFile(String filename) {

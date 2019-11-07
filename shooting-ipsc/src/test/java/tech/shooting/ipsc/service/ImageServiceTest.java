@@ -2,8 +2,10 @@ package tech.shooting.ipsc.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.util.FileCopyUtils;
 
 import com.mpsdevelopment.plasticine.commons.IdGenerator;
 
@@ -39,6 +42,8 @@ import tech.shooting.ipsc.repository.PersonRepository;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class ImageServiceTest {
+	
+	private static final String FOLDER_NAME = "data/";
 
 	private static final String FILENAME = "files/Hawaii.png";
 
@@ -49,7 +54,7 @@ public class ImageServiceTest {
 
 	@BeforeEach
 	public void before() {
-		filename = String.valueOf(IdGenerator.nextId());
+		filename = String.valueOf(IdGenerator.nextId()) + ".png";
 	}
 
 	@Test
@@ -87,6 +92,35 @@ public class ImageServiceTest {
 		assertThrows(NotFoundException.class, () -> {
 			imageService.getImageByFilename(filename);
 		});
+	}
+	
+	@Test
+	public void findResource() throws FileNotFoundException, IOException, BadRequestException {
+		MockMultipartFile multipartFile = new MockMultipartFile(FILENAME, new FileInputStream(FILENAME));
+		Image image = imageService.storeFile(multipartFile, filename);
+
+		var resource = imageService.findResource(filename);
+		
+		assertNotNull(resource);
+		
+		File file = new File(FOLDER_NAME + filename);
+		FileCopyUtils.copy(resource.getInputStream(), new FileOutputStream(file));
+		
+		file.delete();
+	}
+	
+	@Test
+	public void findResourceAsFile() throws FileNotFoundException, IOException, BadRequestException {
+		MockMultipartFile multipartFile = new MockMultipartFile(FILENAME, new FileInputStream(FILENAME));
+		Image image = imageService.storeFile(multipartFile, filename);
+
+		var file = imageService.findResourceAsFile(filename, FOLDER_NAME + filename);
+		
+		assertNotNull(file);
+		
+		assertTrue(file.exists());
+		
+		file.delete();
 	}
 
 //	@Test

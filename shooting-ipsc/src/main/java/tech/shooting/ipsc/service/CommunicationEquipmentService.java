@@ -47,10 +47,10 @@ public class CommunicationEquipmentService {
 	}
 
 	public CommunicationEquipment getById(Long id) throws BadRequestException {
-		return checkVehicle(id);
+		return checkEquipment(id);
 	}
 
-	private CommunicationEquipment checkVehicle(Long id) throws BadRequestException {
+	private CommunicationEquipment checkEquipment(Long id) throws BadRequestException {
 		return equipmentRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Communication equipment with this id %s is not exist", id)));
 	}
 
@@ -83,7 +83,7 @@ public class CommunicationEquipmentService {
 	}
 
 	public CommunicationEquipment addOwner(Long weaponId, Long personId) throws BadRequestException {
-		CommunicationEquipment vehicle = checkVehicle(weaponId);
+		CommunicationEquipment vehicle = checkEquipment(weaponId);
 		if (personId == null) {
 			vehicle.setOwner(null);
 		} else {

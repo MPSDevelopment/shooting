@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class TileService {
 
 	private static final int TILE_SIZE = 256;
+	
 	private static final String FOLDER_NAME = "data/tiles/";
 
 	public void createTiles(int row, int column, int zoom, String filename) {
 		try {
 
-			new File(FOLDER_NAME).mkdirs();
+			String filenameNoExtension = FilenameUtils.getBaseName(filename);
+			new File(FOLDER_NAME + filenameNoExtension).mkdirs();
 
 			BufferedImage originalImgage = ImageIO.read(new File(filename));
 
@@ -73,7 +76,7 @@ public class TileService {
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
 		String extension = FilenameUtils.getExtension(filename);
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
-		return new File(FOLDER_NAME + filenameNoExtension + "-" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
+		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
 	
 	public File createTile(String filename, int tileX, int tileY, int zoom) throws IOException {
@@ -117,6 +120,13 @@ public class TileService {
 
 		return byteArrayOS.toByteArray();
 
+	}
+
+
+
+	public void clearTiles(String filename) throws IOException {
+		String filenameNoExtension = FilenameUtils.getBaseName(filename);
+		FileUtils.deleteDirectory(new File(FOLDER_NAME + filenameNoExtension));
 	}
 
 }
