@@ -37,7 +37,8 @@ public class TileServiceTest {
 	public void getTile() {
 		File tileImage = service.getTileImage(FILENAME, 1, 1, 10);
 		assertEquals("z10x1y1.png", tileImage.getName());
-		assertTrue(tileImage.getAbsolutePath().contains("\\Hawaii\\z10x1y1.png"));
+		assertTrue(tileImage.getAbsolutePath().contains("Hawaii"));
+		assertTrue(tileImage.getAbsolutePath().contains("z10x1y1.png"));
 	}
 	
 	
