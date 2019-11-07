@@ -27,7 +27,7 @@ public class Equipment extends BaseDocument {
     @Min(value = 7,message = ValidationConstants.EQUIPMENT_SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
 
-    @JsonProperty
+    @JsonProperty("equipmentType")
     @ApiModelProperty(value = "Equipment type", required = true)
     @DBRef
     private EquipmentType type;
