@@ -47,9 +47,14 @@ public class IpscApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
+
 			mqttService.startBroker(null);
 
-			tagService.start();
+			try {
+				tagService.start();
+			} catch (IllegalStateException e) {
+				log.info("Cannot start tag service %s", e.getMessage());
+			}
 
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
