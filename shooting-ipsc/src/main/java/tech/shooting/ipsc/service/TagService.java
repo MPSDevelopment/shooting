@@ -24,6 +24,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
+import tech.shooting.ipsc.event.TagRestartEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
 
@@ -134,6 +135,13 @@ public class TagService {
 	@Handler
 	public void handle(TagDetectedEvent event) {
 
+	}
+	
+	@Handler
+	public void handle(TagRestartEvent event) throws OctaneSdkException {
+		
+		stop();
+		start();
 	}
 
 	public void stop() throws OctaneSdkException {
