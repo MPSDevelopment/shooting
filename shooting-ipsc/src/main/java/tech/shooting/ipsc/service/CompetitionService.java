@@ -458,6 +458,9 @@ public class CompetitionService {
 		result.add(scoreResult);
 		competitor.setResult(result);
 		saveAndReturn(competition, competitor, false);
+		
+		EventBus.publishEvent(new CompetitionUpdatedEvent(competition.getId(), "Competition %s added score", competition.getName()));
+		
 		return scoreResult;
 	}
 
