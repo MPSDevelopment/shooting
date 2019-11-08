@@ -52,7 +52,7 @@ public class IpscApplication {
 
 			try {
 				tagService.start();
-			} catch (IllegalStateException e) {
+			} catch (Throwable e) {
 				log.info("Cannot start tag service %s", e.getMessage());
 			}
 
