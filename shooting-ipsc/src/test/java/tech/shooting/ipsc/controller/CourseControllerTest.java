@@ -249,6 +249,7 @@ class CourseControllerTest {
 		Course course1 = JacksonUtils.fromJson(Course.class, contentAsString);
 		assertEquals(first.getName(), course1.getName());
 		assertEquals(course.getSecond().getId(), course1.getId());
+		assertEquals(course.getSecond().getOwner().getId(), course1.getOwner().getId());
 	}
 
 	@Test
