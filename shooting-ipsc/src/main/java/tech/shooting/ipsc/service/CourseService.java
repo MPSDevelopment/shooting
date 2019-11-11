@@ -53,7 +53,7 @@ public class CourseService {
 	public Course postCourse(CourseBean bean) throws BadRequestException {
 		Person person = checkPerson(bean.getOwner());
 		Course course = new Course();
-		BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
+		BeanUtils.copyProperties(bean, course, Course.COURSE_OWNER);
 		course.setOwner(person);
 		return courseRepository.save(course);
 	}
@@ -73,7 +73,7 @@ public class CourseService {
 			new BadRequestException(new ErrorMessage("Owner in the course must be same %s and %s", course.getOwner().getId(), person.getId()));
 		}
 
-		BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
+		BeanUtils.copyProperties(bean, course, Course.COURSE_OWNER);
 		course.setOwner(person);
 		return courseRepository.save(course);
 	}

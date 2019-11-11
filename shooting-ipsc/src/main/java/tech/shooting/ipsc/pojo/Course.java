@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 public class Course extends BaseDocument {
 	
-    public static final String COURSE_PERSON = "person";
+    public static final String COURSE_OWNER = "owner";
     
     @DBRef
     @JsonProperty
