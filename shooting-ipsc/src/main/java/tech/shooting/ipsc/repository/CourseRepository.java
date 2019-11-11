@@ -14,15 +14,15 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends MongoRepository<Course, Long>, CustomCourseRepository {
 
-	List<Course> findByPerson(Person person);
+	List<Course> findByOwner(Person person);
 
-	List<Course> findByPersonIn(List<Person> persons);
+	List<Course> findByOwnerIn(List<Person> persons);
 
-	Page<Course> findByPersonIn(List<Person> persons, PageRequest pageable);
+	Page<Course> findByOwnerIn(List<Person> persons, PageRequest pageable);
 
 //	List<Course> findByPersonDivision(Division division);
 
 //	@Query(value = "{ 'person' : {'$elemMatch': { 'division.id' : ?0 }}}") // { "qty" : { "$elemMatch" : { "num" : 100 , "color" : "green"}}}
 //	@Query("{'person' :{'$ref' : 'person' , 'division.id' : ?0}}")
-	List<Course> findByPersonDivisionId(Long division);
+	List<Course> findByOwnerDivisionId(Long division);
 }

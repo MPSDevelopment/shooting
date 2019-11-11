@@ -54,7 +54,7 @@ public class CourseService {
 		Person person = checkPerson(bean.getPerson());
 		Course course = new Course();
 		BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
-		course.setPerson(person);
+		course.setOwner(person);
 		return courseRepository.save(course);
 	}
 
@@ -69,29 +69,29 @@ public class CourseService {
 	public Course putCourse(Long courseId, CourseBean bean) throws BadRequestException {
 		Course course = checkCourse(courseId);
 		Person person = checkPerson(bean.getPerson());
-		if (!course.getPerson().equals(person)) {
-			new BadRequestException(new ErrorMessage("Person in the course must be same %s and %s", course.getPerson().getId(), person.getId()));
+		if (!course.getOwner().equals(person)) {
+			new BadRequestException(new ErrorMessage("Person in the course must be same %s and %s", course.getOwner().getId(), person.getId()));
 		}
 
 		BeanUtils.copyProperties(bean, course, Course.COURSE_PERSON);
-		course.setPerson(person);
+		course.setOwner(person);
 		return courseRepository.save(course);
 	}
 
 	public List<Course> getCourseByDivision(Long divisionId) throws BadRequestException {
 		Division division = checkDivision(divisionId);
-		return courseRepository.findByPersonDivisionIn(division);
+		return courseRepository.findByOwnerDivisionIn(division);
 	}
 
 	public List<Course> getCoursesByPerson(Long personId) throws BadRequestException {
-		return courseRepository.findByPerson(checkPerson(personId));
+		return courseRepository.findByOwner(checkPerson(personId));
 	}
 
 	public Page<Course> getAllCoursesByPersonPaging(Long personId, Integer page, Integer size) {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (personId != null) {
 			Person person = personRepository.findById(personId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Person with id %s does not exist", personId));
-			return courseRepository.findByPersonIn(Arrays.asList(person), pageable);
+			return courseRepository.findByOwnerIn(Arrays.asList(person), pageable);
 		}
 		return courseRepository.findAll(pageable);
 	}
@@ -109,7 +109,7 @@ public class CourseService {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
 		if (divisionId != null) {
 			Division division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
-			return courseRepository.findByPersonDivisionIn(division, pageable);
+			return courseRepository.findByOwnerDivisionIn(division, pageable);
 		}
 		return courseRepository.findAll(pageable);
 	}

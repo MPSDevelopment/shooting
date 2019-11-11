@@ -67,21 +67,21 @@ public class CourseRepositoryTest {
 		person = personRepository.save(new Person().setName("First person").setBirthDate(offsetDateTime).setDivision(division));
 		otherPerson = personRepository.save(new Person().setName("Second person").setBirthDate(offsetDateTime).setDivision(division));
 
-		courseRepository.save(new Course().setPerson(person).setName("Test"));
-		courseRepository.save(new Course().setPerson(otherPerson).setName("Test"));
+		courseRepository.save(new Course().setOwner(person).setName("Test"));
+		courseRepository.save(new Course().setOwner(otherPerson).setName("Test"));
 
 		log.info("Division is %s", division.getId());
 	}
 
 	@Test
 	public void findByPerson() {
-		list = courseRepository.findByPerson(person);
+		list = courseRepository.findByOwner(person);
 		assertEquals(1, list.size());
 	}
 
 	@Test
 	public void findByPersonIn() {
-		list = courseRepository.findByPersonIn(Arrays.asList(person));
+		list = courseRepository.findByOwnerIn(Arrays.asList(person));
 		assertEquals(1, list.size());
 
 	}
@@ -100,13 +100,13 @@ public class CourseRepositoryTest {
 
 	@Test
 	public void findByPersonDivisionIn() {
-		list = courseRepository.findByPersonDivisionIn(division);
+		list = courseRepository.findByOwnerDivisionIn(division);
 		assertEquals(2, list.size());
 	}
 
 	@Test
 	public void findByPersonDivisionInPageable() {
-		page = courseRepository.findByPersonDivisionIn(division, PageRequest.of(0, 10));
+		page = courseRepository.findByOwnerDivisionIn(division, PageRequest.of(0, 10));
 		assertEquals(0, page.getNumber());
 		assertEquals(10, page.getSize());
 		assertEquals(2, page.getTotalElements());
@@ -114,7 +114,7 @@ public class CourseRepositoryTest {
 
 	@Test
 	public void findByDivisionInPageable() {
-		page = courseRepository.findByPersonIn(personRepository.findByDivisionIn(division.getAllChildren()), PageRequest.of(0, 10));
+		page = courseRepository.findByOwnerIn(personRepository.findByDivisionIn(division.getAllChildren()), PageRequest.of(0, 10));
 		assertEquals(0, page.getNumber());
 		assertEquals(10, page.getSize());
 		assertEquals(2, page.getTotalElements());

@@ -22,7 +22,7 @@ public class TileService {
 	
 	private static final String FOLDER_NAME = "data/tiles/";
 
-	public void createTiles(int row, int column, int zoom, String filename) {
+	public void createTiles(int rowNumber, int columnNumber, int zoom, String filename) {
 		try {
 
 			String filenameNoExtension = FilenameUtils.getBaseName(filename);
@@ -37,15 +37,15 @@ public class TileService {
 			log.info("Image Dimension: " + tWidth + "x" + tHeight);
 
 			// width and height of each piece
-			int eWidth = tWidth / column;
-			int eHeight = tHeight / row;
+			int eWidth = tWidth / columnNumber;
+			int eHeight = tHeight / rowNumber;
 
 			int x = 0;
 			int y = 0;
 
-			for (int i = 0; i < row; i++) {
+			for (int i = 0; i < rowNumber; i++) {
 				y = 0;
-				for (int j = 0; j < column; j++) {
+				for (int j = 0; j < columnNumber; j++) {
 					try {
 
 						String extension = FilenameUtils.getExtension(filename);

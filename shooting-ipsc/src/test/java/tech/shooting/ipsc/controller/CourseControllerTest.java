@@ -121,8 +121,8 @@ class CourseControllerTest {
 		person = personRepository.save(new Person().setName("First person").setDivision(division));
 		otherPerson = personRepository.save(new Person().setName("Second person").setDivision(division));
 
-		courseRepository.save(new Course().setPerson(person).setName("Test"));
-		courseRepository.save(new Course().setPerson(otherPerson).setName("Test"));
+		courseRepository.save(new Course().setOwner(person).setName("Test"));
+		courseRepository.save(new Course().setOwner(otherPerson).setName("Test"));
 	}
 
 	@Test
@@ -137,20 +137,20 @@ class CourseControllerTest {
 		CourseBean bean = pair.getFirst();
 		// unauthorized user
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getPerson().getDivision().getId().toString())))
+				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getOwner().getDivision().getId().toString())))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
 		// user role
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getPerson().getDivision().getId().toString()))
+				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getOwner().getDivision().getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// judge role
 		mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getPerson().getDivision().getId().toString()))
+				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getOwner().getDivision().getId().toString()))
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// admin role
 		String contentAsString1 = mockMvc.perform(MockMvcRequestBuilders
-				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getPerson().getDivision().getId().toString()))
+				.get(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_GET_COURSE_BY_DIVISION.replace(ControllerAPI.REQUEST_DIVISION_ID, course.getOwner().getDivision().getId().toString()))
 				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<Course> listFromJson = JacksonUtils.getListFromJson(Course[].class, contentAsString1);
 

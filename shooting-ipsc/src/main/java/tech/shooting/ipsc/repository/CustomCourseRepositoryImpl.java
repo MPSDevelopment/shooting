@@ -20,7 +20,7 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<Course> findByPersonDivisionIn(Division division) {
+	public List<Course> findByOwnerDivisionIn(Division division) {
 
 		Query query = new Query();
 		if (division.getParent() == null) {
@@ -31,12 +31,12 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 		List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
-		query.addCriteria(Criteria.where("person").in(persons));
+		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, Course.class);
 	}
 
 	@Override
-	public Page<Course> findByPersonDivisionIn(Division division, PageRequest pageable) {
+	public Page<Course> findByOwnerDivisionIn(Division division, PageRequest pageable) {
 
 		Query query = new Query().with(pageable);
 		if (division.getParent() == null) {
@@ -48,7 +48,7 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository {
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 		List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
-		query.addCriteria(Criteria.where("person").in(persons));
+		query.addCriteria(Criteria.where("owner").in(persons));
 		List<Course> list = mongoTemplate.find(query, Course.class);
 
 		return PageableExecutionUtils.getPage(list, pageable, () -> mongoTemplate.count(query, Course.class));

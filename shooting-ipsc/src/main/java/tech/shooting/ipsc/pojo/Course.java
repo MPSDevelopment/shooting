@@ -22,7 +22,7 @@ public class Course extends BaseDocument {
     @DBRef
     @JsonProperty
     @ApiModelProperty(value = "Person", required = true)
-    private Person person;
+    private Person owner;
 
     @JsonProperty
     @ApiModelProperty(value = "Course name", required = true)
