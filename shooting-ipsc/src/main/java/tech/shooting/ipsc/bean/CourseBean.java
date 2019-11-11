@@ -18,7 +18,7 @@ public class CourseBean {
     @JsonProperty
     @ApiModelProperty(value = "Person id", required = true)
     @NotNull
-    private Long person;
+    private Long owner;
 
     @JsonProperty
     @ApiModelProperty(value = "Course name", required = true)

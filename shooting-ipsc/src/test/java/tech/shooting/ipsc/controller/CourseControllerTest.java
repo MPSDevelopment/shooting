@@ -162,7 +162,7 @@ class CourseControllerTest {
 
 		long count = courseRepository.count();
 
-		CourseBean bean = new CourseBean().setPerson(testing.getId()).setName("bla bla").setImagePath("fdgdsfdsfsdfsd").setAddress("fsdfds").setDate(OffsetDateTime.now());
+		CourseBean bean = new CourseBean().setOwner(testing.getId()).setName("bla bla").setImagePath("fdgdsfdsfsdfsd").setAddress("fsdfds").setDate(OffsetDateTime.now());
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.COURSE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.COURSE_CONTROLLER_POST_COURSE).contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(JacksonUtils.getJson(bean)).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
 		Course course = JacksonUtils.fromJson(Course.class, contentAsString);
