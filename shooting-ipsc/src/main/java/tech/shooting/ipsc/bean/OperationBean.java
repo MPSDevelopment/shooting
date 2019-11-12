@@ -1,21 +1,20 @@
-package tech.shooting.ipsc.pojo;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
+package tech.shooting.ipsc.bean;
 
 import java.util.List;
 
-import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.Document;
-import tech.shooting.commons.mongo.BaseDocument;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(collection = "operation")
-@TypeAlias("operation")
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import tech.shooting.ipsc.pojo.Info;
+import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationSymbol;
+import tech.shooting.ipsc.pojo.Weather;
+
 @Data
 @Accessors(chain = true)
-public class Operation extends BaseDocument {
+public class OperationBean {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
@@ -36,6 +35,4 @@ public class Operation extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Operation symbols list", required = true)
     private List<OperationSymbol> symbols;
-    
-    
 }

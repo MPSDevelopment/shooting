@@ -24,7 +24,7 @@ import java.util.List;
 public class Standard extends BaseDocument {
 
 	@JsonProperty
-	@ApiModelProperty(value = "Info from standard", required = true)
+	@ApiModelProperty(value = "Standard info", required = true)
 	private Info info;
 
 	@DBRef

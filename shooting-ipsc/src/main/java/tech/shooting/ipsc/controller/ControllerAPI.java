@@ -46,6 +46,7 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_DATE = "date";
 	public static final String PATH_VARIABLE_COURSE_ID = "courseId";
 	public static final String PATH_VARIABLE_MARK = "mark";
+	public static final String PATH_VARIABLE_OPERATION_ID = "operationId";
 
 	/*
 	 * request variable
@@ -82,6 +83,7 @@ public class ControllerAPI {
 	public static final String REQUEST_QUIZ_ID = "{" + PATH_VARIABLE_QUIZ_ID + "}";
 	public static final String REQUEST_QUESTION_ID = "{" + PATH_VARIABLE_QUESTION_ID + "}";
 	public static final String REQUEST_MARK = "{" + PATH_VARIABLE_MARK + "}";
+	public static final String REQUEST_OPERATION_ID = "{" + PATH_VARIABLE_OPERATION_ID + "}";
 
 	/*
 	 * VALIDATION_CONTROLLER
@@ -412,4 +414,14 @@ public class ControllerAPI {
 	
     public static final String MAP_CONTROLLER = "/api/map";
     public static final String MAP_CONTROLLER_GET_TILE_URL = "{id}/{z}/{x}/{y}.png";
+    
+	public static final String OPERATION_CONTROLLER = "/api/operation";
+	public static final String OPERATION_CONTROLLER_GET_ALL = "/all";
+	public static final String OPERATION_CONTROLLER_POST = "";
+	public static final String OPERATION_CONTROLLER_GET_BY_ID = "/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_PUT_BY_ID = "/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_DELETE_BY_ID = "/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders";
+	
+
 }
