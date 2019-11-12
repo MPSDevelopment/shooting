@@ -1557,9 +1557,11 @@ var TableAbstract = /** @class */ /*@__PURE__*/ (function (_super) {
                     ratingCells.push(this.fields.STAGES);
                     return ratingCells;
                 case page_types_1.PageTypes.COURSE:
-                    var courseCells = __spread(persons_mock_1.Mocks.displayedCells);
-                    courseCells.push(this.fields.PERSON);
-                    return courseCells;
+                    // const courseCells = [...Mocks.displayedCells];
+                    // courseCells.push(this.fields.PERSON);
+                    // return courseCells;
+                    notDisplay = [];
+                    return this.filterCells(notDisplay);
                 case page_types_1.PageTypes.SUBJECTS:
                 case page_types_1.PageTypes.QUESTIONS:
                 case page_types_1.PageTypes.TESTS:
@@ -6978,7 +6980,7 @@ function View_CompetitorsComponent_0(_l) {
             var ad = true;
             var _co = _v.component;
             if (("competitorValue" === en)) {
-                var pd_0 = (_co.filterPersonsByMember(_co.persons) !== false);
+                var pd_0 = (_co.filterPersonsByMember() !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -6986,7 +6988,7 @@ function View_CompetitorsComponent_0(_l) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
-                var pd_0 = (_co.createListOfCompetitors() !== false);
+                var pd_0 = (_co.createListOfCompetitors(true) !== false);
                 ad = (pd_0 && ad);
             }
             return ad;
@@ -7080,6 +7082,7 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         _this.connectionService = connectionService;
         _this.vcRef = vcRef;
         _this.tournamentsService = tournamentsService;
+        _this.personsForUpdateTournament = [];
         _this.divisions = [];
         _this.searchValue = '';
         _this.pageSize = 10;
@@ -7155,6 +7158,7 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
                 _this.tournament = _this.findTournamentById(tournaments, tournamentId);
                 _this.competitors = _this.getCompetitorsFromTournament(tournaments, tournamentId);
                 if (_this.persons) {
+                    _this.persons.forEach(function (competitor) { return competitor.member = false; });
                     _this.findCompetitors();
                 }
             }
@@ -7164,7 +7168,7 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.competitors.forEach(function (competitor) {
             _this.persons = _this.setCompetitors(_this.persons, competitor);
-            _this.filterPersonsByMember(_this.persons);
+            _this.filterPersonsByMember();
         });
     };
     CompetitorsComponent.prototype.setCompetitors = function (persons, competitor) {
@@ -7175,18 +7179,45 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             return person;
         });
     };
-    CompetitorsComponent.prototype.filterPersonsByMember = function (persons) {
-        this.competitorLength = persons.filter(function (person) { return person.member; }).length;
+    CompetitorsComponent.prototype.filterPersonsByMember = function () {
+        if (!this.personsForUpdateTournament.length) {
+            this.competitorLength = this.persons.filter(function (person) { return person.member; }).length;
+            this.personsIds;
+        }
+        else {
+            this.competitorLength = this.personsIds.length;
+        }
     };
-    CompetitorsComponent.prototype.createListOfCompetitors = function () {
+    CompetitorsComponent.prototype.createListOfCompetitors = function (goBack) {
         var competitorsIds = this.personsIds;
         this.store.dispatch(new actions_1.CreateListOfCompetitors({ competitorsIds: competitorsIds, tournament: this.tournament }));
+        if (goBack) {
+            this.location.back();
+        }
     };
     Object.defineProperty(CompetitorsComponent.prototype, "personsIds", {
         get: function () {
-            return this.persons
-                .filter(function (person) { return person.member === true; })
-                .map(function (item) { return item.id; });
+            var _this = this;
+            this.persons.forEach(function (person) {
+                if (person.member) {
+                    if (_this.personsForUpdateTournament.length) {
+                        if (_this.personsForUpdateTournament.findIndex(function (personForUpdate) { return personForUpdate.id === person.id; }) == -1) {
+                            _this.personsForUpdateTournament.push(person);
+                        }
+                    }
+                    else {
+                        _this.personsForUpdateTournament.push(person);
+                    }
+                }
+                else {
+                    if (_this.personsForUpdateTournament.length) {
+                        if (_this.personsForUpdateTournament.findIndex(function (personForUpdate) { return personForUpdate.id === person.id; }) !== -1) {
+                            _this.personsForUpdateTournament.splice(_this.personsForUpdateTournament.findIndex(function (personForUpdate) { return personForUpdate.id === person.id; }), 1);
+                        }
+                    }
+                }
+            });
+            return this.personsForUpdateTournament.map(function (item) { return item.id; });
         },
         enumerable: true,
         configurable: true
@@ -7243,9 +7274,11 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     };
     CompetitorsComponent.prototype.selectAll = function () {
         this.persons.forEach(function (competitor) { return competitor.member = true; });
+        this.filterPersonsByMember();
     };
     CompetitorsComponent.prototype.unSelectAll = function () {
         this.persons.forEach(function (competitor) { return competitor.member = false; });
+        this.filterPersonsByMember();
     };
     CompetitorsComponent.prototype.cancel = function () {
         this.location.back();
@@ -7259,6 +7292,10 @@ var CompetitorsComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             return this.fetchPersons(this.divisions[0].id);
         }
         this.store.dispatch(new actions_4.LoadPersonsByDivisionApi(this.division.id));
+        if (this.persons) {
+            this.createListOfCompetitors(false);
+        }
+        ;
     };
     return CompetitorsComponent;
 }(unsubscribe_ondestroy_adapter_1.UnsubscribeOndestroyAdapter));
@@ -7317,7 +7354,7 @@ var CompetitorsEffects = /** @class */ /*@__PURE__*/ (function () {
                 }
                 tournament.humanAmount = competitors.length;
                 tournament.competitors = competitors;
-                _this.location.back();
+                // this.location.back();
                 return new fromTournaments.ForceUpdateTournament(tournament);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -7730,12 +7767,12 @@ var i0 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./course.component.
 var i1 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var i2 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../models/constants/animations */ "./src/app/common/models/constants/animations.ts");
 var i3 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../../../../node_modules/@ng-select/ng-select/ng-select.ngfactory */ "./node_modules/@ng-select/ng-select/ng-select.ngfactory.js");
-var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
-var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
-var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
-var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i4 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ng-select/ng-select */ "./node_modules/@ng-select/ng-select/fesm5/ng-select.js");
+var i5 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngx-translate/core */ "./node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
+var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../table/components/base-table/base-table.component.ngfactory */ "./src/app/common/modules/table/components/base-table/base-table.component.ngfactory.js");
+var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../table/components/base-table/base-table.component */ "./src/app/common/modules/table/components/base-table/base-table.component.ts");
+var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./course.component */ "./src/app/common/modules/course/course/course.component.ts");
 var i11 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var i12 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
@@ -7745,11 +7782,11 @@ var RenderType_CourseComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsul
 exports.RenderType_CourseComponent = RenderType_CourseComponent;
 function View_CourseComponent_1(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 0, null, null, null, null, null, null, null))], null, null); }
 function View_CourseComponent_2(_l) {
-    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 21, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 20, "ng-select", [["class", "ng-select"], ["role", "listbox"]], [[8, "id", 0], [2, "ng-select-single", null], [2, "ng-select-typeahead", null], [2, "ng-select-multiple", null], [2, "ng-select-taggable", null], [2, "ng-select-searchable", null], [2, "ng-select-clearable", null], [2, "ng-select-opened", null], [2, "ng-select-disabled", null], [2, "ng-select-filtered", null]], [[null, "change"], [null, "keydown"]], function (_v, en, $event) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 23, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 22, "ng-select", [["class", "ng-select"], ["role", "listbox"]], [[8, "id", 0], [2, "ng-select-single", null], [2, "ng-select-typeahead", null], [2, "ng-select-multiple", null], [2, "ng-select-taggable", null], [2, "ng-select-searchable", null], [2, "ng-select-clearable", null], [2, "ng-select-opened", null], [2, "ng-select-disabled", null], [2, "ng-select-filtered", null], [2, "ng-untouched", null], [2, "ng-touched", null], [2, "ng-pristine", null], [2, "ng-dirty", null], [2, "ng-valid", null], [2, "ng-invalid", null], [2, "ng-pending", null]], [[null, "change"], [null, "keydown"]], function (_v, en, $event) {
             var ad = true;
             var _co = _v.component;
             if (("keydown" === en)) {
-                var pd_0 = (i1.ɵnov(_v, 4).handleKeyDown($event) !== false);
+                var pd_0 = (i1.ɵnov(_v, 3).handleKeyDown($event) !== false);
                 ad = (pd_0 && ad);
             }
             if (("change" === en)) {
@@ -7757,7 +7794,7 @@ function View_CourseComponent_2(_l) {
                 ad = (pd_1 && ad);
             }
             return ad;
-        }, i3.View_NgSelectComponent_0, i3.RenderType_NgSelectComponent)), i1.ɵprd(5120, null, i4.NG_VALUE_ACCESSOR, function (p0_0) { return [p0_0]; }, [i5.NgSelectComponent]), i1.ɵprd(4608, null, i5.ɵd, i5.ɵd, []), i1.ɵdid(4, 4964352, [[1, 4]], 12, i5.NgSelectComponent, [[8, null], [8, null], [8, null], i5.NgSelectConfig, i5.SELECTION_MODEL_FACTORY, i1.ElementRef, i1.ChangeDetectorRef, i5.ɵr], { bindLabel: [0, "bindLabel"], placeholder: [1, "placeholder"], items: [2, "items"] }, { changeEvent: "change" }), i1.ɵqud(335544320, 14, { optionTemplate: 0 }), i1.ɵqud(335544320, 15, { optgroupTemplate: 0 }), i1.ɵqud(335544320, 16, { labelTemplate: 0 }), i1.ɵqud(335544320, 17, { multiLabelTemplate: 0 }), i1.ɵqud(335544320, 18, { headerTemplate: 0 }), i1.ɵqud(335544320, 19, { footerTemplate: 0 }), i1.ɵqud(335544320, 20, { notFoundTemplate: 0 }), i1.ɵqud(335544320, 21, { typeToSearchTemplate: 0 }), i1.ɵqud(335544320, 22, { loadingTextTemplate: 0 }), i1.ɵqud(335544320, 23, { tagTemplate: 0 }), i1.ɵqud(335544320, 24, { loadingSpinnerTemplate: 0 }), i1.ɵqud(603979776, 25, { ngOptions: 1 }), i1.ɵpod(17, { ending: 0 }), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(19, { value: 0 }), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i7.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_10 = "userName"; var currVal_11 = i1.ɵunv(_v, 4, 1, i1.ɵnov(_v, 20).transform("choose", _ck(_v, 19, 0, i1.ɵunv(_v, 4, 1, i1.ɵnov(_v, 18).transform("person", _ck(_v, 17, 0, "\u0443"))).toLowerCase()))); var currVal_12 = i1.ɵunv(_v, 4, 2, i1.ɵnov(_v, 21).transform(_co.personsByDivision$)); _ck(_v, 4, 0, currVal_10, currVal_11, currVal_12); }, function (_ck, _v) { var currVal_0 = "persons"; var currVal_1 = !i1.ɵnov(_v, 4).multiple; var currVal_2 = i1.ɵnov(_v, 4).typeahead; var currVal_3 = i1.ɵnov(_v, 4).multiple; var currVal_4 = i1.ɵnov(_v, 4).addTag; var currVal_5 = i1.ɵnov(_v, 4).searchable; var currVal_6 = i1.ɵnov(_v, 4).clearable; var currVal_7 = i1.ɵnov(_v, 4).isOpen; var currVal_8 = i1.ɵnov(_v, 4).disabled; var currVal_9 = i1.ɵnov(_v, 4).filtered; _ck(_v, 1, 0, currVal_0, currVal_1, currVal_2, currVal_3, currVal_4, currVal_5, currVal_6, currVal_7, currVal_8, currVal_9); });
+        }, i3.View_NgSelectComponent_0, i3.RenderType_NgSelectComponent)), i1.ɵprd(4608, null, i4.ɵd, i4.ɵd, []), i1.ɵdid(3, 4964352, [[1, 4]], 12, i4.NgSelectComponent, [[8, null], [8, null], [8, null], i4.NgSelectConfig, i4.SELECTION_MODEL_FACTORY, i1.ElementRef, i1.ChangeDetectorRef, i4.ɵr], { bindLabel: [0, "bindLabel"], placeholder: [1, "placeholder"], items: [2, "items"] }, { changeEvent: "change" }), i1.ɵqud(335544320, 14, { optionTemplate: 0 }), i1.ɵqud(335544320, 15, { optgroupTemplate: 0 }), i1.ɵqud(335544320, 16, { labelTemplate: 0 }), i1.ɵqud(335544320, 17, { multiLabelTemplate: 0 }), i1.ɵqud(335544320, 18, { headerTemplate: 0 }), i1.ɵqud(335544320, 19, { footerTemplate: 0 }), i1.ɵqud(335544320, 20, { notFoundTemplate: 0 }), i1.ɵqud(335544320, 21, { typeToSearchTemplate: 0 }), i1.ɵqud(335544320, 22, { loadingTextTemplate: 0 }), i1.ɵqud(335544320, 23, { tagTemplate: 0 }), i1.ɵqud(335544320, 24, { loadingSpinnerTemplate: 0 }), i1.ɵqud(603979776, 25, { ngOptions: 1 }), i1.ɵpod(16, { ending: 0 }), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(18, { value: 0 }), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵprd(1024, null, i6.NG_VALUE_ACCESSOR, function (p0_0) { return [p0_0]; }, [i4.NgSelectComponent]), i1.ɵdid(21, 671744, null, 0, i6.NgModel, [[8, null], [8, null], [8, null], [6, i6.NG_VALUE_ACCESSOR]], { model: [0, "model"] }, null), i1.ɵprd(2048, null, i6.NgControl, null, [i6.NgModel]), i1.ɵdid(23, 16384, null, 0, i6.NgControlStatus, [[4, i6.NgControl]], null, null)], function (_ck, _v) { var _co = _v.component; var currVal_17 = "userName"; var currVal_18 = i1.ɵunv(_v, 3, 1, i1.ɵnov(_v, 19).transform("choose", _ck(_v, 18, 0, i1.ɵunv(_v, 3, 1, i1.ɵnov(_v, 17).transform("person", _ck(_v, 16, 0, "\u0443"))).toLowerCase()))); var currVal_19 = _co.personsByDivision; _ck(_v, 3, 0, currVal_17, currVal_18, currVal_19); var currVal_20 = _co.selectedPerson; _ck(_v, 21, 0, currVal_20); }, function (_ck, _v) { var currVal_0 = "persons"; var currVal_1 = !i1.ɵnov(_v, 3).multiple; var currVal_2 = i1.ɵnov(_v, 3).typeahead; var currVal_3 = i1.ɵnov(_v, 3).multiple; var currVal_4 = i1.ɵnov(_v, 3).addTag; var currVal_5 = i1.ɵnov(_v, 3).searchable; var currVal_6 = i1.ɵnov(_v, 3).clearable; var currVal_7 = i1.ɵnov(_v, 3).isOpen; var currVal_8 = i1.ɵnov(_v, 3).disabled; var currVal_9 = i1.ɵnov(_v, 3).filtered; var currVal_10 = i1.ɵnov(_v, 23).ngClassUntouched; var currVal_11 = i1.ɵnov(_v, 23).ngClassTouched; var currVal_12 = i1.ɵnov(_v, 23).ngClassPristine; var currVal_13 = i1.ɵnov(_v, 23).ngClassDirty; var currVal_14 = i1.ɵnov(_v, 23).ngClassValid; var currVal_15 = i1.ɵnov(_v, 23).ngClassInvalid; var currVal_16 = i1.ɵnov(_v, 23).ngClassPending; _ck(_v, 1, 1, [currVal_0, currVal_1, currVal_2, currVal_3, currVal_4, currVal_5, currVal_6, currVal_7, currVal_8, currVal_9, currVal_10, currVal_11, currVal_12, currVal_13, currVal_14, currVal_15, currVal_16]); });
 }
 function View_CourseComponent_3(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 5, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 4, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 3, "button", [["class", "btn btn-primary w-100"]], null, [[null, "click"]], function (_v, en, $event) {
@@ -7768,7 +7805,7 @@ function View_CourseComponent_3(_l) {
                 ad = (pd_0 && ad);
             }
             return ad;
-        }, null, null)), (_l()(), i1.ɵted(3, null, ["", " ", ""])), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform("add")); var currVal_1 = i1.ɵunv(_v, 3, 1, i1.ɵnov(_v, 5).transform("course")).toLowerCase(); _ck(_v, 3, 0, currVal_0, currVal_1); });
+        }, null, null)), (_l()(), i1.ɵted(3, null, ["", " ", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform("add")); var currVal_1 = i1.ɵunv(_v, 3, 1, i1.ɵnov(_v, 5).transform("course")).toLowerCase(); _ck(_v, 3, 0, currVal_0, currVal_1); });
 }
 function View_CourseComponent_4(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 3, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "app-base-table", [["class", "main__table"]], null, [[null, "action"], [null, "pages"]], function (_v, en, $event) {
@@ -7783,10 +7820,10 @@ function View_CourseComponent_4(_l) {
                 ad = (pd_1 && ad);
             }
             return ad;
-        }, i8.View_BaseTableComponent_0, i8.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i9.BaseTableComponent, [i6.TranslateService], { pageType: [0, "pageType"], defaultPageSize: [1, "defaultPageSize"], page: [2, "page"], objects: [3, "objects"], actions: [4, "actions"], paginationLength: [5, "paginationLength"] }, { action: "action", pages: "pages" }), i1.ɵpid(131072, i7.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.pageTypes.COURSE; var currVal_1 = _co.size; var currVal_2 = _co.page; var currVal_3 = _v.context.ngIf; var currVal_4 = _co.actions; var currVal_5 = (_co.selectedPerson ? ((_v.context.ngIf == null) ? null : _v.context.ngIf.length) : i1.ɵunv(_v, 3, 5, i1.ɵnov(_v, 4).transform(_co.coursesCount$))); _ck(_v, 3, 0, currVal_0, currVal_1, currVal_2, currVal_3, currVal_4, currVal_5); }, null);
+        }, i7.View_BaseTableComponent_0, i7.RenderType_BaseTableComponent)), i1.ɵdid(3, 245760, null, 0, i8.BaseTableComponent, [i5.TranslateService], { pageType: [0, "pageType"], defaultPageSize: [1, "defaultPageSize"], page: [2, "page"], objects: [3, "objects"], actions: [4, "actions"], paginationLength: [5, "paginationLength"] }, { action: "action", pages: "pages" }), i1.ɵpid(131072, i9.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.pageTypes.COURSE; var currVal_1 = _co.size; var currVal_2 = _co.page; var currVal_3 = _v.context.ngIf; var currVal_4 = _co.actions; var currVal_5 = (_co.selectedPerson ? ((_v.context.ngIf == null) ? null : _v.context.ngIf.length) : i1.ɵunv(_v, 3, 5, i1.ɵnov(_v, 4).transform(_co.coursesCount$))); _ck(_v, 3, 0, currVal_0, currVal_1, currVal_2, currVal_3, currVal_4, currVal_5); }, null);
 }
 function View_CourseComponent_0(_l) {
-    return i1.ɵvid(0, [i1.ɵqud(671088640, 1, { ngSelect: 0 }), (_l()(), i1.ɵeld(1, 0, null, null, 37, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 3, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 2, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CourseComponent_1)), i1.ɵdid(8, 16384, null, 0, i7.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i7.AsyncPipe, [i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(10, 0, null, null, 23, "div", [["class", "row mt-3 align-items-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(11, 0, null, null, 19, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(12, 0, null, null, 18, "ng-select", [["class", "ng-select"], ["role", "listbox"]], [[8, "id", 0], [2, "ng-select-single", null], [2, "ng-select-typeahead", null], [2, "ng-select-multiple", null], [2, "ng-select-taggable", null], [2, "ng-select-searchable", null], [2, "ng-select-clearable", null], [2, "ng-select-opened", null], [2, "ng-select-disabled", null], [2, "ng-select-filtered", null]], [[null, "change"], [null, "keydown"]], function (_v, en, $event) {
+    return i1.ɵvid(0, [i1.ɵqud(671088640, 1, { ngSelect: 0 }), (_l()(), i1.ɵeld(1, 0, null, null, 36, "div", [["class", "container"]], [[24, "@EnterLeave", 0]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 3, "div", [["class", "col-6"]], null, null, null, null, null)), (_l()(), i1.ɵeld(4, 0, null, null, 2, "h1", [], null, null, null, null, null)), (_l()(), i1.ɵted(5, null, ["", ""])), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CourseComponent_1)), i1.ɵdid(8, 16384, null, 0, i9.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i9.AsyncPipe, [i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(10, 0, null, null, 22, "div", [["class", "row mt-3 align-items-center"]], null, null, null, null, null)), (_l()(), i1.ɵeld(11, 0, null, null, 19, "div", [["class", "col-4"]], null, null, null, null, null)), (_l()(), i1.ɵeld(12, 0, null, null, 18, "ng-select", [["class", "ng-select"], ["role", "listbox"]], [[8, "id", 0], [2, "ng-select-single", null], [2, "ng-select-typeahead", null], [2, "ng-select-multiple", null], [2, "ng-select-taggable", null], [2, "ng-select-searchable", null], [2, "ng-select-clearable", null], [2, "ng-select-opened", null], [2, "ng-select-disabled", null], [2, "ng-select-filtered", null]], [[null, "change"], [null, "keydown"]], function (_v, en, $event) {
             var ad = true;
             var _co = _v.component;
             if (("keydown" === en)) {
@@ -7798,7 +7835,7 @@ function View_CourseComponent_0(_l) {
                 ad = (pd_1 && ad);
             }
             return ad;
-        }, i3.View_NgSelectComponent_0, i3.RenderType_NgSelectComponent)), i1.ɵprd(5120, null, i4.NG_VALUE_ACCESSOR, function (p0_0) { return [p0_0]; }, [i5.NgSelectComponent]), i1.ɵprd(4608, null, i5.ɵd, i5.ɵd, []), i1.ɵdid(15, 4964352, [[1, 4], ["ngSelect", 4]], 12, i5.NgSelectComponent, [[8, null], [8, null], [8, null], i5.NgSelectConfig, i5.SELECTION_MODEL_FACTORY, i1.ElementRef, i1.ChangeDetectorRef, i5.ɵr], { bindLabel: [0, "bindLabel"], placeholder: [1, "placeholder"], items: [2, "items"] }, { changeEvent: "change" }), i1.ɵqud(335544320, 2, { optionTemplate: 0 }), i1.ɵqud(335544320, 3, { optgroupTemplate: 0 }), i1.ɵqud(335544320, 4, { labelTemplate: 0 }), i1.ɵqud(335544320, 5, { multiLabelTemplate: 0 }), i1.ɵqud(335544320, 6, { headerTemplate: 0 }), i1.ɵqud(335544320, 7, { footerTemplate: 0 }), i1.ɵqud(335544320, 8, { notFoundTemplate: 0 }), i1.ɵqud(335544320, 9, { typeToSearchTemplate: 0 }), i1.ɵqud(335544320, 10, { loadingTextTemplate: 0 }), i1.ɵqud(335544320, 11, { tagTemplate: 0 }), i1.ɵqud(335544320, 12, { loadingSpinnerTemplate: 0 }), i1.ɵqud(603979776, 13, { ngOptions: 1 }), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(29, { value: 0 }), i1.ɵpid(131072, i6.TranslatePipe, [i6.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CourseComponent_2)), i1.ɵdid(32, 16384, null, 0, i7.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i7.AsyncPipe, [i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CourseComponent_3)), i1.ɵdid(35, 16384, null, 0, i7.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CourseComponent_4)), i1.ɵdid(37, 16384, null, 0, i7.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i7.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_2 = i1.ɵunv(_v, 8, 0, i1.ɵnov(_v, 9).transform(_co.divisions$)); _ck(_v, 8, 0, currVal_2); var currVal_13 = "name"; var currVal_14 = i1.ɵunv(_v, 15, 1, i1.ɵnov(_v, 30).transform("choose", _ck(_v, 29, 0, i1.ɵunv(_v, 15, 1, i1.ɵnov(_v, 28).transform("division")).toLowerCase()))); var currVal_15 = _co.divisions; _ck(_v, 15, 0, currVal_13, currVal_14, currVal_15); var tmp_16_0 = null; var currVal_16 = (((tmp_16_0 = i1.ɵunv(_v, 32, 0, i1.ɵnov(_v, 33).transform(_co.personsByDivision$))) == null) ? null : tmp_16_0.length); _ck(_v, 32, 0, currVal_16); var currVal_17 = (_co.selectedPerson && _co.selectedDivision); _ck(_v, 35, 0, currVal_17); var currVal_18 = i1.ɵunv(_v, 37, 0, i1.ɵnov(_v, 38).transform(_co.courses$)); _ck(_v, 37, 0, currVal_18); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("courses")); _ck(_v, 5, 0, currVal_1); var currVal_3 = "divisions"; var currVal_4 = !i1.ɵnov(_v, 15).multiple; var currVal_5 = i1.ɵnov(_v, 15).typeahead; var currVal_6 = i1.ɵnov(_v, 15).multiple; var currVal_7 = i1.ɵnov(_v, 15).addTag; var currVal_8 = i1.ɵnov(_v, 15).searchable; var currVal_9 = i1.ɵnov(_v, 15).clearable; var currVal_10 = i1.ɵnov(_v, 15).isOpen; var currVal_11 = i1.ɵnov(_v, 15).disabled; var currVal_12 = i1.ɵnov(_v, 15).filtered; _ck(_v, 12, 0, currVal_3, currVal_4, currVal_5, currVal_6, currVal_7, currVal_8, currVal_9, currVal_10, currVal_11, currVal_12); });
+        }, i3.View_NgSelectComponent_0, i3.RenderType_NgSelectComponent)), i1.ɵprd(5120, null, i6.NG_VALUE_ACCESSOR, function (p0_0) { return [p0_0]; }, [i4.NgSelectComponent]), i1.ɵprd(4608, null, i4.ɵd, i4.ɵd, []), i1.ɵdid(15, 4964352, [[1, 4], ["ngSelect", 4]], 12, i4.NgSelectComponent, [[8, null], [8, null], [8, null], i4.NgSelectConfig, i4.SELECTION_MODEL_FACTORY, i1.ElementRef, i1.ChangeDetectorRef, i4.ɵr], { bindLabel: [0, "bindLabel"], placeholder: [1, "placeholder"], items: [2, "items"] }, { changeEvent: "change" }), i1.ɵqud(335544320, 2, { optionTemplate: 0 }), i1.ɵqud(335544320, 3, { optgroupTemplate: 0 }), i1.ɵqud(335544320, 4, { labelTemplate: 0 }), i1.ɵqud(335544320, 5, { multiLabelTemplate: 0 }), i1.ɵqud(335544320, 6, { headerTemplate: 0 }), i1.ɵqud(335544320, 7, { footerTemplate: 0 }), i1.ɵqud(335544320, 8, { notFoundTemplate: 0 }), i1.ɵqud(335544320, 9, { typeToSearchTemplate: 0 }), i1.ɵqud(335544320, 10, { loadingTextTemplate: 0 }), i1.ɵqud(335544320, 11, { tagTemplate: 0 }), i1.ɵqud(335544320, 12, { loadingSpinnerTemplate: 0 }), i1.ɵqud(603979776, 13, { ngOptions: 1 }), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(29, { value: 0 }), i1.ɵpid(131072, i5.TranslatePipe, [i5.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CourseComponent_2)), i1.ɵdid(32, 16384, null, 0, i9.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CourseComponent_3)), i1.ɵdid(34, 16384, null, 0, i9.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 2, null, View_CourseComponent_4)), i1.ɵdid(36, 16384, null, 0, i9.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), i1.ɵpid(131072, i9.AsyncPipe, [i1.ChangeDetectorRef])], function (_ck, _v) { var _co = _v.component; var currVal_2 = i1.ɵunv(_v, 8, 0, i1.ɵnov(_v, 9).transform(_co.divisions$)); _ck(_v, 8, 0, currVal_2); var currVal_13 = "name"; var currVal_14 = i1.ɵunv(_v, 15, 1, i1.ɵnov(_v, 30).transform("choose", _ck(_v, 29, 0, i1.ɵunv(_v, 15, 1, i1.ɵnov(_v, 28).transform("division")).toLowerCase()))); var currVal_15 = _co.divisions; _ck(_v, 15, 0, currVal_13, currVal_14, currVal_15); var currVal_16 = (((_co.personsByDivision == null) ? null : _co.personsByDivision.length) && _co.selectedPerson); _ck(_v, 32, 0, currVal_16); var currVal_17 = (_co.selectedPerson && _co.selectedDivision); _ck(_v, 34, 0, currVal_17); var currVal_18 = i1.ɵunv(_v, 36, 0, i1.ɵnov(_v, 37).transform(_co.courses$)); _ck(_v, 36, 0, currVal_18); }, function (_ck, _v) { var currVal_0 = undefined; _ck(_v, 1, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 5, 0, i1.ɵnov(_v, 6).transform("courses")); _ck(_v, 5, 0, currVal_1); var currVal_3 = "divisions"; var currVal_4 = !i1.ɵnov(_v, 15).multiple; var currVal_5 = i1.ɵnov(_v, 15).typeahead; var currVal_6 = i1.ɵnov(_v, 15).multiple; var currVal_7 = i1.ɵnov(_v, 15).addTag; var currVal_8 = i1.ɵnov(_v, 15).searchable; var currVal_9 = i1.ɵnov(_v, 15).clearable; var currVal_10 = i1.ɵnov(_v, 15).isOpen; var currVal_11 = i1.ɵnov(_v, 15).disabled; var currVal_12 = i1.ɵnov(_v, 15).filtered; _ck(_v, 12, 0, currVal_3, currVal_4, currVal_5, currVal_6, currVal_7, currVal_8, currVal_9, currVal_10, currVal_11, currVal_12); });
 }
 exports.View_CourseComponent_0 = View_CourseComponent_0;
 function View_CourseComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-course", [], null, null, null, View_CourseComponent_0, RenderType_CourseComponent)), i1.ɵdid(1, 245760, null, 0, i10.CourseComponent, [i11.Store, i12.ModalService, i13.ActivatedRoute], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
@@ -7928,14 +7965,24 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.getPersons(divisions[0].id);
     };
     CourseComponent.prototype.getPersons = function (divisionId) {
+        var _this = this;
         this.store.dispatch(new actions_2.LoadPersonsByDivisionApi(divisionId));
-        this.personsByDivision$ = this.store.pipe(store_1.select(selectors_3.selectPersonsByDivisionApi));
+        this.store.pipe(store_1.select(selectors_3.selectPersonsByDivisionApi)).subscribe(function (personsByDivision) {
+            _this.personsByDivision = personsByDivision;
+            if (personsByDivision && personsByDivision.length) {
+                _this.onSelectItem(personsByDivision[0], 'persons');
+            }
+        });
     };
     CourseComponent.prototype.getCourses = function () {
         this.courses$ = this.store.select(selectors_1.selectCourseData);
     };
     CourseComponent.prototype.add = function () {
-        this.openCourseModal(course_mocks_1.CourseMocks.emptyCourse, false);
+        var newCourse = __assign({}, course_mocks_1.CourseMocks.emptyCourse);
+        if (this.personsByDivision && this.personsByDivision.length) {
+            newCourse.owner = this.personsByDivision[0];
+        }
+        this.openCourseModal(newCourse, false);
     };
     CourseComponent.prototype.handleActions = function (event) {
         switch (event.action) {
@@ -7950,7 +7997,8 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var objectType = this.pageTypes.COURSE;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, course), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                edit ? _this.updateCourse(res, course.id, course.person.id) : _this.createCourse(res);
+                edit ? _this.updateCourse(res, course.id, res.owner.id) : _this.createCourse(res);
+                // this.fetchCoursesByPerson(res.owner.id, {pageNumber: 1, pageSize: 10});
             }
         });
     };
@@ -7963,12 +8011,12 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         });
     };
     CourseComponent.prototype.createCourse = function (course) {
-        course['person'] = this.selectedPerson.id;
+        course['owner'] = this.selectedPerson.id;
         this.store.dispatch(new actions_3.CreateCourse(course));
     };
     CourseComponent.prototype.updateCourse = function (updatedCourse, courseId, personId) {
         updatedCourse['id'] = courseId;
-        updatedCourse['person'] = personId;
+        updatedCourse['owner'] = personId;
         this.store.dispatch(new actions_3.UpdateCourse(updatedCourse));
     };
     CourseComponent.prototype.deleteCourse = function (courseId) {
@@ -8107,7 +8155,7 @@ var CourseEffects = /** @class */ /*@__PURE__*/ (function () {
                 if (course) {
                     _this.messageService.showToastrSuccess(message);
                     courses = courses.map(function (item) {
-                        return item.id === action.payload.id ? action.payload : item;
+                        return item.id === course.id ? course : item;
                     });
                 }
                 return new fromCourses.RefreshCourses(courses);
@@ -11377,6 +11425,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 break;
             case this.fields.MAIN_JUDGE:
             case this.fields.STATISTICS_JUDGE:
+            case this.fields.OWNER:
             case this.fields.DIRECTOR:
                 form.addControl(key, new forms_1.FormControl(formObject[key]['userName'], this.getValidation(key)));
                 break;
@@ -24079,7 +24128,7 @@ var SharedService = /** @class */ /*@__PURE__*/ (function () {
         formData.append('file', file, file.name);
         var n = id.indexOf('.');
         id = id.substring(0, n !== -1 ? n : id.length);
-        return this.http.post(this.imageBaseUrl + ("/" + id), formData)
+        return this.http.post(this.imageBaseUrl, formData)
             .pipe(operators_1.map(function (response) { return response; }));
     };
     SharedService.prototype.deleteImage = function (imagePath) {

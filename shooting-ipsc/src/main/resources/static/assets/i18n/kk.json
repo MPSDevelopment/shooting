@@ -237,6 +237,7 @@
   "course": "Курс",
   "imagePath": "Сурет",
   "addCourse": "Курстық дайындық",
+  "editCourse": "Изменить данные о курсе",
   "person": "Персона {{ending}}",
   "editDivision": "Бөлімшені өзгерту",
   "addDivision": "Бөлімше қосу",

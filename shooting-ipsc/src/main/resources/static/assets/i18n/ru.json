@@ -238,6 +238,7 @@
   "course": "Курс",
   "imagePath": "Фото",
   "addCourse": "Добавить курс",
+  "editCourse": "Изменить данные о курсе",
   "person": "Персон{{ending}}",
   "editDivision": "Изменить подразделение",
   "addDivision": "Добавить подразделение",

@@ -85,7 +85,9 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processInvalidFormatException(InvalidFormatException ex, HttpServletRequest request) {
 		log.error("Invalid Format Exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		return new ErrorMessage(DEFAULT_FIELD, ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
 	}
 
 	@ExceptionHandler(BadRequestException.class)
@@ -137,7 +139,9 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorMessage processInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request) {
 		log.error("Internal server error in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
-		return new ErrorMessage(DEFAULT_FIELD, "Internal server error for request %s", request.getRequestURL());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, e.getMessage());
+		return new ErrorMessage(validationErrors);
 	}
 
 	private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {
