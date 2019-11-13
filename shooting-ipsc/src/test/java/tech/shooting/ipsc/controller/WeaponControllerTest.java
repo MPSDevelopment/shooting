@@ -108,7 +108,7 @@ class WeaponControllerTest {
 	@BeforeEach
 	void setUp() {
 		weaponRepository.deleteAll();
-		testWeapon = new Weapon().setCount(0).setOwner(testPerson).setWeaponName(testWeaponType).setSerialNumber("1234567");
+		testWeapon = new Weapon().setCount(0).setOwner(testPerson).setWeaponType(testWeaponType).setSerialNumber("1234567");
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
 		testPerson = testPerson == null ? personRepository.save(new Person().setDivision(testDivision).setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testWeaponType = testWeaponType == null ? weaponTypeRepository.save(new WeaponType().setName("Test-AK")) : testWeaponType;
@@ -226,7 +226,7 @@ class WeaponControllerTest {
 
 	private void createWeaponRows(int k) {
 		for (int i = 0; i < k; i++) {
-			weaponRepository.save(new Weapon().setCount(i).setOwner(testPerson).setWeaponName(testWeaponType).setSerialNumber("1234567" + i));
+			weaponRepository.save(new Weapon().setCount(i).setOwner(testPerson).setWeaponType(testWeaponType).setSerialNumber("1234567" + i));
 		}
 	}
 
@@ -282,7 +282,7 @@ class WeaponControllerTest {
 		assertEquals(testWeaponBean.getCount(), weapon.getCount());
 		assertEquals(testWeaponBean.getOwner(), weapon.getOwner().getId());
 		assertEquals(testWeaponBean.getSerialNumber(), weapon.getSerialNumber());
-		assertEquals(testWeaponBean.getWeaponType(), weapon.getWeaponName().getId());
+		assertEquals(testWeaponBean.getWeaponType(), weapon.getWeaponType().getId());
 	}
 	
 	@Test
@@ -313,7 +313,7 @@ class WeaponControllerTest {
 		assertEquals(testWeaponBean.getCount(), weapon.getCount());
 		assertEquals(testWeaponBean.getOwner(), weapon.getOwner().getId());
 		assertEquals(testWeaponBean.getSerialNumber(), weapon.getSerialNumber());
-		assertEquals(testWeaponBean.getWeaponType(), weapon.getWeaponName().getId());
+		assertEquals(testWeaponBean.getWeaponType(), weapon.getWeaponType().getId());
 	}
 
 	@Test

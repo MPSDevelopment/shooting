@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Vehicle;
+import tech.shooting.ipsc.pojo.VehicleType;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface VehicleRepository extends MongoRepository<Vehicle,Long>, Custom
     List<Vehicle> findByOwnerIn(List<Person> list);
     
     Page<Vehicle> findByOwnerIn(List<Person> persons, PageRequest pageable);
+    
+    List<Vehicle> findByOwnerAndType(Person person, VehicleType type);
+    
+    List<Vehicle> findByOwnerAndTypeId(Person person, Long typeId);
+    
+    long countByOwnerAndTypeId(Person person, Long typeId);
 }

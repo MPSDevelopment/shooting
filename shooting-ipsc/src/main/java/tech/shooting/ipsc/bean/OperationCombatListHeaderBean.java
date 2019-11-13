@@ -22,6 +22,6 @@ public class OperationCombatListHeaderBean {
 	@ApiModelProperty(value = "name")
 	private String name;
 	
-	
+	private Long typeId;
 
 }

@@ -2,9 +2,11 @@ package tech.shooting.ipsc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,26 @@ import tech.shooting.ipsc.bean.StandardCommonConditionsBean;
 import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.StandardCommonConditions;
+import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.repository.AmmoTypeRepository;
+import tech.shooting.ipsc.repository.AnimalRepository;
 import tech.shooting.ipsc.repository.AnimalTypeRepository;
+import tech.shooting.ipsc.repository.CommunicationEquipmentRepository;
 import tech.shooting.ipsc.repository.CommunicationEquipmentTypeRepository;
+import tech.shooting.ipsc.repository.EquipmentRepository;
 import tech.shooting.ipsc.repository.EquipmentTypeRepository;
 import tech.shooting.ipsc.repository.OperationRepository;
+import tech.shooting.ipsc.repository.VehicleRepository;
 import tech.shooting.ipsc.repository.VehicleTypeRepository;
+import tech.shooting.ipsc.repository.WeaponRepository;
 import tech.shooting.ipsc.repository.WeaponTypeRepository;
 
 @Service
 public class OperationService {
+
+	private static final String REPLACEMENT = "0";
 
 	private static final String WEAPON_TYPE_HEADER = "weaponry";
 
@@ -62,7 +73,22 @@ public class OperationService {
 
 	@Autowired
 	private EquipmentTypeRepository equipmentTypeRepository;
-	
+
+	@Autowired
+	private WeaponRepository weaponRepository;
+
+	@Autowired
+	private AnimalRepository animalRepository;
+
+	@Autowired
+	private VehicleRepository vehicleRepository;
+
+	@Autowired
+	private CommunicationEquipmentRepository communicationEquipmentRepository;
+
+	@Autowired
+	private EquipmentRepository equipmentRepository;
+
 	public void clearTypes() {
 		weaponTypeRepository.deleteAll();
 		ammoTypeRepository.deleteAll();
@@ -72,30 +98,85 @@ public class OperationService {
 		equipmentTypeRepository.deleteAll();
 	}
 
+	public void clearObjects() {
+		weaponRepository.deleteAll();
+		animalRepository.deleteAll();
+		vehicleRepository.deleteAll();
+		communicationEquipmentRepository.deleteAll();
+		equipmentRepository.deleteAll();
+	}
+
 	public List<OperationCombatListHeaderBean> getHeaders() {
 
 		var result = new ArrayList<OperationCombatListHeaderBean>();
 
 		weaponTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(WEAPON_TYPE_HEADER));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(WEAPON_TYPE_HEADER).setTypeId(type.getId()));
 		});
 		ammoTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(AMMO_TYPE_HEADER));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(AMMO_TYPE_HEADER).setTypeId(type.getId()));
 		});
 		animalTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(ANIMAL_TYPE_HEADER));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(ANIMAL_TYPE_HEADER).setTypeId(type.getId()));
 		});
 		vehicleTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(VEHICLE_TYPE_HEADER));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(VEHICLE_TYPE_HEADER).setTypeId(type.getId()));
 		});
 		communicationEquipmentTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(COMMUNICATION_TYPE_HEADER).setSubtype(type.getType().toString()));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(COMMUNICATION_TYPE_HEADER).setSubtype(type.getType().toString()).setTypeId(type.getId()));
 		});
 		equipmentTypeRepository.findAll().forEach(type -> {
-			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(EQUIPMENT_TYPE_HEADER).setSubtype(type.getType().toString()));
+			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(EQUIPMENT_TYPE_HEADER).setSubtype(type.getType().toString()).setTypeId(type.getId()));
 		});
 
 		return result;
+	}
+
+	public List<List<String>> getCombatListData(Long id, List<OperationCombatListHeaderBean> headers) throws BadRequestException {
+		var list = new ArrayList<List<String>>();
+		var operation = checkOperation(id);
+
+		var persons = operation.getParticipants().stream().map(item -> {
+			return item.getPerson();
+		}).collect(Collectors.toList());
+
+		operation.getParticipants().forEach(participant -> {
+			var participantData = new ArrayList<String>();
+
+			headers.forEach(header -> {
+				switch (header.getType()) {
+				case WEAPON_TYPE_HEADER: {
+					participantData.add(String.valueOf(weaponRepository.countByOwnerAndWeaponTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					break;
+				}
+				case AMMO_TYPE_HEADER: {
+
+					break;
+				}
+				case ANIMAL_TYPE_HEADER: {
+					participantData.add(String.valueOf(animalRepository.countByOwnerAndAnimalTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					break;
+				}
+				case VEHICLE_TYPE_HEADER: {
+					participantData.add(String.valueOf(vehicleRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					break;
+				}
+				case COMMUNICATION_TYPE_HEADER: {
+					participantData.add(String.valueOf(communicationEquipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					break;
+				}
+				case EQUIPMENT_TYPE_HEADER: {
+					participantData.add(String.valueOf(equipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					break;
+				}
+				}
+			});
+
+			if (CollectionUtils.isNotEmpty(participantData)) {
+				list.add(participantData);
+			}
+		});
+		return list;
 	}
 
 	public List<Operation> getAllOperations() {
@@ -105,11 +186,11 @@ public class OperationService {
 	public Operation getOperationById(Long id) throws BadRequestException {
 		return checkOperation(id);
 	}
-	
+
 	private Operation checkOperation(Long id) throws BadRequestException {
 		return operationRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect operation id %s", id)));
 	}
-	
+
 	public Operation postOperation(OperationBean bean) throws BadRequestException {
 		var operation = new Operation();
 		BeanUtils.copyProperties(bean, operation);
@@ -123,8 +204,20 @@ public class OperationService {
 	}
 
 	public void deleteOperationById(Long id) throws BadRequestException {
-		var operation = checkOperation(id);
+		checkOperation(id);
 		operationRepository.deleteById(id);
+	}
+
+	public void setWeather(Long id, Weather weather) throws BadRequestException {
+		var operation = checkOperation(id);
+		operation.setWeather(weather);
+		operationRepository.save(operation);
+	}
+
+	public void setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
+		var operation = checkOperation(id);
+		operation.setSymbols(symbols);
+		operationRepository.save(operation);
 	}
 
 }

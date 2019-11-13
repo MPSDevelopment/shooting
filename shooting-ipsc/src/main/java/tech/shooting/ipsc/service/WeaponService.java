@@ -50,7 +50,7 @@ public class WeaponService {
 		if (weapon == null) {
 			weapon = new Weapon();
 		}
-		weapon.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponName(weaponType);
+		weapon.setOwner(owner).setSerialNumber(bean.getSerialNumber()).setCount(bean.getCount()).setWeaponType(weaponType);
 
 		return weaponRepository.save(weapon);
 	}

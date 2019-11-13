@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.TypeAlias;
@@ -16,7 +17,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Data
 @Accessors(chain = true)
 public class Operation extends BaseDocument {
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
 	private Info info;
@@ -24,18 +25,17 @@ public class Operation extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Operation weather", required = true)
 	private Weather weather;
-	
-    @JsonProperty
-    @ApiModelProperty(value = "Operation image path", required = true)
-    private String imagePath;
-    
-    @JsonProperty
-    @ApiModelProperty(value = "Operation participant list", required = true)
-    private List<OperationParticipant> participants;
-    
-    @JsonProperty
-    @ApiModelProperty(value = "Operation symbols list", required = true)
-    private List<OperationSymbol> symbols;
-    
-    
+
+	@JsonProperty
+	@ApiModelProperty(value = "Operation image path", required = true)
+	private String imagePath;
+
+	@JsonProperty
+	@ApiModelProperty(value = "Operation participant list", required = true)
+	private List<OperationParticipant> participants = new ArrayList<>();
+
+	@JsonProperty
+	@ApiModelProperty(value = "Operation symbols list", required = true)
+	private List<OperationSymbol> symbols = new ArrayList<>();
+
 }

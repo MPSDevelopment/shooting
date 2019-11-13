@@ -29,11 +29,11 @@ public class Weapon extends BaseDocument {
     //example AK-74 №4405222
     private String serialNumber;
 
-    @JsonProperty
-    @ApiModelProperty(value = "Weapon name", required = true)
+    @JsonProperty("weaponName")
+    @ApiModelProperty(value = "Weapon type", required = true)
     @DBRef
     //AK-47, AK-74,AKC-74,AKM,ПКМ, РПГ, АГС, ПМ,АПС,АПБ И ПРОЧЕЕ НАДО ВЗЯТЬ СПИСОК ИЛИ ДЕЛАТЬ Записью в базе
-    private WeaponType weaponName;
+    private WeaponType weaponType;
 
     @JsonProperty
     @ApiModelProperty(value = "Fired count by weapon")

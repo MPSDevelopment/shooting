@@ -140,4 +140,6 @@ public class ValidationConstants {
 	public static final String LEGEND_TYPE_MESSAGE = "Legend type must be not null";
 
 	public static final String RFID_CODE_MEASSAGE = "Rfid code must be not null";
+	
+	public static final String ANIMAL_NAME_MESSAGE = "Animal name must be from 3 to 30 characters";
 }
