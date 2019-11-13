@@ -28,6 +28,7 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.OperationBean;
+import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -36,7 +37,9 @@ import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.Standard;
+import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.repository.OperationRepository;
+import tech.shooting.ipsc.repository.WeaponTypeRepository;
 import tech.shooting.ipsc.service.OperationService;
 
 @ExtendWith(SpringExtension.class)
@@ -55,6 +58,9 @@ public class OperationControllerTest extends BaseControllerTest {
 	
 	@Autowired
 	private OperationService operationService;
+	
+	@Autowired
+	private WeaponTypeRepository weaponTypeRepository;
 	
 	private Operation testOperation;
 
@@ -237,6 +243,48 @@ public class OperationControllerTest extends BaseControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertEquals(actual, operationRepository.findAll().size());
+	}
+	
+	@Test
+	void getOperationCombatListHeaders() throws Exception {
+		
+		operationService.clearTypes();
+		
+		assertEquals(Collections.emptyList(), operationRepository.findAll());
+		int count = operationRepository.findAll().size();
+		Operation save = operationRepository.save(testOperation);
+		assertEquals(count + 1, operationRepository.findAll().size());
+
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access with admin role
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		var list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
+		assertEquals(0, list.size());
+		
+		weaponTypeRepository.save(new WeaponType().setName("AK-47"));
+		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
+		
+		contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
+		assertEquals(2, list.size());
+
 	}
 
 	private OperationBean createOperationBean() {

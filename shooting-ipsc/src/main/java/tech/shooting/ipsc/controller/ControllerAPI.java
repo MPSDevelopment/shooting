@@ -421,7 +421,7 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_PUT_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_DELETE_BY_ID = "/" + REQUEST_OPERATION_ID;
-	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders";
+	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders/" + REQUEST_OPERATION_ID;
 	
 
 }

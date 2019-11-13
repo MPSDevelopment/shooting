@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.OperationBean;
+import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.service.OperationService;
 import javax.validation.Valid;
@@ -58,5 +59,10 @@ public class OperationController {
 		operationService.deleteOperationById(id);
 		return new ResponseEntity<>(new SuccessfulMessage("Operation was successfully deleted"), HttpStatus.OK);
 	}
-
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get operation combat list headers")
+	public ResponseEntity<List<OperationCombatListHeaderBean>> getOperationCombatListHeaders(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(operationService.getHeaders(), HttpStatus.OK);
+	}
 }

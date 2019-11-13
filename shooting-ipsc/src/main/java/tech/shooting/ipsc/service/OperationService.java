@@ -62,6 +62,15 @@ public class OperationService {
 
 	@Autowired
 	private EquipmentTypeRepository equipmentTypeRepository;
+	
+	public void clearTypes() {
+		weaponTypeRepository.deleteAll();
+		ammoTypeRepository.deleteAll();
+		animalTypeRepository.deleteAll();
+		vehicleTypeRepository.deleteAll();
+		communicationEquipmentTypeRepository.deleteAll();
+		equipmentTypeRepository.deleteAll();
+	}
 
 	public List<OperationCombatListHeaderBean> getHeaders() {
 
