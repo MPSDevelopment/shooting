@@ -109,11 +109,11 @@ class VehicleControllerTest {
 	@BeforeEach
 	void setUp() {
 		vehicleRepository.deleteAll();
-		testVehicle = new Vehicle().setCount(0).setOwner(testPerson).setType(testType).setSerialNumber("1234567");
+		testVehicle = new Vehicle().setCount(0).setOwner(testPerson).setType(testType).setSerialNumber("1234567").setPassportNumber("FR234");
 		testDivision = testDivision == null ? divisionRepository.save(new Division().setParent(null).setName("root")) : testDivision;
 		testPerson = testPerson == null ? personRepository.save(new Person().setDivision(testDivision).setName("testing").setQualifierRank(ClassificationBreaks.D)) : testPerson;
 		testType = testType == null ? vehicleTypeRepository.save(new VehicleType().setName("Test-AK")) : testType;
-		testVehicleBean = new VehicleBean().setId(testVehicle.getId()).setType(testType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567");
+		testVehicleBean = new VehicleBean().setId(testVehicle.getId()).setType(testType.getId()).setCount(0).setOwner(testPerson.getId()).setSerialNumber("1234567").setPassportNumber("FR234");
 		user = user == null ? userRepository.save(new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword("dfhhjsdgfdsfhj").setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"))
 				.setPerson(new Person().setName("fgdgfgd"))) : user;
 		admin = userRepository.findByLogin(DatabaseCreator.ADMIN_LOGIN);
@@ -227,7 +227,7 @@ class VehicleControllerTest {
 
 	private void createRows(int k) {
 		for (int i = 0; i < k; i++) {
-			vehicleRepository.save(new Vehicle().setCount(i).setOwner(testPerson).setType(testType).setSerialNumber("1234567" + i));
+			vehicleRepository.save(new Vehicle().setCount(i).setOwner(testPerson).setType(testType).setSerialNumber("1234567" + i).setPassportNumber("AK" + i));
 		}
 	}
 
@@ -264,29 +264,30 @@ class VehicleControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
-		
-		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1"));
-		
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1").setPassportNumber(testVehicleBean.getPassportNumber() + "1"));
+
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_POST).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
 		Vehicle vehicle = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(count + 2, vehicleRepository.findAll().size());
 		assertEquals(testVehicleBean.getCount(), vehicle.getCount());
 		assertEquals(testVehicleBean.getOwner(), vehicle.getOwner().getId());
 		assertEquals(testVehicleBean.getSerialNumber(), vehicle.getSerialNumber());
+		assertEquals(testVehicleBean.getPassportNumber(), vehicle.getPassportNumber());
 		assertEquals(testVehicleBean.getType(), vehicle.getType().getId());
 	}
-	
+
 	@Test
 	void putVehicle() throws Exception {
 		assertEquals(Collections.emptyList(), vehicleRepository.findAll());
@@ -296,26 +297,27 @@ class VehicleControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				userToken)).andExpect(MockMvcResultMatchers.status().isOk());
 		// try access with judge role
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try access with admin role
-		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
-		
-		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1"));
-		
+		mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER,
+				adminToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+		json = JacksonUtils.getJson(testVehicleBean.setSerialNumber(testVehicleBean.getSerialNumber() + "1").setPassportNumber(testVehicleBean.getPassportNumber() + "1"));
+
 		// try access with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
-		
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put(ControllerAPI.VEHICLE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.VEHICLE_CONTROLLER_PUT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+
 		Vehicle vehicle = JacksonUtils.fromJson(Vehicle.class, contentAsString);
 		assertEquals(count + 2, vehicleRepository.findAll().size());
 		assertEquals(testVehicleBean.getCount(), vehicle.getCount());
 		assertEquals(testVehicleBean.getOwner(), vehicle.getOwner().getId());
 		assertEquals(testVehicleBean.getSerialNumber(), vehicle.getSerialNumber());
+		assertEquals(testVehicleBean.getPassportNumber(), vehicle.getPassportNumber());
 		assertEquals(testVehicleBean.getType(), vehicle.getType().getId());
 	}
 
