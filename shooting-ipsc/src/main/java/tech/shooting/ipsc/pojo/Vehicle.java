@@ -29,6 +29,7 @@ public class Vehicle extends BaseDocument {
     private String serialNumber;
     
     @JsonProperty
+    @Indexed(unique = true)
     @ApiModelProperty(value = "Passport number of vehicle", required = true)
     @Min(value = 7,message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
     private String passportNumber;
