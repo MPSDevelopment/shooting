@@ -320,6 +320,7 @@
   "equipment": "Оборудование",
   "equipments": "Оборудования",
   "addequipmentTypes": "Добавить тип оборудования",
+  "editequipmentTypes": "Изменить тип оборудования",
   "mqttConnectionError": "Нет подключения к серверу mqtt",
   "scanTag": "Отсканировать метку",
   "setTag": "Назначить метку",
@@ -354,9 +355,10 @@
   "TIMES_LESS": "Раз меньше",
   "PERCENTS_MORE": "Процентов больше",
   "PERCENTS_LESS": "Процентов меньше",
-  "SECONDS_MORE": "Секунд больше ",
+  "SECONDS_MORE": "Секунд больше",
   "SECONDS_LESS": "Секунд меньше",
   "ammunitionTypes": "Типы боеприпасов",
   "battleUnits": "Единицы боевого порядка",
-  "specialOperations": "Спец. операции"
+  "specialOperations": "Спец. операции",
+  "editCondition": "Изменить условие"
 }

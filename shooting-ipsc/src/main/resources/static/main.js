@@ -459,17 +459,16 @@ var message_service_1 = __webpack_require__(/*! @services/message.service */ "./
 var token_service_1 = __webpack_require__(/*! @services/token.service */ "./src/app/common/services/token.service.ts");
 var ngx_mqtt_1 = __webpack_require__(/*! ngx-mqtt */ "./node_modules/ngx-mqtt/src/index.js");
 var unsubscribe_ondestroy_adapter_1 = __webpack_require__(/*! ./common/adstracts/unsubscribe-ondestroy-adapter */ "./src/app/common/adstracts/unsubscribe-ondestroy-adapter.ts");
-var actions_3 = __webpack_require__(/*! @competitors/actions/actions */ "./src/app/common/modules/competitors/actions/actions.ts");
-var actions_4 = __webpack_require__(/*! @workspace/actions/actions */ "./src/app/common/modules/workspace/actions/actions.ts");
+var actions_3 = __webpack_require__(/*! @workspace/actions/actions */ "./src/app/common/modules/workspace/actions/actions.ts");
 var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
 var dialog_modal_component_1 = __webpack_require__(/*! @modal/components/dialog-modal/dialog-modal.component */ "./src/app/common/modules/modal/components/dialog-modal/dialog-modal.component.ts");
 var selectors_1 = __webpack_require__(/*! @workspace/selectors/selectors */ "./src/app/common/modules/workspace/selectors/selectors.ts");
-var actions_5 = __webpack_require__(/*! @persons/actions/actions */ "./src/app/common/modules/persons/actions/actions.ts");
+var actions_4 = __webpack_require__(/*! @persons/actions/actions */ "./src/app/common/modules/persons/actions/actions.ts");
 var check_modal_component_1 = __webpack_require__(/*! @modal/components/check-modal/check-modal.component */ "./src/app/common/modules/modal/components/check-modal/check-modal.component.ts");
 var selectors_2 = __webpack_require__(/*! @persons/selectors/selectors */ "./src/app/common/modules/persons/selectors/selectors.ts");
-var actions_6 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
-var actions_7 = __webpack_require__(/*! @equipment/actions/actions */ "./src/app/common/modules/equipment/actions/actions.ts");
-var actions_8 = __webpack_require__(/*! @quiz/actions/actions */ "./src/app/common/modules/quiz/actions/actions.ts");
+var actions_5 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+var actions_6 = __webpack_require__(/*! @equipment/actions/actions */ "./src/app/common/modules/equipment/actions/actions.ts");
+var actions_7 = __webpack_require__(/*! @quiz/actions/actions */ "./src/app/common/modules/quiz/actions/actions.ts");
 var ngx_toastr_1 = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
 var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     __extends(AppComponent, _super);
@@ -507,7 +506,6 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             // this.openDialogModal('testQuestion');
             // FIXME Test modal window doesn't open without "set point in debugger"
             this.getCurrentWorkspace();
-            this.getTournamentTopic();
         }
     };
     AppComponent.prototype.showMqttConnectionErrorMessage = function (flag) {
@@ -550,31 +548,20 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
                 this.store.dispatch(new actions_1.LoadCompetitorMarks());
                 this.store.dispatch(new actions_1.LoadDisqualificationTypes());
                 this.store.dispatch(new actions_2.LoadAllData());
-                this.store.dispatch(new actions_6.LoadWaveTypeList());
-                this.store.dispatch(new actions_7.LoadMeansTypeList());
-                this.store.dispatch(new actions_8.LoadUnitValues());
+                this.store.dispatch(new actions_5.LoadWaveTypeList());
+                this.store.dispatch(new actions_6.LoadMeansTypeList());
+                this.store.dispatch(new actions_7.LoadUnitValues());
             }
             this.store.dispatch(new actions_1.LoadValidations());
             this.store.dispatch(new actions_1.LoadStatuses());
             this.store.dispatch(new actions_1.LoadTimeIntervals());
             this.store.dispatch(new actions_1.LoadUserById(userId));
             this.store.dispatch(new actions_1.LoadRanks());
-            this.store.dispatch(new actions_5.LoadPersons());
+            this.store.dispatch(new actions_4.LoadPersons());
         }
         else {
             this.messageService.showPushNotification('No internet connection!');
         }
-    };
-    AppComponent.prototype.getTournamentTopic = function () {
-        var _this = this;
-        this.subscriptions.sink = this._mqttService.observe('competition').subscribe(function (message) {
-            if (message.payload) {
-                var resultString = String.fromCharCode.apply(String, __spread(message.payload));
-                var parsedResult = JSON.parse(resultString);
-                _this.goToRating(parsedResult.id);
-                _this.store.dispatch(new actions_3.LoadCompetitorsRating(parsedResult.id));
-            }
-        });
     };
     AppComponent.prototype.openDialogModal = function (message) {
         var _this = this;
@@ -583,13 +570,13 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
                 _this.getCurrentWorkspace();
             }
             else {
-                _this.getTournamentTopic();
+                // this.getTournamentTopic();
             }
         });
     };
     AppComponent.prototype.getCurrentWorkspace = function () {
         var _this = this;
-        this.store.dispatch(new actions_4.LoadCurrentWorkspace());
+        this.store.dispatch(new actions_3.LoadCurrentWorkspace());
         this.subscriptions.sink = this.store.pipe(store_1.select(selectors_1.selectCurrentWorkspace))
             .subscribe(function (workspace) {
             if (workspace) {
@@ -609,7 +596,7 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     };
     AppComponent.prototype.getCheckStatus = function (check, result) {
         var _this = this;
-        this.store.dispatch(new actions_4.LoadCheckStatus(check));
+        this.store.dispatch(new actions_3.LoadCheckStatus(check));
         this.subscriptions.sink = this.store.pipe(store_1.select(selectors_1.selectCheckStatus))
             .subscribe(function (data) {
             console.log(data);
@@ -642,9 +629,6 @@ var AppComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     };
     AppComponent.prototype.findPersonById = function (persons, personId) {
         return persons.find(function (person) { return person.id === personId; });
-    };
-    AppComponent.prototype.goToRating = function (id) {
-        this.router.navigate(['tournaments/rating'], { queryParams: { tournament: id } });
     };
     AppComponent.prototype.hasConnection = function () {
         return this.connectionStatus && this.connectionStatus !== this.connectionService.NO_CONNECTION;
@@ -1929,7 +1913,7 @@ exports.equipmentTypeMapperToServer = function (data) {
     return {
         id: data.id,
         name: data.name,
-        equipmentType: translateWaveType(data.equipmentType)
+        type: translateWaveType(data.type)
     };
 };
 exports.equipmentMapperToServer = function (data) {
@@ -2209,14 +2193,54 @@ exports.standardMapperToServer = function (data) {
         subject: data.subject
     };
 };
-exports.conditionsMapper = function (data) {
+var translateUnitTypes = function (unitTypes) {
+    switch (unitTypes) {
+        case 'TIMES_MORE':
+            return 'Раз больше';
+        case 'TIMES_LESS':
+            return 'Раз меньше';
+        case 'PERCENTS_MORE':
+            return 'Процентов больше';
+        case 'PERCENTS_LESS':
+            return 'Процентов меньше';
+        case 'SECONDS_MORE':
+            return 'Секунд больше';
+        case 'SECONDS_LESS':
+            return 'Секунд меньше';
+        case 'Раз больше':
+            return 'TIMES_MORE';
+        case 'Раз меньше':
+            return 'TIMES_LESS';
+        case 'Процентов больше':
+            return 'PERCENTS_MORE';
+        case 'Процентов меньше':
+            return 'PERCENTS_LESS';
+        case 'Секунд больше':
+            return 'SECONDS_MORE';
+        case 'Секунд меньше':
+            return 'SECONDS_LESS';
+    }
+};
+var ɵ1 = translateUnitTypes;
+exports.ɵ1 = ɵ1;
+exports.conditionsMapperFromServer = function (data) {
     return {
+        id: data.id,
+        conditionsRus: data.conditionsRus,
+        conditionsKz: data.conditionsKz,
+        coefficient: data.coefficient,
+        units: translateUnitTypes(data.units)
+    };
+};
+exports.conditionsMapperToServer = function (data) {
+    return {
+        id: data.id,
         conditionsRus: data.conditionsRus,
         conditionsKz: data.conditionsKz,
         // minValue: data.minValue,
         // maxValue: data.maxValue,
         coefficient: data.coefficient,
-        units: data.units,
+        units: translateUnitTypes(data.units)
     };
 };
 exports.scoreMapperFromServer = function (data) {
@@ -2984,7 +3008,7 @@ var EquipmentMocks;
 (function (EquipmentMocks) {
     EquipmentMocks.emptyEquipmentTypes = {
         name: '',
-        equipmentType: undefined,
+        type: undefined,
     };
     EquipmentMocks.emptyEquipment = {
         serialNumber: '',
@@ -6028,6 +6052,7 @@ var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
             if (res) {
                 if (edit) {
                     var body = __assign({}, communication, res);
+                    body.owner = typeof res.owner === 'string' ? communication.owner : res.owner;
                     _this.updateCommunication(body);
                 }
                 else {
@@ -6583,6 +6608,7 @@ var i6 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ./competitors-ratin
 var i7 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var i8 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var i9 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ../../../tournaments/services/tournaments.service */ "./src/app/common/modules/tournaments/services/tournaments.service.ts");
+var i10 = /*@__PURE__*/ /*@__PURE__*/ __webpack_require__(/*! ngx-mqtt/src/mqtt.service */ "./node_modules/ngx-mqtt/src/mqtt.service.js");
 var styles_CompetitorsRatingComponent = [i0.styles];
 var RenderType_CompetitorsRatingComponent = /*@__PURE__*/ /*@__PURE__*/ i1.ɵcrt({ encapsulation: 0, styles: styles_CompetitorsRatingComponent, data: {} });
 exports.RenderType_CompetitorsRatingComponent = RenderType_CompetitorsRatingComponent;
@@ -6591,7 +6617,7 @@ function View_CompetitorsRatingComponent_3(_l) { return i1.ɵvid(0, [(_l()(), i1
 function View_CompetitorsRatingComponent_2(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, "div", [["class", "row mt-4"]], null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_3)), i1.ɵdid(2, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = !_co.rating.length; _ck(_v, 2, 0, currVal_0); }, null); }
 function View_CompetitorsRatingComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 9, "div", [["class", "container-fluid pl-5 pr-5"]], null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 4, "div", [["class", "row mt-3"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 3, "div", [["class", "col"]], null, null, null, null, null)), (_l()(), i1.ɵeld(3, 0, null, null, 2, "h1", [["class", "text-center"]], null, null, null, null, null)), (_l()(), i1.ɵted(4, null, ["", ""])), i1.ɵpid(131072, i4.TranslatePipe, [i4.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_1)), i1.ɵdid(7, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_CompetitorsRatingComponent_2)), i1.ɵdid(9, 16384, null, 0, i5.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_1 = _co.rating; _ck(_v, 7, 0, currVal_1); var currVal_2 = _co.competitors; _ck(_v, 9, 0, currVal_2); }, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 4, 0, i1.ɵnov(_v, 5).transform("competitorsRating")); _ck(_v, 4, 0, currVal_0); }); }
 exports.View_CompetitorsRatingComponent_0 = View_CompetitorsRatingComponent_0;
-function View_CompetitorsRatingComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-competitors-rating", [], null, null, null, View_CompetitorsRatingComponent_0, RenderType_CompetitorsRatingComponent)), i1.ɵdid(1, 770048, null, 0, i6.CompetitorsRatingComponent, [i7.Store, i8.ActivatedRoute, i9.TournamentsService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+function View_CompetitorsRatingComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-competitors-rating", [], null, null, null, View_CompetitorsRatingComponent_0, RenderType_CompetitorsRatingComponent)), i1.ɵdid(1, 770048, null, 0, i6.CompetitorsRatingComponent, [i7.Store, i8.ActivatedRoute, i9.TournamentsService, i10.MqttService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_CompetitorsRatingComponent_Host_0 = View_CompetitorsRatingComponent_Host_0;
 var CompetitorsRatingComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-competitors-rating", i6.CompetitorsRatingComponent, View_CompetitorsRatingComponent_Host_0, {}, {}, []);
 exports.CompetitorsRatingComponentNgFactory = CompetitorsRatingComponentNgFactory;
@@ -6632,6 +6658,35 @@ exports.styles = styles;
 
 var __extends = /*@__PURE__*/ __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js").__extends;
 "use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m)
+        return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+            ar.push(r.value);
+    }
+    catch (error) {
+        e = { error: error };
+    }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"]))
+                m.call(i);
+        }
+        finally {
+            if (e)
+                throw e.error;
+        }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
@@ -6645,13 +6700,15 @@ var selectors_3 = __webpack_require__(/*! @persons/selectors/selectors */ "./src
 var unsubscribe_ondestroy_adapter_1 = __webpack_require__(/*! ../../../../adstracts/unsubscribe-ondestroy-adapter */ "./src/app/common/adstracts/unsubscribe-ondestroy-adapter.ts");
 var tournaments_service_1 = __webpack_require__(/*! @tournaments/services/tournaments.service */ "./src/app/common/modules/tournaments/services/tournaments.service.ts");
 var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var ngx_mqtt_1 = __webpack_require__(/*! ngx-mqtt */ "./node_modules/ngx-mqtt/src/index.js");
 var CompetitorsRatingComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     __extends(CompetitorsRatingComponent, _super);
-    function CompetitorsRatingComponent(store, route, tournamentsService) {
+    function CompetitorsRatingComponent(store, route, tournamentsService, _mqttService) {
         var _this = _super.call(this) || this;
         _this.store = store;
         _this.route = route;
         _this.tournamentsService = tournamentsService;
+        _this._mqttService = _mqttService;
         _this.actions = [];
         _this.icons = icons_1.Icons;
         _this.pageTypes = page_types_1.PageTypes;
@@ -6661,7 +6718,17 @@ var CompetitorsRatingComponent = /** @class */ /*@__PURE__*/ (function (_super) 
         console.log(changes);
     };
     CompetitorsRatingComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.getRouteParams();
+        this.subscriptions.sink = this._mqttService.observe('competition').subscribe(function (message) {
+            if (message.payload) {
+                var resultString = String.fromCharCode.apply(String, __spread(message.payload));
+                var parsedResult = JSON.parse(resultString);
+                _this.tournamentId = parsedResult.id;
+                _this.getTournamentsStages(_this.tournamentId);
+                _this.getPersons();
+            }
+        });
     };
     CompetitorsRatingComponent.prototype.getRouteParams = function () {
         var _this = this;
@@ -7997,7 +8064,9 @@ var CourseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var objectType = this.pageTypes.COURSE;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, course), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                edit ? _this.updateCourse(res, course.id, res.owner.id) : _this.createCourse(res);
+                var updatedCourse = __assign({}, course, res);
+                updatedCourse.owner = typeof res.owner === 'string' ? course.owner : res.owner;
+                edit ? _this.updateCourse(updatedCourse, course.id, updatedCourse.owner.id) : _this.createCourse(res);
                 // this.fetchCoursesByPerson(res.owner.id, {pageNumber: 1, pageSize: 10});
             }
         });
@@ -8154,9 +8223,7 @@ var CourseEffects = /** @class */ /*@__PURE__*/ (function () {
                 var message = { user: toastr_1.ToastrUsersType.COURSE, type: toastr_1.ToastrMessageType.UPDATE };
                 if (course) {
                     _this.messageService.showToastrSuccess(message);
-                    courses = courses.map(function (item) {
-                        return item.id === course.id ? course : item;
-                    });
+                    courses = courses.map(function (item) { return item.id === course.id ? course : item; });
                 }
                 return new fromCourses.RefreshCourses(courses);
             }), operators_1.catchError(function (err) {
@@ -8703,6 +8770,7 @@ var selectors_1 = __webpack_require__(/*! @workspace/selectors/selectors */ "./s
 var selectors_2 = __webpack_require__(/*! @persons/selectors/selectors */ "./src/app/common/modules/persons/selectors/selectors.ts");
 var check_modal_component_1 = __webpack_require__(/*! @modal/components/check-modal/check-modal.component */ "./src/app/common/modules/modal/components/check-modal/check-modal.component.ts");
 var modal_service_1 = __webpack_require__(/*! @modal/services/modal.service */ "./src/app/common/modules/modal/services/modal.service.ts");
+var actions_2 = __webpack_require__(/*! @competitors/actions/actions */ "./src/app/common/modules/competitors/actions/actions.ts");
 var DashboardComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     __extends(DashboardComponent, _super);
     function DashboardComponent(router, loginService, _mqttService, store, modalService, document) {
@@ -8719,6 +8787,7 @@ var DashboardComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.role = localStorage.getItem('role');
         if (this.role === 'GUEST') {
+            this.getTournamentTopic();
             this.store.dispatch(new actions_1.LoadCurrentWorkspace());
             this.subscriptions.sink = this.store.pipe(store_1.select(selectors_1.selectCurrentWorkspace))
                 .subscribe(function (workspace) {
@@ -8727,6 +8796,20 @@ var DashboardComponent = /** @class */ /*@__PURE__*/ (function (_super) {
                 }
             });
         }
+    };
+    DashboardComponent.prototype.getTournamentTopic = function () {
+        var _this = this;
+        this.subscriptions.sink = this._mqttService.observe('competition').subscribe(function (message) {
+            if (message.payload) {
+                var resultString = String.fromCharCode.apply(String, __spread(message.payload));
+                var parsedResult = JSON.parse(resultString);
+                _this.goToRating(parsedResult.id);
+                _this.store.dispatch(new actions_2.LoadCompetitorsRating(parsedResult.id));
+            }
+        });
+    };
+    DashboardComponent.prototype.goToRating = function (id) {
+        this.router.navigate(['tournaments/rating'], { queryParams: { tournament: id } });
     };
     DashboardComponent.prototype.getWorkspaceCheckTopic = function (topic) {
         var _this = this;
@@ -10164,6 +10247,7 @@ var EquipmentComponent = /** @class */ /*@__PURE__*/ (function () {
             if (res) {
                 if (edit) {
                     var body = __assign({}, equipment, res);
+                    body.owner = typeof res.owner === 'string' ? equipment.owner : res.owner;
                     _this.updateEquipment(body);
                 }
                 else {
@@ -10626,7 +10710,7 @@ var EquipmentService = /** @class */ /*@__PURE__*/ (function () {
     EquipmentService.prototype.createEquipmentType = function (body) {
         var mappedBody = equipment_mapper_1.equipmentTypeMapperToServer(body);
         return this.http.post(this.baseEquipmentTypeUrl + "/create", mappedBody)
-            .pipe(operators_1.map(function (response) { return response; }));
+            .pipe(operators_1.map(function (response) { return equipment_mapper_1.equipmentTypeMapperToServer(response); }));
     };
     EquipmentService.prototype.updateEquipmentType = function (type) {
         var mappedBody = equipment_mapper_1.equipmentTypeMapperToServer(type);
@@ -10803,6 +10887,7 @@ var ExerciseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         _this.sharedService = sharedService;
         _this.passedCompetitors = [];
         _this.currentCompetitor = null;
+        _this.scoresByCurrentTournament = [];
         _this.filledExercises = [];
         _this.pageType = page_types_1.PageTypes;
         _this.currentScore = __assign({}, emptyScore);
@@ -10850,6 +10935,15 @@ var ExerciseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             _this.competitors = _this.filterCompetitorsByValue(_this.tournament.competitors);
             _this.stages = _this.tournament.stages;
             _this.stageNumber = _this.findStageIndex(_this.stages, _this.stageId) + 1;
+            _this.tournamentsService.getScoreListByTournament(_this.tournamentId, _this.stageId).subscribe(function (scores) {
+                scores.forEach(function (score) {
+                    _this.competitors.forEach(function (competitor) {
+                        if (score.personId === competitor.person.id) {
+                            _this.passedCompetitors.push(competitor);
+                        }
+                    });
+                });
+            });
         });
     };
     ExerciseComponent.prototype.findCompetitorByNumber = function () {
@@ -10939,6 +11033,7 @@ var ExerciseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.seconds = 0;
         this.milliseconds = 0;
         this.targetScore = 0;
+        this.filledExercises = [];
     };
     ExerciseComponent.prototype.loadNextTarget = function () {
         if (this.currentScore.score === null) {
@@ -11055,7 +11150,7 @@ var ExerciseComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         if (this.connectionStatusCondition) {
             return this.passedCompetitors.length === this.competitors.length
                 && this.passedTargets.length === this.stages[this.stageNumber - 1].allTargets ||
-                this.passedCompetitors.length === this.competitors.length;
+                this.passedCompetitors.length === this.competitors.length || this.currentCompetitor !== null;
         }
         else {
             return !this.storageService.hasScoreList(this.tournamentId, this.stageId) && this.passedCompetitors.length !== 0;
@@ -12340,7 +12435,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             if (control === _this.fields.UNITS && _this.objectType === 'Condition') {
                 _this.subscriptions.sink = _this.store.select(selectors_8.selectUnitValues)
                     .subscribe(function (list) {
-                    _this.units = list;
+                    _this.units = _this.sharedService.translateArray(list);
                     // this.translatedWaveTypes = this.sharedService.translateArray(this.meansTypes);
                 });
             }
@@ -12397,10 +12492,13 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         return this.dialogsService.getDialogOptions('тип регистрации', this.mobileSelectArray);
     };
     BaseFormComponent.prototype.onLoadImage = function (file) {
-        var n = file.name.indexOf('.');
-        var imagePath = file.name.substring(0, n !== -1 ? n : file.name.length);
-        this.formControls['imagePath'].setValue(imagePath);
+        var _this = this;
+        // const n = file.name.indexOf('.');
+        // const imagePath = file.name.substring(0, n !== -1 ? n : file.name.length);
         this.store.dispatch(new actions_1.UploadImage(file));
+        this.store.select(selectors_1.selectImage).subscribe(function (imageObject) {
+            _this.formControls['imagePath'].setValue(imageObject.path);
+        });
     };
     BaseFormComponent.prototype.onDeleteImage = function () {
         this.formControls['imagePath'].setValue('');
@@ -15678,6 +15776,7 @@ var MachineComponent = /** @class */ /*@__PURE__*/ (function () {
             if (res) {
                 if (edit) {
                     var body = __assign({}, machine, res);
+                    body.owner = typeof res.owner === 'string' ? machine.owner : res.owner;
                     _this.updateMachine(body);
                 }
                 else {
@@ -21503,17 +21602,17 @@ var QuizService = /** @class */ /*@__PURE__*/ (function () {
     };
     QuizService.prototype.getConditions = function () {
         return this.http.get(this.conditionsBaseUrl + '/get/all')
-            .pipe(operators_1.map(function (response) { return response; }));
+            .pipe(operators_1.map(function (response) { return response.map(function (item) { return quiz_mapper_1.conditionsMapperFromServer(item); }); }));
     };
     QuizService.prototype.createCondition = function (condition) {
-        var body = quiz_mapper_1.conditionsMapper(condition);
+        var body = quiz_mapper_1.conditionsMapperToServer(condition);
         return this.http.post(this.conditionsBaseUrl + '/post/common/condition', body)
-            .pipe(operators_1.map(function (response) { return response; }));
+            .pipe(operators_1.map(function (response) { return quiz_mapper_1.conditionsMapperToServer(response); }));
     };
     QuizService.prototype.updateCondition = function (condition) {
-        var body = quiz_mapper_1.conditionsMapper(condition);
+        var body = quiz_mapper_1.conditionsMapperToServer(condition);
         return this.http.put(this.conditionsBaseUrl + ("/put/common/condition/" + condition.id), body)
-            .pipe(operators_1.map(function (response) { return response; }));
+            .pipe(operators_1.map(function (response) { return quiz_mapper_1.conditionsMapperToServer(response); }));
     };
     QuizService.prototype.deleteCondition = function (conditionId) {
         return this.http.delete(this.conditionsBaseUrl + ("/delete/" + conditionId))
@@ -24024,6 +24123,9 @@ exports.selectUser = store_1.createSelector(exports.selectShared, ɵ10);
 var ɵ11 = function (state) { return state.ranks; };
 exports.ɵ11 = ɵ11;
 exports.selectRanks = store_1.createSelector(exports.selectShared, ɵ11);
+var ɵ12 = function (state) { return state.image; };
+exports.ɵ12 = ɵ12;
+exports.selectImage = store_1.createSelector(exports.selectShared, ɵ12);
 
 
 
@@ -26871,6 +26973,10 @@ var TournamentsService = /** @class */ /*@__PURE__*/ (function () {
         return this.http.post(this.baseUrl + ("/competition/" + tournamentId + "/stage/" + stageId + "/score/list"), scores)
             .pipe(operators_1.map(function (response) { return response; }));
     };
+    TournamentsService.prototype.getScoreListByTournament = function (tournamentId, stageId) {
+        return this.http.get(this.baseUrl + ("/competition/" + tournamentId + "/stage/" + stageId + "/score/list"))
+            .pipe(operators_1.map(function (response) { return response; }));
+    };
     TournamentsService.prototype.startTournament = function (tournamentId) {
         return this.http.post(this.baseUrl + ("/competition/" + tournamentId + "/start"), null)
             .pipe(operators_1.map(function (response) { return response; }));
@@ -28043,6 +28149,7 @@ var WeaponListComponent = /** @class */ /*@__PURE__*/ (function (_super) {
             if (res) {
                 if (edit) {
                     var body = __assign({}, weapon, res);
+                    body.owner = typeof res.owner === 'string' ? weapon.owner : res.owner;
                     _this.updateWeaponListItem(body);
                 }
                 else {

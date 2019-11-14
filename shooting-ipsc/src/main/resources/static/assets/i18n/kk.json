@@ -316,6 +316,7 @@
   "equipment": "Құрал-жабдықтар",
   "equipments": "Оборудования",
   "addequipmentTypes": "Жабдық түрін қосыңыз",
+  "editequipmentTypes": "Жабдықтың түрлерін редакциялау",
   "mqttConnectionError": "Mqtt серверімен байланыс жоқ",
   "scanTag": "Тегті сканерлеу",
   "setTag": "Белгі",
@@ -352,5 +353,6 @@
   "SECONDS_LESS": "Секунд меньше",
   "ammunitionTypes": "Оқ-дәрілердің түрлері",
   "battleUnits": "әскери бөлімдер",
-  "specialOperations": "Арнайы операциялар"
+  "specialOperations": "Арнайы операциялар",
+  "editCondition": "Шартты өзгерту"
 }
