@@ -46,21 +46,21 @@ public class EquipmentController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_GET_BY_ID)
-	@ApiOperation(value = "Return vehicle by id", notes = "Vehicle or BadRequestException")
+	@ApiOperation(value = "Return equipment by id", notes = "Equipment or BadRequestException")
 	public ResponseEntity<Equipment> getById(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID)
-	@ApiOperation(value = "Return all vehicles by division")
+	@ApiOperation(value = "Return all equipment by division")
 	public ResponseEntity<List<Equipment>> getByDivision(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) Long divisionId) throws BadRequestException {
 		return new ResponseEntity<>(service.getAllByDivision(divisionId), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID)
-	@ApiOperation(value = "Return all vehicle  where owner person with id")
+	@ApiOperation(value = "Return all equipment  where owner person with id")
 	public ResponseEntity<List<Equipment>> getByPerson(@PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(service.getAllByPerson(personId), HttpStatus.OK);
 	}
@@ -95,13 +95,13 @@ public class EquipmentController {
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_POST_ADD_OWNER)
-	@ApiOperation(value = "Return updated equipment", notes = "Return updated vehicle object")
+	@ApiOperation(value = "Return updated equipment", notes = "Return updated equipment object")
 	public ResponseEntity<Equipment> postAddOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) Long id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PERSON_ID) Long personId) throws BadRequestException {
 		return new ResponseEntity<>(service.addOwner(id, personId), HttpStatus.OK);
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.EQUIPMENT_CONTROLLER_POST_REMOVE_OWNER)
-	@ApiOperation(value = "Return updated equipment, with owner null", notes = "Return updated vehicle object")
+	@ApiOperation(value = "Return updated equipment, with owner null", notes = "Return updated equipment object")
 	public ResponseEntity<Equipment> postRemoveOwner(@PathVariable(value = ControllerAPI.PATH_VARIABLE_EQUIPMENT_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(service.addOwner(id, null), HttpStatus.OK);
 	}

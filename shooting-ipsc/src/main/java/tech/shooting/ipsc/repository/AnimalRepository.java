@@ -12,7 +12,7 @@ import tech.shooting.ipsc.pojo.Person;
 import java.util.List;
 
 @Repository
-public interface AnimalRepository extends MongoRepository<Animal, Long> {
+public interface AnimalRepository extends MongoRepository<Animal, Long>, CustomAnimalRepository {
 
 	Animal findByName(String serial);
 
@@ -22,9 +22,9 @@ public interface AnimalRepository extends MongoRepository<Animal, Long> {
 
 	Page<Animal> findByOwnerIn(List<Person> persons, PageRequest pageable);
 
-	List<Animal> findByOwnerAndAnimalType(Person person, AnimalType type);
+	List<Animal> findByOwnerAndType(Person person, AnimalType type);
 
-	List<Animal> findByOwnerAndAnimalTypeId(Person person, Long typeId);
+	List<Animal> findByOwnerAndTypeId(Person person, Long typeId);
 
-	long countByOwnerAndAnimalTypeId(Person person, Long typeId);
+	long countByOwnerAndTypeId(Person person, Long typeId);
 }

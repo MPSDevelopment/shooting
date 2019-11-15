@@ -28,9 +28,9 @@ public class Animal extends BaseDocument {
     private String name;
 
     @JsonProperty
-    @ApiModelProperty(value = "Animal type name", required = true)
+    @ApiModelProperty(value = "Animal type", required = true)
     @DBRef
-    private AnimalType animalType;
+    private AnimalType type;
 
     @DBRef
     @JsonProperty

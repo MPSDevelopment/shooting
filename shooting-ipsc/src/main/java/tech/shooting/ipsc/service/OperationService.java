@@ -154,7 +154,7 @@ public class OperationService {
 					break;
 				}
 				case ANIMAL_TYPE_HEADER: {
-					participantData.add(String.valueOf(animalRepository.countByOwnerAndAnimalTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(animalRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				case VEHICLE_TYPE_HEADER: {

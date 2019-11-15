@@ -19,7 +19,7 @@ import tech.shooting.ipsc.repository.UserRepository;
 public class BaseControllerTest {
 
 	@Autowired
-	private UserRepository userRepository;
+	protected UserRepository userRepository;
 
 	@Autowired
 	protected MockMvc mockMvc;

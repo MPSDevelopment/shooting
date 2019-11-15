@@ -41,6 +41,7 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_WEAPON_ID = "weaponId";
 	public static final String PATH_VARIABLE_VEHICLE_ID = "vehicleId";
 	public static final String PATH_VARIABLE_EQUIPMENT_ID = "equipmentId";
+	public static final String PATH_VARIABLE_ANIMAL_ID = "animalId";
 	public static final String PATH_VARIABLE_TYPE_ID = "typeId";
 	public static final String PATH_VARIABLE_INTERVAL = "interval";
 	public static final String PATH_VARIABLE_DATE = "date";
@@ -63,6 +64,7 @@ public class ControllerAPI {
 	public static final String REQUEST_WEAPON_ID = "{" + PATH_VARIABLE_WEAPON_ID + "}";
 	public static final String REQUEST_VEHICLE_ID = "{" + PATH_VARIABLE_VEHICLE_ID + "}";
 	public static final String REQUEST_EQUIPMENT_ID = "{" + PATH_VARIABLE_EQUIPMENT_ID + "}";
+	public static final String REQUEST_ANIMAL_ID = "{" + PATH_VARIABLE_ANIMAL_ID + "}";
 	public static final String REQUEST_TYPE_ID = "{" + PATH_VARIABLE_TYPE_ID + "}";
 	public static final String REQUEST_DIVISION_ID = "{" + PATH_VARIABLE_DIVISION_ID + "}";
 	public static final String REQUEST_CATEGORY_ID = "{" + PATH_VARIABLE_CATEGORY_ID + "}";
@@ -371,6 +373,19 @@ public class ControllerAPI {
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
+	
+	// animal section
+	public static final String ANIMAL_CONTROLLER = "/api/animal";
+	public static final String ANIMAL_CONTROLLER_GET_ALL = "/all";
+	public static final String ANIMAL_CONTROLLER_GET_BY_ID = "/" + REQUEST_ANIMAL_ID;
+	public static final String ANIMAL_CONTROLLER_POST = "/create";
+	public static final String ANIMAL_CONTROLLER_PUT = "/edit";
+	public static final String ANIMAL_CONTROLLER_DELETE_BY_ID = "/delete/" + REQUEST_ANIMAL_ID;
+	public static final String ANIMAL_CONTROLLER_POST_ADD_OWNER = "/" + REQUEST_ANIMAL_ID + "/" + REQUEST_PERSON_ID;
+	public static final String ANIMAL_CONTROLLER_POST_REMOVE_OWNER = "/" + REQUEST_ANIMAL_ID + "/remove";
+	public static final String ANIMAL_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
+	public static final String ANIMAL_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
+	public static final String ANIMAL_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
 
 	public static final String STANDARD_CONTROLLER = "/api/standard";
 	public static final String STANDARD_CONTROLLER_GET_ALL = "/get/all";
