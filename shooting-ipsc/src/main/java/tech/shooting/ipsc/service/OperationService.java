@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +13,8 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
-import tech.shooting.ipsc.bean.StandardBean;
-import tech.shooting.ipsc.bean.StandardCommonConditionsBean;
-import tech.shooting.ipsc.enums.UnitEnum;
-import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationSymbol;
-import tech.shooting.ipsc.pojo.StandardCommonConditions;
 import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.repository.AmmoTypeRepository;
 import tech.shooting.ipsc.repository.AnimalRepository;
@@ -150,7 +143,7 @@ public class OperationService {
 					break;
 				}
 				case AMMO_TYPE_HEADER: {
-
+					
 					break;
 				}
 				case ANIMAL_TYPE_HEADER: {
