@@ -115,11 +115,11 @@ public class CompetitionService {
 
 	public void removeCompetition(Long id) throws BadRequestException {
 		Competition competition = checkCompetition(id);
-		
+
 		if (competition.isActive()) {
 			throw new BadRequestException(new ErrorMessage("Cannot delete active competition %s", competition.getName()));
 		}
-		
+
 		competitionRepository.delete(competition);
 	}
 
@@ -458,9 +458,9 @@ public class CompetitionService {
 		result.add(scoreResult);
 		competitor.setResult(result);
 		saveAndReturn(competition, competitor, false);
-		
+
 		EventBus.publishEvent(new CompetitionUpdatedEvent(competition.getId(), "Competition %s added score", competition.getName()));
-		
+
 		return scoreResult;
 	}
 
@@ -507,9 +507,9 @@ public class CompetitionService {
 		double maxRating = 0;
 
 		for (Long personId : map.keySet()) {
-			
+
 			List<Score> personScores = map.get(personId);
-			
+
 			RatingBean personalRating = new RatingBean();
 			personalRating.setPersonId(personId);
 			personalRating.setScores(personScores);
@@ -579,5 +579,19 @@ public class CompetitionService {
 		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stopped", competiton.getName()));
 		log.info("Competition %s stopped", competiton.getName());
 		return competiton;
+	}
+
+	public Stage completeStage(Long competitionId, Long stageId) throws BadRequestException {
+		Competition competition = checkCompetition(competitionId);
+		Stage stage = findStage(competition, stageId);
+		stage.setCompleted(true);
+		EventBus.publishEvent(new CompetitionUpdatedEvent(competitionId, "Stage %s completed", stage.getName()));
+		log.info("Stage %s completed", stage.getName());
+		competitionRepository.save(competition);
+		return stage;
+	}
+
+	private Stage findStage(Competition competition, Long stageId) {
+		return competition.getStages().stream().filter((stage) -> stage.getId().equals(stageId)).findAny().get();
 	}
 }

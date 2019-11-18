@@ -176,6 +176,7 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_GET_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_DELETE_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
 	public static final String COMPETITION_CONTROLLER_PUT_STAGE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID;
+	public static final String COMPETITION_CONTROLLER_POST_STAGE_COMPLETE = "/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/complete";
 	public static final String COMPETITION_CONTROLLER_GET_SCORE_LIST_BY_STAGE = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
 	public static final String COMPETITION_CONTROLLER_GET_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/score/list";
 	public static final String COMPETITION_CONTROLLER_GET_RATING = "/competition/" + REQUEST_COMPETITION_ID + "/rating";
@@ -373,7 +374,7 @@ public class ControllerAPI {
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_DIVISION_ID = "/all/by/division/" + REQUEST_DIVISION_ID;
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_OWNER_ID = "/all/by/person/" + REQUEST_PERSON_ID;
 	public static final String EQUIPMENT_CONTROLLER_GET_ALL_BY_PERSON_NAME_AND_DIVISION_ID = "/all/by/person/" + REQUEST_PERSON_NAME + "/division/" + REQUEST_DIVISION_ID;
-	
+
 	// animal section
 	public static final String ANIMAL_CONTROLLER = "/api/animal";
 	public static final String ANIMAL_CONTROLLER_GET_ALL = "/all";
@@ -426,10 +427,10 @@ public class ControllerAPI {
 	public static final String SETTINGS_CONTROLLER = "/api/settings";
 	public static final String SETTINGS_CONTROLLER_GET_SETTINGS = "/";
 	public static final String SETTINGS_CONTROLLER_PUT_SETTINGS = "/";
-	
-    public static final String MAP_CONTROLLER = "/api/map";
-    public static final String MAP_CONTROLLER_GET_TILE_URL = "{id}/{z}/{x}/{y}.png";
-    
+
+	public static final String MAP_CONTROLLER = "/api/map";
+	public static final String MAP_CONTROLLER_GET_TILE_URL = "{id}/{z}/{x}/{y}.png";
+
 	public static final String OPERATION_CONTROLLER = "/api/operation";
 	public static final String OPERATION_CONTROLLER_GET_ALL = "/all";
 	public static final String OPERATION_CONTROLLER_POST = "";
@@ -437,6 +438,5 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_PUT_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_DELETE_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders/" + REQUEST_OPERATION_ID;
-	
 
 }

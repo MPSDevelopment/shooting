@@ -156,6 +156,13 @@ public class CompetitionController {
 			throws BadRequestException {
 		return new ResponseEntity<>(competitionService.updateStage(competitionId, stageId, stage), HttpStatus.OK);
 	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_POST_STAGE_COMPLETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Update stage ", notes = "Return updated stage object")
+	public ResponseEntity<Stage> completeStage(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STAGE_ID) Long stageId)
+			throws BadRequestException {
+		return new ResponseEntity<>(competitionService.completeStage(competitionId, stageId), HttpStatus.OK);
+	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_CONST_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
