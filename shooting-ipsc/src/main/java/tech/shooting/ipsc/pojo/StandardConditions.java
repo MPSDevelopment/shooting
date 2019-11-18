@@ -5,12 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Data
 @Accessors(chain = true)
@@ -19,10 +19,12 @@ public class StandardConditions {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Name conditions by rus", required = true)
+	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String conditionsRus;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Name conditions by kz", required = true)
+	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String conditionsKz;
 
 	@JsonProperty

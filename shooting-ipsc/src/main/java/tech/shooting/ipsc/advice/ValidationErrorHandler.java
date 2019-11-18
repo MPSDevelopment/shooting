@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.mongodb.MongoWriteException;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -101,6 +103,15 @@ public class ValidationErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processValidationException(MongoWriteException ex, HttpServletRequest request) {
 		log.error("Database exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
+		return new ErrorMessage(validationErrors);
+	}
+	
+	@ExceptionHandler(DuplicateKeyException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage processDuplicateKeyException(DuplicateKeyException ex, HttpServletRequest request) {
+		log.error("Duplicate key exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
 		return new ErrorMessage(validationErrors);
