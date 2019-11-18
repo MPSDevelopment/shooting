@@ -80,4 +80,8 @@ public class Stage extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Name of fire position")
 	private String location;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Stage completed")
+	private boolean completed = false;
 }
