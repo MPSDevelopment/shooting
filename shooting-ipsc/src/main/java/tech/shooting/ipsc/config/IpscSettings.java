@@ -14,4 +14,6 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ConfigurationProperties(prefix = "ipsc")
 public class IpscSettings {
+	
+	public static final String NAME_REGEXP = "[^0-9+-.]+";
 }

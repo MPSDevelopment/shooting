@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotEmpty;
@@ -36,7 +37,7 @@ public class UserSignupBean {
 	@ApiModelProperty(value = "User's login", required = true)
 	@NotEmpty(message = ValidationConstants.USER_INCORRECT_LOGIN_MESSAGE)
 	@Size(min = 3, max = 50, message = ValidationConstants.USER_LOGIN_MESSAGE)
-	@Pattern(regexp = "[^0-9]+")
+	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String login;
 
 	@JsonProperty

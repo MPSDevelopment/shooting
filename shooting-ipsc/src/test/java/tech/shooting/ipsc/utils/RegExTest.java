@@ -63,7 +63,7 @@ public class RegExTest {
 
 	@Test
 	public void checkUserName() {
-		Pattern pattern = Pattern.compile("[^0-9]+");
+		Pattern pattern = Pattern.compile("[^0-9+-.]+");
 		matcher = pattern.matcher("Thor");
 		assertTrue(matcher.find());
 		matcher = pattern.matcher("1234");
@@ -71,6 +71,12 @@ public class RegExTest {
 		matcher = pattern.matcher("12Thor23");
 		assertTrue(matcher.find());
 		matcher = pattern.matcher("98Thowwr");
+		assertTrue(matcher.find());
+		matcher = pattern.matcher("9.8");
+		assertFalse(matcher.find());
+		matcher = pattern.matcher("9.8+-");
+		assertFalse(matcher.find());
+		matcher = pattern.matcher("9.8+-t");
 		assertTrue(matcher.find());
 	}
 }

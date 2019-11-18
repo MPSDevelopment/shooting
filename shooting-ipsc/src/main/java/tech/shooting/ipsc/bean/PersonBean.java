@@ -8,18 +8,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
 import tech.shooting.ipsc.pojo.Address;
-import tech.shooting.ipsc.pojo.Division;
-import tech.shooting.ipsc.pojo.Rank;
-import tech.shooting.ipsc.pojo.WeaponIpscCode;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,11 +25,13 @@ import java.util.List;
 @ApiModel(value = "Person create")
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class PersonBean{
+public class PersonBean {
+
 	@JsonProperty("userName")
 	@ApiModelProperty(value = "Person's name", required = true)
 	@NotNull(message = ValidationConstants.PERSON_NAME_MESSAGE)
 	@Size(min = 3, max = 20, message = ValidationConstants.PERSON_NAME_MESSAGE)
+	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String name;
 
 	@JsonProperty
@@ -64,9 +64,9 @@ public class PersonBean{
 
 	@JsonProperty("level")
 	@ApiModelProperty(value = "Person's qualifier rank", required = true)
-	@NotNull(message= ValidationConstants.LEVEL_MESSAGE)
+	@NotNull(message = ValidationConstants.LEVEL_MESSAGE)
 	private ClassificationBreaks qualifierRank;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Person's rfid code")
 	private String rfidCode;
@@ -74,7 +74,7 @@ public class PersonBean{
 	@JsonProperty
 	@ApiModelProperty(value = "Person's number code")
 	private String number;
-	
+
 	@JsonProperty
 	@ApiModelProperty(value = "Person's call")
 	private String call;

@@ -10,6 +10,8 @@ public class ValidationConstants {
 	public static final String USER_NAME_MESSAGE = "Min 3 character";
 
 	public static final String USER_LOGIN_MESSAGE = "Min 3 character";
+	
+	public static final String NAME_ONLY_DIGITS_MESSAGE = "Only digits not allowed";
 
 	public static final String USER_INCORRECT_LOGIN_MESSAGE = "Incorrect login";
 

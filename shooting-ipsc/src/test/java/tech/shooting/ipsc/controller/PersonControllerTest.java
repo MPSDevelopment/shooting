@@ -169,6 +169,17 @@ public class PersonControllerTest {
 		assertEquals(personBean.getName(), person.getName());
 		assertEquals(personBean.getRank(), person.getRank().getId());
 		assertEquals(personBean.getQualifierRank(), person.getQualifierRank());
+		
+		// try to create a person with wrong names
+		json = JacksonUtils.getJson(personBean.setName("+"));
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).header(Token.TOKEN_HEADER, adminToken).content(json)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		json = JacksonUtils.getJson(personBean.setName("."));
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).header(Token.TOKEN_HEADER, adminToken).content(json)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		json = JacksonUtils.getJson(personBean.setName("-"));
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.PERSON_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_POST_PERSON).header(Token.TOKEN_HEADER, adminToken).content(json)
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
