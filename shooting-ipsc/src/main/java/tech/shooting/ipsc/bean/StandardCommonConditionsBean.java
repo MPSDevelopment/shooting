@@ -1,10 +1,13 @@
 package tech.shooting.ipsc.bean;
 
+import javax.validation.constraints.Positive;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.UnitEnum;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 @Data
 @Accessors(chain = true)
@@ -19,6 +22,7 @@ public class StandardCommonConditionsBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
+    @Positive(message = ValidationConstants.POSITIVE_MESSAGE)
     private Double coefficient;
 
     @JsonProperty

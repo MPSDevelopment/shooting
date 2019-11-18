@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.enums.UnitEnum;
+import tech.shooting.ipsc.validator.ValidationConstants;
+
+import javax.validation.constraints.Positive;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -24,6 +27,7 @@ public class StandardConditions {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Standard coefficient", required = true)
+	@Positive(message = ValidationConstants.POSITIVE_MESSAGE)
 	private Double coefficient;
 
 	@JsonProperty

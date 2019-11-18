@@ -5,11 +5,15 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.Positive;
+
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.enums.UnitEnum;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 @Data
 @Accessors(chain = true)
@@ -29,6 +33,7 @@ public class StandardCommonConditions  extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Standard coefficient time for this conditions", required = true)
+    @Positive(message = ValidationConstants.POSITIVE_MESSAGE)
     private Double coefficient;
 
     @JsonProperty
