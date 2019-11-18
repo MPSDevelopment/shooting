@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -143,5 +144,13 @@ public class WeaponRepositoryTest {
 		assertEquals(0, count);
 		count = weaponRepository.countByOwnerAndWeaponTypeId(otherPerson, otherWeaponType.getId());
 		assertEquals(1, count);
+	}
+
+	@Test
+	public void save() {
+		assertThrows(DuplicateKeyException.class, () -> {
+			Weapon weapon = new Weapon().setCount(20).setOwner(person).setWeaponType(weaponType).setSerialNumber("AD32434234");
+			weaponRepository.save(weapon);
+		});
 	}
 }

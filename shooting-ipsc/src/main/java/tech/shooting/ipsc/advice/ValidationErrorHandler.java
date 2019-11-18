@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tech.shooting.commons.exception.*;
 import tech.shooting.commons.pojo.ErrorMessage;
+import tech.shooting.ipsc.utils.ExceptionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.UnexpectedTypeException;
@@ -99,19 +100,19 @@ public class ValidationErrorHandler {
 		return e.getErrorMessage();
 	}
 	
-	@ExceptionHandler(MongoWriteException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processValidationException(MongoWriteException ex, HttpServletRequest request) {
-		log.error("Database exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
-		Map<String, String> validationErrors = new HashMap<>();
-		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
-		return new ErrorMessage(validationErrors);
-	}
-	
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage processDuplicateKeyException(DuplicateKeyException ex, HttpServletRequest request) {
 		log.error("Duplicate key exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
+		return new ErrorMessage(validationErrors);
+	}
+	
+	@ExceptionHandler(MongoWriteException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage processValidationException(MongoWriteException ex, HttpServletRequest request) {
+		log.error("Database exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(DEFAULT_FIELD, ex.getMessage());
 		return new ErrorMessage(validationErrors);
