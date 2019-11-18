@@ -102,12 +102,12 @@ public class ValidationErrorHandler {
 	
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorMessage processDuplicateKeyException(DuplicateKeyException ex, HttpServletRequest request) {
+	public Map<String, String> processDuplicateKeyException(DuplicateKeyException ex, HttpServletRequest request) {
 		log.error("Duplicate key exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		log.error("Duplicate key exception field %s value %s", ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
-		return new ErrorMessage(validationErrors);
+		return validationErrors;
 	}
 	
 	@ExceptionHandler(MongoWriteException.class)
