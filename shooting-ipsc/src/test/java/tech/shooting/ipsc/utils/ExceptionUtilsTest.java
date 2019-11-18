@@ -12,11 +12,11 @@ public class ExceptionUtilsTest {
 
 	@Test
 	public void getDuplicateKeyErrorField() {
-		assertEquals("serialNumber", ExceptionUtils.getDuplicateKeyErrorField("index: serialNumber dup key: { : \"AD32434234\" }"));
+		assertEquals("passportNumber", ExceptionUtils.getDuplicateKeyErrorField("E11000 duplicate key error collection: shooting.vehicle index: passportNumber dup key: { : \"2342\" }; nested exception is "));
 	}
 	
 	@Test
 	public void getDuplicateKeyErrorValue() {
-		assertEquals("AD32434234", ExceptionUtils.getDuplicateKeyErrorValue("index: serialNumber dup key: { : \"AD32434234\" }"));
+		assertEquals("2342", ExceptionUtils.getDuplicateKeyErrorValue("E11000 duplicate key error collection: shooting.vehicle index: passportNumber dup key: { : \"2342\" }; nested exception is "));
 	}
 }
