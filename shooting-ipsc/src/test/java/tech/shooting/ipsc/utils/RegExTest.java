@@ -13,8 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class RegExTest {
+
+	private Matcher matcher;
+
 	@Test
-	public void checkSwagger () {
+	public void checkSwagger() {
 		Pattern pattern = Pattern.compile(".*/v[0123456789.]*/.*");
 		Matcher matcher = pattern.matcher("/operations/v1.0/gufi");
 		assertTrue(matcher.find());
@@ -32,10 +35,10 @@ public class RegExTest {
 	}
 
 	@Test
-	public void checkAnswer () {
+	public void checkAnswer() {
 		Pattern pattern = Pattern.compile("^((?!state|government|head).)*$");
 		String s = "state of";
-		Matcher matcher = pattern.matcher(s);
+		matcher = pattern.matcher(s);
 		assertFalse(matcher.find());
 		s = "government of";
 		matcher = pattern.matcher(s);
@@ -49,12 +52,25 @@ public class RegExTest {
 	}
 
 	@Test
-	public void checkApi () {
+	public void checkApi() {
 		Pattern pattern = Pattern.compile("^(?!/(api|doc|swagger|webjars|image|error)).*$");
 		String s = "/api/auth";
-		Matcher matcher = pattern.matcher(s);
+		matcher = pattern.matcher(s);
 		assertFalse(matcher.find());
 		matcher = pattern.matcher("/index.html");
+		assertTrue(matcher.find());
+	}
+
+	@Test
+	public void checkUserName() {
+		Pattern pattern = Pattern.compile("[^0-9]+");
+		matcher = pattern.matcher("Thor");
+		assertTrue(matcher.find());
+		matcher = pattern.matcher("1234");
+		assertFalse(matcher.find());
+		matcher = pattern.matcher("12Thor23");
+		assertTrue(matcher.find());
+		matcher = pattern.matcher("98Thowwr");
 		assertTrue(matcher.find());
 	}
 }

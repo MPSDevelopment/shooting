@@ -125,6 +125,12 @@ public class UserControllerTest {
 		// try to create the same user with admin token
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON)
 				.content(userJson)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		
+		userJson = JacksonUtils.getJson(userSignupBean.setLogin("1234"));
+		// try to create the a user with login numbers
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.USER_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.USER_CONTROLLER_POST_JUDGE).header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON)
+				.content(userJson)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		
 	}
 
 	@Test

@@ -12,6 +12,7 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
@@ -22,6 +23,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class UserSignupBean {
+	
 	public static final String LOGIN_FIELD = "login";
 
 	public static final String PASSWORD_FIELD = "password";
@@ -34,6 +36,7 @@ public class UserSignupBean {
 	@ApiModelProperty(value = "User's login", required = true)
 	@NotEmpty(message = ValidationConstants.USER_INCORRECT_LOGIN_MESSAGE)
 	@Size(min = 3, max = 50, message = ValidationConstants.USER_LOGIN_MESSAGE)
+	@Pattern(regexp = "[^0-9]+")
 	private String login;
 
 	@JsonProperty
