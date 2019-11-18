@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 public class ExceptionUtils {
 
-	private static final String DUPLICATE_ERROR_PATTERN_FIELD = ".*: (.*) dup key:.*";
+	private static final String DUPLICATE_ERROR_PATTERN_FIELD = ".*index: (.*) dup key:.*";
 	
-	private static final String DUPLICATE_ERROR_PATTERN_VALUE = ".*\\{ : \"(.*)\" \\}.*";
+	private static final String DUPLICATE_ERROR_PATTERN_VALUE = ".*dup key: \\{ : \"(.*)\" \\}.*";
 
 	public static String getDuplicateKeyErrorField(String value) {
 		Pattern pattern = Pattern.compile(DUPLICATE_ERROR_PATTERN_FIELD);

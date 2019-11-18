@@ -1,10 +1,13 @@
 package tech.shooting.ipsc.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import tech.shooting.commons.constraints.IpscConstants;
+
+@Tag(IpscConstants.UNIT_TEST_TAG)
 public class ExceptionUtilsTest {
 
 	@Test
