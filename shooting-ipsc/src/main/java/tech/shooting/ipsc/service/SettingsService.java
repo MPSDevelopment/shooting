@@ -25,13 +25,15 @@ public class SettingsService {
 	public Settings putSettings(Settings settings) {
 		var result = getSettings();
 		if (result == null) {
+			result = repository.save(settings.setName(DatabaseCreator.DEFAULT_SETTINGS_NAME));
 			EventBus.publishEvent(new TagRestartEvent(settings.getTagServiceIp()));
-			return repository.save(settings.setName(DatabaseCreator.DEFAULT_SETTINGS_NAME));
+			return result;
 		}
 		if (!Objects.equals(settings.getTagServiceIp(), result.getTagServiceIp())) {
+			BeanUtils.copyProperties(settings, result, Settings.NAME_FIELD, Settings.ID_FIELD);
+			result = repository.save(result);
 			EventBus.publishEvent(new TagRestartEvent(settings.getTagServiceIp()));
 		}
-		BeanUtils.copyProperties(settings, result, Settings.NAME_FIELD, Settings.ID_FIELD);
-		return repository.save(result);
+		return result;
 	}
 }
