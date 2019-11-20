@@ -18,6 +18,14 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Accessors(chain = true)
 public class Operation extends BaseDocument {
 
+	public static final String WEATHER_FIELD = "weather";
+
+	public static final String PARTICIPANTS_FIELD = "participants";
+
+	public static final String MAIN_INDICATORS_FIELD = "mainIndicators";
+
+	public static final String SYMBOLS_FIELD = "symbols";
+
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
 	private Info info;
@@ -26,7 +34,7 @@ public class Operation extends BaseDocument {
 	@ApiModelProperty(value = "Operation weather", required = true)
 	private Weather weather;
 
-	@JsonProperty  
+	@JsonProperty
 	@ApiModelProperty(value = "Operation image path", required = true)
 	private String imagePath;
 
@@ -37,5 +45,9 @@ public class Operation extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Operation symbols list", required = true)
 	private List<OperationSymbol> symbols = new ArrayList<>();
+
+	@JsonProperty
+	@ApiModelProperty(value = "Operation main indicator list", required = true)
+	private List<OperationMainIndicator> mainIndicators = new ArrayList<>();
 
 }

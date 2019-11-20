@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tech.shooting.ipsc.pojo.Operation;
 
 @Repository
-public interface OperationRepository extends MongoRepository<Operation, Long> {
+public interface OperationRepository extends MongoRepository<Operation, Long>, CustomOperationRepository {
 
 }
