@@ -63,6 +63,16 @@ public class PersonService {
 		return personRepository.findAll(pageable);
 	}
 
+	public Page<Person> getPersonListByDivisionPaging(Long divisionId, Integer page, Integer size) {
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
+		if (divisionId != null) {
+			Division division = divisionRepository.findById(divisionId).orElseThrow(() -> new ValidationException(Division.ID_FIELD, "Division with id %s does not exist", divisionId));
+			List<Division> divisions = division.getAllChildren();
+			return personRepository.getPersonListByPage(divisions, pageable);
+		}
+		return personRepository.findAll(pageable);
+	}
+
 	private void createPerson(Person person) {
 		if (personRepository.findByNameAndBirthDate(person.getName(), person.getBirthDate()) != null) {
 			throw new ValidationException(Person.NAME_AND_BIRTHDAY, "Person with name %s and date of birthday %s is already exist", person.getName(), person.getBirthDate());
@@ -133,7 +143,7 @@ public class PersonService {
 		page = Math.max(1, page);
 		page--;
 		size = Math.min(Math.max(10, size), 20);
-		Page<Person> pageOfUsers = getAllPersonsByDivisionPaging(rootId, page, size);
+		Page<Person> pageOfUsers = getPersonListByDivisionPaging(rootId, page, size);
 		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 

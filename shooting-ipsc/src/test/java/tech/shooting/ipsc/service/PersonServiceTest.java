@@ -41,9 +41,17 @@ class PersonServiceTest {
 
 	@Autowired
 	private PersonService personService;
-	
+
 	@Autowired
 	private DivisionService divisionService;
+
+	private Division root;
+
+	private Division first;
+
+	private Division second;
+
+	private Division third;
 
 	@BeforeEach
 	public void before() {
@@ -54,23 +62,49 @@ class PersonServiceTest {
 	@Test
 	void createDivision() {
 
+		createDivisionsAndPersons();
+
+		assertEquals(6, personService.getAllPersonsByDivision(root.getId()).size());
+		assertEquals(3, personService.getAllPersonsByDivision(first.getId()).size());
+		assertEquals(2, personService.getAllPersonsByDivision(second.getId()).size());
+		assertEquals(1, personService.getAllPersonsByDivision(third.getId()).size());
+	}
+
+	@Test
+	public void getAllPersonsByDivisionPaging() {
 		
+		createDivisionsAndPersons();
+
+		var page = personService.getAllPersonsByDivisionPaging(root.getId(), 0, 10);
+		assertEquals(6, page.getTotalElements());
 		
-		Division root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));		
-		Division first = divisionService.createDivisionWithCheck(new DivisionBean().setName("first"), root.getId());
-		Division second = divisionService.createDivisionWithCheck(new DivisionBean().setName("second"), root.getId());
-		Division third = divisionService.createDivisionWithCheck(new DivisionBean().setName("third"), second.getId());
+		page = personService.getAllPersonsByDivisionPaging(first.getId(), 0, 10);
+		assertEquals(3, page.getTotalElements());
+	}
+	
+	@Test
+	public void getPersonListByDivisionPaging() {
 		
+		createDivisionsAndPersons();
+
+		var page = personService.getPersonListByDivisionPaging(root.getId(), 0, 10);
+		assertEquals(6, page.getTotalElements());
+		
+		page = personService.getAllPersonsByDivisionPaging(first.getId(), 0, 10);
+		assertEquals(3, page.getTotalElements());
+	}
+
+	private void createDivisionsAndPersons() {
+		root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
+		first = divisionService.createDivisionWithCheck(new DivisionBean().setName("first"), root.getId());
+		second = divisionService.createDivisionWithCheck(new DivisionBean().setName("second"), root.getId());
+		third = divisionService.createDivisionWithCheck(new DivisionBean().setName("third"), second.getId());
+
 		personRepository.save(new Person().setName("1").setDivision(root));
 		personRepository.save(new Person().setName("2").setDivision(first));
 		personRepository.save(new Person().setName("3").setDivision(first));
 		personRepository.save(new Person().setName("4").setDivision(first));
 		personRepository.save(new Person().setName("5").setDivision(second));
 		personRepository.save(new Person().setName("6").setDivision(third));
-		
-		assertEquals(6, personService.getAllPersonsByDivision(root.getId()).size());
-		assertEquals(3, personService.getAllPersonsByDivision(first.getId()).size());
-		assertEquals(2, personService.getAllPersonsByDivision(second.getId()).size());
-		assertEquals(1, personService.getAllPersonsByDivision(third.getId()).size());
 	}
 }

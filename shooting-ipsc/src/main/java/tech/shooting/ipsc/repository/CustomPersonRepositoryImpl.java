@@ -1,18 +1,22 @@
 package tech.shooting.ipsc.repository;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.GraphLookupOperation;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
-
 import java.util.List;
 
 @Slf4j
@@ -20,6 +24,16 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Override
+	public Page<Person> getPersonListByPage(List<Division> divisionList, PageRequest pageable) {
+		Query query = new Query();
+		if (CollectionUtils.isNotEmpty(divisionList)) {
+			query.addCriteria(Criteria.where(Person.DIVISION).in(divisionList));
+		}
+		
+		return PageableExecutionUtils.getPage(mongoTemplate.find(query.with(pageable), Person.class), pageable, () -> mongoTemplate.count(query, Person.class));
+	}
 
 	public List<Person> findByDivisionId(Long id) {
 		// GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder().from("devision").startWith("parent").connectFrom("parent").connectTo("children").restrict(Criteria.where("id").is(id)).as // GraphLookupOperation

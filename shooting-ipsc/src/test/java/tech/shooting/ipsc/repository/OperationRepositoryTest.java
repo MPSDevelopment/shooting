@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext
 @Tag(IpscConstants.UNIT_TEST_TAG)
 public class OperationRepositoryTest {
+	
 	@Autowired
 	private OperationRepository operationRepository;
 
