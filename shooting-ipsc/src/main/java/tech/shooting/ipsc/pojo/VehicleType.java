@@ -19,6 +19,6 @@ public class VehicleType extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Vehicle type name", required = true)
-	@NotBlank(message = ValidationConstants.VEHICLE_NAME_MESSAGE)
+	@NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
 	private String name;
 }

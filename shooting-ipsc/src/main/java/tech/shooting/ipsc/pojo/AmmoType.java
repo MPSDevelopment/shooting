@@ -21,12 +21,12 @@ public class AmmoType extends BaseDocument {
 
     @JsonProperty
     @ApiModelProperty(value = "Ammunition type name", required = true)
-    @NotBlank(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
+    @NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
     private String name;
     
     @JsonProperty
     @ApiModelProperty(value = "Weapon type", required = true)
-    @NotNull(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
+    @NotNull(message = ValidationConstants.AMMO_TYPE_WEAPON_TYPE_MESSAGE)
     private WeaponType weaponType;
     
     @JsonProperty

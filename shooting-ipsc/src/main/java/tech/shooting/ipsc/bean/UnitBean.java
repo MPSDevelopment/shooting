@@ -14,6 +14,6 @@ public class UnitBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Units name")
-    @NotBlank(message = ValidationConstants.UNIT_NAME_MESSAGE)
+    @NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
     private String name;
 }

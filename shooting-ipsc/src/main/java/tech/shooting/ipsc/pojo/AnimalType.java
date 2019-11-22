@@ -21,6 +21,6 @@ public class AnimalType extends BaseDocument {
     
 	@JsonProperty
     @ApiModelProperty(value = "Animal type name", required = true)
-    @NotBlank(message = ValidationConstants.ANIMAL_TYPE_NAME_MESSAGE)
+    @NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
     private String name;
 }

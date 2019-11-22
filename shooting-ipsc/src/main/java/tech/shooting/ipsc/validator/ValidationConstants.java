@@ -96,23 +96,15 @@ public class ValidationConstants {
 
 	public static final String NUMBER_MAX_MESSAGE = "Number must be max 4";
 
-	public static final String SPECIALITY_MESSAGE = "The speciality length must be not blank";
-
 	public static final String SPECIALITY_SIZE_MESSAGE = "The speciality length must be min 3 characters";
 
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
 
-	public static final String WEAPON_TYPE_NAME_MESSAGE = "Weapon type name must be not blank";
-
-	public static final String COMMUNICATION_EQUIPMENT_NAME_MESSAGE = "Communication equipment type name must be not blank";
-
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_MESSAGE = "Communication equipment type must be not null";
-
-	public static final String EQUIPMENT_NAME_MESSAGE = "Equipment type name must be not blank";
 
 	public static final String EQUIPMENT_TYPE_MESSAGE = "Equipment type must be not null";
 
-	public static final String VEHICLE_NAME_MESSAGE = "Vehicle type name must be not blank";
+	public static final String NAME_NOT_BLANK_MESSAGE = "Name must be not blank";
 
 	public static final String SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
 	
@@ -124,19 +116,11 @@ public class ValidationConstants {
 
 	public static final String PASSPORT_NUMBER_NUMBER_MESSAGE = "Passport number 7 characters min";
 
-	public static final String UNIT_NAME_MESSAGE = "Unit name must be not blank";
-
 	public static final String COURSE_NAME_MESSAGE = "Course name must be min 3 characters";
-
-	public static final String ANIMAL_TYPE_NAME_MESSAGE = "Animal type name must be not blank";
-
-	public static final String AMMO_TYPE_NAME_MESSAGE = "Ammunition type name must be not blank";
 	
 	public static final String AMMO_TYPE_WEAPON_TYPE_MESSAGE = "Ammunition weapon type name must not be null";
 	
 	public static final String AMMO_TYPE_COUNT_MESSAGE = "Must be 0 or greater";
-	
-	public static final String LEGEND_TYPE_NAME_MESSAGE = "Legend type name must be not blank";
 
 	public static final String LEGEND_TYPE_MESSAGE = "Legend type must be not null";
 

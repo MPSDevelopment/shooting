@@ -21,7 +21,7 @@ public class CommunicationEquipmentType extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Communication equipment type name", required = true)
-	@NotBlank(message = ValidationConstants.COMMUNICATION_EQUIPMENT_NAME_MESSAGE)
+	@NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
 	private String name;
 	
 	@JsonProperty

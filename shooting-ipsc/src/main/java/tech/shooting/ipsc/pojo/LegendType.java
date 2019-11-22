@@ -21,7 +21,7 @@ public class LegendType extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Legend type name", required = true)
-	@NotBlank(message = ValidationConstants.LEGEND_TYPE_NAME_MESSAGE)
+	@NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
 	private String name;
 	
 	@JsonProperty

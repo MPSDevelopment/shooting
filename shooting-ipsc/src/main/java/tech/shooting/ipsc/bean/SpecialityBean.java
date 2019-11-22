@@ -14,13 +14,13 @@ import javax.validation.constraints.Size;
 public class SpecialityBean {
     @JsonProperty
     @ApiModelProperty(value = "Speciality name in rus", required = true)
-    @NotBlank(message = ValidationConstants.SPECIALITY_MESSAGE)
+    @NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
     @Size(min = 3, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
     private String specialityRus;
 
     @JsonProperty
     @ApiModelProperty(value = "Speciality name in kz", required = true)
-    @NotBlank(message = ValidationConstants.SPECIALITY_MESSAGE)
+    @NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
     @Size(min = 3, message = ValidationConstants.SPECIALITY_SIZE_MESSAGE)
     private String specialityKz;
 }

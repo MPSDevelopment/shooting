@@ -21,7 +21,7 @@ public class AmmoTypeBean {
     
     @JsonProperty
     @ApiModelProperty(value = "Weapon type", required = true)
-    @NotNull(message = ValidationConstants.AMMO_TYPE_NAME_MESSAGE)
+    @NotNull(message = ValidationConstants.AMMO_TYPE_WEAPON_TYPE_MESSAGE)
     private Long weaponTypeId;
     
     @JsonProperty

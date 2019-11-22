@@ -22,7 +22,7 @@ public class EquipmentType extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Equipment type name", required = true)
-	@NotBlank(message = ValidationConstants.EQUIPMENT_NAME_MESSAGE)
+	@NotBlank(message = ValidationConstants.NAME_NOT_BLANK_MESSAGE)
 	private String name;
 	
 	@JsonProperty
