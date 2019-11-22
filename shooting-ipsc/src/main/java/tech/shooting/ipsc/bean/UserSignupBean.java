@@ -37,7 +37,7 @@ public class UserSignupBean {
 	@ApiModelProperty(value = "User's login", required = true)
 	@NotEmpty(message = ValidationConstants.USER_INCORRECT_LOGIN_MESSAGE)
 	@Size(min = 3, max = 50, message = ValidationConstants.USER_LOGIN_MESSAGE)
-	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
+	@Pattern(regexp = ValidationConstants.NAME_PATTERN, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String login;
 
 	@JsonProperty

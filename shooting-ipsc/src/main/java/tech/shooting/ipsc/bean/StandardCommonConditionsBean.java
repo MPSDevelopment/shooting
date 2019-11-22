@@ -16,12 +16,12 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 public class StandardCommonConditionsBean {
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by rus", required = true)
-    @Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
+    @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
     private String conditionsRus;
 
     @JsonProperty
     @ApiModelProperty(value = "Name conditions by kz", required = true)
-    @Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
+    @Pattern(regexp = ValidationConstants.NAME_PATTERN, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
     private String conditionsKz;
 
     @JsonProperty

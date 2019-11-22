@@ -25,7 +25,7 @@ public class UserUpdateBean {
 	@ApiModelProperty(value = "User's name")
 	@NotNull(message = ValidationConstants.USER_NAME_MESSAGE)
 //	@Size(min = 5, max = 50, message = ValidationConstants.USER_NAME_MESSAGE)
-	@Pattern(regexp = IpscSettings.NAME_REGEXP, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
+	@Pattern(regexp = ValidationConstants.NAME_PATTERN, message = ValidationConstants.NAME_ONLY_DIGITS_MESSAGE)
 	private String name;
 
 	@JsonProperty
