@@ -23,7 +23,7 @@ public class WeaponBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of weapon", required = true)
-    @Size(min = 3, max = 30, message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.SERIAL_NUMBER_MESSAGE)
     //example AK-74 №4405222
     private String serialNumber;
 

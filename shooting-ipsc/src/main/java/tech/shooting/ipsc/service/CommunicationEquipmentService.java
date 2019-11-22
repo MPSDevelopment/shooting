@@ -8,24 +8,14 @@ import org.springframework.stereotype.Service;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.CommunicationEquipmentBean;
-import tech.shooting.ipsc.bean.VehicleBean;
-import tech.shooting.ipsc.bean.WeaponBean;
 import tech.shooting.ipsc.pojo.CommunicationEquipmentType;
 import tech.shooting.ipsc.pojo.CommunicationEquipment;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
-import tech.shooting.ipsc.pojo.Vehicle;
-import tech.shooting.ipsc.pojo.VehicleType;
-import tech.shooting.ipsc.pojo.Weapon;
-import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.repository.CommunicationEquipmentRepository;
 import tech.shooting.ipsc.repository.CommunicationEquipmentTypeRepository;
 import tech.shooting.ipsc.repository.DivisionRepository;
 import tech.shooting.ipsc.repository.PersonRepository;
-import tech.shooting.ipsc.repository.VehicleRepository;
-import tech.shooting.ipsc.repository.VehicleTypeRepository;
-import tech.shooting.ipsc.repository.WeaponRepository;
-import tech.shooting.ipsc.repository.WeaponTypeRepository;
 
 @Service
 public class CommunicationEquipmentService {

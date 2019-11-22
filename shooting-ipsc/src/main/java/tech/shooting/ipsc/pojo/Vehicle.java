@@ -24,14 +24,14 @@ public class Vehicle extends BaseDocument {
     @JsonProperty
     @Indexed(unique = true)
     @ApiModelProperty(value = "Serial number of vehicle", required = true)
-    @NotBlank(message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE )
-    @Min(value = 7,message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
+    @NotBlank(message = ValidationConstants.SERIAL_NUMBER_MESSAGE )
+    @Min(value = 7,message = ValidationConstants.SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
     
     @JsonProperty
     @Indexed(unique = true)
     @ApiModelProperty(value = "Passport number of vehicle", required = true)
-    @Min(value = 7,message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
+    @Min(value = 7,message = ValidationConstants.PASSPORT_NUMBER_MESSAGE)
     private String passportNumber;
     
     @JsonProperty

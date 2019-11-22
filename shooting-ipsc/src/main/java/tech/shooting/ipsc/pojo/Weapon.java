@@ -24,8 +24,8 @@ public class Weapon extends BaseDocument {
     @JsonProperty
     @Indexed(unique = true)
     @ApiModelProperty(value = "Serial number of weapon", required = true)
-    @NotBlank(message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE )
-    @Min(value = 7,message = ValidationConstants.WEAPON_SERIAL_NUMBER_MESSAGE)
+    @NotBlank(message = ValidationConstants.SERIAL_NUMBER_MESSAGE )
+    @Min(value = 7,message = ValidationConstants.SERIAL_NUMBER_MESSAGE)
     //example AK-74 №4405222
     private String serialNumber;
 

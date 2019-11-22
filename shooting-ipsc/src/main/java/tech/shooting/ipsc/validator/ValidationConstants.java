@@ -102,25 +102,21 @@ public class ValidationConstants {
 
 	public static final String WEAPON_COUNT_MESSAGE = "Must be 0 or greater";
 
-	public static final String WEAPON_SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
-
 	public static final String WEAPON_TYPE_NAME_MESSAGE = "Weapon type name must be not blank";
 
 	public static final String COMMUNICATION_EQUIPMENT_NAME_MESSAGE = "Communication equipment type name must be not blank";
 
 	public static final String COMMUNICATION_EQUIPMENT_TYPE_MESSAGE = "Communication equipment type must be not null";
 
-	public static final String COMMUNICATION_EQUIPMENT_SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
-
 	public static final String EQUIPMENT_NAME_MESSAGE = "Equipment type name must be not blank";
 
 	public static final String EQUIPMENT_TYPE_MESSAGE = "Equipment type must be not null";
-	
-	public static final String EQUIPMENT_SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
 
 	public static final String VEHICLE_NAME_MESSAGE = "Vehicle type name must be not blank";
 
-	public static final String VEHICLE_SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
+	public static final String SERIAL_NUMBER_MESSAGE = "Serial number from 3 to 30 characters";
+	
+	public static final String PASSPORT_NUMBER_MESSAGE = "Passport number from 3 to 30 characters";
 
 	public static final String VEHICLE_COUNT_MESSAGE = "Must be 0 or greater";
 
@@ -149,4 +145,6 @@ public class ValidationConstants {
 	public static final String ANIMAL_NAME_MESSAGE = "Animal name must be from 3 to 30 characters";
 	
 	public static final String POSITIVE_MESSAGE = "The value must be not null and positive";
+
+	public static final String DUPLICATE_KEY_MESSAGE = "Duplicate key value";
 }

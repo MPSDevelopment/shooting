@@ -23,7 +23,7 @@ public class EquipmentBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of equipment", required = true)
-    @Size(min = 3, max = 30, message = ValidationConstants.EQUIPMENT_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
 
     @JsonProperty("equipmentType")

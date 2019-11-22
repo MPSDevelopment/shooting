@@ -26,12 +26,13 @@ public class VehicleBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Serial number of vehicle", required = true)
-    @Size(min = 3, max = 30, message = ValidationConstants.VEHICLE_SERIAL_NUMBER_MESSAGE)
+    @Size(min = 3, max = 30, message = ValidationConstants.SERIAL_NUMBER_MESSAGE)
     private String serialNumber;
     
     @JsonProperty
     @Indexed(unique = true)
     @ApiModelProperty(value = "Passport number of vehicle", required = true)
+    @Size(min = 3, max = 30, message = ValidationConstants.PASSPORT_NUMBER_MESSAGE)
     private String passportNumber;
     
     @JsonProperty

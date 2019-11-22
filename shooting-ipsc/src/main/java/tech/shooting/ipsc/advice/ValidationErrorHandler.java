@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tech.shooting.commons.exception.*;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.utils.ExceptionUtils;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.UnexpectedTypeException;
@@ -106,7 +107,7 @@ public class ValidationErrorHandler {
 		log.error("Duplicate key exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
 		log.error("Duplicate key exception field %s value %s", ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
 		Map<String, String> validationErrors = new HashMap<>();
-		validationErrors.put(ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
+		validationErrors.put(ExceptionUtils.getDuplicateKeyErrorField(ex.getMessage()), ValidationConstants.DUPLICATE_KEY_MESSAGE + " : " + ExceptionUtils.getDuplicateKeyErrorValue(ex.getMessage()));
 		return validationErrors;
 	}
 	
