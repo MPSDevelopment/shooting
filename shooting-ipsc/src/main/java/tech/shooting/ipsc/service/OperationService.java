@@ -14,6 +14,8 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationMainIndicator;
+import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.repository.AmmoTypeRepository;
@@ -202,15 +204,19 @@ public class OperationService {
 	}
 
 	public void setWeather(Long id, Weather weather) throws BadRequestException {
-		var operation = checkOperation(id);
-		operation.setWeather(weather);
-		operationRepository.save(operation);
+		operationRepository.setWeatherToOperation(id, weather);
 	}
 
 	public void setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
-		var operation = checkOperation(id);
-		operation.setSymbols(symbols);
-		operationRepository.save(operation);
+		operationRepository.setSymbolsToOperation(id, symbols);
+	}
+	
+	public void setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
+		operationRepository.setMainIndicatorsToOperation(id, indicators);
+	}
+	
+	public void setParticipantsToOperation(Long id, List<OperationParticipant> participants) throws BadRequestException {
+		operationRepository.setParticipantsToOperation(id, participants);
 	}
 
 }

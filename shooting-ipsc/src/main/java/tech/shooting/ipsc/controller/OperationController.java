@@ -15,6 +15,10 @@ import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationMainIndicator;
+import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationSymbol;
+import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.service.OperationService;
 import javax.validation.Valid;
 import java.util.List;
@@ -64,5 +68,39 @@ public class OperationController {
 	@ApiOperation(value = "Get operation combat list headers")
 	public ResponseEntity<List<OperationCombatListHeaderBean>> getOperationCombatListHeaders(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getHeaders(), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get operation combat list data")
+	public ResponseEntity<List<List<String>>> getOperationCombatListData(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(operationService.getCombatListData(id, operationService.getHeaders()), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_WEATHER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set operation weather")
+	public ResponseEntity<SuccessfulMessage> setWeather(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid Weather weather) throws BadRequestException {
+		operationService.setWeather(id, weather);
+		return new ResponseEntity<>(new SuccessfulMessage("Weather was successfully saved"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SYMBOLS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set operation symbols")
+	public ResponseEntity<SuccessfulMessage> setWeather(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSymbol> symbols) throws BadRequestException {
+		operationService.setSymbols(id, symbols);
+		return new ResponseEntity<>(new SuccessfulMessage("Symbols ware successfully saved"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_MAIN_INDICATORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set operation symbols")
+	public ResponseEntity<SuccessfulMessage> setMainIndicators(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationMainIndicator> indicators) throws BadRequestException {
+		operationService.setMainIndicatorsToOperation(id, indicators);
+		return new ResponseEntity<>(new SuccessfulMessage("Main indicators were successfully saved"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set operation symbols")
+	public ResponseEntity<SuccessfulMessage> setParticipants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationParticipant> participants) throws BadRequestException {
+		operationService.setParticipantsToOperation(id, participants);
+		return new ResponseEntity<>(new SuccessfulMessage("Participants were successfully saved"), HttpStatus.OK);
 	}
 }

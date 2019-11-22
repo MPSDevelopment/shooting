@@ -151,6 +151,9 @@ public class JacksonUtilsTest {
 	@Test
 	public void checkComplexList() {
 		List<List<List<Double>>> list = Collections.singletonList(Arrays.asList(Arrays.asList(-103.0, 47.5), Arrays.asList(-103.0, 48.0), Arrays.asList(-102.5, 48.0), Arrays.asList(-102.5, 47.5), Arrays.asList(-103.0, 47.5)));
-		log.info("Json list is %s", JacksonUtils.getJson(list));
+		String json = JacksonUtils.getJson(list);
+		log.info("Json list is %s", json);
+		
+//		list = JacksonUtils.getListFromJson(List[], json);
 	}
 }

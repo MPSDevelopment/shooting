@@ -438,5 +438,9 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_PUT_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_DELETE_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders/" + REQUEST_OPERATION_ID;
-
+	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_DATA = "/combatlistdata/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_POST_WEATHER = "/weather/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_POST_SYMBOLS = "/symbols/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_POST_MAIN_INDICATORS = "/mainindicators/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_POST_PARTICIPANTS = "/participants/" + REQUEST_OPERATION_ID;
 }

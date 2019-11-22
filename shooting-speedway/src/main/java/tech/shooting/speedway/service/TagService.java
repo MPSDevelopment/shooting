@@ -1,7 +1,5 @@
 package tech.shooting.speedway.service;
 
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;

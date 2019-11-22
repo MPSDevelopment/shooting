@@ -3,6 +3,7 @@ package tech.shooting.ipsc.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,9 +37,12 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.WeaponType;
 import tech.shooting.ipsc.repository.OperationRepository;
+import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.WeaponTypeRepository;
 import tech.shooting.ipsc.service.OperationService;
 
@@ -61,6 +65,9 @@ public class OperationControllerTest extends BaseControllerTest {
 	
 	@Autowired
 	private WeaponTypeRepository weaponTypeRepository;
+	
+	@Autowired
+	private PersonRepository personRepository;
 	
 	private Operation testOperation;
 
@@ -284,6 +291,60 @@ public class OperationControllerTest extends BaseControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
 		assertEquals(2, list.size());
+
+	}
+	
+	@Test
+	void getOperationCombatListData() throws Exception {
+		
+		operationService.clearTypes();
+		
+		assertEquals(Collections.emptyList(), operationRepository.findAll());
+		int count = operationRepository.findAll().size();
+		Operation save = operationRepository.save(testOperation);
+		assertEquals(count + 1, operationRepository.findAll().size());
+
+		// try access with unauthorized user
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString())))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access with user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isOk());
+
+		// try access with judge role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
+
+		// try access with admin role
+		String contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		var list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
+		assertEquals(0, list.size());
+		
+		weaponTypeRepository.save(new WeaponType().setName("AK-47"));
+		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
+		
+		contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		var doubleList = JacksonUtils.getListFromJson(List[].class, contentAsString);
+		assertEquals(0, doubleList.size());
+		
+		var testPerson = personRepository.save(new Person().setName("Thor"));
+		testOperation.setParticipants(Arrays.asList(new OperationParticipant().setPerson(testPerson)));
+		operationRepository.save(testOperation);
+		
+		contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.get(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		doubleList = JacksonUtils.getListFromJson(List[].class, contentAsString);
+		assertEquals(1, doubleList.size());
+		assertEquals(2, doubleList.get(0).size());
 
 	}
 
