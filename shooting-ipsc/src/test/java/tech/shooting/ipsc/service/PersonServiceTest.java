@@ -24,6 +24,8 @@ import tech.shooting.ipsc.repository.PersonRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.stream.IntStream;
+
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
 @ContextConfiguration(classes = { DivisionService.class, PersonService.class, IpscMongoConfig.class })
@@ -64,10 +66,10 @@ class PersonServiceTest {
 
 		createDivisionsAndPersons();
 
-		assertEquals(6, personService.getAllPersonsByDivision(root.getId()).size());
-		assertEquals(3, personService.getAllPersonsByDivision(first.getId()).size());
-		assertEquals(2, personService.getAllPersonsByDivision(second.getId()).size());
-		assertEquals(1, personService.getAllPersonsByDivision(third.getId()).size());
+		assertEquals(18, personService.getAllPersonsByDivision(root.getId()).size());
+		assertEquals(9, personService.getAllPersonsByDivision(first.getId()).size());
+		assertEquals(6, personService.getAllPersonsByDivision(second.getId()).size());
+		assertEquals(3, personService.getAllPersonsByDivision(third.getId()).size());
 	}
 
 	@Test
@@ -76,10 +78,10 @@ class PersonServiceTest {
 		createDivisionsAndPersons();
 
 		var page = personService.getAllPersonsByDivisionPaging(root.getId(), 0, 10);
-		assertEquals(6, page.getTotalElements());
+		assertEquals(18, page.getTotalElements());
 		
 		page = personService.getAllPersonsByDivisionPaging(first.getId(), 0, 10);
-		assertEquals(3, page.getTotalElements());
+		assertEquals(9, page.getTotalElements());
 	}
 	
 	@Test
@@ -88,10 +90,10 @@ class PersonServiceTest {
 		createDivisionsAndPersons();
 
 		var page = personService.getPersonListByDivisionPaging(root.getId(), 0, 10);
-		assertEquals(6, page.getTotalElements());
+		assertEquals(18, page.getTotalElements());
 		
 		page = personService.getAllPersonsByDivisionPaging(first.getId(), 0, 10);
-		assertEquals(3, page.getTotalElements());
+		assertEquals(9, page.getTotalElements());
 	}
 
 	private void createDivisionsAndPersons() {
@@ -100,11 +102,14 @@ class PersonServiceTest {
 		second = divisionService.createDivisionWithCheck(new DivisionBean().setName("second"), root.getId());
 		third = divisionService.createDivisionWithCheck(new DivisionBean().setName("third"), second.getId());
 
-		personRepository.save(new Person().setName("1").setDivision(root));
-		personRepository.save(new Person().setName("2").setDivision(first));
-		personRepository.save(new Person().setName("3").setDivision(first));
-		personRepository.save(new Person().setName("4").setDivision(first));
-		personRepository.save(new Person().setName("5").setDivision(second));
-		personRepository.save(new Person().setName("6").setDivision(third));
+		IntStream range = IntStream.rangeClosed(1, 3).parallel();
+		range.forEach(item -> {
+			personRepository.save(new Person().setName("1").setDivision(root));
+			personRepository.save(new Person().setName("2").setDivision(first));
+			personRepository.save(new Person().setName("3").setDivision(first));
+			personRepository.save(new Person().setName("4").setDivision(first));
+			personRepository.save(new Person().setName("5").setDivision(second));
+			personRepository.save(new Person().setName("6").setDivision(third));
+		});
 	}
 }

@@ -27,12 +27,15 @@ class CustomPersonRepositoryImpl implements CustomPersonRepository {
 	
 	@Override
 	public Page<Person> getPersonListByPage(List<Division> divisionList, PageRequest pageable) {
+		return PageableExecutionUtils.getPage(mongoTemplate.find(getQuery(divisionList).with(pageable), Person.class), pageable, () -> mongoTemplate.count(getQuery(divisionList), Person.class));
+	}
+
+	private Query getQuery(List<Division> divisionList) {
 		Query query = new Query();
 		if (CollectionUtils.isNotEmpty(divisionList)) {
 			query.addCriteria(Criteria.where(Person.DIVISION).in(divisionList));
 		}
-		
-		return PageableExecutionUtils.getPage(mongoTemplate.find(query.with(pageable), Person.class), pageable, () -> mongoTemplate.count(query, Person.class));
+		return query;
 	}
 
 	public List<Person> findByDivisionId(Long id) {
