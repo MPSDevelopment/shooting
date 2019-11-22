@@ -139,7 +139,7 @@ public class TagService {
 	
 	@Handler
 	public void handle(TagRestartEvent event) throws OctaneSdkException {
-		
+		log.info("Tag restart event with ip %s", event.getIp());
 		stop();
 		start();
 	}
