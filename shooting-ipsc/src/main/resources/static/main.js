@@ -6047,18 +6047,16 @@ var CommunicationComponent = /** @class */ /*@__PURE__*/ (function () {
         }
     };
     CommunicationComponent.prototype.openCommunicationModal = function (communication, edit) {
-        var _this = this;
         var objectType = this.pageTypes.COMMUNICATION;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, communication), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                if (edit) {
-                    var body = __assign({}, communication, res);
-                    body.owner = typeof res.owner === 'string' ? communication.owner : res.owner;
-                    _this.updateCommunication(body);
-                }
-                else {
-                    _this.createCommunication(res);
-                }
+                // if (edit) {
+                //     const body = {...communication, ...res};
+                //     body.owner = typeof res.owner === 'string' ? communication.owner : res.owner;
+                //     this.updateCommunication(body);
+                // } else {
+                //     this.createCommunication(res);
+                // }
             }
         });
     };
@@ -6145,6 +6143,7 @@ var communication_service_1 = __webpack_require__(/*! @communication/services/co
 var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
 var selectors_1 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
 var toastr_1 = __webpack_require__(/*! @models/constants/toastr */ "./src/app/common/models/constants/toastr.ts");
+var actions_1 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
 var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
     function CommunicationEffects(actions$, communicationService, messageService, store) {
         var _this = this;
@@ -6242,6 +6241,7 @@ var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
                     communications.push(communication);
                     _this.messageService.showToastrSuccess(message);
                 }
+                _this.store.dispatch(new actions_1.CommunicationErrors(null));
                 return new fromCommunication.LoadedCommunications(communications);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -6273,6 +6273,7 @@ var CommunicationEffects = /** @class */ /*@__PURE__*/ (function () {
                 if (index > -1) {
                     communications.splice(index, 1, action.payload);
                 }
+                _this.store.dispatch(new actions_1.CommunicationErrors(null));
                 return new fromCommunication.LoadedCommunications(communications);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -8597,7 +8598,7 @@ function View_DashboardComponent_7(_l) {
 }
 function View_DashboardComponent_8(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 0, "hr", [], null, null, null, null, null))], null, null); }
 function View_DashboardComponent_9(_l) {
-    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 20, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 3, "div", [["class", "col-4 mb-2"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "button", [["class", "btn btn-primary btn__big "]], null, [[null, "click"]], function (_v, en, $event) {
+    return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 16, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 3, "div", [["class", "col-4 mb-2"]], null, null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "button", [["class", "btn btn-primary btn__big "]], null, [[null, "click"]], function (_v, en, $event) {
             var ad = true;
             var _co = _v.component;
             if (("click" === en)) {
@@ -8629,7 +8630,7 @@ function View_DashboardComponent_9(_l) {
                 ad = (pd_0 && ad);
             }
             return ad;
-        }, null, null)), (_l()(), i1.ɵted(15, null, ["", ""])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(17, 0, null, null, 3, "div", [["class", "col-4 mb-2"]], null, null, null, null, null)), (_l()(), i1.ɵeld(18, 0, null, null, 2, "button", [["class", "btn btn-primary btn__big "]], null, null, null, null, null)), (_l()(), i1.ɵted(19, null, ["", ""])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform("weaponList")); _ck(_v, 3, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 7, 0, i1.ɵnov(_v, 8).transform("communications")); _ck(_v, 7, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("machines")); _ck(_v, 11, 0, currVal_2); var currVal_3 = i1.ɵunv(_v, 15, 0, i1.ɵnov(_v, 16).transform("equipment")); _ck(_v, 15, 0, currVal_3); var currVal_4 = i1.ɵunv(_v, 19, 0, i1.ɵnov(_v, 20).transform("battleUnits")); _ck(_v, 19, 0, currVal_4); });
+        }, null, null)), (_l()(), i1.ɵted(15, null, ["", ""])), i1.ɵpid(131072, i3.TranslatePipe, [i3.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var currVal_0 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform("weaponList")); _ck(_v, 3, 0, currVal_0); var currVal_1 = i1.ɵunv(_v, 7, 0, i1.ɵnov(_v, 8).transform("communications")); _ck(_v, 7, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 11, 0, i1.ɵnov(_v, 12).transform("machines")); _ck(_v, 11, 0, currVal_2); var currVal_3 = i1.ɵunv(_v, 15, 0, i1.ɵnov(_v, 16).transform("equipment")); _ck(_v, 15, 0, currVal_3); });
 }
 function View_DashboardComponent_10(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 0, "hr", [], null, null, null, null, null))], null, null); }
 function View_DashboardComponent_11(_l) {
@@ -10243,18 +10244,16 @@ var EquipmentComponent = /** @class */ /*@__PURE__*/ (function () {
         }
     };
     EquipmentComponent.prototype.openEquipmentsModal = function (equipment, edit) {
-        var _this = this;
         var objectType = this.pageTypes.EQUIPMENT;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, equipment), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                if (edit) {
-                    var body = __assign({}, equipment, res);
-                    body.owner = typeof res.owner === 'string' ? equipment.owner : res.owner;
-                    _this.updateEquipment(body);
-                }
-                else {
-                    _this.createEquipment(res);
-                }
+                // if (edit) {
+                //     const body = {...equipment, ...res};
+                //     body.owner = typeof res.owner === 'string' ? equipment.owner : res.owner;
+                //     this.updateEquipment(body);
+                // } else {
+                //     this.createEquipment(res);
+                // }
             }
         });
     };
@@ -10341,6 +10340,7 @@ var equipment_service_1 = __webpack_require__(/*! ../services/equipment.service 
 var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
 var selectors_1 = __webpack_require__(/*! ../selectors/selectors */ "./src/app/common/modules/equipment/selectors/selectors.ts");
 var toastr_1 = __webpack_require__(/*! @models/constants/toastr */ "./src/app/common/models/constants/toastr.ts");
+var actions_1 = __webpack_require__(/*! ../actions/actions */ "./src/app/common/modules/equipment/actions/actions.ts");
 var EquipmentEffects = /** @class */ /*@__PURE__*/ (function () {
     function EquipmentEffects(actions$, equipmentService, messageService, store) {
         var _this = this;
@@ -10431,6 +10431,7 @@ var EquipmentEffects = /** @class */ /*@__PURE__*/ (function () {
                     _this.messageService.showToastrSuccess(message);
                     equipments.push(equipment);
                 }
+                _this.store.dispatch(new actions_1.EquipmentErrors(null));
                 return new fromEquipment.LoadedEquipments(equipments);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -10447,6 +10448,7 @@ var EquipmentEffects = /** @class */ /*@__PURE__*/ (function () {
                     _this.messageService.showToastrSuccess(message);
                     equipments = equipments.map(function (item) { return item.id === equipment.id ? equipment : item; });
                 }
+                _this.store.dispatch(new actions_1.EquipmentErrors(null));
                 return new fromEquipment.LoadedEquipments(equipments);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -10676,6 +10678,9 @@ exports.selectEquipmentsData = store_1.createSelector(exports.selectEquipments, 
 var ɵ2 = function (state) { return state.meansTypeList; };
 exports.ɵ2 = ɵ2;
 exports.selectEquipmentMeansTypes = store_1.createSelector(exports.selectEquipments, ɵ2);
+var ɵ3 = function (state) { return state.errors; };
+exports.ɵ3 = ɵ3;
+exports.selectEquipmentErrors = store_1.createSelector(exports.selectEquipments, ɵ3);
 
 
 
@@ -11577,7 +11582,7 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
             case page_types_1.PageTypes.SPECIALITIES:
                 return this.formsService.generateValidationListByBean(this.validations.Speciality, control);
             case page_types_1.PageTypes.WEAPON:
-                return this.formsService.generateValidationListByBean(this.validations.Weapon, control);
+                return this.formsService.generateValidationListByBean(this.validations.WeaponBean, control);
             case page_types_1.PageTypes.USER:
                 return this.formsService.generateValidationListByBean(this.validations.UserSignupBean, control);
             case page_types_1.PageTypes.COMPETITOR:
@@ -11597,8 +11602,12 @@ var AbstractForm = /** @class */ /*@__PURE__*/ (function (_super) {
                 return this.formsService.generateValidationListByBean(this.validations.CommunicationEquipmentType, control);
             case page_types_1.PageTypes.EQUIPMENT_TYPES:
                 return this.formsService.generateValidationListByBean(this.validations.EquipmentType, control);
+            case page_types_1.PageTypes.EQUIPMENT:
+                return this.formsService.generateValidationListByBean(this.validations.EquipmentBean, control);
             case page_types_1.PageTypes.MACHINE_TYPES:
                 return this.formsService.generateValidationListByBean(this.validations.VehicleType, control);
+            case page_types_1.PageTypes.MACHINE:
+                return this.formsService.generateValidationListByBean(this.validations.VehicleBean, control);
             case page_types_1.PageTypes.COMMUNICATION:
                 return this.formsService.generateValidationListByBean(this.validations.CommunicationEquipment, control);
             case page_types_1.PageTypes.CONDITION:
@@ -12217,7 +12226,7 @@ function View_BaseFormComponent_11(_l) {
             return ad;
         }, i13.View_ImageLoaderComponent_0, i13.RenderType_ImageLoaderComponent)), i1.ɵdid(2, 114688, null, 0, i14.ImageLoaderComponent, [i15.Store, i16.SharedService], { imagePath: [0, "imagePath"] }, { loadImage: "loadImage", deleteImage: "deleteImage" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.formControls[_v.parent.context.$implicit].value; _ck(_v, 2, 0, currVal_0); }, null);
 }
-function View_BaseFormComponent_2(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 26, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 25, "div", [["class", "form-group row d-flex align-items-center"]], [[2, "center", null]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "label", [["class", "col-4 col-form-label w-100"]], [[1, "for", 0]], null, null, null, null)), (_l()(), i1.ɵted(3, null, ["", ""])), i1.ɵpid(131072, i11.TranslatePipe, [i11.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(5, 0, null, null, 21, "div", [["class", "col-8 align-items-center"]], null, null, null, null, null)), i1.ɵdid(6, 16384, null, 0, i10.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_3)), i1.ɵdid(8, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_4)), i1.ɵdid(10, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_5)), i1.ɵdid(12, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_6)), i1.ɵdid(14, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_7)), i1.ɵdid(16, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_8)), i1.ɵdid(18, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_9)), i1.ɵdid(20, 16384, null, 0, i10.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], null, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_10)), i1.ɵdid(22, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_11)), i1.ɵdid(24, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵeld(25, 0, null, null, 1, "app-error", [], null, null, null, i17.View_ErrorComponent_0, i17.RenderType_ErrorComponent)), i1.ɵdid(26, 114688, null, 0, i18.ErrorComponent, [], { form: [0, "form"], submitted: [1, "submitted"], controlName: [2, "controlName"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_3 = true; _ck(_v, 6, 0, currVal_3); var currVal_4 = _co.datePickerCase(_v.context.$implicit); _ck(_v, 8, 0, currVal_4); var currVal_5 = (_v.context.$implicit === _co.fields.ACTIVE); _ck(_v, 10, 0, currVal_5); var currVal_6 = _co.ngSelectCase(_v.context.$implicit); _ck(_v, 12, 0, currVal_6); var currVal_7 = _co.numberTypeFieldCase(_v.context.$implicit); _ck(_v, 14, 0, currVal_7); var currVal_8 = (_v.context.$implicit === _co.fields.NOT_COUNTED); _ck(_v, 16, 0, currVal_8); var currVal_9 = _co.textareaCase(_v.context.$implicit); _ck(_v, 18, 0, currVal_9); var currVal_10 = (_v.context.$implicit === _co.fields.RUN_IP); _ck(_v, 22, 0, currVal_10); var currVal_11 = (_v.context.$implicit === _co.fields.IMAGE_PATH); _ck(_v, 24, 0, currVal_11); var currVal_12 = _co.form; var currVal_13 = _co.submitted; var currVal_14 = _v.context.$implicit; _ck(_v, 26, 0, currVal_12, currVal_13, currVal_14); }, function (_ck, _v) { var _co = _v.component; var currVal_0 = (_v.context.$implicit === "active"); _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.context.$implicit === _co.fields); _ck(_v, 2, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform(_v.context.$implicit)); _ck(_v, 3, 0, currVal_2); }); }
+function View_BaseFormComponent_2(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 26, null, null, null, null, null, null, null)), (_l()(), i1.ɵeld(1, 0, null, null, 25, "div", [["class", "form-group row d-flex align-items-center"]], [[2, "center", null]], null, null, null, null)), (_l()(), i1.ɵeld(2, 0, null, null, 2, "label", [["class", "col-4 col-form-label w-100"]], [[1, "for", 0]], null, null, null, null)), (_l()(), i1.ɵted(3, null, ["", ""])), i1.ɵpid(131072, i11.TranslatePipe, [i11.TranslateService, i1.ChangeDetectorRef]), (_l()(), i1.ɵeld(5, 0, null, null, 21, "div", [["class", "col-8 align-items-center"]], null, null, null, null, null)), i1.ɵdid(6, 16384, null, 0, i10.NgSwitch, [], { ngSwitch: [0, "ngSwitch"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_3)), i1.ɵdid(8, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_4)), i1.ɵdid(10, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_5)), i1.ɵdid(12, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_6)), i1.ɵdid(14, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_7)), i1.ɵdid(16, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_8)), i1.ɵdid(18, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_9)), i1.ɵdid(20, 16384, null, 0, i10.NgSwitchDefault, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], null, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_10)), i1.ɵdid(22, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseFormComponent_11)), i1.ɵdid(24, 278528, null, 0, i10.NgSwitchCase, [i1.ViewContainerRef, i1.TemplateRef, i10.NgSwitch], { ngSwitchCase: [0, "ngSwitchCase"] }, null), (_l()(), i1.ɵeld(25, 0, null, null, 1, "app-error", [], null, null, null, i17.View_ErrorComponent_0, i17.RenderType_ErrorComponent)), i1.ɵdid(26, 114688, null, 0, i18.ErrorComponent, [], { form: [0, "form"], submitted: [1, "submitted"], serverErrors: [2, "serverErrors"], controlName: [3, "controlName"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_3 = true; _ck(_v, 6, 0, currVal_3); var currVal_4 = _co.datePickerCase(_v.context.$implicit); _ck(_v, 8, 0, currVal_4); var currVal_5 = (_v.context.$implicit === _co.fields.ACTIVE); _ck(_v, 10, 0, currVal_5); var currVal_6 = _co.ngSelectCase(_v.context.$implicit); _ck(_v, 12, 0, currVal_6); var currVal_7 = _co.numberTypeFieldCase(_v.context.$implicit); _ck(_v, 14, 0, currVal_7); var currVal_8 = (_v.context.$implicit === _co.fields.NOT_COUNTED); _ck(_v, 16, 0, currVal_8); var currVal_9 = _co.textareaCase(_v.context.$implicit); _ck(_v, 18, 0, currVal_9); var currVal_10 = (_v.context.$implicit === _co.fields.RUN_IP); _ck(_v, 22, 0, currVal_10); var currVal_11 = (_v.context.$implicit === _co.fields.IMAGE_PATH); _ck(_v, 24, 0, currVal_11); var currVal_12 = _co.form; var currVal_13 = _co.submitted; var currVal_14 = _co.serverErrors; var currVal_15 = _v.context.$implicit; _ck(_v, 26, 0, currVal_12, currVal_13, currVal_14, currVal_15); }, function (_ck, _v) { var _co = _v.component; var currVal_0 = (_v.context.$implicit === "active"); _ck(_v, 1, 0, currVal_0); var currVal_1 = (_v.context.$implicit === _co.fields); _ck(_v, 2, 0, currVal_1); var currVal_2 = i1.ɵunv(_v, 3, 0, i1.ɵnov(_v, 4).transform(_v.context.$implicit)); _ck(_v, 3, 0, currVal_2); }); }
 function View_BaseFormComponent_12(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-address-form-part", [], null, null, null, i19.View_AddressFormPartComponent_0, i19.RenderType_AddressFormPartComponent)), i1.ɵdid(1, 114688, null, 0, i20.AddressFormPartComponent, [i21.FormsService], { submitted: [0, "submitted"], form: [1, "form"], addressParent: [2, "addressParent"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.submitted; var currVal_1 = _co.formControls["address"]; var currVal_2 = _co.object; _ck(_v, 1, 0, currVal_0, currVal_1, currVal_2); }, null); }
 function View_BaseFormComponent_1(_l) {
     return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 17, "form", [["novalidate", ""]], [[2, "ng-untouched", null], [2, "ng-touched", null], [2, "ng-pristine", null], [2, "ng-dirty", null], [2, "ng-valid", null], [2, "ng-invalid", null], [2, "ng-pending", null]], [[null, "submit"], [null, "reset"]], function (_v, en, $event) {
@@ -12253,7 +12262,7 @@ function View_BaseFormComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵand(16
 exports.View_BaseFormComponent_0 = View_BaseFormComponent_0;
 function View_BaseFormComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-base-form", [], null, null, null, View_BaseFormComponent_0, RenderType_BaseFormComponent)), i1.ɵdid(1, 245760, null, 0, i22.BaseFormComponent, [i21.FormsService, i11.TranslateService, i15.Store, i23.DialogsService, i16.SharedService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_BaseFormComponent_Host_0 = View_BaseFormComponent_Host_0;
-var BaseFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-base-form", i22.BaseFormComponent, View_BaseFormComponent_Host_0, { object: "object", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel", scanState: "scanState" }, []);
+var BaseFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-base-form", i22.BaseFormComponent, View_BaseFormComponent_Host_0, { object: "object", serverErrors: "serverErrors", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel", scanState: "scanState" }, []);
 exports.BaseFormComponentNgFactory = BaseFormComponentNgFactory;
 
 
@@ -12301,17 +12310,17 @@ var forms_service_1 = __webpack_require__(/*! @forms/services/forms.service */ "
 var selectors_1 = __webpack_require__(/*! @shared/selectors/selectors */ "./src/app/common/modules/shared/selectors/selectors.ts");
 var selectors_2 = __webpack_require__(/*! @divisions/selectors/selectors */ "./src/app/common/modules/divisions/selectors/selectors.ts");
 var judjes_selector_1 = __webpack_require__(/*! @judges/selectors/judjes.selector */ "./src/app/common/modules/judges/selectors/judjes.selector.ts");
-var selectors_3 = __webpack_require__(/*! @persons/selectors/selectors */ "./src/app/common/modules/persons/selectors/selectors.ts");
+var selectors_3 = __webpack_require__(/*! @quiz/selectors/selectors */ "./src/app/common/modules/quiz/selectors/selectors.ts");
+var selectors_4 = __webpack_require__(/*! @persons/selectors/selectors */ "./src/app/common/modules/persons/selectors/selectors.ts");
 var actions_1 = __webpack_require__(/*! @shared/actions/actions */ "./src/app/common/modules/shared/actions/actions.ts");
-var selectors_4 = __webpack_require__(/*! @weapon/selectors/selectors */ "./src/app/common/modules/weapon/selectors/selectors.ts");
+var selectors_5 = __webpack_require__(/*! @weapon/selectors/selectors */ "./src/app/common/modules/weapon/selectors/selectors.ts");
 var dialogs_service_1 = __webpack_require__(/*! @shared/services/dialogs.service */ "./src/app/common/modules/shared/services/dialogs.service.ts");
 var subsink_1 = __webpack_require__(/*! subsink */ "./node_modules/subsink/dist/index.js");
 var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
 var shared_service_1 = __webpack_require__(/*! @shared/services/shared.service */ "./src/app/common/modules/shared/services/shared.service.ts");
-var selectors_5 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
-var selectors_6 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
-var selectors_7 = __webpack_require__(/*! @equipment/selectors/selectors */ "./src/app/common/modules/equipment/selectors/selectors.ts");
-var selectors_8 = __webpack_require__(/*! @quiz/selectors/selectors */ "./src/app/common/modules/quiz/selectors/selectors.ts");
+var selectors_6 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var selectors_7 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
+var selectors_8 = __webpack_require__(/*! @equipment/selectors/selectors */ "./src/app/common/modules/equipment/selectors/selectors.ts");
 var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     __extends(BaseFormComponent, _super);
     function BaseFormComponent(formsService, translateService, store, dialogsService, sharedService) {
@@ -12427,14 +12436,14 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
     };
     BaseFormComponent.prototype.getWeaponTypesForList = function () {
         var _this = this;
-        this.subscriptions.sink = this.store.select(selectors_4.selectWeaponTypesData)
+        this.subscriptions.sink = this.store.select(selectors_5.selectWeaponTypesData)
             .subscribe(function (weaponTypes) { return _this.weaponTypesWeaponList = weaponTypes; });
     };
     BaseFormComponent.prototype.getWaveTypes = function () {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.TYPE && _this.objectType === 'communicationTypes') {
-                _this.subscriptions.sink = _this.store.select(selectors_5.selectCommunicationWaveTypes)
+                _this.subscriptions.sink = _this.store.select(selectors_6.selectCommunicationWaveTypes)
                     .subscribe(function (list) {
                     _this.waveTypes = list;
                     _this.translatedWaveTypes = _this.sharedService.translateArray(_this.waveTypes);
@@ -12446,7 +12455,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.TYPE && _this.objectType === 'equipmentTypes') {
-                _this.subscriptions.sink = _this.store.select(selectors_7.selectEquipmentMeansTypes)
+                _this.subscriptions.sink = _this.store.select(selectors_8.selectEquipmentMeansTypes)
                     .subscribe(function (list) {
                     _this.meansTypes = list;
                     _this.translatedWaveTypes = _this.sharedService.translateArray(_this.meansTypes);
@@ -12458,7 +12467,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.UNITS && _this.objectType === 'Condition') {
-                _this.subscriptions.sink = _this.store.select(selectors_8.selectUnitValues)
+                _this.subscriptions.sink = _this.store.select(selectors_3.selectUnitValues)
                     .subscribe(function (list) {
                     _this.units = _this.sharedService.translateArray(list);
                     // this.translatedWaveTypes = this.sharedService.translateArray(this.meansTypes);
@@ -12470,7 +12479,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.COMMUNICATION_TYPE) {
-                _this.subscriptions.sink = _this.store.select(selectors_5.selectCommunicationTypes)
+                _this.subscriptions.sink = _this.store.select(selectors_6.selectCommunicationTypes)
                     .subscribe(function (list) { return _this.communicationTypes = list; });
             }
         });
@@ -12479,7 +12488,7 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.EQUIPMENT_TYPE) {
-                _this.subscriptions.sink = _this.store.select(selectors_7.selectEquipmentTypes)
+                _this.subscriptions.sink = _this.store.select(selectors_8.selectEquipmentTypes)
                     .subscribe(function (list) { return _this.equipmentTypes = list; });
             }
         });
@@ -12488,14 +12497,14 @@ var BaseFormComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         var _this = this;
         this.controls.forEach(function (control) {
             if (control === _this.fields.MACHINE_TYPE) {
-                _this.subscriptions.sink = _this.store.select(selectors_6.selectMachineTypes)
+                _this.subscriptions.sink = _this.store.select(selectors_7.selectMachineTypes)
                     .subscribe(function (list) { return _this.machineTypes = list; });
             }
         });
     };
     BaseFormComponent.prototype.getPersonsByDivision = function () {
         var _this = this;
-        this.subscriptions.sink = this.store.select(selectors_3.selectPersonData)
+        this.subscriptions.sink = this.store.select(selectors_4.selectPersonData)
             .subscribe(function (persons) { return _this.persons = persons; });
     };
     BaseFormComponent.prototype.createArrayOfSubscriptions = function () {
@@ -12987,7 +12996,7 @@ function View_QuestionsFormComponent_0(_l) { return i1.ɵvid(0, [i1.ɵpid(0, i2.
 exports.View_QuestionsFormComponent_0 = View_QuestionsFormComponent_0;
 function View_QuestionsFormComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-questions-form", [], null, null, null, View_QuestionsFormComponent_0, RenderType_QuestionsFormComponent)), i1.ɵdid(1, 245760, null, 0, i13.QuestionsFormComponent, [i14.FormsService, i3.FormBuilder, i9.Store, i4.TranslateService], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_QuestionsFormComponent_Host_0 = View_QuestionsFormComponent_Host_0;
-var QuestionsFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-questions-form", i13.QuestionsFormComponent, View_QuestionsFormComponent_Host_0, { object: "object", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel" }, []);
+var QuestionsFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-questions-form", i13.QuestionsFormComponent, View_QuestionsFormComponent_Host_0, { object: "object", serverErrors: "serverErrors", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel" }, []);
 exports.QuestionsFormComponentNgFactory = QuestionsFormComponentNgFactory;
 
 
@@ -13830,7 +13839,7 @@ function View_StandardsFormComponent_0(_l) { return i1.ɵvid(0, [i1.ɵpid(0, i5.
 exports.View_StandardsFormComponent_0 = View_StandardsFormComponent_0;
 function View_StandardsFormComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-standards-form", [], null, null, null, View_StandardsFormComponent_0, RenderType_StandardsFormComponent)), i1.ɵdid(1, 245760, null, 0, i10.StandardsFormComponent, [i11.FormsService, i4.TranslateService, i3.FormBuilder, i12.Store, i13.ActivatedRoute], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_StandardsFormComponent_Host_0 = View_StandardsFormComponent_Host_0;
-var StandardsFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-standards-form", i10.StandardsFormComponent, View_StandardsFormComponent_Host_0, { object: "object", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel" }, []);
+var StandardsFormComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-standards-form", i10.StandardsFormComponent, View_StandardsFormComponent_Host_0, { object: "object", serverErrors: "serverErrors", objectType: "objectType", isMobile: "isMobile", mobileSelectArray: "mobileSelectArray", editable: "editable", mark: "mark" }, { save: "save", cancel: "cancel" }, []);
 exports.StandardsFormComponentNgFactory = StandardsFormComponentNgFactory;
 
 
@@ -15795,18 +15804,16 @@ var MachineComponent = /** @class */ /*@__PURE__*/ (function () {
         }
     };
     MachineComponent.prototype.openMachineModal = function (machine, edit) {
-        var _this = this;
         var objectType = this.pageTypes.MACHINE;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, machine), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                if (edit) {
-                    var body = __assign({}, machine, res);
-                    body.owner = typeof res.owner === 'string' ? machine.owner : res.owner;
-                    _this.updateMachine(body);
-                }
-                else {
-                    _this.createMachine(res);
-                }
+                // if (edit) {
+                //     const body = {...machine, ...res};
+                //     body.owner = typeof res.owner === 'string' ? machine.owner : res.owner;
+                //     this.updateMachine(body);
+                // } else {
+                //     this.createMachine(res);
+                // }
             }
         });
     };
@@ -15893,6 +15900,7 @@ var machine_service_1 = __webpack_require__(/*! @machine/services/machine.servic
 var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
 var selectors_1 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
 var toastr_1 = __webpack_require__(/*! @models/constants/toastr */ "./src/app/common/models/constants/toastr.ts");
+var actions_1 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
 var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
     function MachineEffects(actions$, machineService, messageService, store) {
         var _this = this;
@@ -15982,6 +15990,7 @@ var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
                     machines.push(machine);
                     _this.messageService.showToastrSuccess(message);
                 }
+                _this.store.dispatch(new actions_1.MachineErrors(null));
                 return new fromMachine.LoadedMachines(machines);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -16013,6 +16022,7 @@ var MachineEffects = /** @class */ /*@__PURE__*/ (function () {
                 if (index > -1) {
                     machines.splice(index, 1, action.payload);
                 }
+                _this.store.dispatch(new actions_1.MachineErrors(null));
                 return new fromMachine.LoadedMachines(machines);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -16351,11 +16361,11 @@ function View_BaseModalComponent_2(_l) {
                 ad = (pd_0 && ad);
             }
             if (("save" === en)) {
-                var pd_1 = (_co.activeModal.close($event) !== false);
+                var pd_1 = (_co.onSave($event) !== false);
                 ad = (pd_1 && ad);
             }
             return ad;
-        }, i3.View_BaseFormComponent_0, i3.RenderType_BaseFormComponent)), i1.ɵdid(1, 245760, null, 0, i4.BaseFormComponent, [i5.FormsService, i6.TranslateService, i7.Store, i8.DialogsService, i9.SharedService], { object: [0, "object"], objectType: [1, "objectType"], editable: [2, "editable"] }, { save: "save", cancel: "cancel" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.object; var currVal_1 = _co.objectType; var currVal_2 = _co.edit; _ck(_v, 1, 0, currVal_0, currVal_1, currVal_2); }, null);
+        }, i3.View_BaseFormComponent_0, i3.RenderType_BaseFormComponent)), i1.ɵdid(1, 245760, null, 0, i4.BaseFormComponent, [i5.FormsService, i6.TranslateService, i7.Store, i8.DialogsService, i9.SharedService], { object: [0, "object"], serverErrors: [1, "serverErrors"], objectType: [2, "objectType"], editable: [3, "editable"] }, { save: "save", cancel: "cancel" })], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.object; var currVal_1 = _co.serverErrors; var currVal_2 = _co.objectType; var currVal_3 = _co.edit; _ck(_v, 1, 0, currVal_0, currVal_1, currVal_2, currVal_3); }, null);
 }
 function View_BaseModalComponent_1(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 2, "div", [["class", "modal-body"]], null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseModalComponent_2)), i1.ɵdid(2, 16384, null, 0, i10.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.object; _ck(_v, 2, 0, currVal_0); }, null); }
 function View_BaseModalComponent_3(_l) {
@@ -16400,7 +16410,7 @@ function View_BaseModalComponent_0(_l) {
         }, null, null)), (_l()(), i1.ɵeld(9, 0, null, null, 1, "fa-icon", [["class", "ng-fa-icon"]], [[8, "innerHTML", 1]], null, null, i17.View_FaIconComponent_0, i17.RenderType_FaIconComponent)), i1.ɵdid(10, 573440, null, 0, i18.FaIconComponent, [i19.DomSanitizer, i18.FaIconService], { iconProp: [0, "iconProp"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseModalComponent_1)), i1.ɵdid(12, 16384, null, 0, i10.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseModalComponent_3)), i1.ɵdid(14, 16384, null, 0, i10.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_BaseModalComponent_4)), i1.ɵdid(16, 16384, null, 0, i10.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_1 = _ck(_v, 3, 0, _co.maxWidth); _ck(_v, 2, 0, currVal_1); var currVal_4 = _co.icons.closeIcon; _ck(_v, 10, 0, currVal_4); var currVal_5 = ((_co.objectType !== _co.page.QUESTIONS) && (_co.objectType !== _co.page.STANDARDS)); _ck(_v, 12, 0, currVal_5); var currVal_6 = (_co.objectType === _co.page.QUESTIONS); _ck(_v, 14, 0, currVal_6); var currVal_7 = (_co.objectType === _co.page.STANDARDS); _ck(_v, 16, 0, currVal_7); }, function (_ck, _v) { var _co = _v.component; var currVal_0 = undefined; _ck(_v, 0, 0, currVal_0); var currVal_2 = i1.ɵunv(_v, 6, 0, i1.ɵnov(_v, 7).transform(_co.title)); _ck(_v, 6, 0, currVal_2); var currVal_3 = i1.ɵnov(_v, 10).renderedIconHTML; _ck(_v, 9, 0, currVal_3); });
 }
 exports.View_BaseModalComponent_0 = View_BaseModalComponent_0;
-function View_BaseModalComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-base-modal", [], null, null, null, View_BaseModalComponent_0, RenderType_BaseModalComponent)), i1.ɵdid(1, 114688, null, 0, i20.BaseModalComponent, [i21.NgbActiveModal], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
+function View_BaseModalComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-base-modal", [], null, null, null, View_BaseModalComponent_0, RenderType_BaseModalComponent)), i1.ɵdid(1, 114688, null, 0, i20.BaseModalComponent, [i21.NgbActiveModal, i7.Store], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_BaseModalComponent_Host_0 = View_BaseModalComponent_Host_0;
 var BaseModalComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-base-modal", i20.BaseModalComponent, View_BaseModalComponent_Host_0, { mobileTitle: "mobileTitle", isOpened: "isOpened", pageType: "pageType", disqualificationTypes: "disqualificationTypes", divisionLength: "divisionLength", isDatePicker: "isDatePicker", mobileObject: "mobileObject" }, { closeMobile: "closeMobile", submitMobile: "submitMobile", disqualificationReason: "disqualificationReason" }, []);
 exports.BaseModalComponentNgFactory = BaseModalComponentNgFactory;
@@ -16441,14 +16451,37 @@ exports.styles = styles;
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s)
+                if (Object.prototype.hasOwnProperty.call(s, p))
+                    t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var ng_bootstrap_1 = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
 var icons_1 = __webpack_require__(/*! @models/constants/icons */ "./src/app/common/models/constants/icons.ts");
 var page_types_1 = __webpack_require__(/*! @models/constants/page-types */ "./src/app/common/models/constants/page-types.ts");
+var actions_1 = __webpack_require__(/*! @machine/actions/actions */ "./src/app/common/modules/machine/actions/actions.ts");
+var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+var actions_2 = __webpack_require__(/*! @communication/actions/actions */ "./src/app/common/modules/communication/actions/actions.ts");
+var selectors_1 = __webpack_require__(/*! @machine/selectors/selectors */ "./src/app/common/modules/machine/selectors/selectors.ts");
+var selectors_2 = __webpack_require__(/*! @communication/selectors/selectors */ "./src/app/common/modules/communication/selectors/selectors.ts");
+var rxjs_1 = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+var actions_3 = __webpack_require__(/*! @equipment/actions/actions */ "./src/app/common/modules/equipment/actions/actions.ts");
+var actions_4 = __webpack_require__(/*! @weapon/actions/actions */ "./src/app/common/modules/weapon/actions/actions.ts");
+var selectors_3 = __webpack_require__(/*! @equipment/selectors/selectors */ "./src/app/common/modules/equipment/selectors/selectors.ts");
+var selectors_4 = __webpack_require__(/*! @weapon/selectors/selectors */ "./src/app/common/modules/weapon/selectors/selectors.ts");
 var BaseModalComponent = /** @class */ /*@__PURE__*/ (function () {
-    function BaseModalComponent(activeModal) {
+    function BaseModalComponent(activeModal, store) {
         this.activeModal = activeModal;
+        this.store = store;
         this.icons = icons_1.Icons;
         this.page = page_types_1.PageTypes;
         this.rows = [];
@@ -16500,6 +16533,92 @@ var BaseModalComponent = /** @class */ /*@__PURE__*/ (function () {
     // It needs for mobile version.
     BaseModalComponent.prototype.onSubmit = function (object) {
         this.submitMobile.emit(object);
+    };
+    BaseModalComponent.prototype.onSave = function (event) {
+        var _this = this;
+        if (this.checkServerResponseType()) {
+            if (this.edit) {
+                var body = __assign({}, this.object, event);
+                body.owner = typeof event.owner === 'string' ? this.object.owner : event.owner;
+                this.updateMethods(body);
+            }
+            else {
+                this.createMethods(event);
+            }
+            setTimeout(function () {
+                _this.handleErrors(event);
+                setTimeout(function () {
+                    _this.serverErrors = null;
+                }, 1500);
+            }, 500);
+        }
+        else {
+            this.activeModal.close(event);
+        }
+    };
+    BaseModalComponent.prototype.checkServerResponseType = function () {
+        switch (this.objectType) {
+            case page_types_1.PageTypes.MACHINE:
+            case page_types_1.PageTypes.EQUIPMENT:
+            case page_types_1.PageTypes.WEAPON:
+            case page_types_1.PageTypes.COMMUNICATION:
+                return true;
+            default:
+                return false;
+        }
+    };
+    BaseModalComponent.prototype.updateMethods = function (body) {
+        if (this.objectType === page_types_1.PageTypes.MACHINE) {
+            this.store.dispatch(new actions_1.UpdateMachine(body));
+        }
+        if (this.objectType === page_types_1.PageTypes.COMMUNICATION) {
+            this.store.dispatch(new actions_2.UpdateCommunication(body));
+        }
+        if (this.objectType === page_types_1.PageTypes.EQUIPMENT) {
+            this.store.dispatch(new actions_3.UpdateEquipment(body));
+        }
+        if (this.objectType === page_types_1.PageTypes.WEAPON) {
+            this.store.dispatch(new actions_4.UpdateWeaponListItem(body));
+        }
+    };
+    BaseModalComponent.prototype.createMethods = function (val) {
+        if (this.objectType === page_types_1.PageTypes.MACHINE) {
+            this.store.dispatch(new actions_1.CreateMachine(val));
+        }
+        if (this.objectType === page_types_1.PageTypes.COMMUNICATION) {
+            this.store.dispatch(new actions_2.CreateCommunication(val));
+        }
+        if (this.objectType === page_types_1.PageTypes.EQUIPMENT) {
+            this.store.dispatch(new actions_3.CreateEquipment(val));
+        }
+        if (this.objectType === page_types_1.PageTypes.WEAPON) {
+            this.store.dispatch(new actions_4.CreateWeaponListItem(val));
+        }
+    };
+    BaseModalComponent.prototype.handleErrors = function (event) {
+        var _this = this;
+        this.getServerErrorsObservable().subscribe(function (errors) {
+            if (errors) {
+                _this.serverErrors = errors.error;
+            }
+            else {
+                _this.activeModal.close(event);
+            }
+        });
+    };
+    BaseModalComponent.prototype.getServerErrorsObservable = function () {
+        switch (this.objectType) {
+            case page_types_1.PageTypes.MACHINE:
+                return this.store.pipe(store_1.select(selectors_1.selectMachineErrors));
+            case page_types_1.PageTypes.COMMUNICATION:
+                return this.store.pipe(store_1.select(selectors_2.selectCommunicationErrors));
+            case page_types_1.PageTypes.EQUIPMENT:
+                return this.store.pipe(store_1.select(selectors_3.selectEquipmentErrors));
+            case page_types_1.PageTypes.WEAPON:
+                return this.store.pipe(store_1.select(selectors_4.selectWeaponErrors));
+            default:
+                return rxjs_1.of(null);
+        }
     };
     return BaseModalComponent;
 }());
@@ -23115,11 +23234,12 @@ function View_ErrorComponent_4(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0,
 function View_ErrorComponent_5(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 4, "div", [], null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(3, { name: 0, "value": 1 }), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var _co = _v.component; var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 4).transform("minValueValidation", _ck(_v, 3, 0, i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_co.controlName)), ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.min.min)))); _ck(_v, 1, 0, currVal_0); }); }
 function View_ErrorComponent_6(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 4, "div", [], null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", " "])), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef]), i1.ɵpod(3, { name: 0, "value": 1 }), i1.ɵpid(131072, i2.TranslatePipe, [i2.TranslateService, i1.ChangeDetectorRef])], null, function (_ck, _v) { var _co = _v.component; var currVal_0 = i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 4).transform("maxValueValidation", _ck(_v, 3, 0, i1.ɵunv(_v, 1, 0, i1.ɵnov(_v, 2).transform(_co.controlName)), ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.max.max)))); _ck(_v, 1, 0, currVal_0); }); }
 function View_ErrorComponent_1(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 10, "div", [["class", "invalid-feedback login__form__error"]], null, null, null, null, null)), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_2)), i1.ɵdid(2, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_3)), i1.ɵdid(4, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_4)), i1.ɵdid(6, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_5)), i1.ɵdid(8, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_6)), i1.ɵdid(10, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.required); _ck(_v, 2, 0, currVal_0); var currVal_1 = ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.minlength); _ck(_v, 4, 0, currVal_1); var currVal_2 = ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.maxlength); _ck(_v, 6, 0, currVal_2); var currVal_3 = ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.min); _ck(_v, 8, 0, currVal_3); var currVal_4 = ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors.max); _ck(_v, 10, 0, currVal_4); }, null); }
-function View_ErrorComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_1)), i1.ɵdid(1, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = (_co.submitted && ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors)); _ck(_v, 1, 0, currVal_0); }, null); }
+function View_ErrorComponent_7(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "div", [["class", "invalid-feedback login__form__error"]], null, null, null, null, null)), (_l()(), i1.ɵted(1, null, [" ", "\n"]))], null, function (_ck, _v) { var _co = _v.component; var currVal_0 = _co.serverErrors[_co.controlName]; _ck(_v, 1, 0, currVal_0); }); }
+function View_ErrorComponent_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_1)), i1.ɵdid(1, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null), (_l()(), i1.ɵand(16777216, null, null, 1, null, View_ErrorComponent_7)), i1.ɵdid(3, 16384, null, 0, i3.NgIf, [i1.ViewContainerRef, i1.TemplateRef], { ngIf: [0, "ngIf"] }, null)], function (_ck, _v) { var _co = _v.component; var currVal_0 = (_co.submitted && ((_co.form.controls[_co.controlName] == null) ? null : _co.form.controls[_co.controlName].errors)); _ck(_v, 1, 0, currVal_0); var currVal_1 = (_co.serverErrors && _co.serverErrors[_co.controlName]); _ck(_v, 3, 0, currVal_1); }, null); }
 exports.View_ErrorComponent_0 = View_ErrorComponent_0;
 function View_ErrorComponent_Host_0(_l) { return i1.ɵvid(0, [(_l()(), i1.ɵeld(0, 0, null, null, 1, "app-error", [], null, null, null, View_ErrorComponent_0, RenderType_ErrorComponent)), i1.ɵdid(1, 114688, null, 0, i4.ErrorComponent, [], null, null)], function (_ck, _v) { _ck(_v, 1, 0); }, null); }
 exports.View_ErrorComponent_Host_0 = View_ErrorComponent_Host_0;
-var ErrorComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-error", i4.ErrorComponent, View_ErrorComponent_Host_0, { form: "form", submitted: "submitted", controlName: "controlName" }, {}, []);
+var ErrorComponentNgFactory = /*@__PURE__*/ /*@__PURE__*/ i1.ɵccf("app-error", i4.ErrorComponent, View_ErrorComponent_Host_0, { form: "form", submitted: "submitted", serverErrors: "serverErrors", controlName: "controlName" }, {}, []);
 exports.ErrorComponentNgFactory = ErrorComponentNgFactory;
 
 
@@ -28187,18 +28307,16 @@ var WeaponListComponent = /** @class */ /*@__PURE__*/ (function (_super) {
         this.openWeaponModal(weapon_mocks_1.WeaponMocks.emptyWeapon, false);
     };
     WeaponListComponent.prototype.openWeaponModal = function (weapon, edit) {
-        var _this = this;
         var objectType = this.pageTypes.WEAPON;
         this.modalService.openModal(base_modal_component_1.BaseModalComponent, { centered: true }, { object: __assign({}, weapon), edit: edit, objectType: objectType }, function (res) {
             if (res) {
-                if (edit) {
-                    var body = __assign({}, weapon, res);
-                    body.owner = typeof res.owner === 'string' ? weapon.owner : res.owner;
-                    _this.updateWeaponListItem(body);
-                }
-                else {
-                    _this.createWeaponListItem(res);
-                }
+                // if (edit) {
+                //     const body = {...weapon, ...res};
+                //     body.owner = typeof res.owner === 'string' ? weapon.owner : res.owner;
+                //     this.updateWeaponListItem(body);
+                // } else {
+                //     this.createWeaponListItem(res);
+                // }
             }
         });
     };
@@ -28516,6 +28634,7 @@ var effects_1 = __webpack_require__(/*! @ngrx/effects */ "./node_modules/@ngrx/e
 var operators_1 = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 var store_1 = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var fromWeapons = __webpack_require__(/*! @weapon/actions/actions */ "./src/app/common/modules/weapon/actions/actions.ts");
+var actions_1 = __webpack_require__(/*! @weapon/actions/actions */ "./src/app/common/modules/weapon/actions/actions.ts");
 var message_service_1 = __webpack_require__(/*! @services/message.service */ "./src/app/common/services/message.service.ts");
 var weapons_service_1 = __webpack_require__(/*! @weapon/services/weapons.service */ "./src/app/common/modules/weapon/services/weapons.service.ts");
 var rxjs_1 = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
@@ -28627,6 +28746,7 @@ var WeaponsEffects = /** @class */ /*@__PURE__*/ (function () {
                         _this.messageService.showToastrSuccess(message);
                     }
                 }
+                _this.store.dispatch(new actions_1.WeaponErrors(null));
                 return new fromWeapons.RefreshWeaponList(weapons);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
@@ -28645,6 +28765,7 @@ var WeaponsEffects = /** @class */ /*@__PURE__*/ (function () {
                 if (index > -1) {
                     weapons.splice(index, 1, action.payload);
                 }
+                _this.store.dispatch(new actions_1.WeaponErrors(null));
                 return new fromWeapons.RefreshWeaponList(weapons);
             }), operators_1.catchError(function (err) {
                 _this.messageService.showPushNotification(err);
