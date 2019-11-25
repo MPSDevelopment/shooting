@@ -27,6 +27,7 @@ import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.CategoriesBean;
 import tech.shooting.ipsc.bean.StandardBean;
+import tech.shooting.ipsc.bean.StandardScoreBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
@@ -358,15 +359,23 @@ class StandardControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
 				.header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-		StandardScore score = new StandardScore();
-		score.setPerson(testingPerson);
+		var score = new StandardScoreBean();
+		score.setPersonId(testingPerson.getId());
 		score.setStandardId(testStandard.getId());
 		score.setScore(4);
 		score.setTimeOfExercise(23);
+		score.setPoints(12);
 
 		// try access with user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated());
+		String content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+		
+		StandardScore gotScore = JacksonUtils.fromJson(StandardScore.class, content);
+
+		assertEquals(testingPerson.getId(), gotScore.getPerson().getId());
+		assertEquals(4, gotScore.getScore());
+		assertEquals(23, gotScore.getTimeOfExercise());
+		assertEquals(12, gotScore.getPoints());
 
 	}
 

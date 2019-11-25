@@ -15,12 +15,9 @@ import tech.shooting.ipsc.bean.QuestionBean;
 import tech.shooting.ipsc.bean.QuizBean;
 import tech.shooting.ipsc.bean.QuizScoreBean;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
-import tech.shooting.ipsc.bean.StandardScoreRequest;
-import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Question;
 import tech.shooting.ipsc.pojo.Quiz;
 import tech.shooting.ipsc.pojo.QuizScore;
-import tech.shooting.ipsc.pojo.StandardScore;
 import tech.shooting.ipsc.pojo.Subject;
 import tech.shooting.ipsc.service.QuizService;
 

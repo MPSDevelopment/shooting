@@ -12,6 +12,7 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.ConditionsBean;
 import tech.shooting.ipsc.bean.StandardBean;
+import tech.shooting.ipsc.bean.StandardScoreBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.UnitEnum;
@@ -72,7 +73,8 @@ public class StandardService {
 		Subject subject = checkSubject(bean.getSubject());
 		List<StandardConditions> conditions = checkConditionList(bean.getConditionsList());
 		List<StandardFails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList()) ? new ArrayList<>() : bean.getFailsList();
-		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setRunning(bean.isRunning()).setInfo(bean.getInfo()).setCategoryByTimeList(bean.getCategoryByTimeList()).setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
+		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setRunning(bean.isRunning()).setInfo(bean.getInfo()).setCategoryByTimeList(bean.getCategoryByTimeList())
+				.setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
 	}
 
 	private List<StandardConditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {
@@ -105,8 +107,8 @@ public class StandardService {
 	public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		Standard standardFromBean = getStandardFromBean(bean);
-		standard.setCategoryByTimeList(standardFromBean.getCategoryByTimeList()).setCategoryByPointsList(standardFromBean.getCategoryByPointsList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList()).setConditionsList(standardFromBean.getConditionsList())
-				.setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setRunning(standardFromBean.isRunning()).setActive(standardFromBean.isActive());
+		standard.setCategoryByTimeList(standardFromBean.getCategoryByTimeList()).setCategoryByPointsList(standardFromBean.getCategoryByPointsList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList())
+				.setConditionsList(standardFromBean.getConditionsList()).setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setRunning(standardFromBean.isRunning()).setActive(standardFromBean.isActive());
 		return standardRepository.save(standard);
 	}
 
@@ -114,7 +116,11 @@ public class StandardService {
 		standardRepository.deleteById(standardId);
 	}
 
-	public StandardScore addScore(Long standardId, StandardScore score) {
+	public StandardScore addScore(Long standardId, StandardScoreBean bean) throws BadRequestException {
+		var person = checkPerson(bean.getPersonId());
+		var score = new StandardScore();
+		BeanUtils.copyProperties(bean, score, StandardScore.PERSON_FIELD);
+		score.setPerson(person);
 		return standardScoreRepository.save(score);
 	}
 
@@ -148,13 +154,13 @@ public class StandardService {
 
 		return standardScoreRepository.getScoreList(query);
 	}
-	
+
 	public ResponseEntity<List<StandardScore>> getScoreList(StandardScoreRequest query, Integer page, Integer size) {
 		page = Math.max(1, page);
 		page--;
 		size = Math.min(Math.max(10, size), 20);
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, QuizScore.TIME_FIELD);
-		var list =  standardScoreRepository.getScoreList(query, pageable);
+		var list = standardScoreRepository.getScoreList(query, pageable);
 		return new ResponseEntity<>(list.getContent(), Pageable.setHeaders(page, list.getTotalElements(), list.getTotalPages()), HttpStatus.OK);
 	}
 }
