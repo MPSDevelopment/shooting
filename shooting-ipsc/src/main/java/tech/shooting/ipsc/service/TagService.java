@@ -99,8 +99,12 @@ public class TagService {
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 
 					if (map.get(tag.getCode()) == null) {
-						EventBus.publishEvent(new TagDetectedEvent(tag.getCode()).setTime(tag.getFirstSeenTime()));
 						map.put(tag.getCode(), tag);
+						EventBus.publishEvent(new TagDetectedEvent(tag.getCode()).setTime(tag.getFirstSeenTime()));
+					} else {
+//						Tag existingTag = map.get(tag.getCode());
+//						existingTag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+//						map.put(tag.getCode(), existingTag);
 					}
 				});
 

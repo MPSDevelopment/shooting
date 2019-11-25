@@ -16,6 +16,7 @@ import javax.validation.constraints.Positive;
 @Accessors(chain = true)
 @ApiModel("Create score")
 public class ScoreBean {
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Competitor's rfid  or number code", required = true)
 	private TypeMarkEnum type;

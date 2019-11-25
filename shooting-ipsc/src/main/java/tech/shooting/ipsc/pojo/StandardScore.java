@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Document(collection = "standardScore")
 @TypeAlias("standardScore")
@@ -52,9 +53,13 @@ public class StandardScore extends BaseDocument {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person time of executing this standard", required = true)
-	@NotNull(message = ValidationConstants.TIME_MESSAGE)
-	@Positive(message = ValidationConstants.TIME_MESSAGE)
+	@PositiveOrZero(message = ValidationConstants.TIME_MESSAGE)
 	private double timeOfExercise = 0;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Person points this standard", required = true)
+	@PositiveOrZero(message = ValidationConstants.POINTS_MESSAGE)
+	private double points = 0;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Disqualification description")

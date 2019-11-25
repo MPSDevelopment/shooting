@@ -66,7 +66,9 @@ public class ValidationConstants {
 
 	public static final String STANDARD_ID = "Standard id is required, must be not null";
 
-	public static final String TIME_MESSAGE = "The time must be not null and positive";
+	public static final String TIME_MESSAGE = "Time must be positive";
+	
+	public static final String POINTS_MESSAGE = "Points must be positive";
 
 	public static final String SATISFACTORILY_MARK_MESSAGE = "The satisfactorily point must be not null and positive";
 

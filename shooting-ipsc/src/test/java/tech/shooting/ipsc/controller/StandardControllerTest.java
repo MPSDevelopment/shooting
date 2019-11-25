@@ -380,6 +380,7 @@ class StandardControllerTest {
 		score.setStandardId(testStandard.getId());
 		score.setScore(4);
 		score.setTimeOfExercise(23);
+		score.setPoints(12);
 
 		standardScoreRepository.save(score);
 
@@ -392,6 +393,8 @@ class StandardControllerTest {
 		StandardScore gotScore = JacksonUtils.fromJson(StandardScore.class, content);
 
 		assertEquals(4, gotScore.getScore());
+		assertEquals(23, gotScore.getTimeOfExercise());
+		assertEquals(12, gotScore.getPoints());
 	}
 
 	@Test
