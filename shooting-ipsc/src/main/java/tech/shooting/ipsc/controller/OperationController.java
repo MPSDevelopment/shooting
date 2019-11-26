@@ -113,7 +113,7 @@ public class OperationController {
 		return new ResponseEntity<>(new SuccessfulMessage("Signals were successfully saved"), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMMANDANT_SERVICES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set commandant services")
 	public ResponseEntity<SuccessfulMessage> setCommandantServices(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCommandantService> services) throws BadRequestException {
 		operationService.setCommandantServices(id, services);
