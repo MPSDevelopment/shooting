@@ -15,6 +15,7 @@ import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSignal;
@@ -107,8 +108,15 @@ public class OperationController {
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation symbols")
-	public ResponseEntity<SuccessfulMessage> setSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> setCombatSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
 		operationService.setCombatSignals(id, signals);
 		return new ResponseEntity<>(new SuccessfulMessage("Signals were successfully saved"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set commandant services")
+	public ResponseEntity<SuccessfulMessage> setCommandantServices(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCommandantService> services) throws BadRequestException {
+		operationService.setCommandantServices(id, services);
+		return new ResponseEntity<>(new SuccessfulMessage("Services were successfully saved"), HttpStatus.OK);
 	}
 }

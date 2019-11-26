@@ -43,5 +43,12 @@ public class OperationCommandantService extends BaseDocument {
 	@ApiModelProperty(value = "Number of transport vehicles", required = true)
 	private int transportNumber;
 	
+	@JsonProperty
+	@ApiModelProperty(value = "Who provides the service", required = true)
+	private String whoProvides;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Readiness of the service", required = true)
+	private String readiness;
 	
 }

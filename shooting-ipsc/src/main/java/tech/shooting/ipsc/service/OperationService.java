@@ -14,6 +14,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSignal;
@@ -222,6 +223,10 @@ public class OperationService {
 	
 	public void setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
 		operationRepository.setCombatSignalsToOperation(id, signals);
+	}
+	
+	public void setCommandantServices(Long id, List<OperationCommandantService> services) throws BadRequestException {
+		operationRepository.setCommandantServicesToOperation(id, services);
 	}
 
 }
