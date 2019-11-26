@@ -4,6 +4,7 @@ import java.util.List;
 
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
 
@@ -16,4 +17,6 @@ public interface CustomOperationRepository {
 	public void setSymbolsToOperation(Long operationId, List<OperationSymbol> list);
 
 	public void setMainIndicatorsToOperation(Long operationId, List<OperationMainIndicator> list);
+	
+	public void setCombatSignalsToOperation(Long operationId, List<OperationSignal> list);
 }

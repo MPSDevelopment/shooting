@@ -19,6 +19,7 @@ import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
 
@@ -84,5 +85,13 @@ public class OperationRepositoryTest {
 		operationRepository.setMainIndicatorsToOperation(operation.getId(), Arrays.asList(new OperationMainIndicator()));
 		assertNotNull(operationRepository.findById(operation.getId()).get().getMainIndicators());
 		assertEquals(1, operationRepository.findById(operation.getId()).get().getMainIndicators().size());
+	}
+	
+	@Test
+	public void setSignalsToOperation() {
+		assertEquals(0, operationRepository.findById(operation.getId()).get().getSignals().size());
+		operationRepository.setCombatSignalsToOperation(operation.getId(), Arrays.asList(new OperationSignal()));
+		assertNotNull(operationRepository.findById(operation.getId()).get().getSignals());
+		assertEquals(1, operationRepository.findById(operation.getId()).get().getSignals().size());
 	}
 }

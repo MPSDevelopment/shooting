@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class IndexController {
 
-    @RequestMapping("/")
-    public String index(){
-        log.info("Looking in the index controller.........");
-        return "index";
-    }
+	@RequestMapping("/")
+	public String index() {
+		log.info("Looking in the index controller.........");
+		return "index";
+	}
 
 }
