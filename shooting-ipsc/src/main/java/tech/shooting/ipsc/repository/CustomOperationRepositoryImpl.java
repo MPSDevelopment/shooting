@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSignal;
@@ -44,5 +45,10 @@ public class CustomOperationRepositoryImpl implements CustomOperationRepository 
 	@Override
 	public void setCombatSignalsToOperation(Long operationId, List<OperationSignal> list) {
 		mongoTemplate.updateFirst(Query.query(Criteria.where(Operation.ID_FIELD).is(operationId)), new Update().set(Operation.SIGNALS_FIELD, list), Operation.class);
+	}
+
+	@Override
+	public void setCommandantServicesToOperation(Long operationId, List<OperationCommandantService> list) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where(Operation.ID_FIELD).is(operationId)), new Update().set(Operation.COMMANDANT_SERVICES_FIELD, list), Operation.class);
 	}
 }

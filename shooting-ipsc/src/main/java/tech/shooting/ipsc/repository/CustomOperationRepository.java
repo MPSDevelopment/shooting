@@ -2,6 +2,7 @@ package tech.shooting.ipsc.repository;
 
 import java.util.List;
 
+import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSignal;
@@ -19,4 +20,6 @@ public interface CustomOperationRepository {
 	public void setMainIndicatorsToOperation(Long operationId, List<OperationMainIndicator> list);
 	
 	public void setCombatSignalsToOperation(Long operationId, List<OperationSignal> list);
+	
+	public void setCommandantServicesToOperation(Long operationId, List<OperationCommandantService> list);
 }

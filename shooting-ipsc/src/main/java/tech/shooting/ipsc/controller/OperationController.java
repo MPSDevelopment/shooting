@@ -17,6 +17,7 @@ import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.service.OperationService;
@@ -102,5 +103,12 @@ public class OperationController {
 	public ResponseEntity<SuccessfulMessage> setParticipants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationParticipant> participants) throws BadRequestException {
 		operationService.setParticipantsToOperation(id, participants);
 		return new ResponseEntity<>(new SuccessfulMessage("Participants were successfully saved"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set operation symbols")
+	public ResponseEntity<SuccessfulMessage> setSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
+		operationService.setCombatSignals(id, signals);
+		return new ResponseEntity<>(new SuccessfulMessage("Signals were successfully saved"), HttpStatus.OK);
 	}
 }
