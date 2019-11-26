@@ -74,7 +74,7 @@ public class StandardService {
 		List<StandardConditions> conditions = checkConditionList(bean.getConditionsList());
 		List<StandardFails> fails = bean.getFailsList() == null || Collections.EMPTY_LIST.equals(bean.getFailsList()) ? new ArrayList<>() : bean.getFailsList();
 		return new Standard().setActive(bean.isActive()).setGroups(bean.isGroups()).setRunning(bean.isRunning()).setInfo(bean.getInfo()).setCategoryByTimeList(bean.getCategoryByTimeList())
-				.setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject);
+				.setCategoryByPointsList(bean.getCategoryByPointsList()).setConditionsList(conditions).setFailsList(fails).setSubject(subject).setLaps(bean.getLaps());
 	}
 
 	private List<StandardConditions> checkConditionList(List<ConditionsBean> conditionsList) throws BadRequestException {

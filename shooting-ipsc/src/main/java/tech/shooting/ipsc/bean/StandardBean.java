@@ -11,6 +11,8 @@ import tech.shooting.ipsc.pojo.Info;
 
 import java.util.List;
 
+import javax.validation.constraints.PositiveOrZero;
+
 @Data
 @Accessors(chain = true)
 public class StandardBean {
@@ -32,8 +34,13 @@ public class StandardBean {
     private boolean groups;
     
     @JsonProperty
-    @ApiModelProperty(value = "Running", required = true)
+    @ApiModelProperty(value = "Is running", required = true)
     private boolean running;
+    
+	@JsonProperty
+	@ApiModelProperty(value = "Number of laps to finish the standard", required = true)
+	@PositiveOrZero
+	private Integer laps;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List categories by time")

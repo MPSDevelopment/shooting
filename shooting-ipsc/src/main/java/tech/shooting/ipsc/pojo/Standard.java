@@ -15,6 +15,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.PositiveOrZero;
+
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -43,6 +45,11 @@ public class Standard extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Is running standard", required = true)
 	private boolean running;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Number of laps to finish the standard", required = true)
+	@PositiveOrZero
+	private Integer laps;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List categories by time")
