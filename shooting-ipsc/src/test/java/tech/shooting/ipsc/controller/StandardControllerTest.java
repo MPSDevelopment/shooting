@@ -230,17 +230,17 @@ class StandardControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
 				.header(Token.TOKEN_HEADER, judgeToken)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// try with admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-				.header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-		
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_STANDARD).contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(json).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+
 		assertEquals(count + 1, standardRepository.findAll().size());
 		Standard standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
-		
+
 		assertEquals(bean.getCategoryByTimeList(), standard1.getCategoryByTimeList());
 		assertEquals(bean.isActive(), standard1.isActive());
 		assertEquals(bean.isGroups(), standard1.isGroups());
 		assertEquals(bean.isRunning(), standard1.isRunning());
-	
+
 	}
 
 	private StandardBean createStandardBean() {
@@ -304,6 +304,16 @@ class StandardControllerTest {
 		assertEquals(standard.isActive(), standard1.isActive());
 		assertNotEquals(standard.isGroups(), standard1.isGroups());
 		assertEquals(standard.isRunning(), standard1.isRunning());
+
+		bean.setGroups(false);
+		json = JacksonUtils.getJson(bean);
+		contentAsString = mockMvc
+				.perform(MockMvcRequestBuilders.put(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_PUT_STANDARD.replace(ControllerAPI.REQUEST_STANDARD_ID, standard.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		assertEquals(count + 1, standardRepository.findAll().size());
+		standard1 = JacksonUtils.fromJson(Standard.class, contentAsString);
+		assertEquals(standard.isGroups(), standard1.isGroups());
 	}
 
 	@Test
@@ -367,9 +377,11 @@ class StandardControllerTest {
 		score.setPoints(12);
 
 		// try access with user role
-		String content = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
-		
+		String content = mockMvc
+				.perform(MockMvcRequestBuilders.post(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE.replace(ControllerAPI.REQUEST_STANDARD_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtils.getJson(score)).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse().getContentAsString();
+
 		StandardScore gotScore = JacksonUtils.fromJson(StandardScore.class, content);
 
 		assertEquals(testingPerson.getId(), gotScore.getPerson().getId());
