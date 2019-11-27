@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
+import tech.shooting.ipsc.event.TagImitatorEvent;
 import tech.shooting.ipsc.event.TagRestartEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
@@ -70,7 +72,7 @@ public class TagService {
 		log.info("Reader has been started");
 
 		EventBus.subscribe(this);
-		
+
 		EventBus.publishEvent(new RunningOnConnectEvent());
 
 		impinjReader.setTagOpCompleteListener(new TagOpCompleteListener() {
@@ -125,9 +127,9 @@ public class TagService {
 				}).collect(Collectors.joining(", ")));
 			}
 		});
-		
+
 		impinjReader.setConnectionCloseListener(new ConnectionCloseListener() {
-			
+
 			@Override
 			public void onConnectionClose(ImpinjReader arg0, ConnectionCloseEvent arg1) {
 				log.info("Reader connection has been closed");
@@ -140,7 +142,7 @@ public class TagService {
 	public void handle(TagDetectedEvent event) {
 
 	}
-	
+
 	@Handler
 	public void handle(TagRestartEvent event) throws OctaneSdkException {
 		log.info("Tag restart event with ip %s", event.getIp());
@@ -157,9 +159,40 @@ public class TagService {
 			impinjReader.disconnect();
 
 			log.info("Reader has been disconnected");
-			
+
 			EventBus.publishEvent(new RunningOnDisconnectEvent());
 		}
+	}
+
+	@Handler
+	public void handle(TagImitatorEvent event) throws InterruptedException {
+		log.info("Tag imitator event started");
+
+		long time = System.currentTimeMillis();
+
+		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
+
+		range.forEach(action -> {
+			
+			log.info("Another lap");
+			
+			event.getPersons().forEach(item -> {
+				
+				EventBus.publishEvent(new TagDetectedEvent(item.getRfidCode()).setTime(System.currentTimeMillis()));
+				
+				try {
+					Thread.sleep(event.getPersonDelay());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+			try {
+				Thread.sleep(event.getLapDelay());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+
 	}
 
 }

@@ -36,7 +36,7 @@ public class RunningService {
 
 	@Handler
 	public void handle(TagDetectedEvent event) {
-		log.info("Tag with code %s have appeared a first time");
+		log.info("Tag with code %s detected", event.getCode());
 		var person = personRepository.findByRfidCode(event.getCode()).orElse(null);
 		if (person == null) {
 			log.info("No person found for a rfid code %s", event.getCode());

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.ConditionsBean;
@@ -16,6 +18,7 @@ import tech.shooting.ipsc.bean.StandardScoreBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.enums.UnitEnum;
+import tech.shooting.ipsc.event.TagImitatorEvent;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.StandardRepository;
@@ -162,5 +165,10 @@ public class StandardService {
 		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, QuizScore.TIME_FIELD);
 		var list = standardScoreRepository.getScoreList(query, pageable);
 		return new ResponseEntity<>(list.getContent(), Pageable.setHeaders(page, list.getTotalElements(), list.getTotalPages()), HttpStatus.OK);
+	}
+
+	public void startImitator(Long standardId) throws BadRequestException {
+		Standard standard = checkStandard(standardId);
+		EventBus.publishEventAsync(new TagImitatorEvent(standardId, standard.getLaps() == 0 ? 5 : 0, personRepository.findAll()));
 	}
 }

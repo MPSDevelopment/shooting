@@ -121,6 +121,13 @@ public class StandardController {
 	public ResponseEntity<List<StandardScore>> getScoreQueryListByPage(@RequestBody StandardScoreRequest query, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_NUMBER) Integer page, @PathVariable(value = ControllerAPI.PATH_VARIABLE_PAGE_SIZE) Integer size) {
 		return standardService.getScoreList(query, page, size);
 	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_START_IMITATOR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation("Start standard running imitator")
+	public ResponseEntity<SuccessfulMessage> postStartImitator(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
+		standardService.startImitator(standardId);
+		return new ResponseEntity<>(new SuccessfulMessage("Standard running imitator was successfully started"), HttpStatus.OK);
+	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "List of standard pass values")
