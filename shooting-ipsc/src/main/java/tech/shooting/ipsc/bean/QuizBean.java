@@ -26,6 +26,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class QuizBean {
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Subject quiz", required = true)
 	@NotNull(message = ValidationConstants.SUBJECT_MESSAGE)
@@ -41,7 +42,7 @@ public class QuizBean {
 	private List<Question> questionList = new ArrayList<>();
 
 	@JsonProperty
-	@ApiModelProperty(value = "Time for answer", required = true)
+	@ApiModelProperty(value = "Time for answers in minutes", required = true)
 	@Positive(message = ValidationConstants.TIME_MESSAGE)
 	private Long time;
 
