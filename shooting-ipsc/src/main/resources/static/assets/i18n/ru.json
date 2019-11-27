@@ -359,6 +359,9 @@
   "SECONDS_MORE": "Секунд больше",
   "SECONDS_LESS": "Секунд меньше",
   "ammunitionTypes": "Типы боеприпасов",
+  "ammunitionType": "Тип Боеприпасов",
+  "addAmmunitionType": "Добавить Тип Боеприпасов",
+  "editAmmunitionType": "Изменить Тип Боеприпасов",
   "battleUnits": "Единицы боевого порядка",
   "specialOperations": "Спец. операции",
   "editCondition": "Изменить условие"
