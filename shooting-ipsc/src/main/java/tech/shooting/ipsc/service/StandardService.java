@@ -110,6 +110,7 @@ public class StandardService {
 	public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		Standard standardFromBean = getStandardFromBean(bean);
+		
 		standard.setCategoryByTimeList(standardFromBean.getCategoryByTimeList()).setCategoryByPointsList(standardFromBean.getCategoryByPointsList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList())
 				.setConditionsList(standardFromBean.getConditionsList()).setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setRunning(standardFromBean.isRunning()).setActive(standardFromBean.isActive());
 		return standardRepository.save(standard);
