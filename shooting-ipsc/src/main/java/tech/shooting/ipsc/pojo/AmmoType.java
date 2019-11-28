@@ -27,7 +27,7 @@ public class AmmoType extends BaseDocument {
     @JsonProperty
     @ApiModelProperty(value = "Weapon type", required = true)
     @NotNull(message = ValidationConstants.AMMO_TYPE_WEAPON_TYPE_MESSAGE)
-    private WeaponType weaponType;
+    private WeaponType ammunitionWeaponType;
     
     @JsonProperty
     @ApiModelProperty(value = "Weapon type's ammo usual count")

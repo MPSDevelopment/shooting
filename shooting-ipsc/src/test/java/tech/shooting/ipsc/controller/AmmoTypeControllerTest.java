@@ -170,7 +170,7 @@ class AmmoTypeControllerTest {
 	@Test
 	void checkPostType() throws Exception {
 		assertEquals(Collections.emptyList(), typeRepository.findAll());
-		AmmoTypeBean bean = new AmmoTypeBean().setName(AMMO_TYPE_ID).setCount(20).setWeaponTypeId(weaponTypeRepository.findByName(WEAPON_TYPE_ID).getId());
+		AmmoTypeBean bean = new AmmoTypeBean().setName(AMMO_TYPE_ID).setCount(20).setAmmunitionWeaponTypeId(weaponTypeRepository.findByName(WEAPON_TYPE_ID).getId());
 		String json = JacksonUtils.getJson(bean);
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.AMMO_TYPE_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.AMMO_TYPE_CONTROLLER_POST_TYPE).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
@@ -190,7 +190,7 @@ class AmmoTypeControllerTest {
 		AmmoType typeFromDB = JacksonUtils.fromJson(AmmoType.class, contentAsString);
 		assertEquals(1, typeRepository.findAll().size());
 		assertEquals(bean.getName(), typeFromDB.getName());
-		assertEquals(bean.getWeaponTypeId(), typeFromDB.getWeaponType().getId());
+		assertEquals(bean.getAmmunitionWeaponTypeId(), typeFromDB.getAmmunitionWeaponType().getId());
 		assertEquals(bean.getCount(), typeFromDB.getCount());
 	}
 

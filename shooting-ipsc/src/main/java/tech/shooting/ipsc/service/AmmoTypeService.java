@@ -46,7 +46,7 @@ public class AmmoTypeService {
 	private AmmoType checkTypeExist(AmmoTypeBean bean) throws BadRequestException {
 		AmmoType byName = repository.findByName(bean.getName());
 		if (byName == null) {
-			return new AmmoType().setName(bean.getName()).setWeaponType(checkWeaponType(bean.getWeaponTypeId())).setCount(bean.getCount());
+			return new AmmoType().setName(bean.getName()).setAmmunitionWeaponType(checkWeaponType(bean.getAmmunitionWeaponTypeId())).setCount(bean.getCount());
 		} else {
 			return byName.setName(bean.getName());
 		}
@@ -57,6 +57,6 @@ public class AmmoTypeService {
 	}
 
 	public AmmoType updateType(long typeId, AmmoTypeBean bean) throws BadRequestException {
-		return repository.save(checkType(typeId).setName(bean.getName()).setWeaponType(checkWeaponType(bean.getWeaponTypeId())).setCount(bean.getCount()));
+		return repository.save(checkType(typeId).setName(bean.getName()).setAmmunitionWeaponType(checkWeaponType(bean.getAmmunitionWeaponTypeId())).setCount(bean.getCount()));
 	}
 }
