@@ -1,36 +1,41 @@
 package tech.shooting.speedway.service;
 
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.impinj.octane.ImpinjReader;
 import com.impinj.octane.OctaneSdkException;
-import com.impinj.octane.TagOpCompleteListener;
-import com.impinj.octane.TagOpReport;
+import com.impinj.octane.ReportConfig;
+import com.impinj.octane.Settings;
 import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
 
-import lombok.extern.slf4j.Slf4j;
-import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.speedway.pojo.Tag;
 
-@Service
-@Slf4j
 public class TagService {
 
 	private ImpinjReader impinjReader;
 
-	public void start() throws OctaneSdkException {
+	private Map<String, Tag> map = new HashMap<>();
+
+	public TagService() {
+
+	}
+
+	public void start(String address) throws OctaneSdkException {
 
 		impinjReader = new ImpinjReader();
 
-		impinjReader.connect("192.168.31.212");
+		try {
+			impinjReader.connect(address);
+		} catch (OctaneSdkException e) {
+			return;
+		}
 
-		log.info("Reader has been connected");
-
-		var settings = impinjReader.queryDefaultSettings();
-		var report = settings.getReport();
+		Settings settings = impinjReader.queryDefaultSettings();
+		ReportConfig report = settings.getReport();
 		report.setIncludeAntennaPortNumber(true);
 		report.setIncludeSeenCount(true);
 		report.setIncludeCrc(true);
@@ -41,15 +46,7 @@ public class TagService {
 
 		impinjReader.start();
 
-		log.info("Reader has been started");
-
-		impinjReader.setTagOpCompleteListener(new TagOpCompleteListener() {
-
-			@Override
-			public void onTagOpComplete(ImpinjReader arg0, TagOpReport report) {
-				log.info("Tag report complete %s", report.getResults());
-			}
-		});
+//		log.info("Reader has been started");
 
 		impinjReader.setTagReportListener(new TagReportListener() {
 
@@ -58,25 +55,40 @@ public class TagService {
 //					log.info("Tag report %s", report.getTags().stream().map(item-> item.getCrc()).collect(Collectors.toList()));
 //					log.info("On tag report %s", report.getTags().stream().map(item-> JacksonUtils.getFullJson(item)).collect(Collectors.joining(", ")));
 
-				log.info("On tag report %s", report.getTags().stream().map(item -> {
+				List<String> list = new ArrayList<String>();
+
+				report.getTags().forEach(item -> {
+					list.add(String.valueOf(item.getCrc()));
+
 					Tag tag = new Tag();
-					tag.setCrc(item.getCrc());
+					tag.setCode(String.valueOf(item.getCrc()));
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-					return JacksonUtils.getJson(tag);
-				}).collect(Collectors.joining(", ")));
+
+					if (map.get(tag.getCode()) == null) {
+						map.put(tag.getCode(), tag);
+					} 
+				});
+
+				// remove tag from map if it is not in tagReport
+				map.forEach((code, item) -> {
+					if (!list.contains(code)) {
+						map.remove(code);
+					}
+				});
 			}
 		});
 	}
 
 	public void stop() throws OctaneSdkException {
-		impinjReader.stop();
+		if (impinjReader != null) {
+			impinjReader.stop();
+			impinjReader.disconnect();
+		}
+	}
 
-		log.info("Reader has been stopped");
-
-		impinjReader.disconnect();
-
-		log.info("Reader has been disconnected");
+	public Map<String, Tag> getTags() {
+		return map;
 	}
 
 }

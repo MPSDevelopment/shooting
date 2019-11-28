@@ -15,7 +15,7 @@
 
 	<properties>
 
-		<jdk.version>11</jdk.version>
+		<jdk.version>8</jdk.version>
 
 		<lib.property>lib</lib.property>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,30 +23,6 @@
 	</properties>
 
 	<dependencies>
-
-		<!-- <dependency> -->
-		<!-- <groupId>com.mpsdevelopment.plasticine</groupId> -->
-		<!-- <artifactId>plasticine-commons</artifactId> -->
-		<!-- <version>${plasticine.version}</version> -->
-		<!-- </dependency> -->
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>shooting-commons</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-actuator</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>OctaneSDKJava</groupId>
@@ -58,24 +34,8 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<!-- Dependency for TEST -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<version>${spring.boot.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.skyscreamer</groupId>
-					<artifactId>jsonassert</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-			</exclusions>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/Octane.jar</systemPath>
 		</dependency>
 
 
