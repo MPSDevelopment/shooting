@@ -40,6 +40,10 @@ public class TagService {
 
 	@Autowired
 	private SettingsService settingsService;
+	
+	public TagService() {
+		EventBus.subscribe(this);
+	}
 
 	public void start() throws OctaneSdkException {
 
@@ -70,8 +74,6 @@ public class TagService {
 		impinjReader.start();
 
 		log.info("Reader has been started");
-
-		EventBus.subscribe(this);
 
 		EventBus.publishEvent(new RunningOnConnectEvent());
 

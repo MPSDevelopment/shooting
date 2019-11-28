@@ -63,7 +63,6 @@ class TagServiceTest {
 	public void handleTagImitatorEvent() {
 
 		EventBus.subscribe(this);
-		EventBus.subscribe(tagService);
 
 		var standard = standardRepository.save(new Standard().setLaps(4).setRunning(true));
 		personRepository.save(new Person().setName("Thor").setRfidCode("1234"));
