@@ -169,8 +169,11 @@ public class TagService {
 	@Handler
 	public void handle(TagImitatorEvent event) throws InterruptedException {
 		log.info("Tag imitator event started");
-
-		long time = System.currentTimeMillis();
+		
+		if (event.getLaps() == 0) {
+			log.error("There is zero laps");
+			return;
+		}
 
 		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
 
