@@ -170,6 +170,6 @@ public class StandardService {
 
 	public void startImitator(Long standardId) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
-		EventBus.publishEventAsync(new TagImitatorEvent(standardId, standard.getLaps() == 0 ? 5 : 0, personRepository.findAll()));
+		EventBus.publishEventAsync(new TagImitatorEvent(standardId, standard.getLaps() == null ? 5 : standard.getLaps(), personRepository.findAll()));
 	}
 }

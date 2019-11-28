@@ -49,7 +49,7 @@ public class Standard extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Number of laps to finish the standard", required = true)
 	@PositiveOrZero
-	private Integer laps;
+	private Integer laps = 0;
 
 	@JsonProperty
 	@ApiModelProperty(value = "List categories by time")
