@@ -44,7 +44,7 @@ public class RunningService {
 		}
 		RunningData runningData = map.get(person);
 		if (runningData == null) {
-			runningData = new RunningData().setLaps(0).setPerson(person).setLastTime(event.getTime()).setFirstTime(event.getTime());
+			runningData = new RunningData().setLaps(0).setPersonId(person.getId()).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
 			runningData = runningData.setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
 		}

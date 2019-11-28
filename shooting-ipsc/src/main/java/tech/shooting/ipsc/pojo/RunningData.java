@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 public class RunningData {
 
 	@JsonProperty
-	private Person person;
+	private Long personId;
 	
 	@JsonProperty
 	private long firstTime;

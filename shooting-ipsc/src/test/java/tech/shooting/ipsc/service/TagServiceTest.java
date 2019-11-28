@@ -75,7 +75,7 @@ class TagServiceTest {
 	@Handler
 	public void handle(RunningUpdatedEvent event) {
 
-		log.info("Running update event: Person %s Laps %s(%s) Time %s(%s)", event.getData().getPerson().getName(), event.getData().getLaps(), previousLaps, event.getData().getLastTime(), previousTime);
+		log.info("Running update event: Person %s Laps %s(%s) Time %s(%s)", event.getData().getPersonId(), event.getData().getLaps(), previousLaps, event.getData().getLastTime(), previousTime);
 
 		if (previousFirstTime != 0) {
 			assertEquals(event.getData().getFirstTime(), previousFirstTime);
