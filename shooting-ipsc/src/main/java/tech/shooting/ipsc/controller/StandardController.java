@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreBean;
@@ -124,7 +125,7 @@ public class StandardController {
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_START_IMITATOR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation("Start standard running imitator")
-	public ResponseEntity<SuccessfulMessage> postStartImitator(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> postStartImitator(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
 		standardService.startImitator(standardId);
 		return new ResponseEntity<>(new SuccessfulMessage("Standard running imitator was successfully started"), HttpStatus.OK);
 	}
