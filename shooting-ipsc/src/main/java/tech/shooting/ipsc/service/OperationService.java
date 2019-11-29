@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
@@ -227,6 +230,10 @@ public class OperationService {
 	
 	public void setCommandantServices(Long id, List<OperationCommandantService> services) throws BadRequestException {
 		operationRepository.setCommandantServicesToOperation(id, services);
+	}
+
+	public void setCombatElements(Long id, List<OperationCombatElement> elements) {
+		operationRepository.setCombatElementsToOperation(id, elements);
 	}
 
 }

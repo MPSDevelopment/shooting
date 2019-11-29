@@ -17,6 +17,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
+import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
@@ -102,5 +103,13 @@ public class OperationRepositoryTest {
 		operationRepository.setCommandantServicesToOperation(operation.getId(), Arrays.asList(new OperationCommandantService()));
 		assertNotNull(operationRepository.findById(operation.getId()).get().getCommandantServices());
 		assertEquals(1, operationRepository.findById(operation.getId()).get().getCommandantServices().size());
+	}
+	
+	@Test
+	public void setCombatElementsToOperation() {
+		assertEquals(0, operationRepository.findById(operation.getId()).get().getCombatElements().size());
+		operationRepository.setCombatElementsToOperation(operation.getId(), Arrays.asList(new OperationCombatElement()));
+		assertNotNull(operationRepository.findById(operation.getId()).get().getCombatElements());
+		assertEquals(1, operationRepository.findById(operation.getId()).get().getCombatElements().size());
 	}
 }

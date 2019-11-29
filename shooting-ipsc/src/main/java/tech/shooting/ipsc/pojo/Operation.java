@@ -29,6 +29,8 @@ public class Operation extends BaseDocument {
 	public static final String SIGNALS_FIELD = "signals";
 	
 	public static final String COMMANDANT_SERVICES_FIELD = "commandantServices";
+	
+	public static final String COMBAT_ELEMENTS_FIELD = "combatElements";
 
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
@@ -45,6 +47,10 @@ public class Operation extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Operation participant list", required = true)
 	private List<OperationParticipant> participants = new ArrayList<>();
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Operation combat elements", required = true)
+	private List<OperationCombatElement> combatElements = new ArrayList<>();
 
 	@JsonProperty
 	@ApiModelProperty(value = "Operation symbols list", required = true)
