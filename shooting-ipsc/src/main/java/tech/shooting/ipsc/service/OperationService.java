@@ -150,7 +150,7 @@ public class OperationService {
 					break;
 				}
 				case AMMO_TYPE_HEADER: {
-					
+
 					break;
 				}
 				case ANIMAL_TYPE_HEADER: {
@@ -212,28 +212,63 @@ public class OperationService {
 		operationRepository.setWeatherToOperation(id, weather);
 	}
 
+	public Weather getWeather(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getWeather();
+	}
+
 	public void setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
 		operationRepository.setSymbolsToOperation(id, symbols);
 	}
 	
+	public List<OperationSymbol> getSymbols(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getSymbols();
+	}
+
 	public void setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
 		operationRepository.setMainIndicatorsToOperation(id, indicators);
 	}
 	
+	public List<OperationMainIndicator> getMainIndicators(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getMainIndicators();
+	}
+
 	public void setParticipantsToOperation(Long id, List<OperationParticipant> participants) throws BadRequestException {
 		operationRepository.setParticipantsToOperation(id, participants);
 	}
 	
+	public List<OperationParticipant> getParticipants(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getParticipants();
+	}
+
 	public void setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
 		operationRepository.setCombatSignalsToOperation(id, signals);
 	}
 	
+	public List<OperationSignal> getSignals(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getSignals();
+	}
+
 	public void setCommandantServices(Long id, List<OperationCommandantService> services) throws BadRequestException {
 		operationRepository.setCommandantServicesToOperation(id, services);
 	}
+	
+	public List<OperationCommandantService> getCommandantServices(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getCommandantServices();
+	}
+
 
 	public void setCombatElements(Long id, List<OperationCombatElement> elements) {
 		operationRepository.setCombatElementsToOperation(id, elements);
 	}
 
+	public List<OperationCombatElement> getCombatElements(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getCombatElements();
+	}
 }

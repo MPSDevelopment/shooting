@@ -441,10 +441,17 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS = "/combatlistheaders/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_COMBATLIST_DATA = "/combatlistdata/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_WEATHER = "/weather/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_WEATHER = "/weather/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_SYMBOLS = "/symbols/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_SYMBOLS = "/symbols/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_MAIN_INDICATORS = "/mainindicators/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_MAIN_INDICATORS = "/mainindicators/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_PARTICIPANTS = "/participants/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_PARTICIPANTS = "/participants/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_SIGNALS = "/signals/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_SIGNALS = "/signals/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_COMMANDANT_SERVICES = "/commandantservices/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_COMMANDANT_SERVICES = "/commandantservices/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
 }
