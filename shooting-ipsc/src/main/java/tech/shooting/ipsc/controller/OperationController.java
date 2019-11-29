@@ -165,7 +165,7 @@ public class OperationController {
 	}
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get operation commandant services")
+	@ApiOperation(value = "Get operation elements")
 	public ResponseEntity<List<OperationCombatElement>> getCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCombatElements(id), HttpStatus.OK);
 	}

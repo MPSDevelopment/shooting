@@ -46,6 +46,8 @@
 		<docker.image.name>ipsc</docker.image.name>
 		<docker.image.version>0.2</docker.image.version>
 		<jdk.version>11</jdk.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<jre.version>1.8.0.74</jre.version>
 
 		<lib.property>lib</lib.property>
