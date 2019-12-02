@@ -54,5 +54,6 @@ public class UserSignupBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's birthday")
+	@NotNull(message = ValidationConstants.USER_BIRTHDAY_MESSAGE)
 	private OffsetDateTime birthDate;
 }

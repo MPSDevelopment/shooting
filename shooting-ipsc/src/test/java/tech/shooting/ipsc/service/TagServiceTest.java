@@ -3,6 +3,9 @@ package tech.shooting.ipsc.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
+import tech.shooting.ipsc.event.TagFinishedEvent;
 import tech.shooting.ipsc.event.TagImitatorEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Standard;
@@ -46,13 +50,7 @@ class TagServiceTest {
 	@Autowired
 	private TagService tagService;
 
-	private int count;
-
-	private int previousLaps = -1;
-
-	private long previousTime;
-
-	private long previousFirstTime;
+	private Map<Long, TestRunningData> map = new HashMap<>();
 
 	@BeforeEach
 	public void beforeEach() {
@@ -65,29 +63,54 @@ class TagServiceTest {
 		EventBus.subscribe(this);
 
 		var standard = standardRepository.save(new Standard().setLaps(4).setRunning(true));
-		personRepository.save(new Person().setName("Thor").setRfidCode("1234"));
+		var thor = personRepository.save(new Person().setName("Thor").setRfidCode("1234"));
+		var loki = personRepository.save(new Person().setName("Loki").setRfidCode("1235"));
 
 		EventBus.publishEvent(new TagImitatorEvent(standard.getId(), standard.getLaps(), personRepository.findAll()).setLapDelay(200).setPersonDelay(100));
 
-		assertEquals(5, count);
+		assertEquals(5, map.get(thor.getId()).getCount());
+		assertEquals(5, map.get(loki.getId()).getCount());
+		assertEquals(4, map.get(thor.getId()).getPreviousLaps());
+		assertEquals(4, map.get(loki.getId()).getPreviousLaps());
+		
+		EventBus.publishEvent(new TagImitatorEvent(standard.getId(), standard.getLaps(), personRepository.findAll()).setLapDelay(200).setPersonDelay(100));
+		
+		
+		assertEquals(5, map.get(thor.getId()).getCount());
+		assertEquals(5, map.get(loki.getId()).getCount());
+		assertEquals(4, map.get(thor.getId()).getPreviousLaps());
+		assertEquals(4, map.get(loki.getId()).getPreviousLaps());
+	}
+	
+	@Handler
+	public void handle(TagFinishedEvent event) {
+		map.clear();
 	}
 
 	@Handler
 	public void handle(RunningUpdatedEvent event) {
 
-		log.info("Running update event: Person %s Laps %s(%s) Time %s(%s)", event.getData().getPersonId(), event.getData().getLaps(), previousLaps, event.getData().getLastTime(), previousTime);
+		var testRunningData = map.get(event.getData().getPersonId());
 
-		if (previousFirstTime != 0) {
-			assertEquals(event.getData().getFirstTime(), previousFirstTime);
-			assertNotEquals(event.getData().getLastTime(), previousTime);
+		if (testRunningData != null) {
+			log.info("Running update event: Person %s Laps %s(%s) Time %s(%s)", event.getData().getPersonId(), event.getData().getLaps(), testRunningData.getPreviousLaps(), event.getData().getLastTime(), testRunningData.getPreviousTime());
+		} else {
+			testRunningData = new TestRunningData();
+			log.info("Running update event: Person %s Laps %s(0) Time %s(0)", event.getData().getPersonId(), event.getData().getLaps(), event.getData().getLastTime());
 		}
-		assertNotEquals(event.getData().getLaps(), previousLaps);
 
-		previousLaps = event.getData().getLaps();
-		previousTime = event.getData().getLastTime();
-		previousFirstTime = event.getData().getFirstTime();
+		if (testRunningData != null && testRunningData.getPreviousFirstTime() != 0) {
+			assertEquals(event.getData().getFirstTime(), testRunningData.getPreviousFirstTime());
+			assertNotEquals(event.getData().getLastTime(), testRunningData.getPreviousTime());
+		}
+		assertNotEquals(event.getData().getLaps(), testRunningData.getPreviousLaps());
+
+		testRunningData.setPreviousLaps(event.getData().getLaps());
+		testRunningData.setPreviousTime(event.getData().getLastTime());
+		testRunningData.setPreviousFirstTime(event.getData().getFirstTime());
+		testRunningData.setCount(testRunningData.getCount() + 1);
 		
-		count++;
+		map.put(event.getData().getPersonId(), testRunningData);
 	}
 
 }

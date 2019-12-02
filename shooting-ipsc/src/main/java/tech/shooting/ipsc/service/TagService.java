@@ -25,6 +25,7 @@ import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
+import tech.shooting.ipsc.event.TagFinishedEvent;
 import tech.shooting.ipsc.event.TagImitatorEvent;
 import tech.shooting.ipsc.event.TagRestartEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
@@ -47,6 +48,7 @@ public class TagService {
 
 	public void start() throws OctaneSdkException {
 
+		map = new HashMap<>();
 		impinjReader = new ImpinjReader();
 
 		var serverSettings = settingsService.getSettings();
@@ -168,12 +170,14 @@ public class TagService {
 
 	@Handler
 	public void handle(TagImitatorEvent event) throws InterruptedException {
-		log.info("Tag imitator event started");
+		log.info("Tag imitator event started with %s laps", event.getLaps());
 		
 		if (event.getLaps() == 0) {
 			log.error("There is zero laps");
 			return;
 		}
+		
+		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
 
 		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
 

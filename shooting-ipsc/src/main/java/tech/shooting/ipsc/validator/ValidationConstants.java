@@ -11,6 +11,8 @@ public class ValidationConstants {
 	public static final String USER_PHONE_MESSAGE = "Min 7 characters (digits - and +)";
 
 	public static final String USER_NAME_MESSAGE = "Min 3 character";
+	
+	public static final String USER_BIRTHDAY_MESSAGE = "Must not be null";
 
 	public static final String USER_LOGIN_MESSAGE = "Min 3 character";
 	

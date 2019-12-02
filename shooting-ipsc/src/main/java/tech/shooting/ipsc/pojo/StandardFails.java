@@ -1,5 +1,7 @@
 package tech.shooting.ipsc.pojo;
 
+import javax.validation.constraints.Positive;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,5 +23,6 @@ public class StandardFails {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Minus point for this fail", required = true)
+	@Positive
 	private Long minusPoint;
 }

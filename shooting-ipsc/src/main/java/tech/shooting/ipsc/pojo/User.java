@@ -14,6 +14,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 import java.time.OffsetDateTime;
 
+import javax.validation.constraints.NotNull;
+
 @Document(collection = "user")
 @TypeAlias("user")
 @Data

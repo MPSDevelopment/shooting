@@ -1,7 +1,6 @@
 package tech.shooting.ipsc.service;
 
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
+import tech.shooting.ipsc.event.TagFinishedEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.RunningData;
@@ -33,6 +33,15 @@ public class RunningService {
 	public RunningData getPersonData(Person person) {
 		return map.get(person);
 	}
+	
+//	EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
+	
+	
+	@Handler
+	public void handle(TagFinishedEvent event) {
+		map.clear();
+	}
+	
 
 	@Handler
 	public void handle(TagDetectedEvent event) {
@@ -44,9 +53,9 @@ public class RunningService {
 		}
 		RunningData runningData = map.get(person);
 		if (runningData == null) {
-			runningData = new RunningData().setLaps(0).setPersonId(person.getId()).setLastTime(event.getTime()).setFirstTime(event.getTime());
+			runningData = new RunningData().setLaps(0).setPersonId(person.getId()).setPersonName(person.getName()).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
-			runningData = runningData.setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
+			runningData = runningData.setPersonId(person.getId()).setPersonName(person.getName()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
 		}
 		map.put(person, runningData);
 		

@@ -13,6 +13,9 @@ public class RunningData {
 	private Long personId;
 	
 	@JsonProperty
+	private String personName;
+	
+	@JsonProperty
 	private long firstTime;
 	
 	@JsonProperty

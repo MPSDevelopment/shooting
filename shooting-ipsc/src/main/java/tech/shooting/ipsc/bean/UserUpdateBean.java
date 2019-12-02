@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
@@ -39,6 +38,7 @@ public class UserUpdateBean {
 
 	@JsonProperty
 	@ApiModelProperty(value = "User's birthday")
+	@NotNull(message = ValidationConstants.USER_BIRTHDAY_MESSAGE)
 	private OffsetDateTime birthDate;
 
 	@JsonProperty
