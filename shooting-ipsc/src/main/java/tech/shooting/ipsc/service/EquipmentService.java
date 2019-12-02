@@ -65,7 +65,10 @@ public class EquipmentService {
 	}
 
 	private Person checkPerson(Long owner) throws BadRequestException {
-		return personRepository.findById(owner).orElseThrow(() -> new BadRequestException(new ErrorMessage("Person with id %s is not exist", owner)));
+		if (owner==null) {
+			return null;
+		}
+		return personRepository.findById(owner).orElse(null);
 	}
 
 	public void delete(long id) {
