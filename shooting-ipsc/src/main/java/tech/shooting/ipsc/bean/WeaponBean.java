@@ -7,11 +7,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-
-import org.springframework.data.annotation.Id;
 
 @Data
 @Accessors(chain = true)
@@ -19,6 +17,7 @@ public class WeaponBean {
 	
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
+//	@NotNull(message = ValidationConstants.NOT_NULL_MESSAGE)
 	protected Long id;
 
     @JsonProperty
@@ -29,6 +28,7 @@ public class WeaponBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Type of weapon", required = true)
+    @NotNull(message = ValidationConstants.NOT_NULL_MESSAGE)
     private Long weaponType;
 
     @JsonProperty

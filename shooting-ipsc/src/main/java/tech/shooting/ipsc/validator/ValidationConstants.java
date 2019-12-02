@@ -7,6 +7,8 @@ public class ValidationConstants {
 	public static final String NAME_PATTERN = ".*[^0-9+-.].*";
 
 	public static final String USER_ID_MESSAGE = "Required";
+	
+	public static final String NOT_NULL_MESSAGE = "Required";
 
 	public static final String USER_PHONE_MESSAGE = "Min 7 characters (digits - and +)";
 

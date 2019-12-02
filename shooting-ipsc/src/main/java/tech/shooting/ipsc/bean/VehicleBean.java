@@ -9,6 +9,7 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
@@ -42,6 +43,7 @@ public class VehicleBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Type of vehicle", required = true)
+    @NotNull(message = ValidationConstants.NOT_NULL_MESSAGE)
     private Long type;
 
     @JsonProperty

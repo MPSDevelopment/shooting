@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
@@ -28,6 +29,7 @@ public class CommunicationEquipmentBean {
 
     @JsonProperty
     @ApiModelProperty(value = "Type of equipment", required = true)
+    @NotNull(message = ValidationConstants.NOT_NULL_MESSAGE)
     private Long type;
 
     @JsonProperty
