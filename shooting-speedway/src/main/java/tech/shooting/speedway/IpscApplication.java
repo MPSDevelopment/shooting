@@ -10,6 +10,8 @@ public class IpscApplication {
 
 	public static void main(String[] args) throws IOException, OctaneSdkException {
 		TagService tagService = new TagService();
-		tagService.start("192.168.31.212");
+		String message = tagService.start("192.168.31.212");
+		
+		System.out.println(message);
 	}
 }

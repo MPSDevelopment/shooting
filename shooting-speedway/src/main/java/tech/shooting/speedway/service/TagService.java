@@ -24,7 +24,7 @@ public class TagService {
 
 	}
 
-	public void start(String address) throws OctaneSdkException {
+	public String start(String address) throws OctaneSdkException {
 
 		clear();
 		impinjReader = new ImpinjReader();
@@ -32,7 +32,7 @@ public class TagService {
 		try {
 			impinjReader.connect(address);
 		} catch (OctaneSdkException e) {
-			return;
+			return "Cannot connect to the address " + address;
 		}
 
 		Settings settings = impinjReader.queryDefaultSettings();
@@ -79,6 +79,8 @@ public class TagService {
 				});
 			}
 		});
+
+		return "Started";
 	}
 
 	public void stop() throws OctaneSdkException {
