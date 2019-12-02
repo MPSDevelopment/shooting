@@ -13,6 +13,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.*;
 import tech.shooting.ipsc.config.CachingConfig;
+import tech.shooting.ipsc.pojo.CategoryByTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,6 +43,10 @@ public class ValidationServiceTest {
 		assertEquals(3, validationService.getConstraints(CompetitionBean.class).size());
 		assertEquals(3, validationService.getConstraints(UserUpdateBean.class).size());
 		assertEquals(3, validationService.getConstraints(CompetitorMark.class).size());
+		assertEquals(3, validationService.getConstraints(CategoryByTime.class).size());
+		
+		var result = validationService.getConstraints(CategoryByTime.class);
+		log.info("Constraints are %s", JacksonUtils.getPrettyJson(result));
 	}
 
 	@Test

@@ -26,6 +26,7 @@ public class TagService {
 
 	public void start(String address) throws OctaneSdkException {
 
+		clear();
 		impinjReader = new ImpinjReader();
 
 		try {
@@ -67,7 +68,7 @@ public class TagService {
 
 					if (map.get(tag.getCode()) == null) {
 						map.put(tag.getCode(), tag);
-					} 
+					}
 				});
 
 				// remove tag from map if it is not in tagReport
@@ -84,6 +85,13 @@ public class TagService {
 		if (impinjReader != null) {
 			impinjReader.stop();
 			impinjReader.disconnect();
+		}
+	}
+
+	public void clear() {
+		if (map != null) {
+			map.clear();
+			map = new HashMap<>();
 		}
 	}
 

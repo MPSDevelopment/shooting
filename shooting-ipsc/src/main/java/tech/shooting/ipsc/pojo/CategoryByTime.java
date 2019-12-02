@@ -22,15 +22,15 @@ public class CategoryByTime {
     @JsonProperty
     @ApiModelProperty(value = "Excellent execute time for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float excellentTime;
+    private Integer excellentTime;
     
     @JsonProperty
     @ApiModelProperty(value = "Good execute time for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float goodTime;
+    private Integer goodTime;
     
     @JsonProperty("satTime")
     @ApiModelProperty(value = "Standard execute time for this category", required = true)
     @Positive(message = ValidationConstants.TIME_MESSAGE)
-    private Float satisfactoryTime;
+    private Integer satisfactoryTime;
 }
