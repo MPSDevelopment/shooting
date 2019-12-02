@@ -52,6 +52,7 @@
   "rank": "Звание",
   "division": "Подразделение",
   "weaponType": "Тип оружия",
+  "ammunitionWeaponType": "Тип оружия",
   "level": "Уровень",
   "handgunCodeIpsc": "IPSC код дробовик",
   "shotgunCodeIpsc": "IPSC код пистолет",
