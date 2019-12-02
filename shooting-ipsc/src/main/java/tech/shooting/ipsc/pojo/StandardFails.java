@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import tech.shooting.ipsc.validator.ValidationConstants;
 
 @Data
 @Accessors(chain = true)
@@ -23,6 +24,6 @@ public class StandardFails {
 
 	@JsonProperty
 	@ApiModelProperty(value = "Minus point for this fail", required = true)
-	@Positive
+	@Positive(message = ValidationConstants.POSITIVE_MESSAGE)
 	private Long minusPoint;
 }

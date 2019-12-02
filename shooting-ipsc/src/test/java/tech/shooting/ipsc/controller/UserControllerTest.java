@@ -44,6 +44,7 @@ import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.UserService;
 import tech.shooting.ipsc.utils.UserLockUtils;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -91,9 +92,9 @@ public class UserControllerTest {
 	public void before() {
 		userRepository.deleteAll();
 		String password = RandomStringUtils.randomAscii(14);
-		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150"));
+		user = new User().setLogin(RandomStringUtils.randomAlphanumeric(15)).setName("Test firstname").setPassword(password).setRoleName(RoleName.USER).setAddress(new Address().setIndex("08150")).setBirthDate(OffsetDateTime.now().minusYears(25));
 		userJson = JacksonUtils.getJson(user);
-		userSignupBean = new UserSignupBean().setPassword("usersignupbeanpassword").setName("userSignUpBean").setLogin("Signup");
+		userSignupBean = new UserSignupBean().setPassword("usersignupbeanpassword").setName("userSignUpBean").setLogin("Signup").setBirthDate(OffsetDateTime.now().minusYears(25));
 		admin = userRepository.save(new User().setLogin(DatabaseCreator.ADMIN_LOGIN).setPassword(DatabaseCreator.ADMIN_PASSWORD).setRoleName(RoleName.ADMIN).setActive(true).setName("Admin"));
 		judge = userRepository.save(new User().setLogin(DatabaseCreator.JUDGE_LOGIN).setPassword(DatabaseCreator.JUDGE_PASSWORD).setRoleName(RoleName.JUDGE).setActive(true).setName("Judge"));
 		userToken = tokenUtils.createToken(admin.getId(), TokenType.USER, admin.getLogin(), RoleName.USER, DateUtils.addMonths(new Date(), 1), DateUtils.addDays(new Date(), -1));
