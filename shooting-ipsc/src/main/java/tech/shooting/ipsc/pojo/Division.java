@@ -38,8 +38,6 @@ public class Division extends BaseDocument {
 	@JsonSerialize(using = BaseDocumentIdSerializer.class)
 	private Division parent;
 
-	private Long parentId;
-
 	@JsonProperty
 	@ApiModelProperty(value = "Division name", required = true)
 	private String name;
@@ -55,7 +53,6 @@ public class Division extends BaseDocument {
 
 	public Division setParentWithChildren(Division parent) {
 		this.parent = parent;
-		parentId = parent == null ? null : parent.getId();
 		if (parent != null) {
 			parent.getChildren().add(this);
 		}

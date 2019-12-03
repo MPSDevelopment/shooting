@@ -97,6 +97,9 @@ public class DivisionService {
 	private DivisionBean convertDivisionToFront(Division division) {
 		DivisionBean divisionBean = new DivisionBean();
 		if (division.getParent() == null) {
+			if (division.getChildren() == null) {
+				division.setChildren(Collections.EMPTY_LIST);
+			}
 			divisionBean.setName(division.getName()).setParent(null).setChildren(division.getChildren().stream().map(item -> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive()).setId(division.getId());
 		} else {
 			divisionBean.setName(division.getName()).setParent(division.getParent().getId()).setChildren(division.getChildren().stream().map(item -> convertDivisionToFront(item)).collect(Collectors.toList())).setActive(division.isActive())
