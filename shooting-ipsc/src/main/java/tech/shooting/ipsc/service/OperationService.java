@@ -9,12 +9,18 @@ import javax.validation.Valid;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
+import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
@@ -22,6 +28,7 @@ import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weather;
 import tech.shooting.ipsc.repository.AmmoTypeRepository;
 import tech.shooting.ipsc.repository.AnimalRepository;
@@ -104,6 +111,15 @@ public class OperationService {
 		vehicleRepository.deleteAll();
 		communicationEquipmentRepository.deleteAll();
 		equipmentRepository.deleteAll();
+	}
+	
+	public ResponseEntity<List<Operation>> getOperationsByPage(Integer page, Integer size) {
+		page = Math.max(1, page);
+		page--;
+		size = Math.min(Math.max(10, size), 20);
+		PageRequest pageable = PageRequest.of(page, size, Sort.Direction.ASC, Person.ID_FIELD);
+		Page<Operation> pageOfUsers = operationRepository.findAll(pageable);
+		return new ResponseEntity<>(pageOfUsers.getContent(), Pageable.setHeaders(page, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages()), HttpStatus.OK);
 	}
 
 	public List<OperationCombatListHeaderBean> getHeaders() {

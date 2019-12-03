@@ -434,6 +434,7 @@ public class ControllerAPI {
 
 	public static final String OPERATION_CONTROLLER = "/api/operation";
 	public static final String OPERATION_CONTROLLER_GET_ALL = "/all";
+	public static final String OPERATION_CONTROLLER_GET_OPERATIONS_BY_PAGE = "/all" + "/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String OPERATION_CONTROLLER_POST = "";
 	public static final String OPERATION_CONTROLLER_GET_BY_ID = "/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_PUT_BY_ID = "/" + REQUEST_OPERATION_ID;
