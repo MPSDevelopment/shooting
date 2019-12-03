@@ -17,7 +17,6 @@ import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
-import tech.shooting.ipsc.enums.UnitEnum;
 import tech.shooting.ipsc.event.TagImitatorEvent;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;

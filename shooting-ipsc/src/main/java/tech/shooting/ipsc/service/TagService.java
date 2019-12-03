@@ -170,7 +170,7 @@ public class TagService {
 
 	@Handler
 	public void handle(TagImitatorEvent event) throws InterruptedException {
-		log.info("Tag imitator event started with %s laps", event.getLaps());
+		log.info("Tag imitator event started with %s laps %s persons", event.getLaps(), event.getPersons().size());
 		
 		if (event.getLaps() == 0) {
 			log.error("There is zero laps");
@@ -195,6 +195,7 @@ public class TagService {
 					e.printStackTrace();
 				}
 			});
+			
 			try {
 				Thread.sleep(event.getLapDelay());
 			} catch (InterruptedException e) {
