@@ -13,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
+import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.exception.ValidationException;
 import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
@@ -21,6 +22,8 @@ import tech.shooting.ipsc.repository.DivisionRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.stream.Collectors;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = DivisionRepository.class)
@@ -55,7 +58,28 @@ class DivisionServiceTest {
 		long count = divisionRepository.count();
 		assertThrows(ValidationException.class, () -> divisionService.createDivision(divisionBean, root.getId()));
 		assertEquals(count, divisionRepository.count());
+
+	}
+
+	@Test
+	void removeDivision() throws BadRequestException {
+
+		Division root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
+		Division testDivision = new Division().setName("test").setParent(root);
+		divisionRepository.save(testDivision);
+
+		var division = divisionRepository.findById(root.getId()).orElse(null);
+
+		division.getChildren().stream().map(item -> {
+			return item.getName();
+		}).collect(Collectors.toList());
 		
+		divisionService.removeDivision(testDivision.getId());
 		
+		division = divisionRepository.findById(root.getId()).orElse(null);
+		division.getChildren().stream().map(item -> {
+			return item.getName();
+		}).collect(Collectors.toList());
+
 	}
 }
