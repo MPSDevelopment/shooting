@@ -365,5 +365,16 @@
   "editAmmunitionType": "Изменить Тип Боеприпасов",
   "battleUnits": "Единицы боевого порядка",
   "specialOperations": "Спец. операции",
-  "editCondition": "Изменить условие"
+  "editCondition": "Изменить условие",
+  "generalTerms": "Общие условия",
+  "categoriesByTime": "Категории по времени",
+  "categoriesByPoints": "Категории по очкам",
+  "conditionsList": "Список условий",
+  "standardScore": "Оценка за норматив",
+  "laps": "Круги",
+  "lap": "Круг",
+  "totalTime": "Общее время",
+  "specialOperation": "Спец. операци{{ending}}",
+  "addOperation": "Добавить Спец. операцию",
+  "editOperation": "Изменить Спец. операцию"
 }

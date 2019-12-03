@@ -359,5 +359,16 @@
   "editAmmunitionType": "Изменить Тип Боеприпасов",
   "battleUnits": "әскери бөлімдер",
   "specialOperations": "Арнайы операциялар",
-  "editCondition": "Шартты өзгерту"
+  "editCondition": "Шартты өзгерту",
+  "generalTerms": "Жалпы жағдайлар",
+  "categoriesByTime": "Уақыт бойынша категориялар",
+  "categoriesByPoints": "Ұпай санаттары",
+  "conditionsList": "Шарттардың тізімі",
+  "standardScore": "Стандартты балл",
+  "laps": "Шеңберлер",
+  "lap": "Шеңбер",
+  "totalTime": "Жалпы уақыт",
+  "specialOperation": "Спец. операци{{ending}}",
+  "addOperation": "Добавить Спец. операцию",
+  "editOperation": "Изменить Спец. операцию"
 }

@@ -6052,7 +6052,7 @@ __webpack_require__(/*! zone.js/dist/zone */ "./node_modules/zone.js/dist/zone.j
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Thor\git\shooting-frontend\src\polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! C:\Users\dmitr\git\shooting-frontend\src\polyfills.ts */"./src/polyfills.ts");
 
 
 /***/ })
