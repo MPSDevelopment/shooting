@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.enums.RoleName;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.pojo.AnimalType;
 import tech.shooting.ipsc.pojo.Settings;
 import tech.shooting.ipsc.pojo.Division;
@@ -121,6 +122,7 @@ public class DatabaseCreator {
 		long count = divisionRepository.count();
 		divisionRepository.createIfNotExists(new Division().setName("Все").setActive(true));
 		log.info("Division count was %s, after root save if not exist, it is %s", count, divisionRepository.count());
+		log.info("Divisions are %s", JacksonUtils.getJson(divisionRepository.findAll()));
 		
 		
 		animalTypeRepository.createIfNotExists(new AnimalType().setName("Собака"));
