@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
@@ -20,10 +20,10 @@ import java.util.List;
 
 @Document(collection = "division")
 @TypeAlias("division")
-@Data
+@Getter
+@Setter
 @ToString(exclude = "children")
 @Accessors(chain = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Division extends BaseDocument {
 
 	public static final String NAME_WITH_PARENT = "name and parent id";
