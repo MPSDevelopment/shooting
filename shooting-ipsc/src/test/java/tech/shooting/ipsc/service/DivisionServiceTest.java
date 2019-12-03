@@ -67,19 +67,22 @@ class DivisionServiceTest {
 		Division root = divisionRepository.createIfNotExists(new Division().setName("root").setParent(null));
 		Division testDivision = new Division().setName("test").setParent(root);
 		divisionRepository.save(testDivision);
-
-		var division = divisionRepository.findById(root.getId()).orElse(null);
-
-		division.getChildren().stream().map(item -> {
-			return item.getName();
-		}).collect(Collectors.toList());
+		Division childDivision = new Division().setName("child").setParent(testDivision);
+		divisionRepository.save(childDivision);
+		
+		checkDivision(root.getId());
 		
 		divisionService.removeDivision(testDivision.getId());
 		
-		division = divisionRepository.findById(root.getId()).orElse(null);
+		checkDivision(root.getId());
+		checkDivision(childDivision.getId());
+
+	}
+
+	private void checkDivision(Long divisionId) {
+		var division = divisionRepository.findById(divisionId).orElse(null);
 		division.getChildren().stream().map(item -> {
 			return item.getName();
 		}).collect(Collectors.toList());
-
 	}
 }

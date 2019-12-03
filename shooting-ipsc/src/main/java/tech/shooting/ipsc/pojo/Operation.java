@@ -37,35 +37,35 @@ public class Operation extends BaseDocument {
 	private Info info;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Operation weather", required = true)
+	@ApiModelProperty(value = "Operation weather")
 	private Weather weather;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Operation image path", required = true)
+	@ApiModelProperty(value = "Operation image path")
 	private String imagePath;
 
 	@JsonProperty
-	@ApiModelProperty(value = "Operation participant list", required = true)
+	@ApiModelProperty(value = "Operation participant list")
 	private List<OperationParticipant> participants = new ArrayList<>();
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Operation combat elements", required = true)
+	@ApiModelProperty(value = "Operation combat elements")
 	private List<OperationCombatElement> combatElements = new ArrayList<>();
 
 	@JsonProperty
-	@ApiModelProperty(value = "Operation symbols list", required = true)
+	@ApiModelProperty(value = "Operation symbols list")
 	private List<OperationSymbol> symbols = new ArrayList<>();
 
 	@JsonProperty
-	@ApiModelProperty(value = "Operation main indicator list", required = true)
+	@ApiModelProperty(value = "Operation main indicator list")
 	private List<OperationMainIndicator> mainIndicators = new ArrayList<>();
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Operation combat signal list", required = true)
+	@ApiModelProperty(value = "Operation combat signal list")
 	private List<OperationSignal> signals = new ArrayList<>();
 	
 	@JsonProperty
-	@ApiModelProperty(value = "Operation commandant service list", required = true)
+	@ApiModelProperty(value = "Operation commandant service list")
 	private List<OperationCommandantService> commandantServices = new ArrayList<>();
 
 }
