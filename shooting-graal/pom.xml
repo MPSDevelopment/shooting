@@ -146,16 +146,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler.plugin.version}</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.plugin.version}</version>
 				<configuration>
@@ -166,88 +156,38 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${dependency.plugin.version}</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<configuration>
+					<mainClass>tech.shooting.graal.TagReaderApplication</mainClass>
+				</configuration>
 				<executions>
 					<execution>
-						<id>copy-lib</id>
-						<phase>package</phase>
 						<goals>
-							<goal>copy-dependencies</goal>
+							<goal>repackage</goal>
 						</goals>
-						<configuration>
-							<includeScope>runtime</includeScope>
-							<outputDirectory>${project.build.directory}/${lib.property}/</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<useBaseVersion>false</useBaseVersion>
-							<stripVersion>true</stripVersion>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>${jar.plugin.version}</version>
-				<configuration>
-					<outputDirectory>${project.build.directory}</outputDirectory>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathLayoutType>custom</classpathLayoutType>
-							<customClasspathLayout>
-								${lib.property}/${artifact.artifactId}${artifact.dashClassifier?}.${artifact.extension}
-							</customClasspathLayout>
-							<mainClass>tech.shooting.ipsc.IpscApplication</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${deploy.plugin.version}</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.oracle.substratevm</groupId> -->
+<!-- 				<artifactId>native-image-maven-plugin</artifactId> -->
+<!-- 				<version>${graal.version}</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>native-image</goal> -->
+<!-- 						</goals> -->
+<!-- 						<phase>package</phase> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<imageName>${project.name}</imageName> -->
+<!-- 					<buildArgs> -->
+<!-- 					</buildArgs> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>build</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>${assembly.plugin.version}</version>
-						<configuration>
-							<descriptors>
-								<descriptor>zip.xml</descriptor>
-							</descriptors>
-							<archiverConfig>
-								<compress>true</compress>
-							</archiverConfig>
-							<recompressZippedFiles>true</recompressZippedFiles>
-						</configuration>
-						<executions>
-							<execution>
-								<id>make-assembly</id>
-								<phase>install</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
