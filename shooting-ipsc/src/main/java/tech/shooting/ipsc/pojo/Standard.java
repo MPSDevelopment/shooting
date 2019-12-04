@@ -2,7 +2,6 @@ package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,8 +13,6 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
@@ -48,7 +45,6 @@ public class Standard extends BaseDocument {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Number of laps to finish the standard", required = true)
-	@PositiveOrZero
 	private Integer laps = 0;
 
 	@JsonProperty

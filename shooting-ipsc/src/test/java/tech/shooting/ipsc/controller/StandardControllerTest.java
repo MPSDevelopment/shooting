@@ -240,6 +240,7 @@ class StandardControllerTest {
 		assertEquals(bean.isActive(), standard1.isActive());
 		assertEquals(bean.isGroups(), standard1.isGroups());
 		assertEquals(bean.isRunning(), standard1.isRunning());
+		assertEquals(bean.getLaps(), standard1.getLaps());
 
 	}
 
@@ -264,6 +265,7 @@ class StandardControllerTest {
 		}
 		bean.setCategoryByPointsList(categoryByPoints);
 		bean.setRunning(true);
+		bean.setLaps(7);
 		return bean;
 	}
 
@@ -304,6 +306,7 @@ class StandardControllerTest {
 		assertEquals(standard.isActive(), standard1.isActive());
 		assertNotEquals(standard.isGroups(), standard1.isGroups());
 		assertEquals(standard.isRunning(), standard1.isRunning());
+		assertEquals(standard.getLaps(), standard1.getLaps());
 
 		bean.setGroups(false);
 		json = JacksonUtils.getJson(bean);
