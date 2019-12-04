@@ -14,4 +14,8 @@ public class OperationBean {
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
 	private Info info;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Operation image path")
+	private String imagePath;
 }

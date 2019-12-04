@@ -194,6 +194,7 @@ public class OperationControllerTest extends BaseControllerTest {
 		Operation operation = JacksonUtils.fromJson(Operation.class, contentAsString);
 
 		assertEquals(bean.getInfo().getNamedRus(), operation.getInfo().getNamedRus());
+		assertEquals(bean.getImagePath(), operation.getImagePath());
 
 	}
 
@@ -371,7 +372,7 @@ public class OperationControllerTest extends BaseControllerTest {
 	}
 
 	private OperationBean createOperationBean() {
-		return new OperationBean().setInfo(new Info().setNamedRus("Test"));
+		return new OperationBean().setInfo(new Info().setNamedRus("Test")).setImagePath("test image path");
 	}
 
 }
