@@ -1,5 +1,7 @@
 package tech.shooting.ipsc.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -54,4 +56,10 @@ public class MapServiceTest {
 		mapService.clearMap(filename);
 	}
 
+	@Test
+	public void getExtension() throws IOException {
+		MockMultipartFile multipartFile = new MockMultipartFile(FILENAME, FILENAME, "image/png", new FileInputStream(FILENAME));
+		log.info("original file name is %s", multipartFile.getOriginalFilename());
+		assertEquals("png", mapService.getExtension(multipartFile));
+	}
 }

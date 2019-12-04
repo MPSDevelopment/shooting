@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -63,6 +64,10 @@ public class MapService {
 		new File(destinationFolder).delete();
 
 		tileService.clearTiles(filename);
+	}
+
+	public String getExtension(MultipartFile multipartFile) {
+		return FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 	}
 
 }

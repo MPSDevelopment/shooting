@@ -64,7 +64,7 @@ public class MapController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Post New Map")
 	public ResponseEntity<UploadMapBean> postMap(@RequestParam("file") MultipartFile file) throws IOException {
-		Image image = mapService.saveMap(file, String.valueOf(IdGenerator.nextId()) + ".png");
+		Image image = mapService.saveMap(file, String.valueOf(IdGenerator.nextId()) + "." + mapService.getExtension(file));
 		return ResponseEntity.ok().body(new UploadMapBean(image.getFileName(), "Map %s has been uploaded", image.getFileName()));
 	}
 
