@@ -376,5 +376,6 @@
   "totalTime": "Общее время",
   "specialOperation": "Спец. операци{{ending}}",
   "addOperation": "Добавить Спец. операцию",
-  "editOperation": "Изменить Спец. операцию"
+  "editOperation": "Изменить Спец. операцию",
+  "updateVersion": "Обновить версию"
 }
