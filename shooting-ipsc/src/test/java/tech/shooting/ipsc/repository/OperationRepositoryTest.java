@@ -21,6 +21,7 @@ import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
@@ -111,5 +112,13 @@ public class OperationRepositoryTest {
 		operationRepository.setCombatElementsToOperation(operation.getId(), Arrays.asList(new OperationCombatElement()));
 		assertNotNull(operationRepository.findById(operation.getId()).get().getCombatElements());
 		assertEquals(1, operationRepository.findById(operation.getId()).get().getCombatElements().size());
+	}
+	
+	@Test
+	public void setRoutesToOperation() {
+		assertEquals(0, operationRepository.findById(operation.getId()).get().getRoutes().size());
+		operationRepository.setRoutesToOperation(operation.getId(), Arrays.asList(new OperationRoute()));
+		assertNotNull(operationRepository.findById(operation.getId()).get().getRoutes());
+		assertEquals(1, operationRepository.findById(operation.getId()).get().getRoutes().size());
 	}
 }

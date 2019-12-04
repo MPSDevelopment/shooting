@@ -13,6 +13,7 @@ import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
@@ -55,5 +56,9 @@ public class CustomOperationRepositoryImpl implements CustomOperationRepository 
 	
 	public void setCombatElementsToOperation(Long operationId, List<OperationCombatElement> list) {
 		mongoTemplate.updateFirst(Query.query(Criteria.where(Operation.ID_FIELD).is(operationId)), new Update().set(Operation.COMBAT_ELEMENTS_FIELD, list), Operation.class);
+	}
+	
+	public void setRoutesToOperation(Long operationId, List<OperationRoute> list) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where(Operation.ID_FIELD).is(operationId)), new Update().set(Operation.ROUTES_FIELD, list), Operation.class);
 	}
 }

@@ -22,6 +22,7 @@ import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Person;
@@ -181,5 +182,18 @@ public class OperationController {
 	@ApiOperation(value = "Get operation elements")
 	public ResponseEntity<List<OperationCombatElement>> getCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCombatElements(id), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_ROUTES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Set combat elements")
+	public ResponseEntity<SuccessfulMessage> setRoutes(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationRoute> routes) throws BadRequestException {
+		operationService.setRoutes(id, routes);
+		return new ResponseEntity<>(new SuccessfulMessage("Combat elements were successfully saved"), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_ROUTES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get operation elements")
+	public ResponseEntity<List<OperationRoute>> getRoutes(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+		return new ResponseEntity<>(operationService.getRoutes(id), HttpStatus.OK);
 	}
 }

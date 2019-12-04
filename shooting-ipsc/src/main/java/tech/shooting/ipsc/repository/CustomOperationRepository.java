@@ -6,6 +6,7 @@ import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Weather;
@@ -25,4 +26,6 @@ public interface CustomOperationRepository {
 	public void setCommandantServicesToOperation(Long operationId, List<OperationCommandantService> list);
 
 	public void setCombatElementsToOperation(Long id, List<OperationCombatElement> elements);
+	
+	public void setRoutesToOperation(Long id, List<OperationRoute> routes);
 }

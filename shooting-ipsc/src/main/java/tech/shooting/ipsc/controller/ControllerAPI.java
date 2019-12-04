@@ -455,4 +455,6 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_COMMANDANT_SERVICES = "/commandantservices/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_POST_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
+	public static final String OPERATION_CONTROLLER_GET_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
 }

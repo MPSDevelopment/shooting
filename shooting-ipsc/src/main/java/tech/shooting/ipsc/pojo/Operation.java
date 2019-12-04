@@ -2,7 +2,8 @@ package tech.shooting.ipsc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -14,7 +15,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 @Document(collection = "operation")
 @TypeAlias("operation")
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
 public class Operation extends BaseDocument {
 
@@ -31,6 +33,8 @@ public class Operation extends BaseDocument {
 	public static final String COMMANDANT_SERVICES_FIELD = "commandantServices";
 	
 	public static final String COMBAT_ELEMENTS_FIELD = "combatElements";
+	
+	public static final String ROUTES_FIELD = "routes";
 
 	@JsonProperty
 	@ApiModelProperty(value = "Operation info", required = true)
@@ -67,5 +71,9 @@ public class Operation extends BaseDocument {
 	@JsonProperty
 	@ApiModelProperty(value = "Operation commandant service list")
 	private List<OperationCommandantService> commandantServices = new ArrayList<>();
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Operation routes")
+	private List<OperationRoute> routes = new ArrayList<>();
 
 }

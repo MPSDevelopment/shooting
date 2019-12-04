@@ -26,6 +26,7 @@ import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
 import tech.shooting.ipsc.pojo.OperationParticipant;
+import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
 import tech.shooting.ipsc.pojo.Person;
@@ -286,5 +287,14 @@ public class OperationService {
 	public List<OperationCombatElement> getCombatElements(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getCombatElements();
+	}
+
+	public void setRoutes(Long id, @Valid List<OperationRoute> routes) {
+		operationRepository.setRoutesToOperation(id, routes);
+	}
+
+	public List<OperationRoute>  getRoutes(Long id) throws BadRequestException {
+		var operation = checkOperation(id);
+		return operation.getRoutes();
 	}
 }
