@@ -115,8 +115,13 @@ public class MapControllerTest extends BaseControllerTest {
 
 		mockMvc.perform(MockMvcRequestBuilders
 				.get(ControllerAPI.MAP_CONTROLLER + ControllerAPI.VERSION_1_0
-						+ ControllerAPI.MAP_CONTROLLER_GET_TILE_URL.replace(ControllerAPI.REQUEST_ID, mapBean.getPath()).replace(ControllerAPI.REQUEST_Z, "10").replace(ControllerAPI.REQUEST_X, "0").replace(ControllerAPI.REQUEST_Y, "0"))
+						+ ControllerAPI.MAP_CONTROLLER_GET_TILE_URL.replace(ControllerAPI.REQUEST_ID, mapBean.getPath()).replace(ControllerAPI.REQUEST_Z, "10").replace(ControllerAPI.REQUEST_X, "512").replace(ControllerAPI.REQUEST_Y, "512"))
 				.accept(MediaType.ALL_VALUE).header(Token.TOKEN_HEADER, adminToken)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.MAP_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.MAP_CONTROLLER_GET_TILE_URL.replace(ControllerAPI.REQUEST_ID, mapBean.getPath()).replace(ControllerAPI.REQUEST_Z, "10").replace(ControllerAPI.REQUEST_X, "512").replace(ControllerAPI.REQUEST_Y, "512"))
+				.accept(MediaType.ALL_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
 
 		mapService.clearMap(mapBean.getFilename());
 	}

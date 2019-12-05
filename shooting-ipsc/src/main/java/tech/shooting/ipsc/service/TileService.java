@@ -43,6 +43,8 @@ public class TileService {
 
 			int x = 0;
 			int y = 0;
+			
+			int startTile = (int) Math.pow(2, zoom - 1);
 
 			for (int i = 0; i < rowNumber; i++) {
 				y = 0;
@@ -50,7 +52,7 @@ public class TileService {
 					try {
 
 						String extension = FilenameUtils.getExtension(filename);
-						File outputfile = getTileImage(filename, i, j, zoom);
+						File outputfile = getTileImage(filename, startTile + i, startTile + j, zoom);
 
 						log.info("Creating tile %s: %s %s %s ", outputfile.getAbsolutePath(), i, j, filename);
 
@@ -74,12 +76,11 @@ public class TileService {
 
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
 		String extension = FilenameUtils.getExtension(filename);
-		int startTile = (int) Math.pow(2, zoom - 1);
 		if (StringUtils.isBlank(extension)) {
 			extension = "png";
 		}
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
-		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + (startTile + tileX) + "y" + (startTile + tileY) + "." + extension);
+		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" +  tileX + "y" + tileY + "." + extension);
 	}
 
 	public File createTile(String filename, int tileX, int tileY, int zoom) throws IOException {
