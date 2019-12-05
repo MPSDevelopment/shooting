@@ -430,7 +430,7 @@ public class ControllerAPI {
 	public static final String SETTINGS_CONTROLLER_PUT_SETTINGS = "/";
 
 	public static final String MAP_CONTROLLER = "/api/map";
-	public static final String MAP_CONTROLLER_GET_TILE_URL = "{id}/{z}/{x}/{y}.png";
+	public static final String MAP_CONTROLLER_GET_TILE_URL = "/" + REQUEST_ID + "/" + REQUEST_Z + "/" + REQUEST_X + "/" + REQUEST_Y;
 
 	public static final String OPERATION_CONTROLLER = "/api/operation";
 	public static final String OPERATION_CONTROLLER_GET_ALL = "/all";

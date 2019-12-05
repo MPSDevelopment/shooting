@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
@@ -40,8 +42,10 @@ public class MapController {
 
 	@Autowired
 	private MapService mapService;
+	
+	private Tika tika = new Tika();
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.IMAGE_PNG_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	@ApiOperation(value = "Get Tile Image", notes = "Returns tile image by x, y and zoom")
 	public ResponseEntity<byte[]> getTile(@PathVariable(value = ControllerAPI.PATH_VARIABLE_ID) String id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_Z) int zoom, @PathVariable(value = ControllerAPI.PATH_VARIABLE_X) int tileX,
@@ -51,8 +55,16 @@ public class MapController {
 
 	private ResponseEntity<byte[]> getTileAsByteArray(String id, int zoom, int tileX, int tileY) {
 		try {
-			byte[] body = FileUtils.readFileToByteArray(tileService.getTileImage(id, tileX, tileY, zoom));
-			return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);
+			File tileImage = tileService.getTileImage(id, tileX, tileY, zoom);
+			
+			if (!tileImage.exists()) {
+				log.error("Tile %s does not exist", tileImage.getAbsolutePath());
+			}
+			
+			byte[] body = FileUtils.readFileToByteArray(tileImage);
+			
+			// return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);
+			return ResponseEntity.ok().contentType(MediaType.parseMediaType(tika.detect(tileImage))).body(body);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -63,8 +75,9 @@ public class MapController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Post New Map")
 	public ResponseEntity<UploadMapBean> postMap(@RequestParam("file") MultipartFile file) throws IOException {
-		Image image = mapService.saveMap(file, String.valueOf(IdGenerator.nextId()) + "." + mapService.getExtension(file));
-		return ResponseEntity.ok().body(new UploadMapBean(image.getFileName(), "Map %s has been uploaded", image.getFileName()));
+		String nextId = String.valueOf(IdGenerator.nextId());
+		Image image = mapService.saveMap(file, nextId + "." + mapService.getExtension(file));
+		return ResponseEntity.ok().body(new UploadMapBean(nextId, image.getFileName(), "Map %s has been uploaded", image.getFileName()));
 	}
 
 }

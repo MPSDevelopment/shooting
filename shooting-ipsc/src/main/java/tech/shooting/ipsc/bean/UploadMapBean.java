@@ -19,9 +19,13 @@ public class UploadMapBean {
 
     @JsonProperty
     private String path;
+    
+    @JsonProperty
+    private String filename;
 
-    public UploadMapBean(String path, String message, Object... objects) {
+    public UploadMapBean(String path, String filename, String message, Object... objects) {
         this.path = path;
+        this.filename = filename;
         this.message = String.format(message, objects);
     }
 

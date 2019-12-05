@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,7 +37,6 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.commons.utils.TokenUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
-import tech.shooting.ipsc.bean.DivisionBean;
 import tech.shooting.ipsc.bean.UploadFileBean;
 import tech.shooting.ipsc.config.AppConfig;
 import tech.shooting.ipsc.config.IpscMongoConfig;
@@ -50,9 +48,6 @@ import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.User;
 import tech.shooting.ipsc.repository.CheckinRepository;
 import tech.shooting.ipsc.repository.UserRepository;
-import tech.shooting.ipsc.security.IpscUserDetailsService;
-import tech.shooting.ipsc.security.TokenAuthenticationFilter;
-import tech.shooting.ipsc.security.TokenAuthenticationManager;
 import tech.shooting.ipsc.service.ImageService;
 
 @ExtendWith(SpringExtension.class)

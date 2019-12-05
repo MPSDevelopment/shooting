@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +76,9 @@ public class TileService {
 
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
 		String extension = FilenameUtils.getExtension(filename);
+		if (StringUtils.isBlank(extension)) {
+			extension = "png";
+		}
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
 		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
