@@ -49,7 +49,7 @@ import tech.shooting.ipsc.service.TileService;
 @SpringBootTest
 @DirtiesContext
 @Slf4j
-@Tag(IpscConstants.UNIT_TEST_TAG)
+//@Tag(IpscConstants.UNIT_TEST_TAG)
 @ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, AppConfig.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, MapService.class, ImageService.class, TileService.class, MapController.class })
 public class MapControllerTest extends BaseControllerTest {
 
