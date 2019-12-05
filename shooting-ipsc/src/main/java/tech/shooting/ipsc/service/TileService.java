@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TileService {
 
 	private static final int TILE_SIZE = 256;
-	
+
 	private static final String FOLDER_NAME = "data/tiles/";
 
 	public void createTiles(int rowNumber, int columnNumber, int zoom, String filename) {
@@ -52,7 +52,7 @@ public class TileService {
 						String extension = FilenameUtils.getExtension(filename);
 						File outputfile = getTileImage(filename, i, j, zoom);
 
-						log.info("Creating tile: " + i + " " + j + " " + filename);
+						log.info("Creating tile %s: %s %s %s ", outputfile.getAbsolutePath(), i, j, filename);
 
 						BufferedImage SubImgage = originalImgage.getSubimage(y, x, eWidth, eHeight);
 						ImageIO.write(SubImgage, extension, outputfile);
@@ -71,18 +71,17 @@ public class TileService {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
 		String extension = FilenameUtils.getExtension(filename);
+		int startTile = (int) Math.pow(2, zoom - 1);
 		if (StringUtils.isBlank(extension)) {
 			extension = "png";
 		}
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
-		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
+		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + (startTile + tileX) + "y" + (startTile + tileY) + "." + extension);
 	}
-	
+
 	public File createTile(String filename, int tileX, int tileY, int zoom) throws IOException {
 		return resizeImage(filename, getTileImage(filename, tileX, tileY, zoom), TILE_SIZE, TILE_SIZE);
 	}
@@ -109,11 +108,9 @@ public class TileService {
 
 		// writes to output file
 		ImageIO.write(outputImage, formatName, outputFile);
-		
+
 		return outputFile;
 	}
-	
-	
 
 	public byte[] writeImageTobyteArray(BufferedImage image) throws IOException {
 
@@ -125,8 +122,6 @@ public class TileService {
 		return byteArrayOS.toByteArray();
 
 	}
-
-
 
 	public void clearTiles(String filename) throws IOException {
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
