@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/favicon.ico")
 			.antMatchers("/**.html")
 			.antMatchers("/**.js")
+			.antMatchers("/**.png")
 			.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 

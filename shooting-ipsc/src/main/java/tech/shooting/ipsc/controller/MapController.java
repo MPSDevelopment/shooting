@@ -33,7 +33,6 @@ import tech.shooting.ipsc.service.TileService;
 @RequestMapping(ControllerAPI.MAP_CONTROLLER)
 @Api(ControllerAPI.MAP_CONTROLLER)
 @Slf4j
-@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 public class MapController {
 
 	@Autowired
@@ -60,7 +59,7 @@ public class MapController {
 		return null;
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@PostMapping(value = ControllerAPI.VERSION_1_0, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Post New Map")
 	public ResponseEntity<UploadMapBean> postMap(@RequestParam("file") MultipartFile file) throws IOException {
