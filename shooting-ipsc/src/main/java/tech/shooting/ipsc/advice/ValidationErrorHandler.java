@@ -22,6 +22,8 @@ import tech.shooting.ipsc.validator.ValidationConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.UnexpectedTypeException;
+
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,13 @@ public class ValidationErrorHandler {
 		Map<String, String> validationErrors = new HashMap<>();
 		validationErrors.put(ex.getField(), ex.getMessage());
 		return new ErrorMessage(validationErrors);
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ErrorMessage process(FileNotFoundException ex, HttpServletRequest request) {
+		log.error("FileNotFound exception in request %s with error %s", request.getRequestURL(), ex.getMessage());
+		return new ErrorMessage(DEFAULT_FIELD, ex.getMessage());
 	}
 
 	@ExceptionHandler(UnexpectedTypeException.class)

@@ -42,33 +42,28 @@ public class MapController {
 
 	@Autowired
 	private MapService mapService;
-	
+
 	private Tika tika = new Tika();
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.ALL_VALUE)
 	@ResponseBody
 	@ApiOperation(value = "Get Tile Image", notes = "Returns tile image by x, y and zoom")
 	public ResponseEntity<byte[]> getTile(@PathVariable(value = ControllerAPI.PATH_VARIABLE_ID) String id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_Z) int zoom, @PathVariable(value = ControllerAPI.PATH_VARIABLE_X) int tileX,
-			@PathVariable(value = ControllerAPI.PATH_VARIABLE_Y) int tileY) {
+			@PathVariable(value = ControllerAPI.PATH_VARIABLE_Y) int tileY) throws IOException {
 		return getTileAsByteArray(id, zoom, tileX, tileY);
 	}
 
-	private ResponseEntity<byte[]> getTileAsByteArray(String id, int zoom, int tileX, int tileY) {
-		try {
-			File tileImage = tileService.getTileImage(id, tileX, tileY, zoom);
-			
-			if (!tileImage.exists()) {
-				log.error("Tile %s does not exist", tileImage.getAbsolutePath());
-			}
-			
-			byte[] body = FileUtils.readFileToByteArray(tileImage);
-			
-			// return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);
-			return ResponseEntity.ok().contentType(MediaType.parseMediaType(tika.detect(tileImage))).body(body);
-		} catch (IOException e) {
-			e.printStackTrace();
+	private ResponseEntity<byte[]> getTileAsByteArray(String id, int zoom, int tileX, int tileY) throws IOException {
+		File tileImage = tileService.getTileImage(id, tileX, tileY, zoom);
+
+		if (!tileImage.exists()) {
+			log.error("Tile %s does not exist", tileImage.getAbsolutePath());
 		}
-		return null;
+
+		byte[] body = FileUtils.readFileToByteArray(tileImage);
+
+		// return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(tika.detect(tileImage))).body(body);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")

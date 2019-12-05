@@ -122,6 +122,11 @@ public class MapControllerTest extends BaseControllerTest {
 				.get(ControllerAPI.MAP_CONTROLLER + ControllerAPI.VERSION_1_0
 						+ ControllerAPI.MAP_CONTROLLER_GET_TILE_URL.replace(ControllerAPI.REQUEST_ID, mapBean.getPath()).replace(ControllerAPI.REQUEST_Z, "10").replace(ControllerAPI.REQUEST_X, "512").replace(ControllerAPI.REQUEST_Y, "512"))
 				.accept(MediaType.ALL_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+				.get(ControllerAPI.MAP_CONTROLLER + ControllerAPI.VERSION_1_0
+						+ ControllerAPI.MAP_CONTROLLER_GET_TILE_URL.replace(ControllerAPI.REQUEST_ID, mapBean.getPath()).replace(ControllerAPI.REQUEST_Z, "10").replace(ControllerAPI.REQUEST_X, "256").replace(ControllerAPI.REQUEST_Y, "256"))
+				.accept(MediaType.ALL_VALUE)).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 		mapService.clearMap(mapBean.getFilename());
 	}
