@@ -38,6 +38,8 @@ public class TagService {
 	private ImpinjReader impinjReader;
 
 	private Map<String, Tag> map = new HashMap<>();
+	
+	private boolean connected = false;
 
 	@Autowired
 	private SettingsService settingsService;
@@ -76,6 +78,8 @@ public class TagService {
 		impinjReader.start();
 
 		log.info("Reader has been started");
+		
+		connected = true;
 
 		EventBus.publishEvent(new RunningOnConnectEvent());
 
@@ -136,6 +140,7 @@ public class TagService {
 
 			@Override
 			public void onConnectionClose(ImpinjReader arg0, ConnectionCloseEvent arg1) {
+				connected = false;
 				log.info("Reader connection has been closed");
 				EventBus.publishEvent(new RunningOnDisconnectEvent());
 			}
@@ -157,6 +162,8 @@ public class TagService {
 	public void stop() throws OctaneSdkException {
 		if (impinjReader != null) {
 			impinjReader.stop();
+			
+			connected = false;
 
 			log.info("Reader has been stopped");
 
@@ -203,6 +210,10 @@ public class TagService {
 			}
 		});
 
+	}
+
+	public boolean getStatus() {
+		return connected;
 	}
 
 }

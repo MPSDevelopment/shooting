@@ -34,17 +34,15 @@ import tech.shooting.ipsc.pojo.Address;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Settings;
 import tech.shooting.ipsc.pojo.User;
-import tech.shooting.ipsc.repository.EquipmentTypeRepository;
 import tech.shooting.ipsc.repository.SettingsRepository;
 import tech.shooting.ipsc.repository.UserRepository;
 import tech.shooting.ipsc.service.SettingsService;
 
-import java.util.Collections;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@EnableMongoRepositories(basePackageClasses = EquipmentTypeRepository.class)
+@EnableMongoRepositories(basePackageClasses = SettingsRepository.class)
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -59,9 +57,6 @@ class SettingsControllerTest {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private SettingsRepository settingsRepository;
 
 	@Autowired
 	private MockMvc mockMvc;

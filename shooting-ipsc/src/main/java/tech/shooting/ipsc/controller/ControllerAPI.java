@@ -458,4 +458,7 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
+	
+	public static final String TAG_CONTROLLER = "/api/tag";
+	public static final String TAG_CONTROLLER_GET_STATUS = "/status";
 }
