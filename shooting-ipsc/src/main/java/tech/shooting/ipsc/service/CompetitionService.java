@@ -31,6 +31,7 @@ import tech.shooting.ipsc.enums.ClassifierIPSC;
 import tech.shooting.ipsc.enums.DisqualificationEnum;
 import tech.shooting.ipsc.enums.TypeMarkEnum;
 import tech.shooting.ipsc.enums.WeaponTypeEnum;
+import tech.shooting.ipsc.event.CompetitionStoppedEvent;
 import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.pojo.Competition;
 import tech.shooting.ipsc.pojo.Competitor;
@@ -580,7 +581,7 @@ public class CompetitionService {
 		Competition competiton = checkCompetition(id);
 		competiton.setStarted(false).setActive(false);
 		competitionRepository.save(competiton);
-		EventBus.publishEvent(new CompetitionUpdatedEvent(id, "Competition %s stopped", competiton.getName()));
+		EventBus.publishEvent(new CompetitionStoppedEvent(id, "Competition %s stopped", competiton.getName()));
 		log.info("Competition %s stopped", competiton.getName());
 		return competiton;
 	}
