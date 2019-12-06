@@ -53,9 +53,9 @@ public class RunningService {
 		}
 		RunningData runningData = map.get(person);
 		if (runningData == null) {
-			runningData = new RunningData().setLaps(0).setPersonId(person.getId()).setPersonName(person.getName()).setLastTime(event.getTime()).setFirstTime(event.getTime());
+			runningData = new RunningData().setCode(event.getCode()).setLaps(0).setPersonId(person.getId()).setPersonName(person.getName()).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
-			runningData = runningData.setPersonId(person.getId()).setPersonName(person.getName()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
+			runningData = runningData.setCode(event.getCode()).setPersonId(person.getId()).setPersonName(person.getName()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
 		}
 		map.put(person, runningData);
 		
