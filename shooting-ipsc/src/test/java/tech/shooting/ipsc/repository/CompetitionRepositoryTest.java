@@ -52,6 +52,20 @@ public class CompetitionRepositoryTest {
 		stage = competition.getStages().get(0);
 		checkStagesId(competitionRepository.findById(competition.getId()).get());
 	}
+	
+	@Test
+	public void getAllActive () {
+		var list = competitionRepository.findAllActive();
+		assertEquals(1, list.size());
+		
+		competitionRepository.save(competition = new Competition().setName("Test new").setActive(true));
+		list = competitionRepository.findAllActive();
+		assertEquals(2, list.size());
+
+		competitionRepository.save(competition.setActive(false));
+		list = competitionRepository.findAllActive();
+		assertEquals(1, list.size());
+	}
 
 	@Test
 	public void checkFindByName () {

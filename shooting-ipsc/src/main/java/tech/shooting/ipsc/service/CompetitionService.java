@@ -130,6 +130,10 @@ public class CompetitionService {
 	public List<Competition> getAll() {
 		return competitionRepository.findAll();
 	}
+	
+	public List<Competition> getAllActive() {
+		return competitionRepository.findAll();
+	}
 
 	public ResponseEntity getCompetitionsByPage(Integer page, Integer size) {
 		return Pageable.getPage(page, size, competitionRepository);

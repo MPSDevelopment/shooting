@@ -106,6 +106,13 @@ public class CompetitionController {
 	public ResponseEntity<List<Competition>> getAllCompetitions() {
 		return new ResponseEntity<>(competitionService.getAll(), HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_ACTIVE_COMPETITIONS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get list active competitions")
+	public ResponseEntity<List<Competition>> getAllActiveCompetitions() {
+		return new ResponseEntity<>(competitionService.getAllActive(), HttpStatus.OK);
+	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -162,6 +162,7 @@ public class ControllerAPI {
 	public static final String COMPETITION_CONTROLLER_POST_COMPETITION_STOP = "/competition/" + REQUEST_COMPETITION_ID + "/stop";
 	public static final String COMPETITION_CONTROLLER_GET_COUNT = "/count";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITIONS = "/all";
+	public static final String COMPETITION_CONTROLLER_GET_ACTIVE_COMPETITIONS = "/allactive";
 	public static final String COMPETITION_CONTROLLER_GET_COMPETITION_BY_PAGE = "/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String COMPETITION_CONTROLLER_POST_SCORE = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score";
 	public static final String COMPETITION_CONTROLLER_POST_SCORE_LIST = "/competition/" + REQUEST_COMPETITION_ID + "/stage/" + REQUEST_STAGE_ID + "/score/list";
