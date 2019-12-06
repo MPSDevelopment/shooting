@@ -1,0 +1,59 @@
+spring:
+  profiles:
+    active: local
+# Global configuration
+---
+spring:
+  main:
+    banner-mode: "off"
+
+server:
+  address: 127.0.0.1
+  port: 8130
+
+---
+spring:
+  profiles: local
+  main:
+    banner-mode: "off"
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: shooting
+      authentication-database: admin
+      username: ipsc
+      password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
+server:
+  address: 127.0.0.1
+  port: 80
+
+ipsc:
+  mqtt:
+    adminLogin: ipsc
+    adminPassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc
+
+---
+spring:
+  profiles: development
+  main:
+    banner-mode: "off"
+  data:
+    mongodb:
+      host: 52.176.90.219
+      port: 27018
+      database: shooting
+      authentication-database: admin
+      username: ipsc
+      password: ipasdfb14235346jsbcfdhasbf3q234sc
+      auto-index-creation: true
+server:
+  address: 127.0.0.1
+  port: 80
+ipsc:
+  mqtt:
+    adminLogin: ipsc
+    adminPassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc

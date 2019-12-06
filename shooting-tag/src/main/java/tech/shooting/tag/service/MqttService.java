@@ -3,7 +3,6 @@ package tech.shooting.tag.service;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.tag.event.MqttOnConnectEvent;
 import tech.shooting.tag.event.RunningOnConnectEvent;
 import tech.shooting.tag.event.RunningOnDisconnectEvent;
@@ -12,6 +11,7 @@ import tech.shooting.tag.mqtt.JsonMqttCallBack;
 import tech.shooting.tag.mqtt.MqttConstants;
 import tech.shooting.tag.mqtt.MqttHandler;
 import tech.shooting.tag.settings.IpscMqttSettings;
+import tech.shooting.tag.utils.JacksonUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;

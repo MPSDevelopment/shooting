@@ -21,13 +21,13 @@ import com.impinj.octane.TagReportListener;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
-import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.tag.event.RunningOnConnectEvent;
 import tech.shooting.tag.event.RunningOnDisconnectEvent;
 import tech.shooting.tag.event.TagDetectedEvent;
 import tech.shooting.tag.event.TagRestartEvent;
 import tech.shooting.tag.event.TagUndetectedEvent;
 import tech.shooting.tag.pojo.Tag;
+import tech.shooting.tag.utils.JacksonUtils;
 
 @Service
 @Slf4j
@@ -36,21 +36,26 @@ public class TagService {
 	private ImpinjReader impinjReader;
 
 	private Map<String, Tag> map = new HashMap<>();
-	
+
 	private boolean connected = false;
-	
+
+	@Autowired
+	private SettingsService settingsService;
+
 	public TagService() {
 		EventBus.subscribe(this);
 	}
 
-	public void start(String ip) throws OctaneSdkException {
+	public void start() throws OctaneSdkException {
 
 		map = new HashMap<>();
 		impinjReader = new ImpinjReader();
 
+		var serverSettings = settingsService.getSettings();
+
 		try {
 			// "192.168.31.212"
-			impinjReader.connect(ip);
+			impinjReader.connect(serverSettings.getTagServiceIp());
 		} catch (OctaneSdkException e) {
 			log.error("Cannot start Tag service : %s", e.getMessage());
 			return;
@@ -71,7 +76,7 @@ public class TagService {
 		impinjReader.start();
 
 		log.info("Reader has been started");
-		
+
 		connected = true;
 
 		EventBus.publishEvent(new RunningOnConnectEvent());
@@ -149,13 +154,13 @@ public class TagService {
 	public void handle(TagRestartEvent event) throws OctaneSdkException {
 		log.info("Tag restart event with ip %s", event.getIp());
 		stop();
-		start(event.getIp());
+		start();
 	}
 
 	public void stop() throws OctaneSdkException {
 		if (impinjReader != null) {
 			impinjReader.stop();
-			
+
 			connected = false;
 
 			log.info("Reader has been stopped");

@@ -48,7 +48,7 @@ public class TagReaderApplication {
 			mqttService.startBroker(null);
 
 			try {
-				tagService.start("192.168.31.212");
+				tagService.start();
 			} catch (Throwable e) {
 				log.info("Cannot start tag service %s", e.getMessage());
 			}

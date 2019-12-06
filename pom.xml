@@ -108,6 +108,7 @@
 		<reflections.version>0.9.11</reflections.version>
 		<tika.version>1.18</tika.version>
 		<octane.version>3.0.0.2</octane.version>
+		<h2database.version>1.4.197</h2database.version>
 
 		<jaxb.version>2.3.1</jaxb.version>
 		<snakeyaml.version>1.23</snakeyaml.version>
