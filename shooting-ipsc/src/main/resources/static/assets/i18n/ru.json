@@ -378,5 +378,17 @@
   "specialOperation": "Спец. операци{{ending}}",
   "addOperation": "Добавить Спец. операцию",
   "editOperation": "Изменить Спец. операцию",
-  "updateVersion": "Обновить версию"
+  "updateVersion": "Обновить версию",
+  "operationCombatList": "Боевой и численный состав",
+  "battleOrderElements": "Элементы боевого порядка",
+  "curfewCalculation": "Расчет комендантской службы",
+  "callSignTable": "Таблица позывных должностных лиц",
+  "legend": "Условные обозначения",
+  "weatherData": "Метеоданные",
+  "basicIndicators": "Основные показатели",
+  "communicationScheme": "Схема организации связи",
+  "combatControlSignals": "Сигналы боевого управления",
+  "weaponry": "Оружие",
+  "ammo": "Боеприпасы",
+  "vehicle": "Транспортное средство"
 }
