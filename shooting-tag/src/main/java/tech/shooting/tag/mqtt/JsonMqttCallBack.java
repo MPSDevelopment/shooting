@@ -1,8 +1,8 @@
 package tech.shooting.tag.mqtt;
 
 import lombok.extern.slf4j.Slf4j;
-import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.tag.event.MqttSimpleEvent;
+import tech.shooting.tag.eventbus.EventBus;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;

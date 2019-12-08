@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
-import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.tag.event.RunningUpdatedEvent;
 import tech.shooting.tag.event.TagDetectedEvent;
 import tech.shooting.tag.event.TagFinishedEvent;
 import tech.shooting.tag.event.TagUndetectedEvent;
+import tech.shooting.tag.eventbus.EventBus;
 import tech.shooting.tag.pojo.RunningData;
 
 @Service

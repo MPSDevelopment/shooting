@@ -1,4 +1,4 @@
-package tech.shooting.commons.eventbus;
+package tech.shooting.tag.eventbus;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +16,7 @@ public class EventBus {
 
 	private static final String AVISION_MAIN_BUS = "Avision main eventbus";
 
-	private static AvisionMbassador eventBus = null;
+	private static IpscMbassador eventBus = null;
 
 	private EventBus() {
 
@@ -30,9 +30,9 @@ public class EventBus {
 		}
 	};
 
-	private static AvisionMbassador getEventBus() {
+	private static IpscMbassador getEventBus() {
 		if (eventBus == null) {
-			eventBus = new AvisionMbassador(new BusConfiguration().addFeature(Feature.SyncPubSub.Default()).addFeature(Feature.AsynchronousHandlerInvocation.Default()).addFeature(Feature.AsynchronousMessageDispatch.Default())
+			eventBus = new IpscMbassador(new BusConfiguration().addFeature(Feature.SyncPubSub.Default()).addFeature(Feature.AsynchronousHandlerInvocation.Default()).addFeature(Feature.AsynchronousMessageDispatch.Default())
 					.addPublicationErrorHandler(errorHandler).setProperty(IBusConfiguration.Properties.BusId, AVISION_MAIN_BUS));
 		}
 		return eventBus;

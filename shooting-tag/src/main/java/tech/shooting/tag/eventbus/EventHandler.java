@@ -1,4 +1,4 @@
-package tech.shooting.commons.eventbus;
+package tech.shooting.tag.eventbus;
 
 public class EventHandler implements Subscribable {
 

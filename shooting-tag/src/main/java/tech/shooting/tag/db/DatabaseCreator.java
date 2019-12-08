@@ -30,7 +30,7 @@ public class DatabaseCreator {
 	}
 
 	private void createDatabase () {
-		if (appSettingsRepository.findByName(DEFAULT_SETTINGS_NAME) == null) {
+		if (appSettingsRepository.getSettings() == null) {
 			appSettingsRepository.save(new Settings().setName(DEFAULT_SETTINGS_NAME).setTagServiceIp("127.0.0.1"));
 		}
 		

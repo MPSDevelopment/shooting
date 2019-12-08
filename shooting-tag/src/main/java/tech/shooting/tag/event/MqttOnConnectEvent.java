@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import tech.shooting.commons.eventbus.Event;
+import tech.shooting.tag.eventbus.Event;
 
 @AllArgsConstructor
 @Getter

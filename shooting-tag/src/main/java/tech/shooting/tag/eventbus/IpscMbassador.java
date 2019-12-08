@@ -1,4 +1,4 @@
-package tech.shooting.commons.eventbus;
+package tech.shooting.tag.eventbus;
 
 import java.util.Collection;
 
@@ -7,13 +7,13 @@ import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.subscription.Subscription;
 
 @SuppressWarnings("rawtypes")
-public class AvisionMbassador extends MBassador<Event> {
+public class IpscMbassador extends MBassador<Event> {
 
-	public AvisionMbassador() {
+	public IpscMbassador() {
 		super();
 	}
 
-	public AvisionMbassador(IBusConfiguration configuration) {
+	public IpscMbassador(IBusConfiguration configuration) {
 		super(configuration);
 	}
 
