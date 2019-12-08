@@ -12,8 +12,6 @@ import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.impinj.octane.OctaneSdkException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +19,8 @@ import tech.shooting.tag.service.MqttService;
 import tech.shooting.tag.service.TagService;
 
 @SpringBootApplication
-@EnableWebMvc
 @EntityScan(basePackages = { "tech.shooting.tag" })
 @ComponentScan(basePackages = { "tech.shooting.commons.spring", "tech.shooting.commons.utils", "tech.shooting.tag" })
-@EnableScheduling
 @Slf4j
 public class TagReaderApplication {
 

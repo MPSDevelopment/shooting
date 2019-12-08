@@ -28,7 +28,7 @@ ipsc:
 
 ---
 spring:
-  profiles: development
+  profiles: production
   main:
     banner-mode: "off"
 server:
