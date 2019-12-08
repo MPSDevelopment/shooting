@@ -1,6 +1,12 @@
 package tech.shooting.tag.service;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -175,6 +181,37 @@ public class TagService {
 
 	public boolean getStatus() {
 		return connected;
+	}
+
+	public String getTagIp() {
+		return settingsService.getSettings().getTagServiceIp();
+	}
+
+	public String getLocalIp() {
+		InetAddress inetAddress;
+		try {
+			inetAddress = InetAddress.getLocalHost();
+			return inetAddress.getHostAddress();
+		} catch (UnknownHostException e) {
+			log.error("Cannot get a local ip address");
+		}
+		return "Cannot get ip address";
+	}
+	
+	public InetAddress getFirstNonLoopbackAddress() throws SocketException {
+	    Enumeration en = NetworkInterface.getNetworkInterfaces();
+	    while (en.hasMoreElements()) {
+	        NetworkInterface i = (NetworkInterface) en.nextElement();
+	        for (Enumeration en2 = i.getInetAddresses(); en2.hasMoreElements();) {
+	            InetAddress addr = (InetAddress) en2.nextElement();
+	            if (!addr.isLoopbackAddress()) {
+	                if (addr instanceof Inet4Address) {
+	                    return addr;
+	                }
+	            }
+	        }
+	    }
+	    return null;
 	}
 
 }
