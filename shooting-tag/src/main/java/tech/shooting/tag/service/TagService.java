@@ -130,7 +130,7 @@ public class TagService {
 					}
 				});
 
-				log.info("On tag report %s", report.getTags().stream().map(item -> {
+				log.info("On tag report %s", report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
 					Tag tag = new Tag();
 					tag.setCode(String.valueOf(item.getCrc()));
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
@@ -197,21 +197,21 @@ public class TagService {
 		}
 		return "Cannot get ip address";
 	}
-	
+
 	public InetAddress getFirstNonLoopbackAddress() throws SocketException {
-	    Enumeration en = NetworkInterface.getNetworkInterfaces();
-	    while (en.hasMoreElements()) {
-	        NetworkInterface i = (NetworkInterface) en.nextElement();
-	        for (Enumeration en2 = i.getInetAddresses(); en2.hasMoreElements();) {
-	            InetAddress addr = (InetAddress) en2.nextElement();
-	            if (!addr.isLoopbackAddress()) {
-	                if (addr instanceof Inet4Address) {
-	                    return addr;
-	                }
-	            }
-	        }
-	    }
-	    return null;
+		Enumeration en = NetworkInterface.getNetworkInterfaces();
+		while (en.hasMoreElements()) {
+			NetworkInterface i = (NetworkInterface) en.nextElement();
+			for (Enumeration en2 = i.getInetAddresses(); en2.hasMoreElements();) {
+				InetAddress addr = (InetAddress) en2.nextElement();
+				if (!addr.isLoopbackAddress()) {
+					if (addr instanceof Inet4Address) {
+						return addr;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }
