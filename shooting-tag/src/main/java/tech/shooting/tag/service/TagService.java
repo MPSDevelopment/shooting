@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,13 +131,16 @@ public class TagService {
 					}
 				});
 
-				log.info("On tag report %s", report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
+				String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
 					Tag tag = new Tag();
 					tag.setCode(String.valueOf(item.getCrc()));
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 					return JacksonUtils.getJson(tag);
-				}).collect(Collectors.joining(", ")));
+				}).collect(Collectors.joining(", "));
+				if (StringUtils.isNotBlank(collect)) {
+					log.info("On tag report %s", collect);
+				}
 			}
 		});
 
