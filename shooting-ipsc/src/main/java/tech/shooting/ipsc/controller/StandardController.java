@@ -42,13 +42,13 @@ public class StandardController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL)
 	@ApiOperation(value = "Get list all standard")
-	public ResponseEntity<List<Standard>> getAllStandards() {
+	public ResponseEntity<List<Standard>> getAllStandards(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) {
 		return new ResponseEntity<>(standardService.getAllStandards(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_STANDARD_BY_SUBJECT)
 	@ApiOperation(value = "Get list standards by subject")
-	public ResponseEntity<List<Standard>> getStandardsBySubject(@PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT_ID) Long subjectId) throws BadRequestException {
+	public ResponseEntity<List<Standard>> getStandardsBySubject(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_SUBJECT_ID) Long subjectId) throws BadRequestException {
 		return new ResponseEntity<>(standardService.getStandardsBySubject(subjectId), HttpStatus.OK);
 	}
 
