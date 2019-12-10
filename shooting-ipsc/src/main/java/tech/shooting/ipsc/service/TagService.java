@@ -27,6 +27,7 @@ import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
 import tech.shooting.ipsc.event.TagFinishedEvent;
 import tech.shooting.ipsc.event.TagImitatorEvent;
+import tech.shooting.ipsc.event.TagImitatorOnlyCodesEvent;
 import tech.shooting.ipsc.event.TagRestartEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
@@ -195,6 +196,43 @@ public class TagService {
 			event.getPersons().forEach(item -> {
 				
 				EventBus.publishEvent(new TagDetectedEvent(item.getRfidCode()).setTime(System.currentTimeMillis()));
+				
+				try {
+					Thread.sleep(event.getPersonDelay());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+			
+			try {
+				Thread.sleep(event.getLapDelay());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+
+	}
+	
+	@Handler
+	public void handle(TagImitatorOnlyCodesEvent event) throws InterruptedException {
+		log.info("Tag imitator only codes event started with %s laps %s persons", event.getLaps(), event.getPersons().size());
+		
+		if (event.getLaps() == 0) {
+			log.error("There is zero laps");
+			return;
+		}
+		
+		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
+
+		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
+
+		range.forEach(action -> {
+			
+			log.info("Another lap");
+			
+			event.getPersons().forEach(item -> {
+				
+				EventBus.publishEvent(new TagDetectedEvent(item.getRfidCode()).setOnlyCode(true).setTime(System.currentTimeMillis()));
 				
 				try {
 					Thread.sleep(event.getPersonDelay());

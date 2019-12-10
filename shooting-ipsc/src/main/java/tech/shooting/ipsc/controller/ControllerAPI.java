@@ -404,6 +404,7 @@ public class ControllerAPI {
 	public static final String STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST = "/scorelist/query";
 	public static final String STANDARD_CONTROLLER_GET_SCORE_QUERY_LIST_BY_PAGE = "/scorelist/query/all/" + REQUEST_PAGE_NUMBER + "/" + REQUEST_PAGE_SIZE;
 	public static final String STANDARD_CONTROLLER_POST_START_IMITATOR = "/startimitator/" + REQUEST_STANDARD_ID;
+	public static final String STANDARD_CONTROLLER_POST_START_IMITATOR_ONLY_CODES = "/startimitatoronlycodes/" + REQUEST_STANDARD_ID;
 	public static final String STANDARD_CONTROLLER_GET_PASS_ENUM = "/enum/pass";
 	public static final String STANDARD_CONTROLLER_GET_UNIT_ENUM = "/enum/unit";
 

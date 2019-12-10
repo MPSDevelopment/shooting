@@ -45,25 +45,54 @@ class RunningServiceTest {
 	}
 
 	@Test
-	void checkEvents() {
+	void checkTagDetecetdEvents() {
+		
+		person = new Person().setRfidCode("0");
 
 		EventBus.publishEvent(new TagDetectedEvent("1").setTime(1000));
-		assertNull(runningService.getPersonData(person));
+		assertNull(runningService.getPersonData(person.getRfidCode()));
 		
 		person = personRepository.save(new Person().setRfidCode("1"));
 		
-		EventBus.publishEvent(new TagDetectedEvent("1").setTime(1001));
-		assertNotNull(runningService.getPersonData(person));
-		assertEquals(0, runningService.getPersonData(person).getLaps());
+		EventBus.publishEvent(new TagDetectedEvent(person.getRfidCode()).setTime(1001));
+		assertNotNull(runningService.getPersonData(person.getRfidCode()));
+		assertEquals(0, runningService.getPersonData(person.getRfidCode()).getLaps());
 		
-		EventBus.publishEvent(new TagDetectedEvent("1").setTime(1002));
-		assertNotNull(runningService.getPersonData(person));
-		assertEquals(1, runningService.getPersonData(person).getLaps());
+		EventBus.publishEvent(new TagDetectedEvent(person.getRfidCode()).setTime(1002));
+		assertNotNull(runningService.getPersonData(person.getRfidCode()));
+		assertEquals(1, runningService.getPersonData(person.getRfidCode()).getLaps());
 		
 		EventBus.publishEvent(new TagDetectedEvent("2").setTime(1003));
-		assertNotNull(runningService.getPersonData(person));
-		assertEquals(1, runningService.getPersonData(person).getLaps());
-		assertEquals(1001, runningService.getPersonData(person).getFirstTime());
-		assertEquals(1002, runningService.getPersonData(person).getLastTime());
+		assertNotNull(runningService.getPersonData(person.getRfidCode()));
+		assertEquals(1, runningService.getPersonData(person.getRfidCode()).getLaps());
+		assertEquals(1001, runningService.getPersonData(person.getRfidCode()).getFirstTime());
+		assertEquals(1002, runningService.getPersonData(person.getRfidCode()).getLastTime());
 	}
+	
+	@Test
+	void checkTagDetectedEventsOnlyCodes() {
+		
+		String personCode = "10";
+
+		EventBus.publishEvent(new TagDetectedEvent("11").setOnlyCode(true).setTime(1000));
+		assertNull(runningService.getPersonData(personCode));
+		
+		personCode = "11";
+		
+		EventBus.publishEvent(new TagDetectedEvent("11").setOnlyCode(true).setTime(1001));
+		assertNotNull(runningService.getPersonData(personCode));
+		assertEquals(1, runningService.getPersonData(personCode).getLaps());
+		
+		EventBus.publishEvent(new TagDetectedEvent("11").setOnlyCode(true).setTime(1002));
+		assertNotNull(runningService.getPersonData(personCode));
+		assertEquals(2, runningService.getPersonData(personCode).getLaps());
+		
+		EventBus.publishEvent(new TagDetectedEvent("12").setOnlyCode(true).setTime(1003));
+		assertNotNull(runningService.getPersonData(personCode));
+		assertEquals(2, runningService.getPersonData(personCode).getLaps());
+		assertEquals(1000, runningService.getPersonData(personCode).getFirstTime());
+		assertEquals(1002, runningService.getPersonData(personCode).getLastTime());
+	}
+	
+	
 }

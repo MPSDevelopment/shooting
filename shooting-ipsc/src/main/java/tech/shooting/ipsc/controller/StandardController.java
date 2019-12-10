@@ -129,6 +129,13 @@ public class StandardController {
 		standardService.startImitator(standardId);
 		return new ResponseEntity<>(new SuccessfulMessage("Standard running imitator was successfully started"), HttpStatus.OK);
 	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_POST_START_IMITATOR_ONLY_CODES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation("Start standard running imitator only codes")
+	public ResponseEntity<SuccessfulMessage> postStartImitatorOnlyCodes(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId) throws BadRequestException {
+		standardService.startImitatorOnlyCodes(standardId);
+		return new ResponseEntity<>(new SuccessfulMessage("Standard running imitator only codes was successfully started"), HttpStatus.OK);
+	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "List of standard pass values")

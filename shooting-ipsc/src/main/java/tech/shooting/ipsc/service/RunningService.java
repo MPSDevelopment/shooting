@@ -21,7 +21,7 @@ import tech.shooting.ipsc.repository.PersonRepository;
 @Slf4j
 public class RunningService {
 
-	private Map<Person, RunningData> map = new HashedMap<>();
+	private Map<String, RunningData> map = new HashedMap<>();
 
 	@Autowired
 	private PersonRepository personRepository;
@@ -30,36 +30,38 @@ public class RunningService {
 		EventBus.subscribe(this);
 	}
 
-	public RunningData getPersonData(Person person) {
-		return map.get(person);
+	public RunningData getPersonData(String code) {
+		return map.get(code);
 	}
-	
-//	EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
-	
-	
+
 	@Handler
 	public void handle(TagFinishedEvent event) {
 		map.clear();
 	}
-	
 
 	@Handler
 	public void handle(TagDetectedEvent event) {
 		log.info("Tag with code %s detected", event.getCode());
-		var person = personRepository.findByRfidCode(event.getCode()).orElse(null);
-		if (person == null) {
-			log.info("No person found for a rfid code %s", event.getCode());
-			return;
+		Person person = null;
+		if (!event.isOnlyCode()) {
+			person = personRepository.findByRfidCode(event.getCode()).orElse(null);
+			if (person == null) {
+				log.info("No person found for a rfid code %s", event.getCode());
+				return;
+			}
 		}
-		RunningData runningData = map.get(person);
+		RunningData runningData = map.get(event.getCode());
 		if (runningData == null) {
-			runningData = new RunningData().setCode(event.getCode()).setLaps(0).setPersonId(person.getId()).setPersonName(person.getName()).setLastTime(event.getTime()).setFirstTime(event.getTime());
+			runningData = new RunningData().setCode(event.getCode()).setLaps(0).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
-			runningData = runningData.setCode(event.getCode()).setPersonId(person.getId()).setPersonName(person.getName()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
+			runningData = runningData.setCode(event.getCode()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
 		}
-		map.put(person, runningData);
-		
-		EventBus.publishEvent(new RunningUpdatedEvent().setPersonId(person.getId()).setData(runningData));
+		if (person != null) {
+			runningData.setPersonId(person.getId()).setPersonName(person.getName());
+		}
+		map.put(event.getCode(), runningData);
+
+		EventBus.publishEvent(new RunningUpdatedEvent().setData(runningData));
 	}
 
 	@Handler

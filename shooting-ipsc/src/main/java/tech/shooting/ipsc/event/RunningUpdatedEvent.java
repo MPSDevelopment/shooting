@@ -14,9 +14,6 @@ public class RunningUpdatedEvent extends Event {
 	
 	@JsonProperty
 	private EventTypeEnum type = EventTypeEnum.RUNNING_UPDATED;
-
-	@JsonProperty
-	private Long personId;
 	
 	@JsonProperty
 	private RunningData data;

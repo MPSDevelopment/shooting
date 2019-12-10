@@ -18,6 +18,7 @@ import tech.shooting.ipsc.bean.StandardScoreBean;
 import tech.shooting.ipsc.bean.StandardScoreRequest;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.event.TagImitatorEvent;
+import tech.shooting.ipsc.event.TagImitatorOnlyCodesEvent;
 import tech.shooting.ipsc.pojo.*;
 import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.StandardRepository;
@@ -170,5 +171,11 @@ public class StandardService {
 	public void startImitator(Long standardId) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		EventBus.publishEventAsync(new TagImitatorEvent(standardId, standard.getLaps() == null ? 5 : standard.getLaps(), personRepository.findAll()));
+	}
+	
+
+	public void startImitatorOnlyCodes(Long standardId) throws BadRequestException {
+		Standard standard = checkStandard(standardId);
+		EventBus.publishEventAsync(new TagImitatorOnlyCodesEvent(standardId, standard.getLaps() == null ? 5 : standard.getLaps(), personRepository.findAll()));
 	}
 }

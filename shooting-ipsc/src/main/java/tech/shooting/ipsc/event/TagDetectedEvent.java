@@ -18,6 +18,9 @@ public class TagDetectedEvent extends Event {
 	private String code;
 	
 	@JsonProperty
+	private boolean onlyCode = false;	
+	
+	@JsonProperty
 	private long time;
 
 	public TagDetectedEvent(String code) {
