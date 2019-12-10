@@ -144,7 +144,17 @@ class StandardControllerTest {
 
 		List<Standard> listFromJson = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
 		assertEquals(Collections.EMPTY_LIST, listFromJson);
-
+		
+		Standard save = standardRepository.save(testStandard);
+		
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_ALL).header(Token.TOKEN_HEADER, adminToken))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
+		
+		listFromJson = JacksonUtils.getListFromJson(Standard[].class, contentAsString);
+		assertEquals(1, listFromJson.size());
+		
+		Standard standard = listFromJson.get(0);
+		assertEquals(standard.getSubject().getId(), save.getSubject().getId());
 	}
 
 	@Test
@@ -173,6 +183,7 @@ class StandardControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Standard standard = JacksonUtils.fromJson(Standard.class, contentAsString);
 		assertEquals(save, standard);
+		assertEquals(standard.getSubject().getId(), save.getSubject().getId());
 
 	}
 

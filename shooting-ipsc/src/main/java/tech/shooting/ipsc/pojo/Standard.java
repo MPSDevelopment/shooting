@@ -26,7 +26,7 @@ public class Standard extends BaseDocument {
 	@ApiModelProperty(value = "Standard info", required = true)
 	private Info info;
 
-	@DBRef
+	@DBRef(lazy = false)
 	@JsonProperty
 	@ApiModelProperty(value = "Subject", required = true)
 	private Subject subject;
