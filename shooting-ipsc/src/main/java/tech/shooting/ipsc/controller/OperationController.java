@@ -134,9 +134,8 @@ public class OperationController {
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation participants")
-	public ResponseEntity<SuccessfulMessage> setParticipants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<Long> participants) throws BadRequestException {
-		operationService.setParticipantsToOperation(id, participants);
-		return new ResponseEntity<>(new SuccessfulMessage("Participants were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationParticipant>> setParticipants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<Long> participants) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setParticipantsToOperation(id, participants), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

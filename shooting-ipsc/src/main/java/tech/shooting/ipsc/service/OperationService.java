@@ -256,7 +256,7 @@ public class OperationService {
 		return operation.getMainIndicators();
 	}
 
-	public void setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
+	public List<OperationParticipant> setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
 		
 		var participants = new ArrayList<OperationParticipant>();
 		
@@ -266,6 +266,8 @@ public class OperationService {
 		}
 		
 		operationRepository.setParticipantsToOperation(operationId, participants);
+		
+		return participants;
 	}
 	
 	public List<OperationParticipant> getParticipants(Long id) throws BadRequestException {

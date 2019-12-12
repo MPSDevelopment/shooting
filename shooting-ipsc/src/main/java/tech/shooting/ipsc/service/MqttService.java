@@ -10,6 +10,7 @@ import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
 import tech.shooting.ipsc.event.MqttOnConnectEvent;
 import tech.shooting.ipsc.event.MqttOnConnectionLostEvent;
 import tech.shooting.ipsc.event.MqttOnDisconnectEvent;
+import tech.shooting.ipsc.event.RunningCompletedEvent;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.RunningUpdatedEvent;
@@ -311,6 +312,15 @@ public class MqttService {
 
 	@Handler
 	public void handle(RunningUpdatedEvent event) {
+		try {
+			getPublisher().publish(MqttConstants.RUNNING_TOPIC, createJsonMessage(event));
+		} catch (MqttException e) {
+			log.error("Cannot send a mqtt message %s", event);
+		}
+	}
+	
+	@Handler
+	public void handle(RunningCompletedEvent event) {
 		try {
 			getPublisher().publish(MqttConstants.RUNNING_TOPIC, createJsonMessage(event));
 		} catch (MqttException e) {
