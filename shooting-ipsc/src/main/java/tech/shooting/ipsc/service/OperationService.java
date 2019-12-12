@@ -39,6 +39,7 @@ import tech.shooting.ipsc.repository.CommunicationEquipmentTypeRepository;
 import tech.shooting.ipsc.repository.EquipmentRepository;
 import tech.shooting.ipsc.repository.EquipmentTypeRepository;
 import tech.shooting.ipsc.repository.OperationRepository;
+import tech.shooting.ipsc.repository.PersonRepository;
 import tech.shooting.ipsc.repository.VehicleRepository;
 import tech.shooting.ipsc.repository.VehicleTypeRepository;
 import tech.shooting.ipsc.repository.WeaponRepository;
@@ -60,6 +61,9 @@ public class OperationService {
 	private static final String COMMUNICATION_TYPE_HEADER = "communication";
 
 	private static final String EQUIPMENT_TYPE_HEADER = "equipment";
+	
+	@Autowired
+	private PersonRepository personRepository;
 
 	@Autowired
 	private OperationRepository operationRepository;
@@ -252,8 +256,16 @@ public class OperationService {
 		return operation.getMainIndicators();
 	}
 
-	public void setParticipantsToOperation(Long id, List<OperationParticipant> participants) throws BadRequestException {
-		operationRepository.setParticipantsToOperation(id, participants);
+	public void setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
+		
+		var participants = new ArrayList<OperationParticipant>();
+		
+		for(long id : list) {
+			var person = checkPerson(id);
+			participants.add(new OperationParticipant().setActive(true).setPerson(person).setName(person.getName()));
+		}
+		
+		operationRepository.setParticipantsToOperation(operationId, participants);
 	}
 	
 	public List<OperationParticipant> getParticipants(Long id) throws BadRequestException {
@@ -296,5 +308,9 @@ public class OperationService {
 	public List<OperationRoute>  getRoutes(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getRoutes();
+	}
+	
+	private Person checkPerson(Long id) throws BadRequestException {
+		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect personid %s", id)));
 	}
 }

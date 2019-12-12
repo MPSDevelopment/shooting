@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.pojo.Info;
@@ -145,6 +146,9 @@ public class OperationServiceTest {
 		weaponRepository.save(new Weapon().setWeaponType(weaponType).setOwner(testPerson).setSerialNumber("123"));
 		
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
+		
+		log.info("Data is %s", JacksonUtils.getJson(combatListData));
+		
 		assertEquals(1, combatListData.size());
 		assertEquals(2, combatListData.get(0).size());		
 		assertEquals(Arrays.asList( "1", "0"), combatListData.get(0));
