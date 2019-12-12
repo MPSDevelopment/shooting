@@ -77,6 +77,8 @@ public class TagService {
 		report.setIncludeCrc(true);
 		report.setIncludeFirstSeenTime(true);
 		report.setIncludeLastSeenTime(true);
+		
+		settings.getAntennas().enableAll();
 
 		impinjReader.applySettings(settings);
 

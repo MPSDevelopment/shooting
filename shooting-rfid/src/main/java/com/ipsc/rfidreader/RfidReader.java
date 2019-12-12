@@ -10,6 +10,8 @@ import cn.pda.serialport.Tools;
 
 public class RfidReader {
 
+	private static final int MEM_BANK = UhfManager.EPC;
+
 	private UhfManager manager = null; // UhfManager.getInstance();
 
 //	private int sensitive = 0;
@@ -17,7 +19,6 @@ public class RfidReader {
 //	private int area = UhfManager.WorkArea_China2;
 //	private int frequency = 0;
 
-	private int membank;
 	private int addr = 0;
 	private int length = 1;
 
@@ -59,8 +60,6 @@ public class RfidReader {
 
 		String result = initialize();
 
-		membank = UhfManager.RESERVE;
-
 		if (accessPassword.length != 4) {
 //			return result + "\n Wrong password";
 			return "Wrong password";
@@ -69,7 +68,7 @@ public class RfidReader {
 		List<byte[]> epcList = manager.inventoryRealTime();
 
 		// read data
-		byte[] data = manager.readFrom6C(membank, addr, length, accessPassword);
+		byte[] data = manager.readFrom6C(MEM_BANK, addr, length, accessPassword);
 		if (data != null && data.length > 1) {
 			String dataStr = Tools.Bytes2HexString(data, data.length);
 			return dataStr;
@@ -96,8 +95,6 @@ public class RfidReader {
 
 		String result = initialize();
 
-		membank = UhfManager.RESERVE;
-
 		if (accessPassword.length != 4) {
 //			return result + "\n Wrong password";
 			return "Wrong password";
@@ -109,7 +106,7 @@ public class RfidReader {
 
 		byte[] data = Tools.HexString2Bytes(mark);
 
-		boolean writeFlag = manager.writeTo6C(accessPassword, membank, addr, data.length / 2, data);
+		boolean writeFlag = manager.writeTo6C(accessPassword, MEM_BANK, addr, data.length / 2, data);
 
 		if (writeFlag) {
 			return "Mark has been successfully wrote";
