@@ -9,6 +9,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.event.CompetitionUpdatedEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,5 +127,12 @@ public class JacksonUtilsTest {
 		String json = JacksonUtils.getJson(new SuccessfulMessage("Some success %s", "Here"));
 		log.info("Map is %s", json);
 		assertEquals("{\"success\":{\"message\":\"Some success Here\"}}", json);
+	}
+
+	@Test
+	public void checkCompetitionEvent() {
+		String json = JacksonUtils.getJson(new CompetitionUpdatedEvent(1L, "Competition started"));
+		log.info("Json is %s", json);
+		assertTrue(json.contains("COMPETITION_UPDATED"));
 	}
 }

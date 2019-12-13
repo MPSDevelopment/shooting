@@ -10,7 +10,7 @@ import tech.shooting.ipsc.enums.EventTypeEnum;
 public class CompetitionUpdatedEvent extends Event {
 	
 	@JsonProperty
-	private static final EventTypeEnum type = EventTypeEnum.COMPETITION_UPDATED;
+	private EventTypeEnum type = EventTypeEnum.COMPETITION_UPDATED;
 
 	@JsonProperty
 	private Long id;
