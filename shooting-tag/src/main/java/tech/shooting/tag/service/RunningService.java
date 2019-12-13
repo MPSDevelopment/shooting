@@ -49,6 +49,6 @@ public class RunningService {
 
 	@Handler
 	public void handle(TagUndetectedEvent event) {
-		log.info("Tag with code %s does not exist anymore");
+		log.info("Tag with code %s does not exist anymore", event.getCode());
 	}
 }
