@@ -6,17 +6,7 @@ services:
     restart: always
     volumes:
       - ./logs:/usr/share/servers/ipsc/logs
-#    networks:
-#      nginx-proxy:
-#        ipv4_address: "192.168.31.63"
     ports:
-      - 80:9901
-      - 8808:8808
-      - 1885:1885
-#networks:
-#  nginx-proxy:
-#    ipam:
-#      config:
-#        - subnet: 192.168.31.0/24 
-#          #docker-compose v3+ do not use ip_range
-#          #ip_range: 192.168.31.0/24
+      - 192.168.0.10:80:9901
+      - 192.168.0.10:8808:8808
+      - 192.168.0.10:1885:1885
