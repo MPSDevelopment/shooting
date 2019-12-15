@@ -228,7 +228,7 @@ public class TagService {
 
 		range.forEach(action -> {
 			
-			log.info("Another lap");
+			log.info("Another lap %s", action);
 			
 			event.getPersons().forEach(item -> {
 				
