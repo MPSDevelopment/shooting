@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -33,6 +35,7 @@ import javax.servlet.ServletContext;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @Configuration
@@ -114,6 +117,19 @@ public class AppConfig extends WebMvcConfigurationSupport {
 		converter.setObjectMapper(mapper);
 		return converter;
 	}
+	
+	@Bean
+    public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter(){
+        ByteArrayHttpMessageConverter bam = new ByteArrayHttpMessageConverter();
+        List<org.springframework.http.MediaType> mediaTypes = new LinkedList<MediaType>();
+        mediaTypes.add(org.springframework.http.MediaType.APPLICATION_JSON);
+        mediaTypes.add(org.springframework.http.MediaType.IMAGE_JPEG);
+        mediaTypes.add(org.springframework.http.MediaType.IMAGE_PNG);
+        mediaTypes.add(org.springframework.http.MediaType.IMAGE_GIF);
+        mediaTypes.add(org.springframework.http.MediaType.TEXT_PLAIN);
+        bam.setSupportedMediaTypes(mediaTypes);
+        return bam;
+    }
 
 //	@Bean
 //	public Jackson2ObjectMapperBuilder objectMapperBuilder(HandlerInstantiator handlerInstantiator) {
@@ -126,6 +142,7 @@ public class AppConfig extends WebMvcConfigurationSupport {
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(converter());
 		converters.add(new ResourceHttpMessageConverter());
+		converters.add(byteArrayHttpMessageConverter());
 		super.configureMessageConverters(converters);
 	}
 

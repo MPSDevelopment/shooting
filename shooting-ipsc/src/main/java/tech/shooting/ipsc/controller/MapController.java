@@ -45,7 +45,7 @@ public class MapController {
 
 	private Tika tika = new Tika();
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.ALL_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.MAP_CONTROLLER_GET_TILE_URL, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	@ApiOperation(value = "Get Tile Image", notes = "Returns tile image by x, y and zoom")
 	public ResponseEntity<byte[]> getTile(@PathVariable(value = ControllerAPI.PATH_VARIABLE_ID) String id, @PathVariable(value = ControllerAPI.PATH_VARIABLE_Z) int zoom, @PathVariable(value = ControllerAPI.PATH_VARIABLE_X) int tileX,
@@ -63,6 +63,7 @@ public class MapController {
 		byte[] body = FileUtils.readFileToByteArray(tileImage);
 
 		// return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES)).body(body);
+		// return ResponseEntity.ok().contentType(MediaType.parseMediaType(tika.detect(tileImage))).body(body);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(tika.detect(tileImage))).body(body);
 	}
 

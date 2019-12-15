@@ -17,7 +17,7 @@ import tech.shooting.commons.constraints.IpscConstants;
 public class TileServiceTest {
 
 	private static final int ZOOM = 10;
-	
+
 	private static final String FILENAME = "files/Hawaii.png";
 
 	private TileService service = new TileService();
@@ -29,7 +29,7 @@ public class TileServiceTest {
 		int column = 3;
 
 		service.createTiles(row, column, ZOOM, FILENAME);
-		
+
 //		service.clearTiles(FILENAME);
 	}
 
@@ -40,14 +40,13 @@ public class TileServiceTest {
 		assertTrue(tileImage.getAbsolutePath().contains("Hawaii"));
 		assertTrue(tileImage.getAbsolutePath().contains("z10x1y1.png"));
 	}
-	
-	
+
 	@Test
 	public void resizeImage() throws IOException {
-		File tileImage = service.resizeImage(FILENAME, new File("data/SmallHawaii.png"), 256, 256);
+		File tileImage = service.resizeImage(new File(FILENAME), new File("data/SmallHawaii.png"), 256, 256);
 		assertTrue(tileImage.exists());
 	}
-	
+
 	@Test
 	public void createTile() throws IOException {
 		File tileImage = service.createTile(FILENAME, 7, 7, 10);

@@ -43,8 +43,8 @@ public class TileService {
 
 			int x = 0;
 			int y = 0;
-			
-			int startTile = (int) Math.pow(2, zoom - 1);
+
+			int startTile = (int) Math.pow(2, zoom - 1) - 2;
 
 			for (int i = 0; i < rowNumber; i++) {
 				y = 0;
@@ -56,17 +56,20 @@ public class TileService {
 
 						log.info("Creating tile %s: %s %s %s ", outputfile.getAbsolutePath(), i, j, filename);
 
-						BufferedImage SubImgage = originalImgage.getSubimage(y, x, eWidth, eHeight);
-						ImageIO.write(SubImgage, extension, outputfile);
+						BufferedImage subImage = originalImgage.getSubimage(x, y, eWidth, eHeight);
 
-						y += eWidth;
+						// subImage = resizeImage(subImage, TILE_SIZE, TILE_SIZE);
+
+						ImageIO.write(subImage, extension, outputfile);
+
+						y += eHeight;
 
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 
-				x += eHeight;
+				x += eWidth;
 			}
 
 		} catch (IOException e) {
@@ -80,20 +83,22 @@ public class TileService {
 			extension = "png";
 		}
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
-		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" +  tileX + "y" + tileY + "." + extension);
+		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
 
 	public File createTile(String filename, int tileX, int tileY, int zoom) throws IOException {
-		return resizeImage(filename, getTileImage(filename, tileX, tileY, zoom), TILE_SIZE, TILE_SIZE);
+		File tileImage = getTileImage(filename, tileX, tileY, zoom);
+		return resizeImage(new File(filename), tileImage, TILE_SIZE, TILE_SIZE);
+
 	}
 
 	/**
 	 * Resizes an image to a absolute width and height (the image may not be
 	 * proportional)
 	 */
-	public File resizeImage(String filename, File outputFile, int scaledWidth, int scaledHeight) throws IOException {
+	public File resizeImage(File inputFile, File outputFile, int scaledWidth, int scaledHeight) throws IOException {
+
 		// reads input image
-		File inputFile = new File(filename);
 		BufferedImage inputImage = ImageIO.read(inputFile);
 
 		// creates output image
@@ -105,12 +110,25 @@ public class TileService {
 		g2d.dispose();
 
 		// extracts extension of output file
-		String formatName = FilenameUtils.getExtension(filename);
+		String formatName = FilenameUtils.getExtension(inputFile.getName());
 
 		// writes to output file
 		ImageIO.write(outputImage, formatName, outputFile);
 
 		return outputFile;
+	}
+
+	public BufferedImage resizeImage(BufferedImage inputImage, int scaledWidth, int scaledHeight) throws IOException {
+
+		// creates output image
+		BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, inputImage.getType());
+
+		// scales the input image to the output image
+		Graphics2D g2d = outputImage.createGraphics();
+		g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+		g2d.dispose();
+
+		return outputImage;
 	}
 
 	public byte[] writeImageTobyteArray(BufferedImage image) throws IOException {
