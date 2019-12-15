@@ -44,7 +44,8 @@ public class TileService {
 			int x = 0;
 			int y = 0;
 
-			int startTile = (int) Math.pow(2, zoom - 1) - 2;
+			int startTileX = (int) Math.pow(2, zoom - 1) - 4;
+			int startTileY = (int) Math.pow(2, zoom - 1) - 1;
 
 			for (int i = 0; i < rowNumber; i++) {
 				y = 0;
@@ -52,7 +53,7 @@ public class TileService {
 					try {
 
 						String extension = FilenameUtils.getExtension(filename);
-						File outputfile = getTileImage(filename, startTile + i, startTile + j, zoom);
+						File outputfile = getTileImage(filename, startTileX + i, startTileY + j, zoom);
 
 						log.info("Creating tile %s: %s %s %s ", outputfile.getAbsolutePath(), i, j, filename);
 
