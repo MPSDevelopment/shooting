@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
@@ -46,6 +47,7 @@ import tech.shooting.ipsc.repository.WeaponRepository;
 import tech.shooting.ipsc.repository.WeaponTypeRepository;
 
 @Service
+@Slf4j
 public class OperationService {
 
 	private static final String REPLACEMENT = "0";
@@ -197,6 +199,9 @@ public class OperationService {
 				case EQUIPMENT_TYPE_HEADER: {
 					participantData.add(String.valueOf(equipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
 					break;
+				}
+				default:{
+					log.error("No combat list data for type %s", header.getType());
 				}
 				}
 			});
