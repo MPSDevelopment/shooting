@@ -15,11 +15,11 @@ public class Waypoint extends BaseDocument {
 	@ApiModelProperty(value = "Waypoint's number")
 	protected Integer number;
 
-	@JsonProperty
+	@JsonProperty("lat")
 	@ApiModelProperty(value = "Waypoint's latitude")
 	protected double latitude;
 
-	@JsonProperty
+	@JsonProperty("lon")
 	@ApiModelProperty(value = "Waypoint's longitude")
 	protected double longitude;
 
