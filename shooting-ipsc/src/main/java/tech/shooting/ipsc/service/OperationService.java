@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -200,7 +201,7 @@ public class OperationService {
 					participantData.add(String.valueOf(equipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
-				default:{
+				default: {
 					log.error("No combat list data for type %s", header.getType());
 				}
 				}
@@ -316,6 +317,16 @@ public class OperationService {
 	}
 
 	public void setRoutes(Long id, @Valid List<OperationRoute> routes) {
+		routes.forEach(route -> {
+			route.getWaypoints().forEach(waypoint -> {
+				if (waypoint.getHeight()==null) {
+					waypoint.setHeight(0D);
+				}
+				if (StringUtils.isBlank(waypoint.getLabel())) {
+					waypoint.setLabel(String.valueOf(waypoint.getNumber()));
+				}
+			});
+		});
 		operationRepository.setRoutesToOperation(id, routes);
 	}
 
