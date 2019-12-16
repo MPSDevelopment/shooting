@@ -1,5 +1,6 @@
 package tech.shooting.ipsc.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
@@ -23,6 +24,8 @@ import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.pojo.Equipment;
+import tech.shooting.ipsc.pojo.EquipmentType;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationParticipant;
@@ -58,7 +61,7 @@ public class OperationServiceTest {
 
 	@Autowired
 	private OperationRepository operationRepository;
-	
+
 	@Autowired
 	private PersonRepository personRepository;
 
@@ -118,9 +121,18 @@ public class OperationServiceTest {
 
 		weaponTypeRepository.save(new WeaponType().setName("AK-47"));
 		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
+		equipmentTypeRepository.save(new EquipmentType().setName("Radio"));
 
 		headers = operationService.getHeaders();
-		assertEquals(3, headers.size());
+		assertEquals(4, headers.size());
+		assertNotNull(headers.get(0));
+		assertNotNull(headers.get(0).getType());
+		assertNotNull(headers.get(1));
+		assertNotNull(headers.get(1).getType());
+		assertNotNull(headers.get(2));
+		assertNotNull(headers.get(2).getType());
+		assertNotNull(headers.get(3));
+		assertNotNull(headers.get(3).getType());
 	}
 
 	@Test
@@ -128,30 +140,41 @@ public class OperationServiceTest {
 		testOperation = operationRepository.save(testOperation);
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
 		assertEquals(0, combatListData.size());
-		
+
 		var testPerson = personRepository.save(new Person().setName("Thor").setCall("ThorCall"));
 		testOperation.setParticipants(Arrays.asList(new OperationParticipant().setPerson(testPerson)));
-		
+
 		operationRepository.save(testOperation);
-		
+
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
 		assertEquals(1, combatListData.size());
-		
-		var weaponType = weaponTypeRepository.save(new WeaponType().setName("AK-47"));
+
+		WeaponType weaponType = weaponTypeRepository.save(new WeaponType().setName("AK-47"));
 		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
-		
+
 		headers = operationService.getHeaders();
 		assertEquals(3, headers.size());
-		
+
 		weaponRepository.save(new Weapon().setWeaponType(weaponType).setOwner(testPerson).setSerialNumber("123"));
+
+		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
+
+		log.info("Data is %s", JacksonUtils.getJson(combatListData));
+
+		assertEquals(1, combatListData.size());
+		assertEquals(3, combatListData.get(0).size());
+		assertEquals(Arrays.asList("ThorCall", "1", "0"), combatListData.get(0));
+
+		EquipmentType equipmentType;
+		equipmentTypeRepository.save(equipmentType = new EquipmentType().setName("Radio"));
 		
+		equipmentRepository.save(new Equipment().setType(equipmentType).setOwner(testPerson).setSerialNumber("4632"));
+
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
 		
-		log.info("Data is %s", JacksonUtils.getJson(combatListData));
-		
 		assertEquals(1, combatListData.size());
-		assertEquals(3, combatListData.get(0).size());		
-		assertEquals(Arrays.asList( "ThorCall", "1", "0"), combatListData.get(0));
+		assertEquals(4, combatListData.get(0).size());
+		assertEquals(Arrays.asList("ThorCall", "1", "0", "1"), combatListData.get(0));
 	}
 
 }

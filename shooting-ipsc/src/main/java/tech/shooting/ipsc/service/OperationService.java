@@ -133,7 +133,7 @@ public class OperationService {
 
 		var result = new ArrayList<OperationCombatListHeaderBean>();
 
-		result.add(new OperationCombatListHeaderBean().setName(Person.CALL));
+		result.add(new OperationCombatListHeaderBean().setType(CALL_TYPE_HEADER));
 
 		weaponTypeRepository.findAll().forEach(type -> {
 			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(WEAPON_TYPE_HEADER).setTypeId(type.getId()));
