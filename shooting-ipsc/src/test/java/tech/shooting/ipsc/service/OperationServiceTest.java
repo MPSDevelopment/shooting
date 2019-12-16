@@ -114,13 +114,13 @@ public class OperationServiceTest {
 	@Test
 	public void getHeaders() {
 		headers = operationService.getHeaders();
-		assertEquals(0, headers.size());
+		assertEquals(1, headers.size());
 
 		weaponTypeRepository.save(new WeaponType().setName("AK-47"));
 		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
 
 		headers = operationService.getHeaders();
-		assertEquals(2, headers.size());
+		assertEquals(3, headers.size());
 	}
 
 	@Test
@@ -129,19 +129,19 @@ public class OperationServiceTest {
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
 		assertEquals(0, combatListData.size());
 		
-		var testPerson = personRepository.save(new Person().setName("Thor"));
+		var testPerson = personRepository.save(new Person().setName("Thor").setCall("ThorCall"));
 		testOperation.setParticipants(Arrays.asList(new OperationParticipant().setPerson(testPerson)));
 		
 		operationRepository.save(testOperation);
 		
 		combatListData = operationService.getCombatListData(testOperation.getId(), operationService.getHeaders());
-		assertEquals(0, combatListData.size());
+		assertEquals(1, combatListData.size());
 		
 		var weaponType = weaponTypeRepository.save(new WeaponType().setName("AK-47"));
 		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
 		
 		headers = operationService.getHeaders();
-		assertEquals(2, headers.size());
+		assertEquals(3, headers.size());
 		
 		weaponRepository.save(new Weapon().setWeaponType(weaponType).setOwner(testPerson).setSerialNumber("123"));
 		
@@ -150,8 +150,8 @@ public class OperationServiceTest {
 		log.info("Data is %s", JacksonUtils.getJson(combatListData));
 		
 		assertEquals(1, combatListData.size());
-		assertEquals(2, combatListData.get(0).size());		
-		assertEquals(Arrays.asList( "1", "0"), combatListData.get(0));
+		assertEquals(3, combatListData.get(0).size());		
+		assertEquals(Arrays.asList( "ThorCall", "1", "0"), combatListData.get(0));
 	}
 
 }

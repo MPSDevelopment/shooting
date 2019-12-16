@@ -50,6 +50,8 @@ public class OperationService {
 
 	private static final String REPLACEMENT = "0";
 
+	private static final String CALL_TYPE_HEADER = "call";
+
 	private static final String WEAPON_TYPE_HEADER = "weaponry";
 
 	private static final String AMMO_TYPE_HEADER = "ammo";
@@ -61,7 +63,7 @@ public class OperationService {
 	private static final String COMMUNICATION_TYPE_HEADER = "communication";
 
 	private static final String EQUIPMENT_TYPE_HEADER = "equipment";
-	
+
 	@Autowired
 	private PersonRepository personRepository;
 
@@ -117,7 +119,7 @@ public class OperationService {
 		communicationEquipmentRepository.deleteAll();
 		equipmentRepository.deleteAll();
 	}
-	
+
 	public ResponseEntity<List<Operation>> getOperationsByPage(Integer page, Integer size) {
 		page = Math.max(1, page);
 		page--;
@@ -130,6 +132,8 @@ public class OperationService {
 	public List<OperationCombatListHeaderBean> getHeaders() {
 
 		var result = new ArrayList<OperationCombatListHeaderBean>();
+
+		result.add(new OperationCombatListHeaderBean().setName(Person.CALL).setType(CALL_TYPE_HEADER));
 
 		weaponTypeRepository.findAll().forEach(type -> {
 			result.add(new OperationCombatListHeaderBean().setName(type.getName()).setType(WEAPON_TYPE_HEADER).setTypeId(type.getId()));
@@ -166,6 +170,10 @@ public class OperationService {
 
 			headers.forEach(header -> {
 				switch (header.getType()) {
+				case CALL_TYPE_HEADER: {
+					participantData.add(participant.getPerson().getCall());
+					break;
+				}
 				case WEAPON_TYPE_HEADER: {
 					participantData.add(String.valueOf(weaponRepository.countByOwnerAndWeaponTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
 					break;
@@ -241,7 +249,7 @@ public class OperationService {
 	public void setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
 		operationRepository.setSymbolsToOperation(id, symbols);
 	}
-	
+
 	public List<OperationSymbol> getSymbols(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getSymbols();
@@ -250,26 +258,26 @@ public class OperationService {
 	public void setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
 		operationRepository.setMainIndicatorsToOperation(id, indicators);
 	}
-	
+
 	public List<OperationMainIndicator> getMainIndicators(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getMainIndicators();
 	}
 
 	public List<OperationParticipant> setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
-		
+
 		var participants = new ArrayList<OperationParticipant>();
-		
-		for(long id : list) {
+
+		for (long id : list) {
 			var person = checkPerson(id);
 			participants.add(new OperationParticipant().setActive(true).setPerson(person).setName(person.getName()));
 		}
-		
+
 		operationRepository.setParticipantsToOperation(operationId, participants);
-		
+
 		return participants;
 	}
-	
+
 	public List<OperationParticipant> getParticipants(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getParticipants();
@@ -278,7 +286,7 @@ public class OperationService {
 	public void setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
 		operationRepository.setCombatSignalsToOperation(id, signals);
 	}
-	
+
 	public List<OperationSignal> getSignals(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getSignals();
@@ -287,12 +295,11 @@ public class OperationService {
 	public void setCommandantServices(Long id, List<OperationCommandantService> services) throws BadRequestException {
 		operationRepository.setCommandantServicesToOperation(id, services);
 	}
-	
+
 	public List<OperationCommandantService> getCommandantServices(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getCommandantServices();
 	}
-
 
 	public void setCombatElements(Long id, List<OperationCombatElement> elements) {
 		operationRepository.setCombatElementsToOperation(id, elements);
@@ -307,11 +314,11 @@ public class OperationService {
 		operationRepository.setRoutesToOperation(id, routes);
 	}
 
-	public List<OperationRoute>  getRoutes(Long id) throws BadRequestException {
+	public List<OperationRoute> getRoutes(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getRoutes();
 	}
-	
+
 	private Person checkPerson(Long id) throws BadRequestException {
 		return personRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect personid %s", id)));
 	}
