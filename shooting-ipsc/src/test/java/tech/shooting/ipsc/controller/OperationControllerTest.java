@@ -53,7 +53,7 @@ import tech.shooting.ipsc.service.OperationService;
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest
-@DirtiesContext
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, DatabaseCreator.class, OperationController.class, OperationService.class })
@@ -302,7 +302,7 @@ public class OperationControllerTest extends BaseControllerTest {
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		var list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
-		assertEquals(0, list.size());
+		assertEquals(1, list.size());
 
 		weaponTypeRepository.save(new WeaponType().setName("AK-47"));
 		weaponTypeRepository.save(new WeaponType().setName("AK-74"));
@@ -312,7 +312,7 @@ public class OperationControllerTest extends BaseControllerTest {
 						.header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		list = JacksonUtils.getListFromJson(OperationCombatListHeaderBean[].class, contentAsString);
-		assertEquals(2, list.size());
+		assertEquals(3, list.size());
 
 	}
 
@@ -367,7 +367,7 @@ public class OperationControllerTest extends BaseControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		doubleList = JacksonUtils.getListFromJson(List[].class, contentAsString);
 		assertEquals(1, doubleList.size());
-		assertEquals(2, doubleList.get(0).size());
+		assertEquals(3, doubleList.get(0).size());
 
 	}
 
