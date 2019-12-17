@@ -461,5 +461,6 @@ public class ControllerAPI {
 	
 	public static final String TAG_CONTROLLER = "/api/tag";
 	public static final String TAG_CONTROLLER_GET_STATUS = "/status";
+	public static final String TAG_CONTROLLER_GET_MODE = "/mode";
 	public static final String TAG_CONTROLLER_POST_NEW_EPC = "/epcwrite";
 }

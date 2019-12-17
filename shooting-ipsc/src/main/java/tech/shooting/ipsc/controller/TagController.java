@@ -31,4 +31,10 @@ public class TagController {
 		}
 		return new ResponseEntity<>(new SuccessfulMessage("Status disconnected"), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_MODE)
+	@ApiOperation(value = "Return server mode")
+	public ResponseEntity<String> getMode() {
+		return new ResponseEntity<>("Online", HttpStatus.OK);
+	}
 }

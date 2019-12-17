@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import io.swagger.annotations.ApiOperation;
 import tech.shooting.tag.pojo.SuccessfulMessage;
 import tech.shooting.tag.pojo.TagEpc;
 import tech.shooting.tag.service.TagService;
@@ -34,6 +36,11 @@ public class TagController {
         return new ResponseEntity<>(new SuccessfulMessage("Status disconnected  Tag Ip %s Local ip %s", service.getTagIp(), service.getFirstNonLoopbackAddress()), HttpStatus.OK);
     }
 
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_MODE)
+	@ApiOperation(value = "Return server mode")
+	public ResponseEntity<String> getMode() {
+		return new ResponseEntity<>("Offline", HttpStatus.BAD_GATEWAY);
+	}
 
     @PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SuccessfulMessage> writeNewEPCCode(@RequestBody TagEpc tagEpc) throws SocketException {
