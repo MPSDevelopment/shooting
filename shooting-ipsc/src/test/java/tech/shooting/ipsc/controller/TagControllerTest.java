@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +31,7 @@ import tech.shooting.ipsc.service.TagService;
 @EnableMongoRepositories(basePackageClasses = SettingsRepository.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-@DirtiesContext
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
 @Tag(IpscConstants.UNIT_TEST_TAG)
 @ContextConfiguration(classes = { ValidationErrorHandler.class, IpscSettings.class, IpscMongoConfig.class, SecurityConfig.class, UserDao.class, TagService.class, SettingsService.class, TagController.class })
@@ -43,5 +44,11 @@ class TagControllerTest {
 	void checkGetStatus() throws Exception {
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_STATUS)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void checkGetMode() throws Exception {
+		// try access with unauthorized user role
+		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_MODE)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
