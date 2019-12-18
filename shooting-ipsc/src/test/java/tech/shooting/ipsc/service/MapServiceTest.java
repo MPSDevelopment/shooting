@@ -37,6 +37,8 @@ import tech.shooting.ipsc.repository.PersonRepository;
 public class MapServiceTest {
 	
 	private static final String FILENAME = "files/Hawaii.png";
+	
+	private static final String MAP_FILENAME = "files/Map.jpg";
 
 	@Autowired
 	private MapService mapService;
@@ -49,8 +51,16 @@ public class MapServiceTest {
 	}
 
 	@Test
-	public void saveMap() throws IOException {
+	public void saveMapPng() throws IOException {
 		MockMultipartFile multipartFile = new MockMultipartFile(FILENAME, new FileInputStream(FILENAME));
+		mapService.saveMap(multipartFile, filename);
+		
+		mapService.clearMap(filename);
+	}
+	
+	@Test
+	public void saveMapJpg() throws IOException {
+		MockMultipartFile multipartFile = new MockMultipartFile(MAP_FILENAME, new FileInputStream(FILENAME));
 		mapService.saveMap(multipartFile, filename);
 		
 		mapService.clearMap(filename);

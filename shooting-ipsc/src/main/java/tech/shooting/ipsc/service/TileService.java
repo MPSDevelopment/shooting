@@ -61,7 +61,7 @@ public class TileService {
 
 						// subImage = resizeImage(subImage, TILE_SIZE, TILE_SIZE);
 
-						ImageIO.write(subImage, extension, outputfile);
+						ImageIO.write(subImage, "png", outputfile);
 
 						y += eHeight;
 
@@ -79,10 +79,10 @@ public class TileService {
 	}
 
 	public File getTileImage(String filename, int tileX, int tileY, int zoom) {
-		String extension = FilenameUtils.getExtension(filename);
-		if (StringUtils.isBlank(extension)) {
-			extension = "png";
-		}
+//		String extension = FilenameUtils.getExtension(filename);
+//		if (StringUtils.isBlank(extension)) {
+		String extension = "png";
+//		}
 		String filenameNoExtension = FilenameUtils.getBaseName(filename);
 		return new File(FOLDER_NAME + filenameNoExtension + "/" + "z" + zoom + "x" + tileX + "y" + tileY + "." + extension);
 	}
