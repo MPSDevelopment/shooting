@@ -1,0 +1,19 @@
+[Unit]
+
+Description=Tag service
+
+After=syslog.target
+
+[Service]
+
+User=root
+
+WorkingDirectory=/home/pi/ipsc
+Environment=SPRING_PROFILES_ACTIVE=production
+ExecStart=/home/pi/ipsc/service.sh
+
+SuccessExitStatus=143
+
+[Install]
+
+WantedBy=multi-user.target
