@@ -19,6 +19,15 @@
 			</modules>
 		</profile>
 		<profile>
+			<id>tag</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>shooting-tag</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>docker</id>
 			<modules>
 				<module>shooting-commons</module>

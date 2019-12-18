@@ -28,11 +28,25 @@ ipsc:
 
 ---
 spring:
+  profiles: development
+  main:
+    banner-mode: "off"
+server:
+  address: 10.0.0.5
+  port: 10001
+ipsc:
+  mqtt:
+    adminLogin: ipsc
+    adminPassword: ip2342354dsdsnkjqsc
+    ipscTopicName: ipsc
+---
+spring:
   profiles: production
   main:
     banner-mode: "off"
 server:
   address: 192.168.0.20
+  port: 80
 ipsc:
   mqtt:
     adminLogin: ipsc
