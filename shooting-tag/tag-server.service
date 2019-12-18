@@ -8,9 +8,9 @@ After=syslog.target
 
 User=root
 
-WorkingDirectory=/home/pi/ipsc
-Environment=SPRING_PROFILES_ACTIVE=production
-ExecStart=/home/pi/ipsc/service.sh
+WorkingDirectory=/usr/share/servers/shooting/tag
+Environment=SPRING_PROFILES_ACTIVE=development
+ExecStart=/usr/share/servers/shooting/tag/service-server.sh
 
 SuccessExitStatus=143
 
