@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import tech.shooting.tag.event.*;
 import tech.shooting.tag.eventbus.EventBus;
 import tech.shooting.tag.pojo.Tag;
@@ -18,6 +19,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Slf4j
@@ -344,6 +346,43 @@ public class TagService {
 		outstanding++;
 		impinjReader.addOpSequence(seq);
 		log.info("Stop rewrite ETC");
+	}
+	
+	@Handler
+	public void handle(TagImitatorOnlyCodesEvent event) throws InterruptedException {
+		log.info("Tag imitator only codes event started with %s laps %s persons", event.getLaps(), event.getCodes().size());
+		
+		if (event.getLaps() == 0) {
+			log.error("There is zero laps");
+			return;
+		}
+		
+		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
+
+		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
+
+		range.forEach(action -> {
+			
+			log.info("Another lap %s", action);
+			
+			event.getCodes().forEach(item -> {
+				
+				EventBus.publishEvent(new TagDetectedEvent(item).setTime(System.currentTimeMillis()));
+				
+				try {
+					Thread.sleep(event.getPersonDelay());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+			
+			try {
+				Thread.sleep(event.getLapDelay());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+
 	}
 
 	private static String getRandomEpc() {
