@@ -567,7 +567,7 @@ class StandardControllerTest {
 		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.STANDARD_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_GET_PASS_ENUM).header(Token.TOKEN_HEADER, adminToken))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<StandardPassEnum> listFromJson = JacksonUtils.getListFromJson(StandardPassEnum[].class, contentAsString);
-		assertEquals(3, listFromJson.size());
+		assertEquals(4, listFromJson.size());
 	}
 
 	@Test
