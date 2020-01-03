@@ -149,7 +149,7 @@ public class TagService {
 					}
 
 					// If Rewrite flag - true start rewrite new ETC code
-					rewriteETC(item);
+					// rewriteETC(item);
 				});
 
 				// remove tag from map if it is not in tagReport
@@ -401,6 +401,10 @@ public class TagService {
 			epc += String.format("%04X", s);
 		}
 		return epc;
+	}
+
+	public void clear() {
+		map = new HashMap<>();
 	}
 
 }

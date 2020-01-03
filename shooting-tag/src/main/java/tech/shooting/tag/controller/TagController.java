@@ -59,10 +59,17 @@ public class TagController {
 		return new ResponseEntity<>(new SuccessfulMessage("Standard running imitator only codes was successfully started"), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_GET_CODES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CODES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation("Get map codes")
 	public ResponseEntity<Map<String, Tag>> getCodes() {
 		return new ResponseEntity<>(service.getMap(), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CLEAR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation("Clear map codes")
+	public ResponseEntity<SuccessfulMessage> clear() {
+		service.clear();
+		return new ResponseEntity<>(new SuccessfulMessage("Tags cleared"), HttpStatus.OK);
 	}
 
 }
