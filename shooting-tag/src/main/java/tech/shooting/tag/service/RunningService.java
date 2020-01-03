@@ -44,7 +44,7 @@ public class RunningService {
 		}
 		map.put(event.getCode(), runningData);
 
-		EventBus.publishEvent(new RunningUpdatedEvent().setData(runningData));
+		EventBus.publishEvent(new RunningUpdatedEvent().setSending(event.isSending()).setData(runningData));
 	}
 
 	@Handler

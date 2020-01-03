@@ -20,4 +20,6 @@ public class RunningUpdatedEvent extends Event {
 	
 	@JsonProperty
 	private RunningData data;
+	
+	private boolean sending = true;
 }

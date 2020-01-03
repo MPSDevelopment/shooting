@@ -48,6 +48,7 @@ public class ControllerAPI {
 	public static final String PATH_VARIABLE_COURSE_ID = "courseId";
 	public static final String PATH_VARIABLE_MARK = "mark";
 	public static final String PATH_VARIABLE_OPERATION_ID = "operationId";
+	public static final String PATH_VARIABLE_COUNT = "count";
 
 	/*
 	 * request variable
@@ -86,6 +87,7 @@ public class ControllerAPI {
 	public static final String REQUEST_QUESTION_ID = "{" + PATH_VARIABLE_QUESTION_ID + "}";
 	public static final String REQUEST_MARK = "{" + PATH_VARIABLE_MARK + "}";
 	public static final String REQUEST_OPERATION_ID = "{" + PATH_VARIABLE_OPERATION_ID + "}";
+	public static final String REQUEST_COUNT = "{" + PATH_VARIABLE_COUNT + "}";
 
 	/*
 	 * VALIDATION_CONTROLLER
@@ -458,7 +460,7 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
-	
+
 	public static final String TAG_CONTROLLER = "/api/tag";
 	public static final String TAG_CONTROLLER_GET_STATUS = "/status";
 	public static final String TAG_CONTROLLER_GET_MODE = "/mode";
@@ -466,4 +468,6 @@ public class ControllerAPI {
 	public static final String TAG_CONTROLLER_POST_START_IMITATOR_ONLY_CODES = "/startimitatoronlycodes";
 	public static final String TAG_CONTROLLER_GET_CODES = "/codes";
 	public static final String TAG_CONTROLLER_GET_CLEAR = "/clear";
+	public static final String TAG_CONTROLLER_GET_STOP = "/stop";
+	public static final String TAG_CONTROLLER_GET_START = "/start/" + REQUEST_COUNT;
 }

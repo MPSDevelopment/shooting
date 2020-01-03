@@ -31,6 +31,12 @@ public class TagService {
 
 	private boolean connected = false;
 
+	private boolean started = false;
+
+	private boolean rewriteFlag = false;
+
+	private int laps;
+
 	private static String currentETCCode;
 	private static String newETCCode;
 
@@ -131,17 +137,20 @@ public class TagService {
 				var list = new ArrayList<>();
 
 				report.getTags().forEach(item -> {
-					log.info(" EPC  String - %s", item.getEpc().toString());
-					list.add(String.valueOf(item.getCrc()));
+
+					String code = Integer.toHexString(item.getCrc()).toUpperCase();
+
+					log.info(" Code %s and EPC  String - %s", code, item.getEpc().toString());
+					list.add(code);
 
 					Tag tag = new Tag();
-					tag.setCode(String.valueOf(item.getCrc()));
+					tag.setCode(code);
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 
 					if (map.get(tag.getCode()) == null) {
 						map.put(tag.getCode(), tag);
-						EventBus.publishEvent(new TagDetectedEvent(tag.getCode()).setTime(tag.getFirstSeenTime()));
+						EventBus.publishEvent(new TagDetectedEvent(tag.getCode()).setSending(started).setTime(tag.getFirstSeenTime()));
 					} else {
 //						Tag existingTag = map.get(tag.getCode());
 //						existingTag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
@@ -155,22 +164,22 @@ public class TagService {
 				// remove tag from map if it is not in tagReport
 				map.forEach((code, item) -> {
 					if (!list.contains(code)) {
-						EventBus.publishEvent(new TagUndetectedEvent(code));
+						EventBus.publishEvent(new TagUndetectedEvent(code).setSending(started));
 						map.remove(code);
 					}
 				});
 
-				// String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
-				String collect = report.getTags().stream().map(item -> {
-					Tag tag = new Tag();
-					tag.setCode(String.valueOf(item.getCrc()));
-					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
-					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-					return JacksonUtils.getJson(tag);
-				}).collect(Collectors.joining(", "));
-				if (StringUtils.isNotBlank(collect)) {
-					log.info("On tag report %s", collect);
-				}
+//				// String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
+//				String collect = report.getTags().stream().map(item -> {
+//					Tag tag = new Tag();
+//					tag.setCode(String.valueOf(item.getCrc()));
+//					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+//					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+//					return JacksonUtils.getJson(tag);
+//				}).collect(Collectors.joining(", "));
+//				if (StringUtils.isNotBlank(collect)) {
+//					log.info("On tag report %s", collect);
+//				}
 			}
 		});
 
@@ -213,10 +222,6 @@ public class TagService {
 		}
 	}
 
-	public Map<String, Tag> getMap() {
-		return map;
-	}
-
 	public boolean getStatus() {
 		return connected;
 	}
@@ -251,8 +256,6 @@ public class TagService {
 		}
 		return null;
 	}
-
-	private boolean rewriteFlag = false;
 
 	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag && tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
@@ -403,8 +406,22 @@ public class TagService {
 		return epc;
 	}
 
+	public Map<String, Tag> getMap() {
+		return map;
+	}
+
 	public void clear() {
 		map = new HashMap<>();
+	}
+
+	public void startSending(int laps) {
+		this.laps = laps;
+		map = new HashMap<>();
+		started = true;
+	}
+
+	public void stopSending() {
+		started = false;
 	}
 
 }

@@ -181,7 +181,9 @@ public class MqttService {
 	@Handler
 	public void handle(RunningUpdatedEvent event) {
 		try {
-			getPublisher().publish(MqttConstants.RUNNING_TOPIC, createJsonMessage(event));
+			if (event.isSending()) {
+				getPublisher().publish(MqttConstants.RUNNING_TOPIC, createJsonMessage(event));
+			}
 		} catch (MqttException e) {
 			log.error("Cannot send a mqtt message %s", event);
 		}

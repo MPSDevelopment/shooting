@@ -253,5 +253,13 @@ public class TagService {
 	public boolean getStatus() {
 		return connected;
 	}
+	
+	public Map<String, Tag> getMap() {
+		return map;
+	}
+
+	public void clear() {
+		map = new HashMap<>();
+	}
 
 }

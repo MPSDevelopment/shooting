@@ -16,6 +16,8 @@ public class TagUndetectedEvent extends Event {
 
 	@JsonProperty
 	private String code;
+	
+	private boolean sending = true;
 
 	public TagUndetectedEvent(String code) {
 		this.code = code;

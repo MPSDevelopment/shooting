@@ -19,6 +19,8 @@ public class TagDetectedEvent extends Event {
 	
 	@JsonProperty
 	private long time;
+	
+	private boolean sending = true;
 
 	public TagDetectedEvent(String code) {
 		this.code = code;
