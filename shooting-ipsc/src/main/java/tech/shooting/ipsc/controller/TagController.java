@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tech.shooting.commons.pojo.SuccessfulMessage;
@@ -55,4 +56,19 @@ public class TagController {
 		service.clear();
 		return new ResponseEntity<>(new SuccessfulMessage("Tags cleared"), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation("Stop sending data")
+	public ResponseEntity<SuccessfulMessage> stop() {
+		service.stopSending();
+		return new ResponseEntity<>(new SuccessfulMessage("Stop sending data"), HttpStatus.OK);
+	}
+
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_START, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation("Start sending data")
+	public ResponseEntity<SuccessfulMessage> start(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COUNT) Integer laps) {
+		service.startSending(laps);
+		return new ResponseEntity<>(new SuccessfulMessage("Start sending data"), HttpStatus.OK);
+	}
+
 }

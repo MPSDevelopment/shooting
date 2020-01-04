@@ -39,12 +39,16 @@ public class TagService {
 	private ImpinjReader impinjReader;
 
 	private Map<String, Tag> map = new HashMap<>();
-	
+
 	private boolean connected = false;
 
 	@Autowired
 	private SettingsService settingsService;
-	
+
+	private int laps;
+
+	private boolean started;
+
 	public TagService() {
 		EventBus.subscribe(this);
 	}
@@ -79,7 +83,7 @@ public class TagService {
 		impinjReader.start();
 
 		log.info("Reader has been started");
-		
+
 		connected = true;
 
 		EventBus.publishEvent(new RunningOnConnectEvent());
@@ -163,7 +167,7 @@ public class TagService {
 	public void stop() throws OctaneSdkException {
 		if (impinjReader != null) {
 			impinjReader.stop();
-			
+
 			connected = false;
 
 			log.info("Reader has been stopped");
@@ -179,31 +183,31 @@ public class TagService {
 	@Handler
 	public void handle(TagImitatorEvent event) throws InterruptedException {
 		log.info("Tag imitator event started with %s laps %s persons", event.getLaps(), event.getPersons().size());
-		
+
 		if (event.getLaps() == 0) {
 			log.error("There is zero laps");
 			return;
 		}
-		
+
 		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
 
 		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
 
 		range.forEach(action -> {
-			
+
 			log.info("Another lap");
-			
+
 			event.getPersons().forEach(item -> {
-				
+
 				EventBus.publishEvent(new TagDetectedEvent(item.getRfidCode()).setTime(System.currentTimeMillis()));
-				
+
 				try {
 					Thread.sleep(event.getPersonDelay());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			});
-			
+
 			try {
 				Thread.sleep(event.getLapDelay());
 			} catch (InterruptedException e) {
@@ -212,35 +216,35 @@ public class TagService {
 		});
 
 	}
-	
+
 	@Handler
 	public void handle(TagImitatorOnlyCodesEvent event) throws InterruptedException {
 		log.info("Tag imitator only codes event started with %s laps %s persons", event.getLaps(), event.getPersons().size());
-		
+
 		if (event.getLaps() == 0) {
 			log.error("There is zero laps");
 			return;
 		}
-		
+
 		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
 
 		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
 
 		range.forEach(action -> {
-			
+
 			log.info("Another lap %s", action);
-			
+
 			event.getPersons().forEach(item -> {
-				
+
 				EventBus.publishEvent(new TagDetectedEvent(item.getRfidCode()).setOnlyCode(true).setTime(System.currentTimeMillis()));
-				
+
 				try {
 					Thread.sleep(event.getPersonDelay());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			});
-			
+
 			try {
 				Thread.sleep(event.getLapDelay());
 			} catch (InterruptedException e) {
@@ -253,13 +257,23 @@ public class TagService {
 	public boolean getStatus() {
 		return connected;
 	}
-	
+
 	public Map<String, Tag> getMap() {
 		return map;
 	}
 
 	public void clear() {
 		map = new HashMap<>();
+	}
+
+	public void startSending(int laps) {
+		this.laps = laps;
+		map = new HashMap<>();
+		started = true;
+	}
+
+	public void stopSending() {
+		started = false;
 	}
 
 }
