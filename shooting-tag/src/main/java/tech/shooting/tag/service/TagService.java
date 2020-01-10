@@ -35,8 +35,6 @@ public class TagService {
 
 	private boolean rewriteFlag = false;
 
-	private int laps;
-
 	private static String currentETCCode;
 	private static String newETCCode;
 
@@ -364,7 +362,7 @@ public class TagService {
 			return;
 		}
 
-		EventBus.publishEvent(new TagFinishedEvent(event.getStandardId()));
+		EventBus.publishEvent(new TagFinishedEvent(event.getLaps()));
 
 		IntStream range = IntStream.rangeClosed(0, event.getLaps()).sequential();
 
@@ -410,18 +408,16 @@ public class TagService {
 		return map;
 	}
 
-	public void clear() {
-		map = new HashMap<>();
-	}
-
 	public void startSending(int laps) {
-		this.laps = laps;
 		map = new HashMap<>();
+		EventBus.publishEvent(new TagFinishedEvent(laps));
 		started = true;
 	}
 
 	public void stopSending() {
 		started = false;
+		map = new HashMap<>();
+		EventBus.publishEvent(new TagFinishedEvent(0));
 	}
 
 }

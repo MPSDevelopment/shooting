@@ -66,13 +66,6 @@ public class TagController {
 		return new ResponseEntity<>(service.getMap(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CLEAR, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation("Clear map codes")
-	public ResponseEntity<SuccessfulMessage> clear() {
-		service.clear();
-		return new ResponseEntity<>(new SuccessfulMessage("Tags cleared"), HttpStatus.OK);
-	}
-
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_STOP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation("Stop sending data")
 	public ResponseEntity<SuccessfulMessage> stop() {

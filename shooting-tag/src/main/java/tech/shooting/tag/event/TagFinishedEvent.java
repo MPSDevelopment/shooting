@@ -15,9 +15,9 @@ public class TagFinishedEvent extends Event {
 	@JsonProperty
 	private EventTypeEnum type = EventTypeEnum.TAG_IMITATOR_FINISHED;
 
-	private Long standardId;
+	private int laps;
 
-	public TagFinishedEvent(Long standardId) {
-		this.standardId = standardId;
+	public TagFinishedEvent(int laps) {
+		this.laps = laps;
 	}
 }

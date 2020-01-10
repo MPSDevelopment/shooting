@@ -20,6 +20,8 @@ public class RunningService {
 
 	private Map<String, RunningData> map = new HashedMap<>();
 
+	private int laps;
+
 	public RunningService() {
 		EventBus.subscribe(this);
 	}
@@ -31,20 +33,32 @@ public class RunningService {
 	@Handler
 	public void handle(TagFinishedEvent event) {
 		map.clear();
+		this.laps = event.getLaps();
+		log.info("There is %s laps", this.laps);
 	}
 
 	@Handler
 	public void handle(TagDetectedEvent event) {
 		log.info("Tag with code %s detected", event.getCode());
 		RunningData runningData = map.get(event.getCode());
-		if (runningData == null) {
-			runningData = new RunningData().setCode(event.getCode()).setLaps(0).setLastTime(event.getTime()).setFirstTime(event.getTime());
-		} else {
-			runningData = runningData.setCode(event.getCode()).setLaps(runningData.getLaps() + 1).setLastTime(event.getTime());
-		}
-		map.put(event.getCode(), runningData);
 
-		EventBus.publishEvent(new RunningUpdatedEvent().setSending(event.isSending()).setData(runningData));
+		int laps = 0;
+
+		if (runningData == null) {
+			runningData = new RunningData().setCode(event.getCode()).setLastTime(event.getTime()).setFirstTime(event.getTime());
+		} else {
+			laps = runningData.getLaps() + 1;
+			runningData = runningData.setCode(event.getCode()).setLastTime(event.getTime());
+		}
+
+		if (laps > this.laps) {
+			log.info("Lap %s bigger then standard laps %s. Will not send the message", laps, this.laps);
+		} else {
+			runningData.setLaps(laps);
+			EventBus.publishEvent(new RunningUpdatedEvent().setSending(event.isSending()).setData(runningData));
+		}
+		
+		map.put(event.getCode(), runningData);
 	}
 
 	@Handler
