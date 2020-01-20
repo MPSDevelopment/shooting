@@ -109,6 +109,8 @@ spring:
     mongodb:
       #      host: ipsc-mongodb
       host: docker.for.win.localhost
+#       host: host.docker.internal 
+#      host: localhost 
 #      host: 192.168.31.63
       port: 27017
       database: shooting
@@ -118,38 +120,6 @@ spring:
       auto-index-creation: true
 server:
   address: 0.0.0.0
-  port: 9901
-  compression:
-    enabled: true
-    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
-    min-response-size: 1024
-  connection-timeout: 20000
-ipsc:
-  mqtt:
-    adminLogin: ipsc
-    adminPassword: ip2342354dsdsnkjqsc
-    ipscTopicName: ipsc
----
-spring:
-  profiles: excelsior
-  main:
-    banner-mode: "off"
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
-  data:
-    mongodb:
-      host: 127.0.0.1
-      port: 27017
-      database: shooting
-      authentication-database: admin
-      username: ipsc
-      password: ipasdfb14235346jsbcfdhasbf3q234sc
-      auto-index-creation: true
-server:
-  address: 127.0.0.1
   port: 9901
   compression:
     enabled: true
