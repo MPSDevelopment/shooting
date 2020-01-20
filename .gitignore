@@ -10,3 +10,4 @@ out/
 **/logs/
 **/app.pid
 /data/
+/.sts4-cache/

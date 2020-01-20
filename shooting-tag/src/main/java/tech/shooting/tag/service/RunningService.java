@@ -34,12 +34,11 @@ public class RunningService {
 	public void handle(TagFinishedEvent event) {
 		map.clear();
 		this.laps = event.getLaps();
-		log.info("There is %s laps", this.laps);
+		log.info("Running a standard with %s laps", this.laps);
 	}
 
 	@Handler
 	public void handle(TagDetectedEvent event) {
-		log.info("Tag with code %s detected", event.getCode());
 		RunningData runningData = map.get(event.getCode());
 
 		int laps = 0;
@@ -50,6 +49,8 @@ public class RunningService {
 			laps = runningData.getLaps() + 1;
 			runningData = runningData.setCode(event.getCode()).setLastTime(event.getTime());
 		}
+		
+		log.info("Tag with code %s detected. It is %s laps for this code", event.getCode(), laps);
 
 		if (laps > this.laps) {
 			log.info("Lap %s bigger then standard laps %s. Will not send the message", laps, this.laps);
