@@ -11,7 +11,7 @@ services:
       MONGO_INITDB_DATABASE : shooting
     volumes:
 #    - ./../../../data/mongo/db:/data/db
-    - ./../../../data/mongo/log:/data/log
+#    - ./../../../data/mongo/log:/data/log
     ports:
     - 27018:27017
     command: mongod --logpath=/data/log/mongo.log --smallfiles  --storageEngine=wiredTiger --wiredTigerCacheSizeGB=1
