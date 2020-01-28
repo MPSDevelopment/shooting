@@ -71,7 +71,7 @@ public class RfidReader {
 		byte[] data = manager.readFrom6C(MEM_BANK, addr, length, accessPassword);
 		if (data != null && data.length > 1) {
 			String dataStr = Tools.Bytes2HexString(data, data.length);
-			return dataStr.replaceFirst("0", "");
+			return dataStr.replaceFirst("FFFF", "").replaceFirst("0", "");
 			// result += "\n Here must be mark -> " + dataStr;
 		} else {
 //			return "Wrong mark, List EPC size is " + epcList.size();
