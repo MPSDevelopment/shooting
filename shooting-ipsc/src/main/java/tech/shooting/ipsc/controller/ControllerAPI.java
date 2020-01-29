@@ -466,6 +466,7 @@ public class ControllerAPI {
 	public static final String TAG_CONTROLLER_GET_STATUS = "/status";
 	public static final String TAG_CONTROLLER_GET_MODE = "/mode";
 	public static final String TAG_CONTROLLER_GET_CODES = "/codes";
+	public static final String TAG_CONTROLLER_GET_CODE = "/readcode";
 	public static final String TAG_CONTROLLER_GET_CLEAR = "/clear";
 	public static final String TAG_CONTROLLER_GET_STOP = "/stop";
 	public static final String TAG_CONTROLLER_GET_START = "/start/" + REQUEST_COUNT;

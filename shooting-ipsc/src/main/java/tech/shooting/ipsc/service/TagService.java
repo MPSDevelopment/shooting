@@ -9,12 +9,14 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,11 @@ public class TagService {
 	private int laps;
 
 	private boolean started;
+	
+	/**
+	 * List of current codes
+	 */
+	private List<String> list;
 	
 	private boolean rewriteFlag = false;
 
@@ -135,7 +142,7 @@ public class TagService {
 //					log.info("Tag report %s", report.getTags().stream().map(item-> item.getCrc()).collect(Collectors.toList()));
 //					log.info("On tag report %s", report.getTags().stream().map(item-> JacksonUtils.getFullJson(item)).collect(Collectors.joining(", ")));
 
-				var list = new ArrayList<>();
+				list = new ArrayList<>();
 
 				report.getTags().forEach(item -> {
 					list.add(String.valueOf(item.getCrc()));
@@ -337,6 +344,10 @@ public class TagService {
 			}
 		}
 		return null;
+	}
+	
+	public String readCode() {
+		return CollectionUtils.isEmpty(list) ? null : list.get(0);
 	}
 
 	public void rewriteETC(com.impinj.octane.Tag tag) {
