@@ -85,7 +85,7 @@ public class TagController {
 		return new ResponseEntity<>(new SuccessfulMessage("EPC was rewrite", service.getTagIp(), service.getFirstNonLoopbackAddress()), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CODES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CODE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation("Get map codes")
 	public ResponseEntity<Tag> getCode() {
 		var tag = new Tag();
