@@ -1,22 +1,43 @@
 package tech.shooting.ipsc.service;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.impinj.octane.BitPointers;
 import com.impinj.octane.ConnectionCloseEvent;
 import com.impinj.octane.ConnectionCloseListener;
 import com.impinj.octane.ImpinjReader;
+import com.impinj.octane.MemoryBank;
 import com.impinj.octane.OctaneSdkException;
+import com.impinj.octane.PcBits;
+import com.impinj.octane.SequenceState;
+import com.impinj.octane.TagData;
+import com.impinj.octane.TagOp;
 import com.impinj.octane.TagOpCompleteListener;
 import com.impinj.octane.TagOpReport;
+import com.impinj.octane.TagOpSequence;
 import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
+import com.impinj.octane.TagWriteOp;
+import com.impinj.octane.TargetTag;
+import com.impinj.octane.WordPointers;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
@@ -31,6 +52,7 @@ import tech.shooting.ipsc.event.TagImitatorOnlyCodesEvent;
 import tech.shooting.ipsc.event.TagRestartEvent;
 import tech.shooting.ipsc.event.TagUndetectedEvent;
 import tech.shooting.ipsc.pojo.Tag;
+import tech.shooting.ipsc.pojo.TagEpc;
 
 @Service
 @Slf4j
@@ -48,6 +70,16 @@ public class TagService {
 	private int laps;
 
 	private boolean started;
+	
+	private boolean rewriteFlag = false;
+
+	private static String currentETCCode;
+	private static String newETCCode;
+
+	private static int outstanding = 0;
+	private static int opSpecID = 1;
+	private static short EPC_OP_ID = 123;
+	private static short PC_BITS_OP_ID = 321;
 
 	public TagService() {
 		EventBus.subscribe(this);
@@ -150,6 +182,10 @@ public class TagService {
 				EventBus.publishEvent(new RunningOnDisconnectEvent());
 			}
 		});
+	}
+	
+	public String getTagIp() {
+		return settingsService.getSettings().getTagServiceIp();
 	}
 
 	@Handler
@@ -274,6 +310,131 @@ public class TagService {
 
 	public void stopSending() {
 		started = false;
+	}
+	
+	public String getLocalIp() {
+		InetAddress inetAddress;
+		try {
+			inetAddress = InetAddress.getLocalHost();
+			return inetAddress.getHostAddress();
+		} catch (UnknownHostException e) {
+			log.error("Cannot get a local ip address");
+		}
+		return "Cannot get ip address";
+	}
+
+	public InetAddress getFirstNonLoopbackAddress() throws SocketException {
+		Enumeration en = NetworkInterface.getNetworkInterfaces();
+		while (en.hasMoreElements()) {
+			NetworkInterface i = (NetworkInterface) en.nextElement();
+			for (Enumeration en2 = i.getInetAddresses(); en2.hasMoreElements();) {
+				InetAddress addr = (InetAddress) en2.nextElement();
+				if (!addr.isLoopbackAddress()) {
+					if (addr instanceof Inet4Address) {
+						return addr;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public void rewriteETC(com.impinj.octane.Tag tag) {
+		if (rewriteFlag && tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+
+			log.info("Start Write new ETC");
+			rewriteFlag = false;
+			log.info(" EPC  String - %s", tag.getEpc().toString());
+
+			log.info(" TID  String - %s", tag.getTid().toString());
+
+			ByteBuffer buffer = ByteBuffer.allocate(2);
+			byte[] arr = buffer.putShort(tag.getCrc()).array();
+			for (byte b : arr) {
+				log.info("byte = %s =->%8s", b, Integer.toBinaryString(b & 0xFF));
+			}
+			log.info("Straight ->>> Int value = %5s ---- HEX = %s ", ByteBuffer.wrap(arr).getShort(), DatatypeConverter.printHexBinary(arr));
+			ArrayUtils.reverse(arr);
+			log.info("Reverse  ->>> Int value = %5s ---- HEX = %s ", ByteBuffer.wrap(arr).getShort(), DatatypeConverter.printHexBinary(arr));
+
+			if (tag.isPcBitsPresent()) {
+				short pc = tag.getPcBits();
+				String currentEpc = tag.getEpc().toHexString();
+				try {
+					programEpc(currentEpc, pc, newETCCode);
+				} catch (Exception e) {
+					log.error("Failed To program EPC: " + e.toString());
+				}
+			}
+		}
+	}
+
+	public void rewriteEPCRequest(TagEpc tagEpc) {
+		log.info("Request on Rewrite EPC");
+		newETCCode = null;
+		currentETCCode = null;
+		if (StringUtils.isBlank(tagEpc.getCurrentEpc()) || StringUtils.isBlank(tagEpc.getNewEpc())) {
+			log.error(" EPC codes dta is EMPTY");
+			return;
+		}
+		currentETCCode = tagEpc.getCurrentEpc();
+		newETCCode = tagEpc.getNewEpc();
+		rewriteFlag = true;
+	}
+
+	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
+		if ((currentEpc.length() % 4 != 0) || (newEpc.length() % 4 != 0)) {
+			throw new Exception("EPCs must be a multiple of 16- bits: " + currentEpc + "  " + newEpc);
+		}
+		if (outstanding > 0) {
+			return;
+		}
+
+		log.info("Programming Tag ");
+		log.info(" EPC %s  to %s ", currentEpc, newEpc);
+
+		TagOpSequence seq = new TagOpSequence();
+		seq.setOps(new ArrayList<TagOp>());
+		seq.setExecutionCount((short) 1); // delete after one time
+		seq.setState(SequenceState.Active);
+		seq.setId(opSpecID++);
+
+		seq.setTargetTag(new TargetTag());
+		seq.getTargetTag().setBitPointer(BitPointers.Epc);
+		seq.getTargetTag().setMemoryBank(MemoryBank.Epc);
+		seq.getTargetTag().setData(currentEpc);
+
+		TagWriteOp epcWrite = new TagWriteOp();
+		epcWrite.Id = EPC_OP_ID;
+		epcWrite.setMemoryBank(MemoryBank.Epc);
+		epcWrite.setWordPointer(WordPointers.Epc);
+		epcWrite.setData(TagData.fromHexString(newEpc));
+
+		// add to the list
+		seq.getOps().add(epcWrite);
+
+		// have to program the PC bits if these are not the same
+		if (currentEpc.length() != newEpc.length()) {
+			// keep other PC bits the same.
+			String currentPCString = PcBits.toHexString(currentPC);
+
+			short newPC = PcBits.AdjustPcBits(currentPC, (short) (newEpc.length() / 4));
+			String newPCString = PcBits.toHexString(newPC);
+
+			log.info(" PC bits to establish new length: %s  %s ", newPCString, currentPCString);
+
+			TagWriteOp pcWrite = new TagWriteOp();
+			pcWrite.Id = PC_BITS_OP_ID;
+			pcWrite.setMemoryBank(MemoryBank.Epc);
+			pcWrite.setWordPointer(WordPointers.PcBits);
+
+			pcWrite.setData(TagData.fromHexString(newPCString));
+			seq.getOps().add(pcWrite);
+		}
+
+		outstanding++;
+		impinjReader.addOpSequence(seq);
+		log.info("Stop rewrite ETC");
 	}
 
 }

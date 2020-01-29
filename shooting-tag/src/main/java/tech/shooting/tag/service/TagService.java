@@ -136,7 +136,7 @@ public class TagService {
 
 				report.getTags().forEach(item -> {
 
-					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("FFFF", "").replaceFirst("0", "");
+					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
 
 					log.info(" Code %s and EPC  String - %s", code, item.getEpc().toString());
 					list.add(code);

@@ -469,4 +469,5 @@ public class ControllerAPI {
 	public static final String TAG_CONTROLLER_GET_CLEAR = "/clear";
 	public static final String TAG_CONTROLLER_GET_STOP = "/stop";
 	public static final String TAG_CONTROLLER_GET_START = "/start/" + REQUEST_COUNT;
+	public static final String TAG_CONTROLLER_POST_NEW_EPC = "/epcwrite";
 }

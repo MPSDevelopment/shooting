@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.SocketException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.pojo.Tag;
+import tech.shooting.ipsc.pojo.TagEpc;
 import tech.shooting.ipsc.service.TagService;
 
 @Controller
@@ -69,6 +73,16 @@ public class TagController {
 	public ResponseEntity<SuccessfulMessage> start(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COUNT) Integer laps) {
 		service.startSending(laps);
 		return new ResponseEntity<>(new SuccessfulMessage("Start sending data"), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<SuccessfulMessage> writeNewEPCCode(@RequestBody TagEpc tagEpc) throws SocketException {
+		
+//		var tag = new com.impinj.octane.Tag();
+		
+		service.rewriteEPCRequest(tagEpc);
+//		service.rewriteETC(tagEpc);
+		return new ResponseEntity<>(new SuccessfulMessage("EPC was rewrite", service.getTagIp(), service.getFirstNonLoopbackAddress()), HttpStatus.OK);
 	}
 
 }

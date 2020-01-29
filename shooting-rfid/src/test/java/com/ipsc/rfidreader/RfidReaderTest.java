@@ -29,6 +29,14 @@ public class RfidReaderTest {
 	}
 	
 	@Test
+	public void checkZeroInTheMiddle() {
+		byte[] bytes = { 9, 8, 0, 1};
+		
+		System.out.println(Tools.Bytes2HexString(bytes, bytes.length));
+		System.out.println(Integer.toHexString(9801));
+	}
+	
+	@Test
 	public void checkReplace() {
 		String code = code3.replaceFirst("0", "");
 		System.out.println(code);

@@ -28,37 +28,67 @@ import tech.shooting.tag.repository.SettingsRepository;
 //@Tag(IpscConstants.UNIT_TEST_TAG)
 @ContextConfiguration(classes = { SettingsRepository.class, SettingsService.class, TagService.class, RunningService.class })
 public class TagServiceTest {
-	
+
 	@Autowired
 	private TagService tagService;
-	
+
 	@Autowired
 	private RunningService runningService;
 
 	@Test
 	public void checkToHex() {
 		int code = 11759;
-		
+
 		String hex = Integer.toHexString(code);
 
 		// String hex = Hex.encodeHexString(code.getBytes());
-		 assertEquals("2def", hex);
+		assertEquals("2def", hex);
 	}
-	
-	@Test 
+
+	@Test
+	public void replaceFirst() {
+		String code = "FFFF34FFFF";
+
+		assertEquals("34FFFF", code.replaceFirst("^FFFF", ""));
+
+		code = "34FFFF";
+
+		assertEquals("34FFFF", code.replaceFirst("^FFFF", ""));
+
+		code = "9B05";
+
+		assertEquals("9B05", code.replaceFirst("^0", ""));
+
+		code = "09B5";
+
+		assertEquals("9B5", code.replaceFirst("^0", ""));
+	}
+
+	@Test
+	public void check() {
+		String code = "90B5";
+
+//		String hex = Integer.toHexString(9801);
+
+		var hex = Integer.parseInt(code, 16);
+
+		assertEquals("9801", hex);
+	}
+
+	@Test
 	public void checkLaps() {
 		tagService.startSending(4);
-		
+
 		long timeMillis = System.currentTimeMillis();
-		
+
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
 		EventBus.publishEvent(new TagDetectedEvent("1111").setSending(true).setTime(timeMillis));
-		
+
 		assertEquals(4, runningService.getPersonData("1111").getLaps());
-		
+
 	}
 }
