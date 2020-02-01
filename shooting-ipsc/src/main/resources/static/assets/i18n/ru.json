@@ -391,5 +391,13 @@
   "weaponry": "Оружие",
   "ammo": "Боеприпасы",
   "vehicle": "Транспортное средство",
-  "saveStandardScores": "Сохранить результаты нормативов"
+  "saveStandardScores": "Сохранить результаты нормативов",
+  "lackOfWeatherData": "Метеоданные не назначены",
+  "setWeather": "Установить",
+  "editWeather": "Изменить",
+  "addWeather": "Установить метеоданные",
+  "humidity": "Влажность (%)",
+  "temperature": "Температура (гр.ц.)",
+  "windDirection": "Направление ветра (гр)",
+  "windSpeed": "Скорость ветра (м/с)"
 }

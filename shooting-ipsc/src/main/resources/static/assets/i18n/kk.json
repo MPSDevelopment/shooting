@@ -378,12 +378,20 @@
   "curfewCalculation": "Расчет комендантской службы",
   "callSignTable": "Таблица позывных должностных лиц",
   "legend": "Условные обозначения",
-  "weatherData": "Метеоданные",
+  "weatherData": "Ауа-райы туралы мәліметтер",
   "basicIndicators": "Основные показатели",
   "communicationScheme": "Схема организации связи",
   "combatControlSignals": "Сигналы боевого управления",
   "weaponry": "Оружие",
   "ammo": "Боеприпасы",
   "vehicle": "Транспортное средство",
-  "saveStandardScores": "Нормативтік нәтижелерді сақтаңыз"
+  "saveStandardScores": "Нормативтік нәтижелерді сақтаңыз",
+  "lackOfWeatherData": "Ауа-райы туралы мәліметтер берілмеген",
+  "setWeather": "Орнатыңыз",
+  "editWeather": "Өңдеу",
+  "addWeather": "Ауа-райы туралы деректерді орнатыңыз",
+  "humidity": "Ылғалдылық",
+  "temperature": "Температура",
+  "windDirection": "Желдің бағыты",
+  "windSpeed": "Желдің жылдамдығы"
 }
