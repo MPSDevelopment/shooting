@@ -78,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, ControllerAPI.IMAGE_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers(HttpMethod.GET, ControllerAPI.MAP_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers(HttpMethod.GET, ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
+			.antMatchers(HttpMethod.POST, ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + "/**")
 			.antMatchers("/favicon.ico")
 			.antMatchers("/**.html")
 			.antMatchers("/**.js")

@@ -51,4 +51,10 @@ class TagControllerTest {
 		// try access with unauthorized user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_MODE)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
+	
+	@Test
+	void checkPostNewEpc() throws Exception {
+		// try access with unauthorized user role
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 }

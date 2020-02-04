@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tech.shooting.commons.pojo.SuccessfulMessage;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.pojo.Tag;
 import tech.shooting.ipsc.pojo.TagEpc;
 import tech.shooting.ipsc.service.TagService;
@@ -76,12 +78,11 @@ public class TagController {
 	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<SuccessfulMessage> writeNewEPCCode(@RequestBody TagEpc tagEpc) throws SocketException {
+	public ResponseEntity<SuccessfulMessage> writeNewEPCCode(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @RequestBody TagEpc tagEpc) throws SocketException {
 
 //		var tag = new com.impinj.octane.Tag();
 
 		service.rewriteEPCRequest(tagEpc);
-//		service.rewriteETC(tagEpc);
 		return new ResponseEntity<>(new SuccessfulMessage("EPC was rewrite", service.getTagIp(), service.getFirstNonLoopbackAddress()), HttpStatus.OK);
 	}
 

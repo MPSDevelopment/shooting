@@ -136,9 +136,11 @@ public class TagService {
 
 				report.getTags().forEach(item -> {
 
-					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
+					// String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
+					
+					String code = item.getEpc().toString();
 
-					log.info(" Code %s and EPC  String - %s", code, item.getEpc().toString());
+					log.debug(" Code %s and EPC  String - %s", code, item.getEpc().toString());
 					list.add(code);
 
 					Tag tag = new Tag();
@@ -256,9 +258,15 @@ public class TagService {
 	}
 
 	private void rewriteETC(com.impinj.octane.Tag tag) {
-		if (rewriteFlag && tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+		if (rewriteFlag) {
 
-			log.info("Start Write new ETC");
+			if (!tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
+				return;
+			}
+
+			log.info("Start Write new ETC from %s to %s", tag.getEpc().toHexString(), newETCCode);
+			
 			rewriteFlag = false;
 			log.info(" EPC  String - %s", tag.getEpc().toString());
 
@@ -282,6 +290,7 @@ public class TagService {
 					log.error("Failed To program EPC: " + e.toString());
 				}
 			}
+
 		}
 	}
 
@@ -296,7 +305,7 @@ public class TagService {
 		currentETCCode = tagEpc.getCurrentEpc();
 		newETCCode = tagEpc.getNewEpc();
 		rewriteFlag = true;
-		
+
 	}
 
 	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {

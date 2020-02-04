@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.impinj.octane.AutoStartMode;
+import com.impinj.octane.AutoStopMode;
 import com.impinj.octane.BitPointers;
 import com.impinj.octane.ConnectionCloseEvent;
 import com.impinj.octane.ConnectionCloseListener;
@@ -29,6 +31,8 @@ import com.impinj.octane.ImpinjReader;
 import com.impinj.octane.MemoryBank;
 import com.impinj.octane.OctaneSdkException;
 import com.impinj.octane.PcBits;
+import com.impinj.octane.ReaderMode;
+import com.impinj.octane.SearchMode;
 import com.impinj.octane.SequenceState;
 import com.impinj.octane.TagData;
 import com.impinj.octane.TagOp;
@@ -110,12 +114,20 @@ public class TagService {
 		log.info("Reader has been connected");
 
 		var settings = impinjReader.queryDefaultSettings();
-		var report = settings.getReport();
-		report.setIncludeAntennaPortNumber(true);
-		report.setIncludeSeenCount(true);
-		report.setIncludeCrc(true);
-		report.setIncludeFirstSeenTime(true);
-		report.setIncludeLastSeenTime(true);
+
+		// set session one so we see the tag only once every few seconds
+		settings.setReaderMode(ReaderMode.AutoSetDenseReader);
+		settings.setSearchMode(SearchMode.SingleTarget);
+		settings.setSession(1);
+		// turn these on so we have them always
+		settings.getReport().setIncludePcBits(true);
+
+		// Set periodic mode so we reset the tag and it shows up with its
+		// new EPC
+		settings.getAutoStart().setMode(AutoStartMode.Periodic);
+		settings.getAutoStart().setPeriodInMs(1000);
+		settings.getAutoStop().setMode(AutoStopMode.Duration);
+		settings.getAutoStop().setDurationInMs(1000);
 
 		impinjReader.applySettings(settings);
 
@@ -145,10 +157,15 @@ public class TagService {
 				list = new ArrayList<>();
 
 				report.getTags().forEach(item -> {
-					list.add(String.valueOf(item.getCrc()));
+					
+					String code = item.getEpc().toString();
+
+					log.debug(" Code %s and EPC  String - %s", code, item.getEpc().toString());
+					
+					list.add(code);
 
 					Tag tag = new Tag();
-					tag.setCode(String.valueOf(item.getCrc()));
+					tag.setCode(code);
 					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
 					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 
@@ -174,13 +191,13 @@ public class TagService {
 					}
 				});
 
-				log.info("On tag report %s", report.getTags().stream().map(item -> {
-					Tag tag = new Tag();
-					tag.setCode(String.valueOf(item.getCrc()));
-					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
-					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-					return JacksonUtils.getJson(tag);
-				}).collect(Collectors.joining(", ")));
+//				log.info("On tag report %s", report.getTags().stream().map(item -> {
+//					Tag tag = new Tag();
+//					tag.setCode(item.getEpc().toString());
+//					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+//					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+//					return JacksonUtils.getJson(tag);
+//				}).collect(Collectors.joining(", ")));
 			}
 		});
 
@@ -355,9 +372,15 @@ public class TagService {
 	}
 
 	private void rewriteETC(com.impinj.octane.Tag tag) {
-		if (rewriteFlag && tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+		if (rewriteFlag) {
 
-			log.info("Start Write new ETC");
+			if (!tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
+				return;
+			}
+
+			log.info("Start Write new ETC from %s to %s", tag.getEpc().toHexString(), newETCCode);
+			
 			rewriteFlag = false;
 			log.info(" EPC  String - %s", tag.getEpc().toString());
 
@@ -381,6 +404,7 @@ public class TagService {
 					log.error("Failed To program EPC: " + e.toString());
 				}
 			}
+
 		}
 	}
 
@@ -395,6 +419,7 @@ public class TagService {
 		currentETCCode = tagEpc.getCurrentEpc();
 		newETCCode = tagEpc.getNewEpc();
 		rewriteFlag = true;
+
 	}
 
 	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
