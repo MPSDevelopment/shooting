@@ -160,7 +160,11 @@ public class TagService {
 //						existingTag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 //						map.put(tag.getCode(), existingTag);
 					}
+					
+					// If Rewrite flag - true start rewrite new ETC code
+					rewriteETC(item);
 				});
+				
 
 				// remove tag from map if it is not in tagReport
 				map.forEach((code, item) -> {
@@ -350,7 +354,7 @@ public class TagService {
 		return CollectionUtils.isEmpty(list) ? null : list.get(0);
 	}
 
-	public void rewriteETC(com.impinj.octane.Tag tag) {
+	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag && tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
 
 			log.info("Start Write new ETC");

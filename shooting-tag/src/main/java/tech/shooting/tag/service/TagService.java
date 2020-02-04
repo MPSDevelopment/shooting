@@ -156,7 +156,7 @@ public class TagService {
 					}
 
 					// If Rewrite flag - true start rewrite new ETC code
-					// rewriteETC(item);
+					rewriteETC(item);
 				});
 
 				// remove tag from map if it is not in tagReport
@@ -296,6 +296,7 @@ public class TagService {
 		currentETCCode = tagEpc.getCurrentEpc();
 		newETCCode = tagEpc.getNewEpc();
 		rewriteFlag = true;
+		
 	}
 
 	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
