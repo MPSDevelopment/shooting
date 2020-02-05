@@ -55,7 +55,7 @@ class TagControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_MODE)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
-	@Test
+//	@Test
 	void checkPostNewEpc() throws Exception {
 		
 		var tag = new TagEpc().setCurrentEpc("1111").setNewEpc("2222");

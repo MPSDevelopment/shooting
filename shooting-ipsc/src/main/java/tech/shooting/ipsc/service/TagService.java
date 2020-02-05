@@ -409,7 +409,7 @@ public class TagService {
 	}
 
 	public void rewriteEPCRequest(TagEpc tagEpc) {
-		log.info("Request on Rewrite EPC");
+		log.info("Request on Rewrite EPC %s", JacksonUtils.getJson(tagEpc));
 		newETCCode = null;
 		currentETCCode = null;
 		if (StringUtils.isBlank(tagEpc.getCurrentEpc()) || StringUtils.isBlank(tagEpc.getNewEpc())) {
