@@ -12,10 +12,10 @@ import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
-import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weather;
 
 public class CustomOperationRepositoryImpl implements CustomOperationRepository {
@@ -30,7 +30,7 @@ public class CustomOperationRepositoryImpl implements CustomOperationRepository 
 	}
 
 	@Override
-	public void setParticipantsToOperation(Long operationId, List<OperationParticipant> list) {
+	public void setParticipantsToOperation(Long operationId, List<Person> list) {
 		mongoTemplate.updateFirst(Query.query(Criteria.where(Operation.ID_FIELD).is(operationId)), new Update().set(Operation.PARTICIPANTS_FIELD, list), Operation.class);
 	}
 	

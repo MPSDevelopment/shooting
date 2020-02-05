@@ -39,7 +39,6 @@ import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
-import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Standard;
 import tech.shooting.ipsc.pojo.WeaponType;
@@ -358,7 +357,7 @@ public class OperationControllerTest extends BaseControllerTest {
 		assertEquals(0, doubleList.size());
 
 		var testPerson = personRepository.save(new Person().setName("Thor"));
-		testOperation.setParticipants(Arrays.asList(new OperationParticipant().setPerson(testPerson)));
+		testOperation.setParticipants(Arrays.asList(testPerson));
 		operationRepository.save(testOperation);
 
 		contentAsString = mockMvc.perform(

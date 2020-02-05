@@ -28,7 +28,6 @@ import tech.shooting.ipsc.pojo.Equipment;
 import tech.shooting.ipsc.pojo.EquipmentType;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
-import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weapon;
 import tech.shooting.ipsc.pojo.WeaponType;
@@ -142,7 +141,7 @@ public class OperationServiceTest {
 		assertEquals(0, combatListData.size());
 
 		var testPerson = personRepository.save(new Person().setName("Thor").setCall("ThorCall"));
-		testOperation.setParticipants(Arrays.asList(new OperationParticipant().setPerson(testPerson)));
+		testOperation.setParticipants(Arrays.asList(testPerson));
 
 		operationRepository.save(testOperation);
 

@@ -1,5 +1,7 @@
 package tech.shooting.ipsc.pojo;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,9 +17,10 @@ public class OperationCommandantService extends BaseDocument {
 	@ApiModelProperty(value = "Number of the district", required = true)
 	private String districtNumber;
 	
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Commandant of the district", required = true)
-	private OperationParticipant commandant;
+	private Person commandant;
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Distance of the district", required = true)

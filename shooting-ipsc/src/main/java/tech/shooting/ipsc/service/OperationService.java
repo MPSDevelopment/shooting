@@ -27,7 +27,6 @@ import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
-import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
@@ -164,9 +163,7 @@ public class OperationService {
 		var list = new ArrayList<List<String>>();
 		var operation = checkOperation(id);
 
-		var persons = operation.getParticipants().stream().map(item -> {
-			return item.getPerson();
-		}).collect(Collectors.toList());
+		var persons = operation.getParticipants();
 
 		operation.getParticipants().forEach(participant -> {
 			var participantData = new ArrayList<String>();
@@ -174,11 +171,11 @@ public class OperationService {
 			headers.forEach(header -> {
 				switch (header.getType()) {
 				case CALL_TYPE_HEADER: {
-					participantData.add(participant.getPerson().getCall());
+					participantData.add(participant.getCall());
 					break;
 				}
 				case WEAPON_TYPE_HEADER: {
-					participantData.add(String.valueOf(weaponRepository.countByOwnerAndWeaponTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(weaponRepository.countByOwnerAndWeaponTypeId(participant, header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				case AMMO_TYPE_HEADER: {
@@ -186,19 +183,19 @@ public class OperationService {
 					break;
 				}
 				case ANIMAL_TYPE_HEADER: {
-					participantData.add(String.valueOf(animalRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(animalRepository.countByOwnerAndTypeId(participant, header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				case VEHICLE_TYPE_HEADER: {
-					participantData.add(String.valueOf(vehicleRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(vehicleRepository.countByOwnerAndTypeId(participant, header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				case COMMUNICATION_TYPE_HEADER: {
-					participantData.add(String.valueOf(communicationEquipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(communicationEquipmentRepository.countByOwnerAndTypeId(participant, header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				case EQUIPMENT_TYPE_HEADER: {
-					participantData.add(String.valueOf(equipmentRepository.countByOwnerAndTypeId(participant.getPerson(), header.getTypeId())).replace("0", REPLACEMENT));
+					participantData.add(String.valueOf(equipmentRepository.countByOwnerAndTypeId(participant, header.getTypeId())).replace("0", REPLACEMENT));
 					break;
 				}
 				default: {
@@ -270,13 +267,12 @@ public class OperationService {
 		return operation.getMainIndicators();
 	}
 
-	public List<OperationParticipant> setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
+	public List<Person> setParticipantsToOperation(Long operationId, List<Long> list) throws BadRequestException {
 
-		var participants = new ArrayList<OperationParticipant>();
+		var participants = new ArrayList<Person>();
 
 		for (long id : list) {
-			var person = checkPerson(id);
-			participants.add(new OperationParticipant().setActive(true).setPerson(person).setName(person.getName()));
+			participants.add(checkPerson(id));
 		}
 
 		operationRepository.setParticipantsToOperation(operationId, participants);
@@ -284,7 +280,7 @@ public class OperationService {
 		return participants;
 	}
 
-	public List<OperationParticipant> getParticipants(Long id) throws BadRequestException {
+	public List<Person> getParticipants(Long id) throws BadRequestException {
 		var operation = checkOperation(id);
 		return operation.getParticipants();
 	}

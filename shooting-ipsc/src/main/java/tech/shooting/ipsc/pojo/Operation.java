@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tech.shooting.commons.mongo.BaseDocument;
 
@@ -48,9 +49,10 @@ public class Operation extends BaseDocument {
 	@ApiModelProperty(value = "Operation image path")
 	private String imagePath;
 
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Operation participant list")
-	private List<OperationParticipant> participants = new ArrayList<>();
+	private List<Person> participants = new ArrayList<>();
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Operation combat elements")

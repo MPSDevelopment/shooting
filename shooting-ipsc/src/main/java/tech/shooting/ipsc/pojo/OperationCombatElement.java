@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import tech.shooting.commons.mongo.BaseDocument;
 
 @Data
@@ -15,15 +17,21 @@ import tech.shooting.commons.mongo.BaseDocument;
 public class OperationCombatElement extends BaseDocument {
 	
 	@JsonProperty
+	@ApiModelProperty(value = "Name of the element", required = true)
+	private String name;
+	
+	@JsonProperty
 	@ApiModelProperty(value = "Call sign of the element", required = true)
 	private String callSign;
 	
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Commander of the element", required = true)
-	private OperationParticipant commander;
+	private Person commander;
 	
+	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Participant list for the element", required = true)
-	private List<OperationParticipant> participants = new ArrayList<>();
+	private List<Person> participants = new ArrayList<>();
 	
 }

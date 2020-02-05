@@ -20,10 +20,10 @@ import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
 import tech.shooting.ipsc.pojo.OperationCommandantService;
 import tech.shooting.ipsc.pojo.OperationMainIndicator;
-import tech.shooting.ipsc.pojo.OperationParticipant;
 import tech.shooting.ipsc.pojo.OperationRoute;
 import tech.shooting.ipsc.pojo.OperationSignal;
 import tech.shooting.ipsc.pojo.OperationSymbol;
+import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weather;
 
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class OperationRepositoryTest {
 	@Test
 	public void setParticipantsToOperation() {
 		assertEquals(0, operationRepository.findById(operation.getId()).get().getParticipants().size());
-		operationRepository.setParticipantsToOperation(operation.getId(), Arrays.asList(new OperationParticipant()));
+		operationRepository.setParticipantsToOperation(operation.getId(), Arrays.asList(new Person()));
 		assertNotNull(operationRepository.findById(operation.getId()).get().getParticipants());
 		assertEquals(1, operationRepository.findById(operation.getId()).get().getParticipants().size());
 	}
