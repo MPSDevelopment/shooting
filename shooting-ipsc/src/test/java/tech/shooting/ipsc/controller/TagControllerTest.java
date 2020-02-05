@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,11 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.shooting.commons.constraints.IpscConstants;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.pojo.TagEpc;
 import tech.shooting.ipsc.repository.SettingsRepository;
 import tech.shooting.ipsc.service.SettingsService;
 import tech.shooting.ipsc.service.TagService;
@@ -54,7 +57,14 @@ class TagControllerTest {
 	
 	@Test
 	void checkPostNewEpc() throws Exception {
+		
+		var tag = new TagEpc().setCurrentEpc("1111").setNewEpc("2222");
+		var json = JacksonUtils.getJson(tag);
+		
 		// try access with unauthorized user role
-		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC)).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.TAG_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_POST_NEW_EPC).content(json).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(MockMvcResultMatchers.status().isOk());
+		
+		
+		
 	}
 }
