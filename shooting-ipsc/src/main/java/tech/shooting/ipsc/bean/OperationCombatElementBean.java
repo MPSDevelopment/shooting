@@ -24,12 +24,10 @@ public class OperationCombatElementBean extends BaseDocument {
 	@ApiModelProperty(value = "Call sign of the element", required = true)
 	private String callSign;
 	
-	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Commander of the element", required = true)
 	private Long commander;
 	
-	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Participant list for the element", required = true)
 	private List<Long> participants = new ArrayList<>();
