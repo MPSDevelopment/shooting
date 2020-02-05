@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
+import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.Operation;
@@ -303,7 +304,21 @@ public class OperationService {
 		return operation.getCommandantServices();
 	}
 
-	public void setCombatElements(Long id, List<OperationCombatElement> elements) {
+	public void setCombatElements(Long id, List<OperationCombatElementBean> beans) throws BadRequestException {
+
+		var elements = new ArrayList<OperationCombatElement>();
+		for (var bean : beans) {
+			var element = new OperationCombatElement();
+			BeanUtils.copyProperties(bean, element, OperationCombatElement.COMMANDER, OperationCombatElement.PARTICIPANTS);
+			element.setCommander(checkPerson(bean.getId()));
+
+			for (var participantBean : bean.getParticipants()) {
+				element.getParticipants().add(checkPerson(participantBean));
+			}
+
+			elements.add(element);
+		}
+
 		operationRepository.setCombatElementsToOperation(id, elements);
 	}
 
@@ -315,7 +330,7 @@ public class OperationService {
 	public void setRoutes(Long id, @Valid List<OperationRoute> routes) {
 		routes.forEach(route -> {
 			route.getWaypoints().forEach(waypoint -> {
-				if (waypoint.getHeight()==null) {
+				if (waypoint.getHeight() == null) {
 					waypoint.setHeight(0D);
 				}
 				if (StringUtils.isBlank(waypoint.getLabel())) {

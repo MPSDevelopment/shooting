@@ -1,4 +1,4 @@
-package tech.shooting.ipsc.pojo;
+package tech.shooting.ipsc.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,11 +14,7 @@ import tech.shooting.commons.mongo.BaseDocument;
 
 @Data
 @Accessors(chain = true)
-public class OperationCombatElement extends BaseDocument {
-	
-	public final static String COMMANDER = "commander"; 
-	
-	public final static String PARTICIPANTS = "participants"; 
+public class OperationCombatElementBean extends BaseDocument {
 	
 	@JsonProperty
 	@ApiModelProperty(value = "Name of the element", required = true)
@@ -31,11 +27,11 @@ public class OperationCombatElement extends BaseDocument {
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Commander of the element", required = true)
-	private Person commander;
+	private Long commander;
 	
 	@DBRef
 	@JsonProperty
 	@ApiModelProperty(value = "Participant list for the element", required = true)
-	private List<Person> participants = new ArrayList<>();
+	private List<Long> participants = new ArrayList<>();
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.ipsc.bean.OperationBean;
+import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
@@ -171,7 +172,7 @@ public class OperationController {
 	
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set combat elements")
-	public ResponseEntity<SuccessfulMessage> setCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCombatElement> elements) throws BadRequestException {
+	public ResponseEntity<SuccessfulMessage> setCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCombatElementBean> elements) throws BadRequestException {
 		operationService.setCombatElements(id, elements);
 		return new ResponseEntity<>(new SuccessfulMessage("Combat elements were successfully saved"), HttpStatus.OK);
 	}
