@@ -23,6 +23,7 @@ import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
+import tech.shooting.ipsc.bean.OperationCommandantServiceBean;
 import tech.shooting.ipsc.controller.Pageable;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.OperationCombatElement;
@@ -295,7 +296,15 @@ public class OperationService {
 		return operation.getSignals();
 	}
 
-	public void setCommandantServices(Long id, List<OperationCommandantService> services) throws BadRequestException {
+	public void setCommandantServices(Long id, List<OperationCommandantServiceBean> beans) throws BadRequestException {
+
+		var services = new ArrayList<OperationCommandantService>();
+		for (var bean : beans) {
+			var service = new OperationCommandantService();
+			BeanUtils.copyProperties(bean, service, OperationCommandantService.COMMANDANT);
+			service.setCommandant(checkPerson(bean.getCommandant()));
+		}
+
 		operationRepository.setCommandantServicesToOperation(id, services);
 	}
 

@@ -13,6 +13,8 @@ import tech.shooting.commons.mongo.BaseDocument;
 @Accessors(chain = true)
 public class OperationCommandantService extends BaseDocument {
 	
+	public final static String COMMANDANT = "commandant";
+	
 	@JsonProperty
 	@ApiModelProperty(value = "Number of the district", required = true)
 	private String districtNumber;
