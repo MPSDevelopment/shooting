@@ -31,12 +31,14 @@ import tech.shooting.commons.pojo.Token;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.OperationBean;
+import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
 import tech.shooting.ipsc.db.DatabaseCreator;
 import tech.shooting.ipsc.db.UserDao;
+import tech.shooting.ipsc.enums.ClassificationBreaks;
 import tech.shooting.ipsc.pojo.Info;
 import tech.shooting.ipsc.pojo.Operation;
 import tech.shooting.ipsc.pojo.Person;
@@ -72,6 +74,8 @@ public class OperationControllerTest extends BaseControllerTest {
 
 	private Operation testOperation;
 
+	private Person testing;
+
 	@BeforeEach
 	public void before() {
 		super.before();
@@ -79,6 +83,9 @@ public class OperationControllerTest extends BaseControllerTest {
 		operationRepository.deleteAll();
 
 		testOperation = new Operation().setInfo(new Info().setNamedRus("Test"));
+		
+		testing = personRepository.save(new Person().setName("testing").setQualifierRank(ClassificationBreaks.D));
+		
 	}
 
 	@Test
@@ -367,6 +374,26 @@ public class OperationControllerTest extends BaseControllerTest {
 		doubleList = JacksonUtils.getListFromJson(List[].class, contentAsString);
 		assertEquals(1, doubleList.size());
 		assertEquals(3, doubleList.get(0).size());
+
+		
+		
+	}
+	
+	@Test
+	void setOperationombatElements() throws Exception {
+
+		Operation save = operationRepository.save(testOperation);
+		
+		var element = new OperationCombatElementBean().setCommander(testing.getId()).setCallSign("First").setName("Very first");
+		element.getParticipants().add(testing.getId());
+			
+
+		var json = JacksonUtils.getJson(Arrays.asList(element));
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 

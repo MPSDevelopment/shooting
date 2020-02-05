@@ -319,7 +319,7 @@ public class OperationService {
 		for (var bean : beans) {
 			var element = new OperationCombatElement();
 			BeanUtils.copyProperties(bean, element, OperationCombatElement.COMMANDER, OperationCombatElement.PARTICIPANTS);
-			element.setCommander(checkPerson(bean.getId()));
+			element.setCommander(checkPerson(bean.getCommander()));
 
 			for (var participantBean : bean.getParticipants()) {
 				element.getParticipants().add(checkPerson(participantBean));
