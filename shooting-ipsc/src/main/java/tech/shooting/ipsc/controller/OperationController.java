@@ -109,9 +109,8 @@ public class OperationController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SYMBOLS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation symbols")
-	public ResponseEntity<SuccessfulMessage> setSymbols(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSymbol> symbols) throws BadRequestException {
-		operationService.setSymbols(id, symbols);
-		return new ResponseEntity<>(new SuccessfulMessage("Symbols were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationSymbol>> setSymbols(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSymbol> symbols) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setSymbols(id, symbols), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_SYMBOLS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -122,9 +121,8 @@ public class OperationController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_MAIN_INDICATORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation main indicators")
-	public ResponseEntity<SuccessfulMessage> setMainIndicators(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationMainIndicator> indicators) throws BadRequestException {
-		operationService.setMainIndicatorsToOperation(id, indicators);
-		return new ResponseEntity<>(new SuccessfulMessage("Main indicators were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationMainIndicator>> setMainIndicators(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationMainIndicator> indicators) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setMainIndicatorsToOperation(id, indicators), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_MAIN_INDICATORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -147,9 +145,8 @@ public class OperationController {
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation symbols")
-	public ResponseEntity<SuccessfulMessage> setCombatSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
-		operationService.setCombatSignals(id, signals);
-		return new ResponseEntity<>(new SuccessfulMessage("Signals were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationSignal>> setCombatSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setCombatSignals(id, signals), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

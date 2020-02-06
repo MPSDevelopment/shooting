@@ -251,8 +251,10 @@ public class OperationService {
 		return operation.getWeather();
 	}
 
-	public void setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
+	public List<OperationSymbol> setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
 		operationRepository.setSymbolsToOperation(id, symbols);
+		
+		return getSymbols(id);
 	}
 
 	public List<OperationSymbol> getSymbols(Long id) throws BadRequestException {
@@ -260,8 +262,10 @@ public class OperationService {
 		return operation.getSymbols();
 	}
 
-	public void setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
+	public List<OperationMainIndicator> setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
 		operationRepository.setMainIndicatorsToOperation(id, indicators);
+		
+		return getMainIndicators(id);
 	}
 
 	public List<OperationMainIndicator> getMainIndicators(Long id) throws BadRequestException {
@@ -287,8 +291,10 @@ public class OperationService {
 		return operation.getParticipants();
 	}
 
-	public void setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
+	public List<OperationSignal> setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
 		operationRepository.setCombatSignalsToOperation(id, signals);
+		
+		return getSignals(id);
 	}
 
 	public List<OperationSignal> getSignals(Long id) throws BadRequestException {
