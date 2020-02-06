@@ -296,7 +296,7 @@ public class OperationService {
 		return operation.getSignals();
 	}
 
-	public void setCommandantServices(Long id, List<OperationCommandantServiceBean> beans) throws BadRequestException {
+	public List<OperationCommandantService> setCommandantServices(Long id, List<OperationCommandantServiceBean> beans) throws BadRequestException {
 
 		var services = new ArrayList<OperationCommandantService>();
 		for (var bean : beans) {
@@ -306,6 +306,8 @@ public class OperationService {
 		}
 
 		operationRepository.setCommandantServicesToOperation(id, services);
+		
+		return getCommandantServices(id);
 	}
 
 	public List<OperationCommandantService> getCommandantServices(Long id) throws BadRequestException {
@@ -313,7 +315,7 @@ public class OperationService {
 		return operation.getCommandantServices();
 	}
 
-	public void setCombatElements(Long id, List<OperationCombatElementBean> beans) throws BadRequestException {
+	public List<OperationCombatElement> setCombatElements(Long id, List<OperationCombatElementBean> beans) throws BadRequestException {
 
 		var elements = new ArrayList<OperationCombatElement>();
 		for (var bean : beans) {
@@ -329,6 +331,8 @@ public class OperationService {
 		}
 
 		operationRepository.setCombatElementsToOperation(id, elements);
+		
+		return getCombatElements(id);
 	}
 
 	public List<OperationCombatElement> getCombatElements(Long id) throws BadRequestException {
@@ -336,7 +340,7 @@ public class OperationService {
 		return operation.getCombatElements();
 	}
 
-	public void setRoutes(Long id, @Valid List<OperationRoute> routes) {
+	public List<OperationRoute> setRoutes(Long id, @Valid List<OperationRoute> routes) throws BadRequestException {
 		routes.forEach(route -> {
 			route.getWaypoints().forEach(waypoint -> {
 				if (waypoint.getHeight() == null) {
@@ -348,6 +352,8 @@ public class OperationService {
 			});
 		});
 		operationRepository.setRoutesToOperation(id, routes);
+		
+		return getRoutes(id);
 	}
 
 	public List<OperationRoute> getRoutes(Long id) throws BadRequestException {

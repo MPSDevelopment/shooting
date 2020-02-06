@@ -33,6 +33,7 @@ import tech.shooting.ipsc.advice.ValidationErrorHandler;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
+import tech.shooting.ipsc.bean.OperationCommandantServiceBean;
 import tech.shooting.ipsc.config.IpscMongoConfig;
 import tech.shooting.ipsc.config.IpscSettings;
 import tech.shooting.ipsc.config.SecurityConfig;
@@ -380,7 +381,7 @@ public class OperationControllerTest extends BaseControllerTest {
 	}
 	
 	@Test
-	void setOperationombatElements() throws Exception {
+	void setOperationCombatElements() throws Exception {
 
 		Operation save = operationRepository.save(testOperation);
 		
@@ -389,12 +390,69 @@ public class OperationControllerTest extends BaseControllerTest {
 			
 
 		var json = JacksonUtils.getJson(Arrays.asList(element));
+		
+		log.info("Json is %s", json);
+		
+		// try access with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
+		// try access with user role
 		mockMvc.perform(
 				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
 						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 
+	}
+	
+	@Test
+	public void setCommandantServices() throws Exception {
+		
+		Operation save = operationRepository.save(testOperation);
+		
+		
+		var service = new OperationCommandantServiceBean().setCommandant(testing.getId()).setDistrictNumber("First");
+		
+		
+		var json = JacksonUtils.getJson(Arrays.asList(service));
+		
+		log.info("Json is %s", json);
+		
+		// try access with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMMANDANT_SERVICES.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access with user role
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMMANDANT_SERVICES.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	public void setParticipants() throws Exception {
+		
+		Operation save = operationRepository.save(testOperation);
+		
+		var json = JacksonUtils.getJson(Arrays.asList(testing.getId()));
+		
+		log.info("Json is %s", json);
+		
+		// try access with unauthorized user
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_PARTICIPANTS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+		// try access with user role
+		mockMvc.perform(
+				MockMvcRequestBuilders.post(ControllerAPI.OPERATION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_PARTICIPANTS.replace(ControllerAPI.REQUEST_OPERATION_ID, save.getId().toString()))
+						.contentType(MediaType.APPLICATION_JSON_UTF8).content(json).header(Token.TOKEN_HEADER, userToken))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	private OperationBean createOperationBean() {

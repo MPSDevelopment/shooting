@@ -38,7 +38,7 @@ import java.util.List;
 @Slf4j
 @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 public class OperationController {
-	
+
 	@Autowired
 	private OperationService operationService;
 
@@ -47,7 +47,7 @@ public class OperationController {
 	public ResponseEntity<List<Operation>> getAll() {
 		return new ResponseEntity<>(operationService.getAllOperations(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_OPERATIONS_BY_PAGE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get persons by page")
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success", responseHeaders = { @ResponseHeader(name = ControllerAPI.HEADER_VARIABLE_PAGE, description = "Current page number", response = String.class),
@@ -81,118 +81,116 @@ public class OperationController {
 		operationService.deleteOperationById(id);
 		return new ResponseEntity<>(new SuccessfulMessage("Operation was successfully deleted"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation combat list headers")
 	public ResponseEntity<List<OperationCombatListHeaderBean>> getOperationCombatListHeaders(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getHeaders(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation combat list data")
 	public ResponseEntity<List<List<String>>> getOperationCombatListData(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCombatListData(id, operationService.getHeaders()), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_WEATHER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation weather")
 	public ResponseEntity<SuccessfulMessage> setWeather(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid Weather weather) throws BadRequestException {
 		operationService.setWeather(id, weather);
 		return new ResponseEntity<>(new SuccessfulMessage("Weather was successfully saved"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_WEATHER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation weather")
 	public ResponseEntity<Weather> getWeather(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getWeather(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SYMBOLS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation symbols")
 	public ResponseEntity<SuccessfulMessage> setSymbols(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSymbol> symbols) throws BadRequestException {
 		operationService.setSymbols(id, symbols);
 		return new ResponseEntity<>(new SuccessfulMessage("Symbols were successfully saved"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_SYMBOLS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation symbols")
 	public ResponseEntity<List<OperationSymbol>> getSymbols(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getSymbols(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_MAIN_INDICATORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation main indicators")
 	public ResponseEntity<SuccessfulMessage> setMainIndicators(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationMainIndicator> indicators) throws BadRequestException {
 		operationService.setMainIndicatorsToOperation(id, indicators);
 		return new ResponseEntity<>(new SuccessfulMessage("Main indicators were successfully saved"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_MAIN_INDICATORS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation main indicators")
 	public ResponseEntity<List<OperationMainIndicator>> getMainIndicators(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getMainIndicators(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation participants")
 	public ResponseEntity<List<Person>> setParticipants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<Long> participants) throws BadRequestException {
 		return new ResponseEntity<>(operationService.setParticipantsToOperation(id, participants), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation participants")
 	public ResponseEntity<List<Person>> getParticioants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getParticipants(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set operation symbols")
 	public ResponseEntity<SuccessfulMessage> setCombatSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationSignal> signals) throws BadRequestException {
 		operationService.setCombatSignals(id, signals);
 		return new ResponseEntity<>(new SuccessfulMessage("Signals were successfully saved"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_SIGNALS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation signals")
 	public ResponseEntity<List<OperationSignal>> getSignals(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getSignals(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMMANDANT_SERVICES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set commandant services")
-	public ResponseEntity<SuccessfulMessage> setCommandantServices(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCommandantServiceBean> services) throws BadRequestException {
-		operationService.setCommandantServices(id, services);
-		return new ResponseEntity<>(new SuccessfulMessage("Services were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationCommandantService>> setCommandantServices(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCommandantServiceBean> services)
+			throws BadRequestException {
+		return new ResponseEntity<>(operationService.setCommandantServices(id, services), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMMANDANT_SERVICES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation commandant services")
 	public ResponseEntity<List<OperationCommandantService>> getCommandantServices(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCommandantServices(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_COMBAT_ELEMENTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Set combat elements")
-	public ResponseEntity<SuccessfulMessage> setCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCombatElementBean> elements) throws BadRequestException {
-		operationService.setCombatElements(id, elements);
-		return new ResponseEntity<>(new SuccessfulMessage("Combat elements were successfully saved"), HttpStatus.OK);
+	public ResponseEntity<List<OperationCombatElement>> setCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationCombatElementBean> elements) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setCombatElements(id, elements), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation elements")
 	public ResponseEntity<List<OperationCombatElement>> getCombatElements(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCombatElements(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_POST_ROUTES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Set combat elements")
-	public ResponseEntity<SuccessfulMessage> setRoutes(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationRoute> routes) throws BadRequestException {
-		operationService.setRoutes(id, routes);
-		return new ResponseEntity<>(new SuccessfulMessage("Combat elements were successfully saved"), HttpStatus.OK);
+	@ApiOperation(value = "Set routes")
+	public ResponseEntity<List<OperationRoute>> setRoutes(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id, @RequestBody @Valid List<OperationRoute> routes) throws BadRequestException {
+		return new ResponseEntity<>(operationService.setRoutes(id, routes), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_ROUTES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "Get operation elements")
+	@ApiOperation(value = "Get routes")
 	public ResponseEntity<List<OperationRoute>> getRoutes(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getRoutes(id), HttpStatus.OK);
 	}
