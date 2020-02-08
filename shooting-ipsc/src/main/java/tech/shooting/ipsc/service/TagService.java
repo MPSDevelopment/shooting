@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -51,6 +52,7 @@ import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.utils.JacksonUtils;
+import tech.shooting.ipsc.enums.WriteModeEnum;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
 import tech.shooting.ipsc.event.TagDetectedEvent;
@@ -94,6 +96,8 @@ public class TagService {
 	private static short EPC_OP_ID = 123;
 	private static short PC_BITS_OP_ID = 321;
 
+	private static Random r = new Random();
+
 	public TagService() {
 		EventBus.subscribe(this);
 	}
@@ -119,8 +123,9 @@ public class TagService {
 
 		// set session one so we see the tag only once every few seconds
 		settings.setReaderMode(ReaderMode.AutoSetDenseReader);
-		settings.setSearchMode(SearchMode.SingleTarget);
-		settings.setSession(1);
+		settings.setSearchMode(SearchMode.ReaderSelected);
+		settings.setSession(10);
+
 		// turn these on so we have them always
 		settings.getReport().setIncludePcBits(true);
 
@@ -130,6 +135,15 @@ public class TagService {
 		settings.getAutoStart().setPeriodInMs(1000);
 		settings.getAutoStop().setMode(AutoStopMode.Duration);
 		settings.getAutoStop().setDurationInMs(1000);
+
+		var report = settings.getReport();
+		report.setIncludeAntennaPortNumber(true);
+		report.setIncludeSeenCount(true);
+		report.setIncludeCrc(true);
+		report.setIncludeFirstSeenTime(true);
+		report.setIncludeLastSeenTime(true);
+
+		settings.getAntennas().enableAll();
 
 		impinjReader.applySettings(settings);
 
@@ -193,15 +207,15 @@ public class TagService {
 					}
 				});
 
-				log.info("On tag report %s", report.getTags().stream().map(item -> {
-					Tag tag = new Tag();
-//					String code = item.getEpc().toString();
-					String code = String.valueOf(item.getCrc());
-					tag.setCode(code);
-					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
-					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-					return JacksonUtils.getJson(tag);
-				}).collect(Collectors.joining(", ")));
+//				log.info("On tag report %s", report.getTags().stream().map(item -> {
+//					Tag tag = new Tag();
+////					String code = item.getEpc().toString();
+//					String code = String.valueOf(item.getCrc());
+//					tag.setCode(code);
+//					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+//					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+//					return JacksonUtils.getJson(tag);
+//				}).collect(Collectors.joining(", ")));
 			}
 		});
 
@@ -378,8 +392,11 @@ public class TagService {
 	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag) {
 
-			if (currentETCCode != null && !tag.getEpc().toHexString().replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
-				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
+			String code = Integer.toHexString(tag.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
+
+			if (currentETCCode != null && !code.replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
+				log.info("Epc to rewrite not match %s and %s", code, currentETCCode);
+				rewriteFlag = false;
 				return;
 			}
 
@@ -401,8 +418,13 @@ public class TagService {
 
 			if (tag.isPcBitsPresent()) {
 				short pc = tag.getPcBits();
+				String currentEpc = tag.getEpc().toHexString();
 				try {
-					programEpc(currentETCCode.replaceAll(" ", ""), pc, newETCCode);
+					programEpc(WriteModeEnum.CRC, code, pc, newETCCode);
+
+					Thread.sleep(3000);
+
+					programEpc(WriteModeEnum.EPC, currentEpc, pc, newETCCode);
 				} catch (Exception e) {
 					log.error("Failed To program EPC: " + e.toString());
 				}
@@ -414,7 +436,7 @@ public class TagService {
 	}
 
 	public void rewriteEPCRequest(TagEpc tagEpc) {
-		log.info("Request on Rewrite EPC %s", JacksonUtils.getJson(tagEpc));
+		log.info("Request on Rewrite EPC");
 		newETCCode = null;
 		currentETCCode = null;
 		if (StringUtils.isBlank(tagEpc.getCurrentEpc()) || StringUtils.isBlank(tagEpc.getNewEpc())) {
@@ -422,19 +444,20 @@ public class TagService {
 			return;
 		}
 		currentETCCode = tagEpc.getCurrentEpc();
-		newETCCode = tagEpc.getNewEpc();
+		// newETCCode = tagEpc.getNewEpc();
+		newETCCode = getRandomEpc();
 		rewriteFlag = true;
 
 	}
 
-	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
-		if ((currentEpc.length() % 4 != 0) || (newEpc.length() % 4 != 0)) {
+	private void programEpc(WriteModeEnum writeMode, String currentEpc, short currentPC, String newEpc) throws Exception {
+		if (newEpc.length() % 4 != 0) {
 			log.info("EPCs must be a multiple of 16- bits: %s %s ", currentEpc, newEpc);
-			throw new BadRequestException(new ErrorMessage("EPCs must be a multiple of 16- bits: %s %s", currentEpc, newEpc));
+			throw new Exception("EPCs must be a multiple of 16- bits: " + currentEpc + "  " + newEpc);
 		}
-		if (outstanding > 0) {
-			return;
-		}
+//		if (outstanding > 0) {
+//			return;
+//		}
 
 		log.info("Programming Tag ");
 		log.info(" EPC %s  to %s ", currentEpc, newEpc);
@@ -446,14 +469,14 @@ public class TagService {
 		seq.setId(opSpecID++);
 
 		seq.setTargetTag(new TargetTag());
-		seq.getTargetTag().setBitPointer(BitPointers.Epc);
+		seq.getTargetTag().setBitPointer(writeMode == WriteModeEnum.CRC ? BitPointers.crc : BitPointers.Epc);
 		seq.getTargetTag().setMemoryBank(MemoryBank.Epc);
 		seq.getTargetTag().setData(currentEpc);
 
 		TagWriteOp epcWrite = new TagWriteOp();
 		epcWrite.Id = EPC_OP_ID;
 		epcWrite.setMemoryBank(MemoryBank.Epc);
-		epcWrite.setWordPointer(WordPointers.Epc);
+		epcWrite.setWordPointer(writeMode == WriteModeEnum.CRC ? WordPointers.Crc : WordPointers.Epc);
 		epcWrite.setData(TagData.fromHexString(newEpc));
 
 		// add to the list
@@ -481,6 +504,20 @@ public class TagService {
 		outstanding++;
 		impinjReader.addOpSequence(seq);
 		log.info("Stop rewrite ETC");
+	}
+
+	private static String getRandomEpc() {
+		String epc = "";
+
+		// get the length of the EPC from 1 to 8 words
+		int numwords = r.nextInt((6 - 1) + 1) + 1;
+		// int numwords = 1;
+
+		for (int i = 0; i < numwords; i++) {
+			Short s = (short) r.nextInt(Short.MAX_VALUE + 1);
+			epc += String.format("%04X", s);
+		}
+		return epc;
 	}
 
 }

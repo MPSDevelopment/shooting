@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tech.shooting.tag.enums.WriteModeEnum;
 import tech.shooting.tag.event.*;
 import tech.shooting.tag.eventbus.EventBus;
 import tech.shooting.tag.pojo.Tag;
@@ -77,7 +78,7 @@ public class TagService {
 		settings.setReaderMode(ReaderMode.AutoSetDenseReader);
 		settings.setSearchMode(SearchMode.ReaderSelected);
 		settings.setSession(10);
-		
+
 		// turn these on so we have them always
 		settings.getReport().setIncludePcBits(true);
 
@@ -140,7 +141,7 @@ public class TagService {
 				report.getTags().forEach(item -> {
 
 					// String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
-					
+
 //					String code = item.getEpc().toString();
 					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
 
@@ -164,7 +165,7 @@ public class TagService {
 					// If Rewrite flag - true start rewrite new ETC code
 					rewriteETC(item);
 				});
-				
+
 //				// String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
 //				String collect = report.getTags().stream().map(item -> {
 //					
@@ -271,13 +272,16 @@ public class TagService {
 	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag) {
 
-			if (currentETCCode!=null && !tag.getEpc().toHexString().replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
-				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
+			String code = Integer.toHexString(tag.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
+
+			if (currentETCCode != null && !code.replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
+				log.info("Epc to rewrite not match %s and %s", code, currentETCCode);
+				rewriteFlag = false;
 				return;
 			}
 
 			log.info("Start Write new ETC from %s to %s", tag.getEpc().toHexString(), newETCCode);
-			
+
 			rewriteFlag = false;
 			log.info(" EPC  String - %s", tag.getEpc().toString());
 
@@ -294,12 +298,18 @@ public class TagService {
 
 			if (tag.isPcBitsPresent()) {
 				short pc = tag.getPcBits();
-//				String currentEpc = tag.getEpc().toHexString();
+				String currentEpc = tag.getEpc().toHexString();
 				try {
-					programEpc(currentETCCode.replaceAll(" ", ""), pc, newETCCode);
+					programEpc(WriteModeEnum.CRC, code, pc, newETCCode);
+					
+					Thread.sleep(3000);
+					
+					programEpc(WriteModeEnum.EPC, currentEpc, pc, newETCCode);
 				} catch (Exception e) {
 					log.error("Failed To program EPC: " + e.toString());
 				}
+			} else {
+				log.info("Cannot write rfid code %s because there is no pc bits", newETCCode);
 			}
 
 		}
@@ -314,19 +324,20 @@ public class TagService {
 			return;
 		}
 		currentETCCode = tagEpc.getCurrentEpc();
-		newETCCode = tagEpc.getNewEpc();
+		// newETCCode = tagEpc.getNewEpc();
+		newETCCode = getRandomEpc();
 		rewriteFlag = true;
 
 	}
 
-	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
-		if ((currentEpc.length() % 4 != 0) || (newEpc.length() % 4 != 0)) {
+	private void programEpc(WriteModeEnum writeMode, String currentEpc, short currentPC, String newEpc) throws Exception {
+		if (newEpc.length() % 4 != 0) {
 			log.info("EPCs must be a multiple of 16- bits: %s %s ", currentEpc, newEpc);
 			throw new Exception("EPCs must be a multiple of 16- bits: " + currentEpc + "  " + newEpc);
 		}
-		if (outstanding > 0) {
-			return;
-		}
+//		if (outstanding > 0) {
+//			return;
+//		}
 
 		log.info("Programming Tag ");
 		log.info(" EPC %s  to %s ", currentEpc, newEpc);
@@ -338,14 +349,14 @@ public class TagService {
 		seq.setId(opSpecID++);
 
 		seq.setTargetTag(new TargetTag());
-		seq.getTargetTag().setBitPointer(BitPointers.Epc);
+		seq.getTargetTag().setBitPointer(writeMode == WriteModeEnum.CRC ? BitPointers.crc : BitPointers.Epc);
 		seq.getTargetTag().setMemoryBank(MemoryBank.Epc);
 		seq.getTargetTag().setData(currentEpc);
 
 		TagWriteOp epcWrite = new TagWriteOp();
 		epcWrite.Id = EPC_OP_ID;
 		epcWrite.setMemoryBank(MemoryBank.Epc);
-		epcWrite.setWordPointer(WordPointers.Epc);
+		epcWrite.setWordPointer(writeMode == WriteModeEnum.CRC ? WordPointers.Crc : WordPointers.Epc);
 		epcWrite.setData(TagData.fromHexString(newEpc));
 
 		// add to the list
