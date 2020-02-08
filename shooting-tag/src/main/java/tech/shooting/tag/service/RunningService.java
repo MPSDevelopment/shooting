@@ -53,7 +53,7 @@ public class RunningService {
 		log.info("Tag with code %s detected. It is %s laps for this code", event.getCode(), laps);
 
 		if (laps > this.laps) {
-			log.info("Lap %s bigger then standard laps %s. Will not send the message", laps, this.laps);
+			log.debug("Lap %s bigger then standard laps %s. Will not send the message", laps, this.laps);
 		} else {
 			runningData.setLaps(laps);
 			EventBus.publishEvent(new RunningUpdatedEvent().setSending(event.isSending()).setData(runningData));

@@ -3,6 +3,8 @@ package tech.shooting.tag.service;
 import com.impinj.octane.*;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +75,9 @@ public class TagService {
 
 		// set session one so we see the tag only once every few seconds
 		settings.setReaderMode(ReaderMode.AutoSetDenseReader);
-		settings.setSearchMode(SearchMode.SingleTarget);
-		settings.setSession(1);
+		settings.setSearchMode(SearchMode.ReaderSelected);
+		settings.setSession(10);
+		
 		// turn these on so we have them always
 		settings.getReport().setIncludePcBits(true);
 
@@ -138,7 +141,8 @@ public class TagService {
 
 					// String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
 					
-					String code = item.getEpc().toString();
+//					String code = item.getEpc().toString();
+					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
 
 					log.debug(" Code %s and EPC  String - %s", code, item.getEpc().toString());
 					list.add(code);
@@ -160,6 +164,25 @@ public class TagService {
 					// If Rewrite flag - true start rewrite new ETC code
 					rewriteETC(item);
 				});
+				
+//				// String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
+//				String collect = report.getTags().stream().map(item -> {
+//					
+//					String code = item.getEpc().toString();
+//					
+////					Tag tag = new Tag();
+////					tag.setCode(code);
+////					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+////					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+////					return JacksonUtils.getJson(tag);
+//					
+//					return code;
+//					
+//				}).collect(Collectors.joining(", "));
+//				
+//				if (CollectionUtils.isNotEmpty(report.getTags())) {
+//					log.info("On tag report %s", collect);
+//				}
 
 				// remove tag from map if it is not in tagReport
 				map.forEach((code, item) -> {
@@ -168,18 +191,6 @@ public class TagService {
 						map.remove(code);
 					}
 				});
-
-//				// String collect = report.getTags().stream().filter(item -> item.getCrc() > 0).map(item -> {
-//				String collect = report.getTags().stream().map(item -> {
-//					Tag tag = new Tag();
-//					tag.setCode(String.valueOf(item.getCrc()));
-//					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
-//					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-//					return JacksonUtils.getJson(tag);
-//				}).collect(Collectors.joining(", "));
-//				if (StringUtils.isNotBlank(collect)) {
-//					log.info("On tag report %s", collect);
-//				}
 			}
 		});
 
@@ -260,7 +271,7 @@ public class TagService {
 	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag) {
 
-			if (!tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+			if (currentETCCode!=null && !tag.getEpc().toHexString().replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
 				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
 				return;
 			}
@@ -283,9 +294,9 @@ public class TagService {
 
 			if (tag.isPcBitsPresent()) {
 				short pc = tag.getPcBits();
-				String currentEpc = tag.getEpc().toHexString();
+//				String currentEpc = tag.getEpc().toHexString();
 				try {
-					programEpc(currentEpc, pc, newETCCode);
+					programEpc(currentETCCode.replaceAll(" ", ""), pc, newETCCode);
 				} catch (Exception e) {
 					log.error("Failed To program EPC: " + e.toString());
 				}
@@ -310,6 +321,7 @@ public class TagService {
 
 	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
 		if ((currentEpc.length() % 4 != 0) || (newEpc.length() % 4 != 0)) {
+			log.info("EPCs must be a multiple of 16- bits: %s %s ", currentEpc, newEpc);
 			throw new Exception("EPCs must be a multiple of 16- bits: " + currentEpc + "  " + newEpc);
 		}
 		if (outstanding > 0) {

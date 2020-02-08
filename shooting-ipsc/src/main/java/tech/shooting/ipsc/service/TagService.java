@@ -48,6 +48,8 @@ import com.impinj.octane.WordPointers;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import tech.shooting.commons.eventbus.EventBus;
+import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.event.RunningOnConnectEvent;
 import tech.shooting.ipsc.event.RunningOnDisconnectEvent;
@@ -76,12 +78,12 @@ public class TagService {
 	private int laps;
 
 	private boolean started;
-	
+
 	/**
 	 * List of current codes
 	 */
 	private List<String> list;
-	
+
 	private boolean rewriteFlag = false;
 
 	private static String currentETCCode;
@@ -157,11 +159,12 @@ public class TagService {
 				list = new ArrayList<>();
 
 				report.getTags().forEach(item -> {
-					
-					String code = item.getEpc().toString();
+
+//					String code = item.getEpc().toString();
+					String code = Integer.toHexString(item.getCrc()).toUpperCase().replaceFirst("^FFFF", "").replaceFirst("^0", "");
 
 					log.debug(" Code %s and EPC  String - %s", code, item.getEpc().toString());
-					
+
 					list.add(code);
 
 					Tag tag = new Tag();
@@ -177,11 +180,10 @@ public class TagService {
 //						existingTag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
 //						map.put(tag.getCode(), existingTag);
 					}
-					
+
 					// If Rewrite flag - true start rewrite new ETC code
 					rewriteETC(item);
 				});
-				
 
 				// remove tag from map if it is not in tagReport
 				map.forEach((code, item) -> {
@@ -191,13 +193,15 @@ public class TagService {
 					}
 				});
 
-//				log.info("On tag report %s", report.getTags().stream().map(item -> {
-//					Tag tag = new Tag();
-//					tag.setCode(item.getEpc().toString());
-//					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
-//					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
-//					return JacksonUtils.getJson(tag);
-//				}).collect(Collectors.joining(", ")));
+				log.info("On tag report %s", report.getTags().stream().map(item -> {
+					Tag tag = new Tag();
+//					String code = item.getEpc().toString();
+					String code = String.valueOf(item.getCrc());
+					tag.setCode(code);
+					tag.setFirstSeenTime(item.getFirstSeenTime().getLocalDateTime().getTime());
+					tag.setLastSeenTime(item.getLastSeenTime().getLocalDateTime().getTime());
+					return JacksonUtils.getJson(tag);
+				}).collect(Collectors.joining(", ")));
 			}
 		});
 
@@ -211,7 +215,7 @@ public class TagService {
 			}
 		});
 	}
-	
+
 	public String getTagIp() {
 		return settingsService.getSettings().getTagServiceIp();
 	}
@@ -339,7 +343,7 @@ public class TagService {
 	public void stopSending() {
 		started = false;
 	}
-	
+
 	public String getLocalIp() {
 		InetAddress inetAddress;
 		try {
@@ -366,7 +370,7 @@ public class TagService {
 		}
 		return null;
 	}
-	
+
 	public String readCode() {
 		return CollectionUtils.isEmpty(list) ? null : list.get(0);
 	}
@@ -374,13 +378,13 @@ public class TagService {
 	private void rewriteETC(com.impinj.octane.Tag tag) {
 		if (rewriteFlag) {
 
-			if (!tag.getEpc().toHexString().equalsIgnoreCase(currentETCCode)) {
+			if (currentETCCode != null && !tag.getEpc().toHexString().replaceAll(" ", "").equalsIgnoreCase(currentETCCode.replaceAll(" ", ""))) {
 				log.info("Epc to rewrite not match %s and %s", tag.getEpc().toHexString(), currentETCCode);
 				return;
 			}
 
 			log.info("Start Write new ETC from %s to %s", tag.getEpc().toHexString(), newETCCode);
-			
+
 			rewriteFlag = false;
 			log.info(" EPC  String - %s", tag.getEpc().toString());
 
@@ -397,12 +401,13 @@ public class TagService {
 
 			if (tag.isPcBitsPresent()) {
 				short pc = tag.getPcBits();
-				String currentEpc = tag.getEpc().toHexString();
 				try {
-					programEpc(currentEpc, pc, newETCCode);
+					programEpc(currentETCCode.replaceAll(" ", ""), pc, newETCCode);
 				} catch (Exception e) {
 					log.error("Failed To program EPC: " + e.toString());
 				}
+			} else {
+				log.info("Cannot write rfid code %s because there is no pc bits", newETCCode);
 			}
 
 		}
@@ -424,7 +429,8 @@ public class TagService {
 
 	private void programEpc(String currentEpc, short currentPC, String newEpc) throws Exception {
 		if ((currentEpc.length() % 4 != 0) || (newEpc.length() % 4 != 0)) {
-			throw new Exception("EPCs must be a multiple of 16- bits: " + currentEpc + "  " + newEpc);
+			log.info("EPCs must be a multiple of 16- bits: %s %s ", currentEpc, newEpc);
+			throw new BadRequestException(new ErrorMessage("EPCs must be a multiple of 16- bits: %s %s", currentEpc, newEpc));
 		}
 		if (outstanding > 0) {
 			return;

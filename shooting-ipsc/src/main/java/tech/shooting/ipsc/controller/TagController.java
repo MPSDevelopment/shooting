@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.pojo.ErrorMessage;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.pojo.Tag;
@@ -88,9 +90,15 @@ public class TagController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CODE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation("Get map codes")
-	public ResponseEntity<Tag> getCode() {
+	public ResponseEntity<Tag> getCode() throws BadRequestException {
 		var tag = new Tag();
-		tag.setCode(service.readCode());
+		String code = service.readCode();
+
+		if (code == null) {
+			throw new BadRequestException(new ErrorMessage("Cannot read rfid code"));
+		}
+
+		tag.setCode(code);
 		return new ResponseEntity<>(tag, HttpStatus.OK);
 	}
 
