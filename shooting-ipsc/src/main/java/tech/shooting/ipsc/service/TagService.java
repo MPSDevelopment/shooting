@@ -439,8 +439,8 @@ public class TagService {
 		log.info("Request on Rewrite EPC");
 		newETCCode = null;
 		currentETCCode = null;
-		if (StringUtils.isBlank(tagEpc.getCurrentEpc()) || StringUtils.isBlank(tagEpc.getNewEpc())) {
-			log.error(" EPC codes dta is EMPTY");
+		if (StringUtils.isBlank(tagEpc.getCurrentEpc())) {
+			log.error(" EPC codes data is empty");
 			return;
 		}
 		currentETCCode = tagEpc.getCurrentEpc();

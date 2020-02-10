@@ -58,7 +58,7 @@ class TagControllerTest {
 //	@Test
 	void checkPostNewEpc() throws Exception {
 		
-		var tag = new TagEpc().setCurrentEpc("1111").setNewEpc("2222");
+		var tag = new TagEpc().setCurrentEpc("1111");
 		var json = JacksonUtils.getJson(tag);
 		
 		// try access with unauthorized user role

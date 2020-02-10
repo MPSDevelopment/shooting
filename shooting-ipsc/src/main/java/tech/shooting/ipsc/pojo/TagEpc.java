@@ -15,7 +15,4 @@ public class TagEpc {
 	@JsonProperty
 	private String currentEpc;
 
-	@JsonProperty
-	private String newEpc;
-
 }
