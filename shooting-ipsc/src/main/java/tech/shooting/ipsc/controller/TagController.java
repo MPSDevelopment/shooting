@@ -89,9 +89,10 @@ public class TagController {
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.TAG_CONTROLLER_GET_CODE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation("Get map codes")
+	@ApiOperation("Read rfid code")
 	public ResponseEntity<Tag> getCode() throws BadRequestException {
 		var tag = new Tag();
+		// String code = TagService.getRandomEpc(); 
 		String code = service.readCode();
 
 		if (code == null) {

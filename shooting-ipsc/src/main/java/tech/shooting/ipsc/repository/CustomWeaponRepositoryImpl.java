@@ -7,9 +7,11 @@ import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import tech.shooting.ipsc.pojo.AmmoType;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.pojo.Weapon;
+import tech.shooting.ipsc.pojo.WeaponType;
 
 import java.util.List;
 
@@ -20,19 +22,19 @@ public class CustomWeaponRepositoryImpl implements CustomWeaponRepository {
 
 	@Override
 	public List<Weapon> findByPersonDivision(Division division) {
-		
+
 		Query query = new Query();
 		if (division.getParent() == null) {
 			return mongoTemplate.find(query, Weapon.class);
 		}
-		
+
 		Query personQuery = new Query();
 		personQuery.addCriteria(Criteria.where("division").in(division.getAllChildren()));
 		List<Person> persons = mongoTemplate.find(personQuery, Person.class);
 
 		query.addCriteria(Criteria.where("owner").in(persons));
 		return mongoTemplate.find(query, Weapon.class);
-		
+
 //	        LookupOperation lookupOperation = LookupOperation.newLookup()
 //	                            .from("Division")
 //	                            .localField("division.id")
@@ -57,4 +59,18 @@ public class CustomWeaponRepositoryImpl implements CustomWeaponRepository {
 //		}
 //		return res;
 //	}
+
+	public long countAmmoByOwner(Person person, Long ammoTypeId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where(Weapon.OWNER_FIELD).in(person));
+		var weapons = mongoTemplate.find(query, Weapon.class);
+
+		return (long) weapons.size();
+	}
+
+	public List<AmmoType> getAmmoTypes(WeaponType weaponType) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where(AmmoType.WEAPON_TYPE).in(weaponType));
+		return mongoTemplate.find(query, AmmoType.class);
+	}
 }

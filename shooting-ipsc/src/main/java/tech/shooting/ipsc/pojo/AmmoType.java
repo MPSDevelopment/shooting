@@ -18,6 +18,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @Accessors(chain = true)
 public class AmmoType extends BaseDocument {
+	
+	public static final String WEAPON_TYPE = "ammunitionWeaponType";
 
     @JsonProperty
     @ApiModelProperty(value = "Ammunition type name", required = true)

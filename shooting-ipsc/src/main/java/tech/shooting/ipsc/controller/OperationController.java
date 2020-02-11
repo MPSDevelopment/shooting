@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
+import tech.shooting.commons.pojo.Token;
 import tech.shooting.ipsc.bean.OperationBean;
 import tech.shooting.ipsc.bean.OperationCombatElementBean;
 import tech.shooting.ipsc.bean.OperationCombatListHeaderBean;
@@ -44,7 +45,7 @@ public class OperationController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_ALL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list of all operations")
-	public ResponseEntity<List<Operation>> getAll() {
+	public ResponseEntity<List<Operation>> getAll(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token) {
 		return new ResponseEntity<>(operationService.getAllOperations(), HttpStatus.OK);
 	}
 
@@ -84,13 +85,15 @@ public class OperationController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_HEADERS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation combat list headers")
-	public ResponseEntity<List<OperationCombatListHeaderBean>> getOperationCombatListHeaders(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<List<OperationCombatListHeaderBean>> getOperationCombatListHeaders(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
+			@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getHeaders(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_COMBATLIST_DATA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation combat list data")
-	public ResponseEntity<List<List<String>>> getOperationCombatListData(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<List<List<String>>> getOperationCombatListData(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token,
+			@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
 		return new ResponseEntity<>(operationService.getCombatListData(id, operationService.getHeaders()), HttpStatus.OK);
 	}
 
@@ -139,7 +142,8 @@ public class OperationController {
 
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.OPERATION_CONTROLLER_GET_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get operation participants")
-	public ResponseEntity<List<Person>> getParticioants(@PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id) throws BadRequestException {
+	public ResponseEntity<List<Person>> getParticioants(@RequestHeader(value = Token.TOKEN_HEADER, defaultValue = Token.COOKIE_DEFAULT_VALUE) String token, @PathVariable(value = ControllerAPI.PATH_VARIABLE_OPERATION_ID) Long id)
+			throws BadRequestException {
 		return new ResponseEntity<>(operationService.getParticipants(id), HttpStatus.OK);
 	}
 

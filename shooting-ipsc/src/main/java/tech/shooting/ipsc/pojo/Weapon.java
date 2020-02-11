@@ -20,6 +20,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @Accessors(chain = true)
 public class Weapon extends BaseDocument {
+	
+	public static final String OWNER_FIELD = "owner";
 
     @JsonProperty
     @Indexed(unique = true)

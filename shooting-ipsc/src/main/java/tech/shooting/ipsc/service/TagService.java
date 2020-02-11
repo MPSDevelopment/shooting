@@ -506,7 +506,7 @@ public class TagService {
 		log.info("Stop rewrite ETC");
 	}
 
-	private static String getRandomEpc() {
+	public static String getRandomEpc() {
 		String epc = "";
 
 		// get the length of the EPC from 1 to 8 words

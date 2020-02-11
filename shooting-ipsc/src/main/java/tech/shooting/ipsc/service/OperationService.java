@@ -165,12 +165,11 @@ public class OperationService {
 		var list = new ArrayList<List<String>>();
 		var operation = checkOperation(id);
 
-		var persons = operation.getParticipants();
-
 		operation.getParticipants().forEach(participant -> {
 			var participantData = new ArrayList<String>();
 
-			headers.forEach(header -> {
+			// headers.forEach(header -> {
+			for (var header : headers) {
 				switch (header.getType()) {
 				case CALL_TYPE_HEADER: {
 					participantData.add(participant.getCall());
@@ -181,7 +180,7 @@ public class OperationService {
 					break;
 				}
 				case AMMO_TYPE_HEADER: {
-
+					participantData.add("-");
 					break;
 				}
 				case ANIMAL_TYPE_HEADER: {
@@ -204,7 +203,8 @@ public class OperationService {
 					log.error("No combat list data for type %s", header.getType());
 				}
 				}
-			});
+			}
+			;
 
 			if (CollectionUtils.isNotEmpty(participantData)) {
 				list.add(participantData);
@@ -253,7 +253,7 @@ public class OperationService {
 
 	public List<OperationSymbol> setSymbols(Long id, List<OperationSymbol> symbols) throws BadRequestException {
 		operationRepository.setSymbolsToOperation(id, symbols);
-		
+
 		return getSymbols(id);
 	}
 
@@ -264,7 +264,7 @@ public class OperationService {
 
 	public List<OperationMainIndicator> setMainIndicatorsToOperation(Long id, List<OperationMainIndicator> indicators) throws BadRequestException {
 		operationRepository.setMainIndicatorsToOperation(id, indicators);
-		
+
 		return getMainIndicators(id);
 	}
 
@@ -293,7 +293,7 @@ public class OperationService {
 
 	public List<OperationSignal> setCombatSignals(Long id, List<OperationSignal> signals) throws BadRequestException {
 		operationRepository.setCombatSignalsToOperation(id, signals);
-		
+
 		return getSignals(id);
 	}
 
@@ -312,7 +312,7 @@ public class OperationService {
 		}
 
 		operationRepository.setCommandantServicesToOperation(id, services);
-		
+
 		return getCommandantServices(id);
 	}
 
@@ -337,7 +337,7 @@ public class OperationService {
 		}
 
 		operationRepository.setCombatElementsToOperation(id, elements);
-		
+
 		return getCombatElements(id);
 	}
 
@@ -358,7 +358,7 @@ public class OperationService {
 			});
 		});
 		operationRepository.setRoutesToOperation(id, routes);
-		
+
 		return getRoutes(id);
 	}
 
