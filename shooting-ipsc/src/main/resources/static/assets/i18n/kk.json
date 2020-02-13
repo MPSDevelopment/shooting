@@ -259,9 +259,9 @@
   "deleteActiveTournamentError": "Белсенді турнирді жою мүмкін емес",
   "NUMBER": "Нөмір",
   "RFID": "Таңба",
-  "currentRfid": "current Таңба",
+  "currentRfid": "Таңба",
   "readRfid": "Прочитать метку",
-  "writeRfid": "Записать метку",
+  "writeRfid": "Изменить метку",
   "addrfid": "Добавить метку",
   "loginAsGuest": "Қонақ ретінде кіру",
   "competitionPlace": "Орын",
@@ -413,7 +413,8 @@
   "combatElements": "Жауынгерлік тәртіп элементтері",
   "addCombatElement": "Элемент қосу",
   "commander": "Командир",
-  "callSign": "Ұрыстың қалыптасуы",
+  "callSign": "Қоңырау белгісі",
   "addcombatElements": "Жауынгерлік тапсырыс затын қосыңыз",
-  "editcombatElements": "Жауынгерлік бұйрық элементін өзгерту"
+  "editcombatElements": "Жауынгерлік бұйрық элементін өзгерту",
+  "combatElementsParticipants": "Участники ЭБП"
 }
