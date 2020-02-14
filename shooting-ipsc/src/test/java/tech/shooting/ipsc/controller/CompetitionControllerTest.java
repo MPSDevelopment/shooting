@@ -892,6 +892,7 @@ public class CompetitionControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		Competitor competitor = JacksonUtils.fromJson(Competitor.class, contentAsString);
 		testing(competitor, competitorMark, testingCompetitor);
+//		assertEquals(competitor.getName(), testingCompetitor.getName());
 		// try access to addedMarkForCompetitor with admin role
 		contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.put(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0

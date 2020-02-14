@@ -308,7 +308,9 @@ public class CompetitionService {
 				index = i;
 			}
 		}
-		return competitors.get(index);
+		
+		Competitor competitor = competitors.get(index);
+		return competitor;
 	}
 
 	public CompetitorMark checkMarkToCompetitor(Long competitionId, Long competitorId, CompetitorMark competitorMark) throws BadRequestException {
