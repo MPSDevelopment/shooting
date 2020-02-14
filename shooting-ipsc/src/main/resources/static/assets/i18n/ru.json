@@ -259,9 +259,9 @@
   "disqualificationReason": "Дисквалификация",
   "NUMBER": "Номер",
   "RFID": "Метка",
-  "currentRfid": "Текущая Метка",
+  "currentRfid": "Метка",
   "readRfid": "Прочитать метку",
-  "writeRfid": "Записать метку",
+  "writeRfid": "Изменить метку",
   "addrfid": "Добавить метку",
   "loginAsGuest": "Войти как гость",
   "competitionPlace": "Место",
@@ -419,7 +419,8 @@
   "combatElements": "Элементы боевого порядка",
   "addCombatElement": "Добавить элемент",
   "commander": "Командир",
-  "callSign": "Боевой порядок",
+  "callSign": "Позывной",
   "addcombatElements": "Добавить элемент боевого порядка",
-  "editcombatElements": "Изменить элемент боевого порядка"
+  "editcombatElements": "Изменить элемент боевого порядка",
+  "combatElementsParticipants": "Участники ЭБП"
 }

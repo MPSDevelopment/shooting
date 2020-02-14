@@ -166,6 +166,16 @@ public class ValidationErrorHandler {
 		validationErrors.put(DEFAULT_FIELD, e.getMessage());
 		return new ErrorMessage(validationErrors);
 	}
+	
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorMessage processNullPointerException(InternalServerErrorException e, HttpServletRequest request) {
+		log.error("Null pointer error in request %s with error %s", request.getRequestURL(), e.getErrorMessage());
+		Map<String, String> validationErrors = new HashMap<>();
+		validationErrors.put(DEFAULT_FIELD, e.getMessage());
+		return new ErrorMessage(validationErrors);
+	}
+
 
 	private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {
 		Map<String, String> validationErrors = new HashMap<>();

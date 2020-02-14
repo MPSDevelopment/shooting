@@ -21,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.pojo.AmmoType;
 import tech.shooting.ipsc.pojo.Course;
 import tech.shooting.ipsc.pojo.Division;
 import tech.shooting.ipsc.pojo.Person;
@@ -52,6 +53,9 @@ public class WeaponRepositoryTest {
 
 	@Autowired
 	private WeaponTypeRepository weaponTypeRepository;
+	
+	@Autowired
+	private AmmoTypeRepository ammoTypeRepository;
 
 	@Autowired
 	private WeaponRepository weaponRepository;
@@ -70,6 +74,8 @@ public class WeaponRepositoryTest {
 
 	private WeaponType otherWeaponType;
 
+	private AmmoType ammoType;
+
 	@BeforeEach
 	public void before() {
 		personRepository.deleteAll();
@@ -78,6 +84,8 @@ public class WeaponRepositoryTest {
 
 		weaponType = weaponTypeRepository.save(new WeaponType().setName("testType"));
 		otherWeaponType = weaponTypeRepository.save(new WeaponType().setName("otherTestType"));
+		
+		ammoType = ammoTypeRepository.save(new AmmoType().setName("testAmmoType").setAmmunitionWeaponType(weaponType).setCount(20));
 
 		OffsetDateTime offsetDateTime = OffsetDateTime.now();
 		division = divisionRepository.save(new Division().setName("First division").setParent(null));
@@ -144,6 +152,11 @@ public class WeaponRepositoryTest {
 		assertEquals(0, count);
 		count = weaponRepository.countByOwnerAndWeaponTypeId(otherPerson, otherWeaponType.getId());
 		assertEquals(1, count);
+	}
+	
+	@Test
+	public void countByOwnerAndAmmoTypeId() {
+		long count = weaponRepository.countByOwnerAndWeaponTypeId(person, weaponType.getId());
 	}
 
 	@Test
