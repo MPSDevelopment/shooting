@@ -302,7 +302,7 @@ public class CompetitionService {
 		competitors = competitionRepository.save(competition).getCompetitors();
 		int index = 0;
 		for (int i = 0; i < competitors.size(); i++) {
-			if (competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson())
+			if (competitors.get(i).getName() != null && competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson())
 					&& ((competitors.get(i).getRfidCode() != null && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode()))
 							|| (competitors.get(i).getNumber() != null && competitors.get(i).getNumber().equals(competitorToDB.getNumber())))) {
 				index = i;
