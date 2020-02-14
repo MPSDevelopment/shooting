@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tech.shooting.commons.exception.BadRequestException;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.CompetitionBean;
 import tech.shooting.ipsc.bean.CompetitorMark;
 import tech.shooting.ipsc.bean.CompetitorMarks;
@@ -237,6 +238,7 @@ public class CompetitionController {
 	@ApiOperation(value = "Added mark(rfid or number) and ready status for competitor", notes = "Updated competitor object")
 	public ResponseEntity<Competitor> addedMarkForCompetitor(@PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITION_ID) Long competitionId, @PathVariable(value = ControllerAPI.PATH_VARIABLE_COMPETITOR_ID) Long competitorId,
 			@RequestBody @Valid CompetitorMark competitorMark) throws BadRequestException {
+		log.info("Competitor mark is %s", JacksonUtils.getPrettyJson(competitorMark));
 		return new ResponseEntity<>(competitionService.addedMarkToCompetitor(competitionId, competitorId, competitorMark), HttpStatus.OK);
 	}
 

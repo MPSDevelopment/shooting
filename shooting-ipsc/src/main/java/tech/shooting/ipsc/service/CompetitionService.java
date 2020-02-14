@@ -302,13 +302,13 @@ public class CompetitionService {
 		competitors = competitionRepository.save(competition).getCompetitors();
 		int index = 0;
 		for (int i = 0; i < competitors.size(); i++) {
-			if (competitors.get(i).getName() != null && competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson()!=null && competitors.get(i).getPerson().equals(competitorToDB.getPerson())
+			if (competitors.get(i).getName().equals(competitorToDB.getName()) && competitors.get(i).getPerson().equals(competitorToDB.getPerson())
 					&& ((competitors.get(i).getRfidCode() != null && competitors.get(i).getRfidCode().equals(competitorToDB.getRfidCode()))
 							|| (competitors.get(i).getNumber() != null && competitors.get(i).getNumber().equals(competitorToDB.getNumber())))) {
 				index = i;
 			}
 		}
-		
+
 		Competitor competitor = competitors.get(index);
 		return competitor;
 	}
@@ -334,7 +334,8 @@ public class CompetitionService {
 		} else {
 			competitor.setNumber(competitorMark.getMark());
 		}
-		competitor.setActive(competitorMark.isActive()).setName(competitorMark.getName());
+
+		competitor.setActive(competitorMark.isActive());
 		return saveAndReturn(competition, competitor, false);
 	}
 
