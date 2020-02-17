@@ -41,7 +41,7 @@ public class CheckinController {
 	@Autowired
 	private TokenUtils tokenUtils;
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_BY_DIVISION, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get list check", notes = "Return list person's from current division")
 	public ResponseEntity<List<Person>> getCheckList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long id) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getList(id), HttpStatus.OK);
@@ -60,31 +60,31 @@ public class CheckinController {
 		return new ResponseEntity<>(checkinService.createCombatNote(divisionId, note), HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_COMBAT_NOTE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added combat note", notes = "Return note object")
 	public ResponseEntity<List<CombatNote>> getCombatNote(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long divisionId) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getCombatNote(divisionId), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_INTERVAL)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_INTERVAL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get List names of interval's")
 	public ResponseEntity<List<String>> getListInterval() {
 		return new ResponseEntity<>(checkinService.getInterval(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get List search result")
 	public ResponseEntity<List<SearchResult>> getSearchResult(@RequestBody CombatListSearchBean bean) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getSearchResult(bean), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get Named list search result")
 	public ResponseEntity<List<NameStatus>> getNamedSearchResult(@RequestBody CombatListSearchBean bean) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getSearch(bean), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL)
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get List <CombatNote> by division by date by interval")
 	public ResponseEntity<List<CombatNote>> getListCombatNoteByDivisionByDateById(@RequestBody CombatListSearchBean searchBean) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getListCombatNote(searchBean), HttpStatus.OK);
