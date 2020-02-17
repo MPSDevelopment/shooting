@@ -69,8 +69,8 @@ public class CheckinService {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division bean %s", id)));
 	}
 
-	public List<SearchResult> getChecksByDivisionStatusDateInterval(Long divisionId, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) throws BadRequestException {
-		List<AggBean> result = checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(divisionId), status, date, interval);
+	public List<SearchResult> getChecksByDivisionStatusDateInterval(CombatListSearchBean searchBean) throws BadRequestException {
+		List<AggBean> result = checkinRepository.findAllByDivisionStatusDateInterval(checkDivision(searchBean.getDivisionId()), searchBean.getStatus(), searchBean.getDate(), searchBean.getInterval());
 		List<SearchResult> toFront = new ArrayList<>();
 		for (int i = 0; i < result.size(); i++) {
 			Map<String, Long> collect = result.get(i).getStat().stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -92,14 +92,14 @@ public class CheckinService {
 		} else {
 			type = TypeOfInterval.EVENING;
 		}
-		//checkStatData(division, TypeOfPresence.ALL, note.getDate(), type);
+		// checkStatData(division, TypeOfPresence.ALL, note.getDate(), type);
 		List<Stat> combatNoteByDivisionFromPeriod = checkinRepository.getCombatNoteByDivisionFromPeriod(division, note.getDate(), type);
 		CombatNote result = new CombatNote();
 		result.setStatList(combatNoteByDivisionFromPeriod).setCombat(person).setDate(note.getDate()).setDivision(division);
 		return combatNoteRepository.save(result);
 	}
 
-	private User checkUser (Long combatId) throws BadRequestException {
+	private User checkUser(Long combatId) throws BadRequestException {
 		return userRepository.findById(combatId).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect user id %s", combatId)));
 	}
 
@@ -123,22 +123,16 @@ public class CheckinService {
 		return res;
 	}
 
-	public List<SearchResult> getSearch(Long divisionId, String status, String interval, String date) throws BadRequestException {
-		TypeOfPresence typeOfPresence = TypeOfPresence.getByState(status);
-		TypeOfInterval typeOfInterval = TypeOfInterval.valueOf(interval);
-		OffsetDateTime dates = OffsetDateTime.parse(date);
-		return getChecksByDivisionStatusDateInterval(divisionId, typeOfPresence, dates, typeOfInterval);
+	public List<SearchResult> getSearchResult(CombatListSearchBean searchBean) throws BadRequestException {
+		return getChecksByDivisionStatusDateInterval(searchBean);
 	}
 
-	public List<NameStatus> getSearch (Long divisionId, String interval, String date) throws BadRequestException {
-		TypeOfInterval typeOfInterval = TypeOfInterval.valueOf(interval);
-		OffsetDateTime dates = OffsetDateTime.parse(date);
-		return checkinRepository.findAllByDivisionDateInterval(checkDivision(divisionId), dates, typeOfInterval);
+	public List<NameStatus> getSearch(CombatListSearchBean searchBean) throws BadRequestException {
+		return checkinRepository.findAllByDivisionDateInterval(checkDivision(searchBean.getDivisionId()), searchBean.getDate(), searchBean.getInterval());
 	}
 
-	public List<CombatNote> getListCombatNote(Long divisionId, String interval, String date) throws BadRequestException {
-		Division division = checkDivision(divisionId);
-		TypeOfInterval typeOfInterval = TypeOfInterval.valueOf(interval);
-		return combatNoteRepository.findAllByDivisionAndDateAndInterval(division, date,typeOfInterval);
+	public List<CombatNote> getListCombatNote(CombatListSearchBean searchBean) throws BadRequestException {
+		Division division = checkDivision(searchBean.getDivisionId());
+		return combatNoteRepository.findAllByDivisionAndDateAndInterval(division, searchBean.getDate(), searchBean.getInterval());
 	}
 }

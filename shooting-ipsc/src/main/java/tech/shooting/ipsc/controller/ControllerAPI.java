@@ -245,9 +245,9 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER_POST_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 	public static final String CHECKIN_CONTROLLER_GET_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 	public static final String CHECKIN_CONTROLLER_GET_INTERVAL = "/enum/interval";
-	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT = "/search/" + REQUEST_DIVISION_ID + "/" + REQUEST_STATUS + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
-	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES = "/search/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
-	public static final String CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL = "/combatenote/" + REQUEST_DIVISION_ID + "/" + REQUEST_INTERVAL + "/" + REQUEST_DATE;
+	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT = "/searchResult";
+	public static final String CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES = "/search";
+	public static final String CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL = "/combatenote";
 
 	// speciality section
 	public static final String SPECIALITY_CONTROLLER = "/api/speciality";

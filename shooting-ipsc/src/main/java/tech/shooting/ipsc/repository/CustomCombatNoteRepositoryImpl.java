@@ -23,9 +23,8 @@ public class CustomCombatNoteRepositoryImpl implements CustomCombatNoteRepositor
     private MongoTemplate mongoTemplate;
 
     @Override
-    public List<CombatNote> findAllByDivisionAndDateAndInterval(Division division, String date, TypeOfInterval interval) {
-        OffsetDateTime parse = OffsetDateTime.parse(date);
-        MatchOperation match = getMatch(division, parse, interval);
+    public List<CombatNote> findAllByDivisionAndDateAndInterval(Division division, OffsetDateTime date, TypeOfInterval interval) {
+        MatchOperation match = getMatch(division, date, interval);
         return mongoTemplate.aggregate(newAggregation(match), CombatNote.class, CombatNote.class).getMappedResults();
     }
 
