@@ -373,6 +373,7 @@ class CheckinControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
+		assertEquals(11, listFromJson.size());
 	}
 
 	@Test
@@ -391,7 +392,7 @@ class CheckinControllerTest {
 			combatNoteRepository.save(combatNote);
 		}
 
-		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setDate(of1).setInterval(TypeOfInterval.EVENING);
+		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setDate(of1).setInterval(TypeOfInterval.DAY);
 		String json = JacksonUtils.getJson(bean);
 
 		// admin role
@@ -400,7 +401,9 @@ class CheckinControllerTest {
 		List<CombatNote> listFromJson = JacksonUtils.getListFromJson(CombatNote[].class, contentAsString);
 
 		log.info("Size from search is %s", listFromJson.size());
-		listFromJson.forEach(System.out::println);
+//		listFromJson.forEach(System.out::println);
+
+//		assertEquals(5, listFromJson.size());
 	}
 
 	@Test
@@ -433,7 +436,8 @@ class CheckinControllerTest {
 		log.info("String result is %s", contentAsString);
 		List<NameStatus> listFromJson = JacksonUtils.getListFromJson(NameStatus[].class, contentAsString);
 		for (int i = 0; i < listFromJson.size(); i++) {
-			log.info("Named is %s", listFromJson.get(i));
+			log.info("Named is %s", JacksonUtils.getJson(listFromJson.get(i)));
 		}
+		assertEquals(11, listFromJson.size());
 	}
 }

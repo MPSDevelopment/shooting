@@ -122,9 +122,11 @@ public class StandardService {
 
 	public StandardScore addScore(Long standardId, StandardScoreBean bean) throws BadRequestException {
 		var person = checkPerson(bean.getPersonId());
+		var standard = checkStandard(bean.getStandardId());
 		var score = new StandardScore();
 		BeanUtils.copyProperties(bean, score, StandardScore.PERSON_FIELD);
 		score.setPerson(person);
+		score.setStandardInfo(standard.getInfo());
 		return standardScoreRepository.save(score);
 	}
 

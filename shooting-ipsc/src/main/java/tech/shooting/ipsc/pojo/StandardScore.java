@@ -32,6 +32,10 @@ public class StandardScore extends BaseDocument {
 	@ApiModelProperty(value = "Standard id", required = true)
 	@NotNull(message = ValidationConstants.STANDARD_ID)
 	private Long standardId;
+	
+	@JsonProperty
+	@ApiModelProperty(value = "Standard info", required = true)
+	private Info standardInfo;
 
 	@JsonProperty
 	@ApiModelProperty(value = "Person id", required = true)
