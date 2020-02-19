@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -514,6 +515,8 @@ class StandardControllerTest {
 
 		var list = JacksonUtils.getListFromJson(StandardScore[].class, content);
 		assertEquals(2, list.size());
+		assertNotNull(list.get(0).getStandardInfo());
+		
 
 		query.setPersonId(anotherPerson.getId());
 

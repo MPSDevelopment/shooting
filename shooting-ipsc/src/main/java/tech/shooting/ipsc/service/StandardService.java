@@ -160,7 +160,7 @@ public class StandardService {
 			checkPerson(query.getPersonId());
 		}
 
-		return standardScoreRepository.getScoreList(query);
+		return addStandardInfo(standardScoreRepository.getScoreList(query));
 	}
 
 	public ResponseEntity<List<StandardScore>> getScoreList(StandardScoreRequest query, Integer page, Integer size) {
@@ -174,7 +174,7 @@ public class StandardService {
 
 	// TODO Remove it after we have normally stored scores
 	public List<StandardScore> addStandardInfo(List<StandardScore> scores) {
-		scores.forEach(item -> {
+		return scores.stream().map(item -> {
 			if (item.getStandardInfo() == null) {
 				try {
 					item.setStandardInfo(checkStandard(item.getStandardId()).getInfo());
@@ -182,9 +182,8 @@ public class StandardService {
 
 				}
 			}
-		});
-		return scores;
-
+			return item;
+		}).collect(Collectors.toList());
 	}
 
 	public void startImitator(Long standardId) throws BadRequestException {
