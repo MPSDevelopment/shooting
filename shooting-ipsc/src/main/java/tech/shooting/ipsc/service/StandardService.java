@@ -28,6 +28,7 @@ import tech.shooting.ipsc.repository.SubjectRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StandardService {
@@ -110,9 +111,10 @@ public class StandardService {
 	public Standard putStandard(Long standardId, StandardBean bean) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		Standard standardFromBean = getStandardFromBean(bean);
-		
+
 		standard.setCategoryByTimeList(standardFromBean.getCategoryByTimeList()).setCategoryByPointsList(standardFromBean.getCategoryByPointsList()).setSubject(standardFromBean.getSubject()).setFailsList(standardFromBean.getFailsList())
-				.setConditionsList(standardFromBean.getConditionsList()).setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setRunning(standardFromBean.isRunning()).setLaps(bean.getLaps()).setActive(standardFromBean.isActive());
+				.setConditionsList(standardFromBean.getConditionsList()).setInfo(standardFromBean.getInfo()).setGroups(standardFromBean.isGroups()).setRunning(standardFromBean.isRunning()).setLaps(bean.getLaps())
+				.setActive(standardFromBean.isActive());
 		return standardRepository.save(standard);
 	}
 
@@ -136,15 +138,15 @@ public class StandardService {
 	}
 
 	public List<StandardScore> getScoreList(Long standardId, Long personId) {
-		return standardScoreRepository.findByPersonIdAndStandardId(personId, standardId);
+		return addStandardInfo(standardScoreRepository.findByPersonIdAndStandardId(personId, standardId));
 	}
 
 	public List<StandardScore> getScoreStandardList(Long standardId) {
-		return standardScoreRepository.findAllByStandardId(standardId);
+		return addStandardInfo(standardScoreRepository.findAllByStandardId(standardId));
 	}
 
 	public List<StandardScore> getScorePersonList(Long personId) {
-		return standardScoreRepository.findAllByPersonId(personId);
+		return addStandardInfo(standardScoreRepository.findAllByPersonId(personId));
 	}
 
 	public List<StandardScore> getScoreList(StandardScoreRequest query) throws BadRequestException {
@@ -170,11 +172,24 @@ public class StandardService {
 		return new ResponseEntity<>(list.getContent(), Pageable.setHeaders(page, list.getTotalElements(), list.getTotalPages()), HttpStatus.OK);
 	}
 
+	// TODO Remove it after we have normally stored scores
+	public List<StandardScore> addStandardInfo(List<StandardScore> scores) {
+		return scores.stream().map(item -> {
+			if (item.getStandardInfo() == null) {
+				try {
+					item.setStandardInfo(checkStandard(item.getStandardId()).getInfo());
+				} catch (BadRequestException e) {
+
+				}
+			}
+			return item;
+		}).collect(Collectors.toList());
+	}
+
 	public void startImitator(Long standardId) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
 		EventBus.publishEventAsync(new TagImitatorEvent(standardId, standard.getLaps() == null ? 5 : standard.getLaps(), personRepository.findAll()));
 	}
-	
 
 	public void startImitatorOnlyCodes(Long standardId) throws BadRequestException {
 		Standard standard = checkStandard(standardId);
