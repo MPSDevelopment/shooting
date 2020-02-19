@@ -353,7 +353,7 @@ class CheckinControllerTest {
 		log.info("Size of result search by division id %s", allByDivision.size());
 		log.info("Root id for search %s and create date is %s", root.getId(), createdDate);
 
-		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setStatus(TypeOfPresence.ALL).setDate(createdDate).setInterval(TypeOfInterval.EVENING);
+		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setStatus(TypeOfPresence.ALL).setDate(createdDate).setInterval(TypeOfInterval.DAY);
 		String json = JacksonUtils.getJson(bean);
 
 		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(bean);
@@ -418,16 +418,19 @@ class CheckinControllerTest {
 		}
 		List<CheckIn> checkIns = checkinRepository.saveAll(toDb);
 		log.info("count row check in from root %s", checkIns.size());
-		OffsetDateTime createdDate = checkIns.get(0).getCreatedDate();
+		assertEquals(11, checkIns.size());
+		
+		OffsetDateTime createdDate = OffsetDateTime.now();
 		log.info("Create date is %s", createdDate);
 		List<CheckIn> allByDate = checkinRepository.findAllByDate(createdDate);
 		log.info("Rows is %s", allByDate.size());
-		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(new CombatListSearchBean().setDivisionId(root.getId()).setStatus(TypeOfPresence.ALL).setDate(createdDate).setInterval(TypeOfInterval.EVENING));
+		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(new CombatListSearchBean().setDivisionId(root.getId()).setStatus(TypeOfPresence.ALL).setDate(createdDate).setInterval(TypeOfInterval.DAY));
 		for (int i = 0; i < fromService.size(); i++) {
 			log.info("String is %s", fromService.get(i));
 		}
+		assertEquals(11, fromService.size());
 
-		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setDate(createdDate).setInterval(TypeOfInterval.EVENING);
+		CombatListSearchBean bean = new CombatListSearchBean().setDivisionId(root.getId()).setDate(createdDate).setInterval(TypeOfInterval.DAY);
 		String json = JacksonUtils.getJson(bean);
 
 		// admin role

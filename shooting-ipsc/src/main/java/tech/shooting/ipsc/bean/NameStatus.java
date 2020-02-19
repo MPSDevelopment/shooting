@@ -11,10 +11,10 @@ import java.time.OffsetDateTime;
 @Accessors (chain = true)
 public class NameStatus {
 	@JsonProperty
-	String status;
+	private String status;
 
 	@JsonProperty
-	OffsetDateTime date;
+	private OffsetDateTime date;
 
 	@JsonProperty
 	private Person person;
