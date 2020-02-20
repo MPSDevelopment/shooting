@@ -422,5 +422,7 @@
   "callSign": "Позывной",
   "addcombatElements": "Добавить элемент боевого порядка",
   "editcombatElements": "Изменить элемент боевого порядка",
-  "combatElementsParticipants": "Участники ЭБП"
+  "combatElementsParticipants": "Участники ЭБП",
+  "standardNameRu": "Название норматива (русский)",
+  "standardNameKz": "Название норматива (казахский)"
 }

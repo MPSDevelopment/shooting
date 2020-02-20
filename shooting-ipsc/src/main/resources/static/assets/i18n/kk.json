@@ -416,5 +416,7 @@
   "callSign": "Қоңырау белгісі",
   "addcombatElements": "Жауынгерлік тапсырыс затын қосыңыз",
   "editcombatElements": "Жауынгерлік бұйрық элементін өзгерту",
-  "combatElementsParticipants": "Участники ЭБП"
+  "combatElementsParticipants": "Участники ЭБП",
+  "standardNameRu": "Название норматива (орысша)",
+  "standardNameKz": "Название норматива (қазақша)"
 }
