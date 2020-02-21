@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
 import tech.shooting.commons.mongo.BaseDocument;
 import tech.shooting.ipsc.bean.AggBean;
 import tech.shooting.ipsc.bean.NameStatus;
@@ -21,9 +22,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -36,17 +39,22 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<CheckIn> findAllByDateAndDivision (OffsetDateTime createdDate, Division division) {
-		OffsetDateTime offsetDateTime = createdDate.plusMinutes(5);
-		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(createdDate).lte(offsetDateTime));
+		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
+		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+		
+		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
 		query.addCriteria(where(CheckIn.DIVISION_ID).is(division.getId()));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
 	@Override
 	public List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Division divisionId) {
+		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
+		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+		
 		Set<Long> divisions = new HashSet<>();
 		addedChild(divisionId, divisions);
-		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).is(createdDate));
+		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
 		log.info("Division id: %s", divisions);
 		query.addCriteria(where(CheckIn.DIVISION_ID).in(divisions));
 		return mongoTemplate.find(query, CheckIn.class);
@@ -70,7 +78,10 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<CheckIn> findAllByDate (OffsetDateTime createdDate) {
-		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).is(createdDate));
+		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
+		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+		
+		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
@@ -127,6 +138,8 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		List<OffsetDateTime> inter = new ArrayList<>();
 		LocalDate localDate;
 		ZoneOffset offset;
+		
+		interval = Optional.ofNullable(interval).orElse(TypeOfInterval.DAY); 
 		switch(interval) {
 			case MORNING:
 				localDate = date.toLocalDate();
@@ -157,6 +170,12 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 				offset = date.getOffset();
 				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset));
 				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1));
+				break;
+			default: 
+				localDate = date.toLocalDate();
+				offset = date.getOffset();
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
+				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
 				break;
 		}
 		return inter;

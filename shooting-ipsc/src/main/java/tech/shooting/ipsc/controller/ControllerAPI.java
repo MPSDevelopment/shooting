@@ -242,6 +242,7 @@ public class ControllerAPI {
 	public static final String CHECKIN_CONTROLLER = "/api/checkin";
 	public static final String CHECKIN_CONTROLLER_POST_CHECK = "/check";
 	public static final String CHECKIN_CONTROLLER_GET_BY_DIVISION = "/check/division/" + REQUEST_DIVISION_ID;
+	public static final String CHECKIN_CONTROLLER_GET_CHECKIN_LIST = "/list";
 	public static final String CHECKIN_CONTROLLER_POST_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 	public static final String CHECKIN_CONTROLLER_GET_COMBAT_NOTE = "/check/division/" + REQUEST_DIVISION_ID + "/combatnote";
 	public static final String CHECKIN_CONTROLLER_GET_INTERVAL = "/enum/interval";
@@ -461,7 +462,7 @@ public class ControllerAPI {
 	public static final String OPERATION_CONTROLLER_GET_COMBAT_ELEMENTS = "/combatelements/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_POST_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
 	public static final String OPERATION_CONTROLLER_GET_ROUTES = "/routes/" + REQUEST_OPERATION_ID;
-	
+
 	public static final String TAG_CONTROLLER = "/api/tag";
 	public static final String TAG_CONTROLLER_GET_STATUS = "/status";
 	public static final String TAG_CONTROLLER_GET_MODE = "/mode";

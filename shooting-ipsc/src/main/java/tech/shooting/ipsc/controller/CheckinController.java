@@ -46,6 +46,12 @@ public class CheckinController {
 	public ResponseEntity<List<Person>> getCheckList(@PathVariable(value = ControllerAPI.PATH_VARIABLE_DIVISION_ID) @NotNull Long id) throws BadRequestException {
 		return new ResponseEntity<>(checkinService.getList(id), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_CHECKIN_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "Get list check", notes = "Return list person's from current division")
+	public ResponseEntity<List<CheckIn>> getCheckInList(@RequestBody CombatListSearchBean searchBean) throws BadRequestException {
+		return new ResponseEntity<>(checkinService.getCheckInList(searchBean), HttpStatus.OK);
+	}
 
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_POST_CHECK, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Added check", notes = "Return created check")

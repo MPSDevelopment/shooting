@@ -64,6 +64,11 @@ public class CheckinService {
 	public List<Person> getList(Long id) throws BadRequestException {
 		return personRepository.findByDivision(checkDivision(id));
 	}
+	
+	public List<CheckIn> getCheckInList(CombatListSearchBean searchBean) throws BadRequestException {
+		Division division = checkDivision(searchBean.getDivisionId());
+		return checkinRepository.findAllByDateAndRootDivision(searchBean.getDate(), division);
+	}
 
 	private Division checkDivision(Long id) throws BadRequestException {
 		return divisionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorMessage("Incorrect division bean %s", id)));

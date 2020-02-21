@@ -12,21 +12,22 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface CustomCheckinRepository {
-	List<CheckIn> findAllByDateAndDivision (OffsetDateTime createdDate, Division division);
 
-	List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Division divisionId);
+	List<CheckIn> findAllByDateAndDivision(OffsetDateTime createdDate, Division division);
 
-	List<CheckIn> findAllByDivision (Long division);
+	List<CheckIn> findAllByDateAndRootDivision(OffsetDateTime createdDate, Division divisionId);
 
-	List<CheckIn> findAllByDate (OffsetDateTime createdDate);
+	List<CheckIn> findAllByDivision(Long division);
 
-	List<AggBean> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
+	List<CheckIn> findAllByDate(OffsetDateTime createdDate);
 
-	List<CheckIn> findAllByStatus (TypeOfPresence status);
+	List<AggBean> findAllByDivisionStatusDateInterval(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
 
-	List<OffsetDateTime>  timeInterval (OffsetDateTime date, TypeOfInterval interval);
+	List<CheckIn> findAllByStatus(TypeOfPresence status);
 
-	List<Stat> getCombatNoteByDivisionFromPeriod (Division division, OffsetDateTime dateTime, TypeOfInterval interval);
+	List<OffsetDateTime> timeInterval(OffsetDateTime date, TypeOfInterval interval);
 
-	List<NameStatus> findAllByDivisionDateInterval (Division checkDivision, OffsetDateTime date, TypeOfInterval interval);
+	List<Stat> getCombatNoteByDivisionFromPeriod(Division division, OffsetDateTime dateTime, TypeOfInterval interval);
+
+	List<NameStatus> findAllByDivisionDateInterval(Division checkDivision, OffsetDateTime date, TypeOfInterval interval);
 }
