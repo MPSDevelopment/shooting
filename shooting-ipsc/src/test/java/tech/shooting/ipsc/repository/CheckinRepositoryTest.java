@@ -286,10 +286,9 @@ class CheckinRepositoryTest {
 				count++;
 			}
 		}
-		// check
-		List<CheckIn> allByDate = checkinRepository.findAllByDate(second);
-		assertEquals(allByDate.size(), count);
-		assertNotNull(allByDate.get(0));
+		
+		assertEquals(20, checkinRepository.findAllByDate(OffsetDateTime.now()).size());
+		assertEquals(0, checkinRepository.findAllByDate(OffsetDateTime.now().plusDays(1)).size());
 	}
 
 	@Test
