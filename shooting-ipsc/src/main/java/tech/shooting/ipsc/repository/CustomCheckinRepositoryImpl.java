@@ -38,68 +38,77 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<CheckIn> findAllByDateAndDivision (OffsetDateTime createdDate, Division division) {
+	public List<CheckIn> findAllByDateAndDivision(OffsetDateTime createdDate, Division division) {
 		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
 		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
-		
+
 		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
 		query.addCriteria(where(CheckIn.DIVISION_ID).is(division.getId()));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
 	@Override
-	public List<CheckIn> findAllByDateAndRootDivision (OffsetDateTime createdDate, Division divisionId) {
-		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
-		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
-		
-		Set<Long> divisions = new HashSet<>();
-		addedChild(divisionId, divisions);
+	public List<CheckIn> findAllByDateAndRootDivision(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
+		OffsetDateTime startTime = date.truncatedTo(ChronoUnit.DAYS);
+		OffsetDateTime finishTime = date.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+
 		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
-		log.info("Division id: %s", divisions);
-		query.addCriteria(where(CheckIn.DIVISION_ID).in(divisions));
+
+		if (division != null) {
+			Set<Long> divisions = new HashSet<>();
+			addedChild(division, divisions);
+			log.info("Division id: %s", divisions);
+			query.addCriteria(where(CheckIn.DIVISION_ID).in(divisions));
+		}
+		
+		
+		if (status!=null) {
+			query.addCriteria(Criteria.where(CheckIn.STATUS).is(status));
+		}
+		
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
-	private void addedChild (Division divisionId, Set<Long> divisions) {
+	private void addedChild(Division divisionId, Set<Long> divisions) {
 		divisions.add(divisionId.getId());
-		if(divisionId.getChildren().size() == 0 || divisionId.getChildren().size() == 1 && divisionId.getChildren().get(0) == null) {
+		if (divisionId.getChildren().size() == 0 || divisionId.getChildren().size() == 1 && divisionId.getChildren().get(0) == null) {
 			return;
 		}
-		for(Division d : divisionId.getChildren()) {
+		for (Division d : divisionId.getChildren()) {
 			addedChild(d, divisions);
 		}
 	}
 
 	@Override
-	public List<CheckIn> findAllByDivision (Long division) {
+	public List<CheckIn> findAllByDivision(Long division) {
 		Query query = new Query(where(CheckIn.DIVISION_ID).is(division));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
 	@Override
-	public List<CheckIn> findAllByDate (OffsetDateTime createdDate) {
+	public List<CheckIn> findAllByDate(OffsetDateTime createdDate) {
 		OffsetDateTime startTime = createdDate.truncatedTo(ChronoUnit.DAYS);
 		OffsetDateTime finishTime = createdDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
-		
+
 		Query query = new Query(where(BaseDocument.CREATED_DATE_FIELD).gte(startTime).lte(finishTime));
 		return mongoTemplate.find(query, CheckIn.class);
 	}
 
 	@Override
-	public List<Stat> getCombatNoteByDivisionFromPeriod (Division division, OffsetDateTime dateTime, TypeOfInterval interval) {
+	public List<Stat> getCombatNoteByDivisionFromPeriod(Division division, OffsetDateTime dateTime, TypeOfInterval interval) {
 		MatchOperation match = getMatch(dateTime, interval);
 		GroupOperation groupOperation = group("status").last("status").as("status").count().as("count");
 		return mongoTemplate.aggregate(newAggregation(match, groupOperation), CheckIn.class, Stat.class).getMappedResults();
 	}
 
 	@Override
-	public List<NameStatus> findAllByDivisionDateInterval (Division checkDivision, OffsetDateTime date, TypeOfInterval interval) {
+	public List<NameStatus> findAllByDivisionDateInterval(Division checkDivision, OffsetDateTime date, TypeOfInterval interval) {
 		GroupOperation groupOperation = group("person").last("person").as("person").first("status").as("status").first("createdDate").as("date");
 		ProjectionOperation projectionOperation = project("status", "date").and("person").previousOperation();
 		return mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, checkDivision, TypeOfPresence.ALL), groupOperation, projectionOperation), CheckIn.class, NameStatus.class).getMappedResults();
 	}
 
-	private MatchOperation getMatch (OffsetDateTime date, TypeOfInterval interval) {
+	private MatchOperation getMatch(OffsetDateTime date, TypeOfInterval interval) {
 		Criteria criteria;
 		List<OffsetDateTime> starEnd = timeInterval(date, interval);
 		OffsetDateTime searchStart = starEnd.get(0);
@@ -109,13 +118,13 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 	}
 
 	@Override
-	public List<AggBean> findAllByDivisionStatusDateInterval (Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
+	public List<AggBean> findAllByDivisionStatusDateInterval(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
 		GroupOperation groupOperation = group("person").last("person").as("person").addToSet("status").as("stat");
 		ProjectionOperation projectionOperation = project("stat").and("person").previousOperation();
 		return mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
 	}
 
-	private MatchOperation getMatchOperation (OffsetDateTime date, TypeOfInterval interval, Division division, TypeOfPresence status) {
+	private MatchOperation getMatchOperation(OffsetDateTime date, TypeOfInterval interval, Division division, TypeOfPresence status) {
 		LocalDate localDate;
 		LocalTime localTime;
 		ZoneOffset offset;
@@ -125,7 +134,7 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 		Set<Long> divisions = new HashSet<>();
 		addedChild(division, divisions);
 		Criteria priceCriteria;
-		if(status.equals(TypeOfPresence.ALL)) {
+		if (status.equals(TypeOfPresence.ALL)) {
 			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions));
 		} else {
 			priceCriteria = where(BaseDocument.CREATED_DATE_FIELD).gte(searchStart).lte(searchEnd).andOperator(where(CheckIn.DIVISION_ID).in(divisions).andOperator(where(CheckIn.STATUS).is(status)));
@@ -134,55 +143,55 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 	}
 
 	@Override
-	public List<OffsetDateTime> timeInterval (OffsetDateTime date, TypeOfInterval interval) {
+	public List<OffsetDateTime> timeInterval(OffsetDateTime date, TypeOfInterval interval) {
 		List<OffsetDateTime> inter = new ArrayList<>();
 		LocalDate localDate;
 		ZoneOffset offset;
-		
-		interval = Optional.ofNullable(interval).orElse(TypeOfInterval.DAY); 
-		switch(interval) {
-			case MORNING:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getEnd(), offset));
-				break;
-			case EVENING:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getEnd(), offset));
-				break;
-			case DAY:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
-				break;
-			case WEEK:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getEnd(), offset).plusDays(7));
-				break;
-			case MONTH:
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1));
-				break;
-			default: 
-				localDate = date.toLocalDate();
-				offset = date.getOffset();
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
-				inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
-				break;
+
+		interval = Optional.ofNullable(interval).orElse(TypeOfInterval.DAY);
+		switch (interval) {
+		case MORNING:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MORNING.getEnd(), offset));
+			break;
+		case EVENING:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.EVENING.getEnd(), offset));
+			break;
+		case DAY:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
+			break;
+		case WEEK:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.WEEK.getEnd(), offset).plusDays(7));
+			break;
+		case MONTH:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.MONTH.getEnd(), offset).plusMonths(1));
+			break;
+		default:
+			localDate = date.toLocalDate();
+			offset = date.getOffset();
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getStart(), offset));
+			inter.add(OffsetDateTime.of(localDate, TypeOfInterval.DAY.getEnd(), offset));
+			break;
 		}
 		return inter;
 	}
 
 	@Override
-	public List<CheckIn> findAllByStatus (TypeOfPresence status) {
+	public List<CheckIn> findAllByStatus(TypeOfPresence status) {
 		Query query = new Query(where(CheckIn.STATUS).is(status));
 		return mongoTemplate.find(query, CheckIn.class);
 	}

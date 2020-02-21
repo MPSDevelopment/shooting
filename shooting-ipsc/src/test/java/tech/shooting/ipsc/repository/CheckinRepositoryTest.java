@@ -245,7 +245,7 @@ class CheckinRepositoryTest {
 		save1.setCreatedDate(createDate);
 		save1 = checkinRepository.save(save1);
 		assertEquals(save1.getCreatedDate(), createDate);
-		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(createDate, root);
+		List<CheckIn> findByRoot = checkinRepository.findAllByDateAndRootDivision(root, null, createDate, null);
 		assertEquals(checkIns.size() + 1, findByRoot.size());
 		log.info("Size count fot sub root %s", findByRoot.size());
 	}

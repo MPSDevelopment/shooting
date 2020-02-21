@@ -15,7 +15,7 @@ public interface CustomCheckinRepository {
 
 	List<CheckIn> findAllByDateAndDivision(OffsetDateTime createdDate, Division division);
 
-	List<CheckIn> findAllByDateAndRootDivision(OffsetDateTime createdDate, Division divisionId);
+	List<CheckIn> findAllByDateAndRootDivision(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval);
 
 	List<CheckIn> findAllByDivision(Long division);
 

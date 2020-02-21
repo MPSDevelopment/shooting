@@ -67,7 +67,7 @@ public class CheckinService {
 	
 	public List<CheckIn> getCheckInList(CombatListSearchBean searchBean) throws BadRequestException {
 		Division division = checkDivision(searchBean.getDivisionId());
-		return checkinRepository.findAllByDateAndRootDivision(searchBean.getDate(), division);
+		return checkinRepository.findAllByDateAndRootDivision(division, null, searchBean.getDate(), null);
 	}
 
 	private Division checkDivision(Long id) throws BadRequestException {
