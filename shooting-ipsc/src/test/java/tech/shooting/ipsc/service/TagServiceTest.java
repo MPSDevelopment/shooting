@@ -58,7 +58,7 @@ class TagServiceTest {
 	}
 
 	@Test
-	public void handleTagImitatorEvent() {
+	public void handleTagImitatorEvent() throws InterruptedException {
 
 		EventBus.subscribe(this);
 
@@ -66,22 +66,25 @@ class TagServiceTest {
 		var thor = personRepository.save(new Person().setName("Thor").setRfidCode("1234"));
 		var loki = personRepository.save(new Person().setName("Loki").setRfidCode("1235"));
 
+		Thread.sleep(10);
+
 		EventBus.publishEvent(new TagImitatorEvent(standard.getId(), standard.getLaps(), personRepository.findAll()).setLapDelay(200).setPersonDelay(100));
 
 		assertEquals(5, map.get(thor.getId()).getCount());
 		assertEquals(5, map.get(loki.getId()).getCount());
 		assertEquals(4, map.get(thor.getId()).getPreviousLaps());
 		assertEquals(4, map.get(loki.getId()).getPreviousLaps());
-		
+
+		Thread.sleep(10);
+
 		EventBus.publishEvent(new TagImitatorEvent(standard.getId(), standard.getLaps(), personRepository.findAll()).setLapDelay(200).setPersonDelay(100));
-		
-		
+
 		assertEquals(5, map.get(thor.getId()).getCount());
 		assertEquals(5, map.get(loki.getId()).getCount());
 		assertEquals(4, map.get(thor.getId()).getPreviousLaps());
 		assertEquals(4, map.get(loki.getId()).getPreviousLaps());
 	}
-	
+
 	@Handler
 	public void handle(TagFinishedEvent event) {
 		map.clear();
@@ -109,7 +112,7 @@ class TagServiceTest {
 		testRunningData.setPreviousTime(event.getData().getLastTime());
 		testRunningData.setPreviousFirstTime(event.getData().getFirstTime());
 		testRunningData.setCount(testRunningData.getCount() + 1);
-		
+
 		map.put(event.getData().getPersonId(), testRunningData);
 	}
 
