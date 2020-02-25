@@ -89,12 +89,12 @@
 		<ehcache.version>2.10.6</ehcache.version>
 		<flapdoodle.version>2.2.0</flapdoodle.version>
 		<mongo.client.version>3.11.1</mongo.client.version>
-		<spring.boot.version>2.2.0.RELEASE</spring.boot.version>
-		<spring.version>5.2.0.RELEASE</spring.version>
-		<spring.security.version>5.2.0.RELEASE</spring.security.version>
-		<spring.integration.version>5.2.0.RELEASE</spring.integration.version>
-		<spring.data.version>2.2.0.RELEASE</spring.data.version>
-		<spring.amqp.version>2.2.0.RELEASE</spring.amqp.version>
+		<spring.boot.version>2.2.2.RELEASE</spring.boot.version>
+		<spring.version>5.2.2.RELEASE</spring.version>
+		<spring.security.version>5.2.2.RELEASE</spring.security.version>
+		<spring.integration.version>5.2.2.RELEASE</spring.integration.version>
+		<spring.data.version>2.2.2.RELEASE</spring.data.version>
+		<spring.amqp.version>2.2.2.RELEASE</spring.amqp.version>
 		<spring.doc.version>1.2.15</spring.doc.version>
 		<moquette.version>0.12.1</moquette.version>
 		<servlet.version>3.1.0</servlet.version>

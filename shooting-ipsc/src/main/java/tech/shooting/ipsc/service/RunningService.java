@@ -21,6 +21,11 @@ import tech.shooting.ipsc.repository.PersonRepository;
 @Slf4j
 public class RunningService {
 
+	private static final Long DELAY = 20 * 1000L;
+
+	/**
+	 * Map of code and RunningData
+	 */
 	private Map<String, RunningData> map = new HashedMap<>();
 
 	@Autowired
@@ -51,6 +56,15 @@ public class RunningService {
 			}
 		}
 		RunningData runningData = map.get(event.getCode());
+
+		if (runningData != null) {
+			long timeDifference = (event.getTime() - runningData.getLastTime());
+			if (timeDifference < DELAY) {
+				log.info("Code %s appeared too early %s ms. Delay is %s ms", event.getCode(), timeDifference, DELAY);
+				return;
+			}
+		}
+
 		if (runningData == null) {
 			runningData = new RunningData().setCode(event.getCode()).setLaps(0).setLastTime(event.getTime()).setFirstTime(event.getTime());
 		} else {
