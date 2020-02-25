@@ -84,21 +84,22 @@
 		<plasticine.version>0.9</plasticine.version>
 		<logback.version>1.2.3</logback.version>
 		<logstash.version>4.11</logstash.version>
+		<hikari.version>2.6.0</hikari.version>
 		<hibernate.validator.version>6.1.2.Final</hibernate.validator.version>
 		<ehcache.version>2.10.6</ehcache.version>
 		<flapdoodle.version>2.2.0</flapdoodle.version>
 		<mongo.client.version>3.11.1</mongo.client.version>
-		<spring.boot.version>2.2.4.RELEASE</spring.boot.version>
-		<spring.version>5.2.3.RELEASE</spring.version>
-		<spring.security.version>5.2.3.RELEASE</spring.security.version>
-		<spring.integration.version>5.2.3.RELEASE</spring.integration.version>
-		<spring.data.version>2.2.4.RELEASE</spring.data.version>
-		<spring.amqp.version>2.2.3.RELEASE</spring.amqp.version>
+		<spring.boot.version>2.2.0.RELEASE</spring.boot.version>
+		<spring.version>5.2.0.RELEASE</spring.version>
+		<spring.security.version>5.2.0.RELEASE</spring.security.version>
+		<spring.integration.version>5.2.0.RELEASE</spring.integration.version>
+		<spring.data.version>2.2.0.RELEASE</spring.data.version>
+		<spring.amqp.version>2.2.0.RELEASE</spring.amqp.version>
 		<spring.doc.version>1.2.15</spring.doc.version>
 		<moquette.version>0.12.1</moquette.version>
 		<servlet.version>3.1.0</servlet.version>
-		<junit.version>5.6.0</junit.version>
-		<junit.platform.version>1.6.0</junit.platform.version>
+		<junit.version>5.5.2</junit.version>
+		<junit.platform.version>1.5.2</junit.platform.version>
 		<mockito.version>3.1.0</mockito.version>
 		<wiremock.version>2.21.0</wiremock.version>
 		<mbassador.version>1.3.2</mbassador.version>
@@ -109,13 +110,14 @@
 		<rest-assured.version>3.1.1</rest-assured.version>
 		<swagger.version>2.9.2</swagger.version>
 		<swagger.version.old>1.5.21</swagger.version.old>
-		<jackson.version>2.10.2</jackson.version>
-		<jackson.datatype.version>2.10.2</jackson.datatype.version>
+		<jackson.version>2.10.0</jackson.version>
+		<jackson.datatype.version>2.10.0</jackson.datatype.version>
 		<nimbus.jose.jwt.version>7.0</nimbus.jose.jwt.version>
 		<jwt.version>3.4.0</jwt.version>
 		<reflections.version>0.9.11</reflections.version>
 		<tika.version>1.18</tika.version>
 		<octane.version>3.0.0.2</octane.version>
+		<h2database.version>1.4.197</h2database.version>
 
 		<jaxb.version>2.3.1</jaxb.version>
 		<snakeyaml.version>1.23</snakeyaml.version>
