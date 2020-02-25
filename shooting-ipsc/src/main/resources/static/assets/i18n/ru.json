@@ -423,6 +423,8 @@
   "addcombatElements": "Добавить элемент боевого порядка",
   "editcombatElements": "Изменить элемент боевого порядка",
   "combatElementsParticipants": "Участники ЭБП",
+  "smallServerOnline":"Small server online",
+  "smallServerOffline":"Small server offline",
   "standardNameRu": "Название норматива (русский)",
   "standardNameKz": "Название норматива (казахский)"
 }

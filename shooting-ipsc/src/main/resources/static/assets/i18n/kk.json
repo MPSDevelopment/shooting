@@ -417,6 +417,8 @@
   "addcombatElements": "Жауынгерлік тапсырыс затын қосыңыз",
   "editcombatElements": "Жауынгерлік бұйрық элементін өзгерту",
   "combatElementsParticipants": "Участники ЭБП",
+  "smallServerOnline":"Small server online",
+  "smallServerOffline":"Small server offline",
   "standardNameRu": "Название норматива (орысша)",
   "standardNameKz": "Название норматива (қазақша)"
 }
