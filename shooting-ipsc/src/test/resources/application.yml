@@ -38,7 +38,8 @@ ipsc:
     adminLogin: ipsc
     adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-
+  running:
+    delay: 0
 ---
 spring:
   profiles: local
@@ -75,7 +76,8 @@ ipsc:
     adminLogin: ipsc
     adminpassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-
+  running:
+    delay: 0
 ---
 spring:
   profiles: simple

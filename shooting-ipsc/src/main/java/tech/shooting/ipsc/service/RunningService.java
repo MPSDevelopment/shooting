@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,8 @@ import tech.shooting.ipsc.repository.PersonRepository;
 @Slf4j
 public class RunningService {
 
-	private static final Long DELAY = 20 * 1000L;
+	@Value("${ipsc.running.delay}")
+	private Long DELAY = 0L;
 
 	/**
 	 * Map of code and RunningData

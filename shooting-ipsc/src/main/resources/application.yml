@@ -57,7 +57,8 @@ ipsc:
     adminLogin: ipsc
     adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
-
+  running:
+    delay: 20
 ---
 spring:
   profiles: development
@@ -70,7 +71,7 @@ spring:
       max-request-size: 10MB
   data:
     mongodb:
-      host: 52.176.90.219
+      host: 10.0.0.5
       port: 27018
       database: shooting
       authentication-database: admin
@@ -92,6 +93,8 @@ ipsc:
     adminLogin: ipsc
     adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
+  running:
+    delay: 20
 logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG    
@@ -131,3 +134,5 @@ ipsc:
     adminLogin: ipsc
     adminPassword: ip2342354dsdsnkjqsc
     ipscTopicName: ipsc
+  running:
+    delay: 20

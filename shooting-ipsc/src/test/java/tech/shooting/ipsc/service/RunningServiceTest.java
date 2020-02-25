@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.shooting.commons.constraints.IpscConstants;
 import tech.shooting.commons.eventbus.EventBus;
 import tech.shooting.ipsc.config.IpscMongoConfig;
+import tech.shooting.ipsc.config.IpscRunningSettings;
 import tech.shooting.ipsc.event.TagDetectedEvent;
 import tech.shooting.ipsc.pojo.Person;
 import tech.shooting.ipsc.repository.PersonRepository;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @EnableMongoRepositories(basePackageClasses = PersonRepository.class)
-@ContextConfiguration(classes = { RunningService.class, IpscMongoConfig.class })
+@ContextConfiguration(classes = { RunningService.class, IpscMongoConfig.class, IpscRunningSettings.class })
 @EnableAutoConfiguration
 @SpringBootTest
 @Slf4j
