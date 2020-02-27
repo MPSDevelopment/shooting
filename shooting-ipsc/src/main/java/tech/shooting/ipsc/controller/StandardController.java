@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.shooting.commons.exception.BadRequestException;
 import tech.shooting.commons.pojo.SuccessfulMessage;
 import tech.shooting.commons.pojo.Token;
+import tech.shooting.commons.utils.JacksonUtils;
 import tech.shooting.ipsc.bean.QuizScoreRequest;
 import tech.shooting.ipsc.bean.StandardBean;
 import tech.shooting.ipsc.bean.StandardScoreBean;
@@ -80,6 +81,7 @@ public class StandardController {
 	@PostMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.STANDARD_CONTROLLER_SCORE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Submit a score")
 	public ResponseEntity<StandardScore> postScore(@PathVariable(value = ControllerAPI.PATH_VARIABLE_STANDARD_ID) Long standardId, @RequestBody @Valid StandardScoreBean score) throws BadRequestException {
+		log.info("Posted standard score %s", JacksonUtils.getJson(score));
 		return new ResponseEntity<>(standardService.addScore(standardId, score), HttpStatus.CREATED);
 	}
 
