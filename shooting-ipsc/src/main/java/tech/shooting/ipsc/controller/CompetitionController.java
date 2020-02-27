@@ -287,7 +287,7 @@ public class CompetitionController {
 		return new ResponseEntity<>(competitionService.getListTypeMark(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('JUDGE') or hasRole('USER')")
 	@GetMapping(value = ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "Get Disqualification's type list", notes = "Return list of Disqualification's type")
 	public ResponseEntity<DisqualificationEnum[]> getEnumDisqualification() {
