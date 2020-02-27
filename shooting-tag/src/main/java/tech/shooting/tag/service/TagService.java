@@ -28,6 +28,8 @@ import java.util.stream.IntStream;
 @Slf4j
 public class TagService {
 
+	private static final int RUNNING_DELAY = 100;
+
 	private ImpinjReader impinjReader;
 
 	private Map<String, Tag> map = new HashMap<>();
@@ -85,9 +87,9 @@ public class TagService {
 		// Set periodic mode so we reset the tag and it shows up with its
 		// new EPC
 		settings.getAutoStart().setMode(AutoStartMode.Periodic);
-		settings.getAutoStart().setPeriodInMs(1000);
+		settings.getAutoStart().setPeriodInMs(RUNNING_DELAY);
 		settings.getAutoStop().setMode(AutoStopMode.Duration);
-		settings.getAutoStop().setDurationInMs(1000);
+		settings.getAutoStop().setDurationInMs(RUNNING_DELAY);
 
 		var report = settings.getReport();
 		report.setIncludeAntennaPortNumber(true);
