@@ -1136,7 +1136,7 @@ public class CompetitionControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// try access to getMarkType with user role
 		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM).header(Token.TOKEN_HEADER, userToken))
-				.andExpect(MockMvcResultMatchers.status().isForbidden());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		// try access to getMarkType with judge role
 		String contentAsString = mockMvc
 				.perform(MockMvcRequestBuilders.get(ControllerAPI.COMPETITION_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.PERSON_CONTROLLER_GET_TYPE_DISQUALIFICATION_ENUM).header(Token.TOKEN_HEADER, judgeToken))
