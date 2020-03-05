@@ -358,18 +358,18 @@ class CheckinControllerTest {
 
 		List<SearchResult> fromService = service.getChecksByDivisionStatusDateInterval(bean);
 		// unauthorized user
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		// judge role
-		mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, judgeToken)
+		mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, judgeToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isForbidden());
 		// user role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, userToken)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, userToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<SearchResult> listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
 		// admin role
-		contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, adminToken)
+		contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT).header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		listFromJson = JacksonUtils.getListFromJson(SearchResult[].class, contentAsString);
 		assertEquals(fromService, listFromJson);
@@ -396,7 +396,7 @@ class CheckinControllerTest {
 		String json = JacksonUtils.getJson(bean);
 
 		// admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_LIST_COMBAT_NOTE_BY_DIVISION_BY_DATE_BY_INTERVAL)
 				.header(Token.TOKEN_HEADER, adminToken).contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		List<CombatNote> listFromJson = JacksonUtils.getListFromJson(CombatNote[].class, contentAsString);
 
@@ -434,7 +434,7 @@ class CheckinControllerTest {
 		String json = JacksonUtils.getJson(bean);
 
 		// admin role
-		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES).header(Token.TOKEN_HEADER, adminToken)
+		String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post(ControllerAPI.CHECKIN_CONTROLLER + ControllerAPI.VERSION_1_0 + ControllerAPI.CHECKIN_CONTROLLER_GET_SEARCH_RESULT_BY_NAMES).header(Token.TOKEN_HEADER, adminToken)
 				.contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
 		log.info("String result is %s", contentAsString);
 		List<NameStatus> listFromJson = JacksonUtils.getListFromJson(NameStatus[].class, contentAsString);
