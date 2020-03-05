@@ -49,6 +49,9 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<CheckIn> findAllByDateAndRootDivision(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
+		
+		date = Optional.ofNullable(date).orElse(OffsetDateTime.now());
+		
 		OffsetDateTime startTime = date.truncatedTo(ChronoUnit.DAYS);
 		OffsetDateTime finishTime = date.plusDays(1).truncatedTo(ChronoUnit.DAYS);
 
@@ -119,12 +122,18 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<AggBean> findAllByDivisionStatusDateInterval(Division division, TypeOfPresence status, OffsetDateTime date, TypeOfInterval interval) {
+		
+		date = Optional.ofNullable(date).orElse(OffsetDateTime.now());
+		
 		GroupOperation groupOperation = group("person").last("person").as("person").addToSet("status").as("stat");
 		ProjectionOperation projectionOperation = project("stat").and("person").previousOperation();
 		return mongoTemplate.aggregate(newAggregation(getMatchOperation(date, interval, division, status), groupOperation, projectionOperation), CheckIn.class, AggBean.class).getMappedResults();
 	}
 
 	private MatchOperation getMatchOperation(OffsetDateTime date, TypeOfInterval interval, Division division, TypeOfPresence status) {
+		
+		date = Optional.ofNullable(date).orElse(OffsetDateTime.now());
+		
 		LocalDate localDate;
 		LocalTime localTime;
 		ZoneOffset offset;
@@ -144,6 +153,9 @@ public class CustomCheckinRepositoryImpl implements CustomCheckinRepository {
 
 	@Override
 	public List<OffsetDateTime> timeInterval(OffsetDateTime date, TypeOfInterval interval) {
+		
+		date = Optional.ofNullable(date).orElse(OffsetDateTime.now());
+		
 		List<OffsetDateTime> inter = new ArrayList<>();
 		LocalDate localDate;
 		ZoneOffset offset;
